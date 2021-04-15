@@ -237,7 +237,7 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
                                   height: 6.dynamic,
                                 ),
                                 Text(
-                                  'Total Reward ',
+                                  'Total Reward Points',
                                   style: TextStyle(
                                       color: Colour.appBlack,
                                       fontSize: 16.dynamic,
