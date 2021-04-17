@@ -34,53 +34,35 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           top: 21.dynamic, left: 16.dynamic, right: 16.dynamic),
                       child: Row(
                         children: [
-                          Stack(
-                            children: [
-                              Container(
-                                width: 75.0,
-                                height: 75.0,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff7c94b6),
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                        'http://i.imgur.com/QSev0hg.jpg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(37.5),
-                                  ),
-                                  border: Border.all(
-                                    color: Colour.appBlue,
-                                    width: 5.0,
-                                  ),
+                          Container(
+                            width: 75.dynamic,
+                            height: 75.dynamic,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: AssetImage('images/user.png'),
                                 ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    width: 28.0,
-                                    height: 28.0,
-                                    alignment: Alignment.bottomRight,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'images/bronze_crown.png'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(14),
-                                      ),
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 4.0,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                border: Border.all(
+                                  color: Colors.blue,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(37.5.dynamic)),
+                            child: Container(
+                              width: 37.5.dynamic,
+                              height: 37.5.dynamic,
+                              margin: EdgeInsets.only(
+                                  left: 40.dynamic, top: 40.dynamic),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+// border: Border.all(
+//   color: Colors.blue,
+// ),
+                                  borderRadius:
+                                      BorderRadius.circular(37.5.dynamic)),
+                              child: Image.asset('images/platinum_crown.png'),
+// color: Colors.red,
+                            ),
                           ),
                           Expanded(
                             child: Column(
