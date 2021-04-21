@@ -14,220 +14,225 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          color: Colour.appLightGrey,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              Container(
-                constraints: BoxConstraints(
-                  minHeight: 339.dynamic,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: 21.dynamic, left: 16.dynamic, right: 16.dynamic),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 75.dynamic,
-                            height: 75.dynamic,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: AssetImage('images/user.png'),
-                                ),
-                                border: Border.all(
-                                  color: Colors.blue,
-                                ),
-                                borderRadius:
-                                    BorderRadius.circular(37.5.dynamic)),
-                            child: Container(
-                              width: 37.5.dynamic,
-                              height: 37.5.dynamic,
-                              margin: EdgeInsets.only(
-                                  left: 40.dynamic, top: 40.dynamic),
+        child: SingleChildScrollView(
+          child: Container(
+            color: Colour.appLightGrey,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                    minHeight: 339.dynamic,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 21.dynamic,
+                            left: 16.dynamic,
+                            right: 16.dynamic),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 75.dynamic,
+                              height: 75.dynamic,
+                              alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: AssetImage('images/user.png'),
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.blue,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.circular(37.5.dynamic)),
+                              child: Container(
+                                width: 37.5.dynamic,
+                                height: 37.5.dynamic,
+                                margin: EdgeInsets.only(
+                                    left: 40.dynamic, top: 40.dynamic),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
 // border: Border.all(
 //   color: Colors.blue,
 // ),
-                                  borderRadius:
-                                      BorderRadius.circular(37.5.dynamic)),
-                              child: Image.asset('images/platinum_crown.png'),
+                                    borderRadius:
+                                        BorderRadius.circular(37.5.dynamic)),
+                                child: Image.asset('images/platinum_crown.png'),
 // color: Colors.red,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '   Sounak Sikdar',
-                                  style: TextStyle(
-                                      color: Colour.appText,
-                                      fontSize: 16.dynamic,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '   Edit Profile  ',
-                                      style: TextStyle(
-                                          color: Colour.appBlue,
-                                          fontSize: 16.dynamic,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                      color: Colour.appBlue,
-                                      size: 14.dynamic,
-                                    )
-                                  ],
-                                ),
-                              ],
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '   Sounak Sikdar',
+                                    style: TextStyle(
+                                        color: Colour.appText,
+                                        fontSize: 16.dynamic,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '   Edit Profile  ',
+                                        style: TextStyle(
+                                            color: Colour.appBlue,
+                                            fontSize: 16.dynamic,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: Colour.appBlue,
+                                        size: 14.dynamic,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 27.dynamic,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 16.dynamic,
+                          right: 16.dynamic,
+                        ),
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: PrettyQr(
+                                        typeNumber: 3,
+                                        size: 162.95.dynamic,
+                                        data: 'https://www.google.ru',
+                                        errorCorrectLevel:
+                                            QrErrorCorrectLevel.M,
+                                        roundEdges: true),
+                                  ),
+                                  SizedBox(
+                                    height: 14.6.dynamic,
+                                  ),
+                                  Text(
+                                    '    Scan QR Code ',
+                                    style: TextStyle(
+                                        color: Colour.appBlue,
+                                        fontSize: 16.dynamic,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 27.dynamic,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 16.dynamic,
-                        right: 16.dynamic,
-                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: 22.6.dynamic, left: 17.dynamic, right: 16.dynamic),
+                    child: SingleChildScrollView(
                       child: Container(
+                        color: Colour.appLightGrey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: PrettyQr(
-                                      typeNumber: 3,
-                                      size: 162.95.dynamic,
-                                      data: 'https://www.google.ru',
-                                      errorCorrectLevel: QrErrorCorrectLevel.M,
-                                      roundEdges: true),
-                                ),
-                                SizedBox(
-                                  height: 14.6.dynamic,
-                                ),
-                                Text(
-                                  '    Scan QR Code ',
-                                  style: TextStyle(
-                                      color: Colour.appBlue,
-                                      fontSize: 16.dynamic,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
+                            Container(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          'Bronze',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14.dynamic,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        '350 Points  ',
+                                        style: TextStyle(
+                                          color: Colour.appDarkGrey,
+                                          fontSize: 14.dynamic,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: Colors.grey,
+                                        size: 13.dynamic,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 18.dynamic,
+                                  ),
+                                  Divider(
+                                    color: Colour.appDarkGrey,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 18.dynamic,
+                            ),
+                            ListOptions(
+                              listName: 'Rewards',
+                            ),
+                            SizedBox(
+                              height: 18.dynamic,
+                            ),
+                            ListOptions(
+                              listName: 'View Points History',
+                            ),
+                            SizedBox(
+                              height: 18.dynamic,
+                            ),
+                            ListOptions(
+                              listName: 'My Purchases',
+                            ),
+                            SizedBox(
+                              height: 18.dynamic,
+                            ),
+                            ListOptions(
+                              listName: 'Settings',
+                            ),
+                            SizedBox(
+                              height: 18.dynamic,
+                            ),
+                            ListOptions(
+                              listName: 'Help Centre',
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: 22.6.dynamic, left: 17.dynamic, right: 16.dynamic),
-                  child: SingleChildScrollView(
-                    child: Container(
-                      color: Colour.appLightGrey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Bronze',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14.dynamic,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      '350 Points  ',
-                                      style: TextStyle(
-                                        color: Colour.appDarkGrey,
-                                        fontSize: 14.dynamic,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                      color: Colors.grey,
-                                      size: 13.dynamic,
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 18.dynamic,
-                                ),
-                                Divider(
-                                  color: Colour.appDarkGrey,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 18.dynamic,
-                          ),
-                          ListOptions(
-                            listName: 'Rewards',
-                          ),
-                          SizedBox(
-                            height: 18.dynamic,
-                          ),
-                          ListOptions(
-                            listName: 'View Points History',
-                          ),
-                          SizedBox(
-                            height: 18.dynamic,
-                          ),
-                          ListOptions(
-                            listName: 'My Purchases',
-                          ),
-                          SizedBox(
-                            height: 18.dynamic,
-                          ),
-                          ListOptions(
-                            listName: 'Settings',
-                          ),
-                          SizedBox(
-                            height: 18.dynamic,
-                          ),
-                          ListOptions(
-                            listName: 'Help Centre',
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

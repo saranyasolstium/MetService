@@ -1,6 +1,7 @@
 import 'package:eagle_pixels/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/screen/home/my_profile.dart';
+import 'package:eagle_pixels/screen/home/my_purchase_screen.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 
 class Nav extends StatefulWidget {
@@ -13,7 +14,7 @@ class _NavState extends State<Nav> {
   List<Widget> _widgetOptions = <Widget>[
     MyProfileScreen(),
     HomeScreen(),
-    Text('Profile Screen'),
+    MyPurchaseScreen(),
   ];
 
   void _onItemTap(int index) {
