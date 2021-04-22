@@ -38,4 +38,8 @@ extension Colour on Colors {
   static Color get appText {
     return HexColor.fromHex('#333333');
   }
+
+  static Color get appRed {
+    return HexColor.fromHex('#DB1A1A');
+  }
 }
