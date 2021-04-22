@@ -30,7 +30,6 @@ class _MyPurchaseDetailsScreenState extends State<MyPurchaseDetailsScreen> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(
-                top: 10.dynamic,
                 left: 16.dynamic,
                 bottom: 13.dynamic,
               ),
@@ -44,14 +43,21 @@ class _MyPurchaseDetailsScreenState extends State<MyPurchaseDetailsScreen> {
                   Center(
                     child: CircleAvatar(
                       backgroundColor: Colour.appLightGrey,
-                      radius: 23,
+                      radius: 23.dynamic,
                       child: IconButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: Icon(Icons.close),
+                        icon: Icon(
+                          Icons.close,
+                          size: 23.dynamic,
+                          color: Colour.appBlue,
+                        ),
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 13.dynamic,
                   ),
                   Text(
                     'Job Details',

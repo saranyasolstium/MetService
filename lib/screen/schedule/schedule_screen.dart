@@ -1,6 +1,8 @@
+import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:eagle_pixels/screen/home/mypurchase_detail_screen.dart';
 
 class ScheduleScreen extends StatefulWidget {
   static String id = '/schedule_screen';
@@ -10,6 +12,8 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
+  TextStyle style =
+      TextStyle(fontSize: 14.dynamic, fontWeight: FontWeight.w300);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,14 +24,19 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           elevation: 0,
           backgroundColor: Color(0xFFFFFFFF),
           leading: RawMaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Nav(),
+              ),
+            ),
             child: Icon(
               Icons.arrow_back,
-              color: Colors.grey,
+              color: Colour.appBlue,
             ),
           ),
           title: Text(
-            'Schedule Job',
+            'Scheduled Job',
             style: TextStyle(
                 color: Colour.appBlack,
                 fontWeight: FontWeight.w400,
@@ -40,25 +49,47 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: 50.dynamic,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 14.dynamic,
+                  vertical: 13.dynamic,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   color: Colors.white,
                 ),
                 child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(
                       Icons.calendar_today,
+                      size: 23.dynamic,
                       color: Colour.appBlue,
+                    ),
+                    SizedBox(
+                      width: 5,
                     ),
                     Expanded(
                       child: Column(
-                        // crossAxisAlignment: CrossAxisAlignment.values[],
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Today'),
-                          Text('Today'),
+                          Text(
+                            'Today',
+                            style: TextStyle(
+                                color: Colour.appDarkGrey,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12.dynamic),
+                          ),
+                          SizedBox(
+                            height: 1,
+                          ),
+                          Text(
+                            '3rd March, 2021',
+                            style: TextStyle(
+                                color: Colour.appBlack,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.dynamic),
+                          ),
                         ],
                       ),
                     ),
@@ -68,6 +99,201 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           color: Colour.appBlue,
                           fontWeight: FontWeight.w400,
                           fontSize: 16.dynamic),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 17.dynamic,
+              ),
+              Container(
+                padding: EdgeInsets.only(
+                  top: 16.dynamic,
+                  left: 16.dynamic,
+                  bottom: 13.dynamic,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          'images/camera.png',
+                        ),
+                        SizedBox(
+                          width: 13.dynamic,
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Hitech Security Camera',
+                                style: TextStyle(
+                                    color: Colour.appBlack,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16.dynamic),
+                              ),
+                              SizedBox(
+                                height: 4.dynamic,
+                              ),
+                              Text(
+                                'ID - CCTVCAM5698533',
+                                style: TextStyle(
+                                    color: Colour.appDarkGrey,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.dynamic),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20.dynamic,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Purchase Date:',
+                                style: TextStyle(
+                                    color: Colour.appDarkGrey,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.dynamic),
+                              ),
+                              SizedBox(
+                                height: 4.dynamic,
+                              ),
+                              Text(
+                                '12th May, 2020',
+                                style: TextStyle(
+                                    color: Colour.appBlack,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.dynamic),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Customer Name:',
+                                style: TextStyle(
+                                    color: Colour.appDarkGrey,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.dynamic),
+                              ),
+                              SizedBox(
+                                height: 4.dynamic,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 24.dynamic,
+                                    height: 24.dynamic,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: AssetImage('images/user.png'),
+                                      ),
+                                      border: Border.all(
+                                        color: Colors.blue,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.circular(37.5.dynamic),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 7.dynamic,
+                                  ),
+                                  Text(
+                                    'Luis Philippe',
+                                    style: TextStyle(
+                                        color: Colour.appBlack,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14.dynamic),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15.dynamic,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(right: 18.dynamic),
+                            child: Material(
+                              // elevation: 5.0,
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: Colour.appBlue,
+                              child: MaterialButton(
+                                minWidth: 121.dynamic,
+                                height: 44.dynamic,
+                                padding:
+                                    EdgeInsets.fromLTRB(25.0, 11.0, 14.0, 10.0),
+                                onPressed: () {},
+                                child: Text(
+                                  'Start Job',
+                                  textAlign: TextAlign.center,
+                                  style: style.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 16.dynamic,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => SingleChildScrollView(
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom),
+                                    child: MyPurchaseDetailsScreen(),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'View Details',
+                              style: TextStyle(
+                                  color: Colour.appBlue,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16.dynamic),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

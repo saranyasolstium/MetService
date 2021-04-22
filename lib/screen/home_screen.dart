@@ -42,18 +42,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           children: [
                             Container(
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 15.dynamic,
-                                child: Icon(
-                                  Icons.person,
-                                ),
-                              ),
+                              width: 30.dynamic,
+                              height: 30.dynamic,
+                              alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colour.appBlue,
+                                image: DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: AssetImage('images/user.png'),
                                 ),
-                                borderRadius: BorderRadius.circular(30.dynamic),
+                                border: Border.all(
+                                  color: Colors.blue,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(37.5.dynamic),
                               ),
                             ),
                             Text(
