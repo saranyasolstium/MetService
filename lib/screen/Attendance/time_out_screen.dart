@@ -121,9 +121,14 @@ class TimeOutScreen extends StatelessWidget {
                 ),
               ),
               Container(
+                decoration: BoxDecoration(
+                  color: Colour.appRed,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.dynamic),
+                  ),
+                ),
                 margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                 width: double.infinity,
-                color: Colour.appRed,
                 child: TextButton(
                   onPressed: () {},
                   child: Text(
