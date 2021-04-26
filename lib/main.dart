@@ -1,12 +1,10 @@
 import 'dart:core';
-import 'package:eagle_pixels/screen/login_screen.dart';
-import 'package:eagle_pixels/screen/signup_screen.dart';
-import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
-import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
+
 import 'colors.dart';
 import 'dynamic_font.dart';
-import 'screen/home_screen.dart';
 import 'screen/nav_bottom.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));

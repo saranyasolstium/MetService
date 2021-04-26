@@ -1,9 +1,8 @@
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Attendance/calendar_screen.dart';
 import 'schedule/schedule_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -115,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => TimeOutScreen()));
+                                  builder: (context) => CalendarScreen()));
                         },
                       ),
                       SizedBox(

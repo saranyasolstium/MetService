@@ -108,9 +108,14 @@ class TimeInScreen extends StatelessWidget {
                 ),
               ),
               Container(
+                decoration: BoxDecoration(
+                  color: HexColor.fromHex("14CE1A"),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.dynamic),
+                  ),
+                ),
                 margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                 width: double.infinity,
-                color: HexColor.fromHex("14CE1A"),
                 child: TextButton(
                   onPressed: () {},
                   child: Text(
