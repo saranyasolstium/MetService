@@ -38,6 +38,7 @@ dependencies:
   pretty_qr_code: ^1.0.2
   date_utils: ^0.2.0
   flutter_calendar_carousel: ^2.0.1
+  month_picker_dialog: ^0.4.0
 
 
 dev_dependencies:
