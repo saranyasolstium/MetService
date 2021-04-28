@@ -7,6 +7,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 
 import 'package:eagle_pixels/dynamic_font.dart';
 import '../../colors.dart';
@@ -32,75 +33,155 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ),
       ),
       backgroundColor: HexColor.fromHex("F7F7F7"),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 17, right: 14.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Year',
-                        ),
-                        Container(
-                          color: Colors.blue,
-                          width: double.infinity,
-                          child: Text(
-                            'Month',
+      body: Padding(
+        padding: const EdgeInsets.only(top: 27.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 17, right: 14.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Year',
+                            style: TextStyle(
+                                color: Colour.appDarkGrey,
+                                fontSize: 14.dynamic,
+                                fontWeight: FontWeight.w400),
                           ),
-                          // constraints: BoxConstraints.expand(),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 17, right: 14.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Year',
-                        ),
-                        Container(
-                          width: double.infinity,
-                          color: Colors.blue,
-                          child: GestureDetector(
-                            onTap: () {
-                              showMonthPicker(
-                                context: context,
-                                firstDate: DateTime.now(),
-                                lastDate: DateTime(2030),
-                                initialDate: DateTime.now(),
-                              );
-                            },
-                            child: Text(
-                              'Month',
+                          SizedBox(
+                            height: 11.dynamic,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              color: Color(0xFFFFFFFF),
+                            ),
+                            padding: EdgeInsets.only(
+                                top: 12.0, left: 13.0, bottom: 12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '   2020',
+                                          style: TextStyle(
+                                              color: Colour.appText,
+                                              fontSize: 14.dynamic,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          DateTime newDateTime =
+                                              await showRoundedDatePicker(
+                                            context: context,
+                                            initialDatePickerMode:
+                                                DatePickerMode.year,
+                                            theme: ThemeData(
+                                                primarySwatch: Colors.green),
+                                          );
+                                          print(newDateTime);
+                                        },
+                                        child: Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: Colour.appBlack,
+                                          size: 30.dynamic,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          // constraints: BoxConstraints.expand(),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                )
-              ],
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 14, right: 17.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Month',
+                            style: TextStyle(
+                                color: Colour.appDarkGrey,
+                                fontSize: 14.dynamic,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(
+                            height: 11.dynamic,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              color: Color(0xFFFFFFFF),
+                            ),
+                            padding: EdgeInsets.only(
+                                top: 12.0, left: 13.0, bottom: 12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    showMonthPicker(
+                                      context: context,
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime(2030),
+                                      initialDate: DateTime.now(),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            '   Sep',
+                                            style: TextStyle(
+                                                color: Colour.appText,
+                                                fontSize: 14.dynamic,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: Colour.appBlack,
+                                          size: 30.dynamic,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 35.dynamic,
-          ),
-          Container(
-            child: CalendarView(),
-          ),
-        ],
+            SizedBox(
+              height: 35.dynamic,
+            ),
+            Container(
+              child: CalendarView(),
+            ),
+          ],
+        ),
       ),
     );
   }
