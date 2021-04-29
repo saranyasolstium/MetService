@@ -1,7 +1,10 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/model/login_model.dart';
+import 'package:eagle_pixels/screen/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:eagle_pixels/screen/nav_bottom.dart';
+
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -83,46 +86,52 @@ class _LoginScreenState extends State<LoginScreen> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Nav()),
+          ); //temp
           if (_formkey.currentState.validate()) {
-            // _formkey.save();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => null),
-            // );
-            print("Validated");
-          } else {
-            print("Not Validated");
-          }
-          print(email);
-          print(password);
-          setState(() {
-            isApiCallService = true;
-          });
-          LoginRequestModel loginRequestModel =
-              LoginRequestModel(email: email, password: password);
-          LoginResponseModel model =
-              await APIService.shared.login(loginRequestModel);
+            FocusScopeNode currentFocus = FocusScope.of(context);
 
-          if (model != null) {
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+            print(email);
+            print(password);
+            setState(() {
+              isApiCallService = true;
+            });
+            LoginRequestModel loginRequestModel =
+                LoginRequestModel(email: email, password: password);
+            LoginResponseModel model =
+                await APIService.shared.login(loginRequestModel);
+
             setState(() {
               isApiCallService = false;
             });
-          }
-          if (model.accessToken.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Login Successful'),
-                duration: Duration(seconds: 1),
-              ),
-            );
-          }
-          if (model.error != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Login Unsuccessful'),
-                duration: Duration(seconds: 1),
-              ),
-            );
+
+            if (model.accessToken.isNotEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Login Successful'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Nav()),
+              );
+            } else if (model.error != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Login Unsuccessful'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            }
+            print("Validated");
+          } else {
+            print("Not Validated");
           }
         },
         child: Text('Login',
@@ -148,119 +157,152 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          Scaffold(
-            key: scaffoldKey,
-            backgroundColor: Colors.transparent,
-            body: SingleChildScrollView(
-              child: Container(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Container(
-                    child: SafeArea(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 30.0, bottom: 20.0),
-                                child: Row(
-                                  // crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Hello',
-                                      style: TextStyle(
-                                          color: Colour.appBlue,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 45.0.dynamic),
-                                    ),
-                                    Image.asset(
-                                      'images/pixellogo.png',
-                                      fit: BoxFit.fill,
-                                      width: 60.dynamic,
-                                      height: 60.dynamic,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Text(
-                                'Welcome to Pixels Connect.',
-                                style: TextStyle(
-                                    color: Colour.appBlack,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 18.0.dynamic),
-                              ),
-                              Text(
-                                'Login to our platform',
-                                style: TextStyle(
-                                    color: Colour.appDarkGrey,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16.0.dynamic),
-                              ),
-                              SizedBox(
-                                height: 150.dynamic,
-                              ),
-                            ],
-                          ),
-                          Form(
-                            key: _formkey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+          GestureDetector(
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+            child: Scaffold(
+              key: scaffoldKey,
+              backgroundColor: Colors.transparent,
+              body: SingleChildScrollView(
+                child: Container(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Container(
+                      child: SafeArea(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 30.0, bottom: 20.0),
+                                  child: Row(
+                                    // crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Hello',
+                                        style: TextStyle(
+                                            color: Colour.appBlue,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 45.0.dynamic),
+                                      ),
+                                      Image.asset(
+                                        'images/pixellogo.png',
+                                        fit: BoxFit.fill,
+                                        width: 60.dynamic,
+                                        height: 60.dynamic,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 Text(
-                                  'Engineer Login',
+                                  'Welcome to Pixels Connect.',
                                   style: TextStyle(
                                       color: Colour.appBlack,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 18.0.dynamic),
+                                ),
+                                Text(
+                                  'Login to our platform',
+                                  style: TextStyle(
+                                      color: Colour.appDarkGrey,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16.0.dynamic),
                                 ),
                                 SizedBox(
-                                  height: 18.dynamic,
-                                ),
-                                Container(
-                                  child: emailField,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFFFFFFF),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                                Container(
-                                  child: passwordField,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFFFFFFF),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                                loginButton,
-                                SafeArea(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 85.0, bottom: 34.0),
-                                    child: Center(
-                                      child: Image.asset(
-                                        'images/poweredby.png',
-                                        fit: BoxFit.fill,
-                                        // width: 60.dynamic,
-                                        // height: 60.dynamic,
-                                      ),
-                                    ),
-                                  ),
+                                  height: 150.dynamic,
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                            Form(
+                              key: _formkey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Engineer Login',
+                                    style: TextStyle(
+                                        color: Colour.appBlack,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16.0.dynamic),
+                                  ),
+                                  SizedBox(
+                                    height: 18.dynamic,
+                                  ),
+                                  Container(
+                                    child: emailField,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFFFFFFF),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Container(
+                                    child: passwordField,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFFFFFFF),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  loginButton,
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: RawMaterialButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SignUpScreen(),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        'Create new account',
+                                        style: TextStyle(
+                                            color: Colour.appBlue,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16.0.dynamic),
+                                      ),
+                                    ),
+                                  ),
+                                  SafeArea(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 85.0, bottom: 34.0),
+                                      child: Center(
+                                        child: Image.asset(
+                                          'images/poweredby.png',
+                                          fit: BoxFit.fill,
+                                          // width: 60.dynamic,
+                                          // height: 60.dynamic,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -1,3 +1,4 @@
+import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:qr/qr.dart';
@@ -198,8 +199,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             SizedBox(
                               height: 18.dynamic,
                             ),
-                            ListOptions(
-                              listName: 'Rewards',
+                            RawMaterialButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MyRewardScreen(),
+                                  ),
+                                );
+                              },
+                              child: ListOptions(
+                                listName: 'Rewards',
+                              ),
                             ),
                             SizedBox(
                               height: 18.dynamic,

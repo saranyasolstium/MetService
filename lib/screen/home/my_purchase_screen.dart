@@ -21,18 +21,18 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
           toolbarHeight: 66.dynamic,
           elevation: 0,
           backgroundColor: Color(0xFFFFFFFF),
-          leading: RawMaterialButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Nav(),
-              ),
-            ),
-            child: Icon(
-              Icons.arrow_back,
-              color: Colour.appBlue,
-            ),
-          ),
+          // leading: RawMaterialButton(
+          //   onPressed: () => Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => Nav(),
+          //     ),
+          //   ),
+          //   child: Icon(
+          //     Icons.arrow_back,
+          //     color: Colour.appBlue,
+          //   ),
+          // ),
           title: Text(
             'My Purchases',
             style: TextStyle(

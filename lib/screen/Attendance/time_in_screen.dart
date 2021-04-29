@@ -1,4 +1,5 @@
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +13,14 @@ class TimeInScreen extends StatelessWidget {
         title: Text('Mark Attendance'),
         backgroundColor: CupertinoColors.white,
         elevation: 0,
-        leading: Icon(
-          Icons.arrow_back,
-          color: Colour.appBlue,
+        leading: RawMaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: Colour.appBlue,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -117,7 +123,12 @@ class TimeInScreen extends StatelessWidget {
                 margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TimeOutScreen()),
+                    );
+                  },
                   child: Text(
                     'Start the day',
                     style: TextStyle(

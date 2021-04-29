@@ -1,13 +1,21 @@
 import 'dart:core';
 import 'dart:math';
 
+import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'colors.dart';
 import 'dynamic_font.dart';
 import 'screen/nav_bottom.dart';
 
-void main() => runApp(MaterialApp(home: MyApp()));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  runApp(MaterialApp(home: MyApp()));
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -23,7 +31,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colour.appBlue,
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
-      home: Nav(),
+      home: LoginScreen(),
     );
   }
 }

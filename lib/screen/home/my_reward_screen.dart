@@ -8,7 +8,39 @@ class MyRewardScreen extends StatefulWidget {
   _MyRewardScreenState createState() => _MyRewardScreenState();
 }
 
+enum EReward { BRONZE, SILVER, GOLD, PLATINUM }
+
+extension ERewardExtention on EReward {
+  String get title {
+    switch (this) {
+      case EReward.BRONZE:
+        return 'bronze';
+      case EReward.SILVER:
+        return 'silver';
+      case EReward.GOLD:
+        return 'gold';
+      case EReward.PLATINUM:
+        return 'platinum';
+    }
+    return '';
+  }
+
+  String get background {
+    return 'images/${this.title}.png';
+  }
+
+  String get cardBackground {
+    return 'images/myreward_${this.title}.png';
+  }
+
+  String get crown {
+    return 'images/${title}_crown.png';
+  }
+}
+
 class _MyRewardScreenState extends State<MyRewardScreen> {
+  final EReward reward = EReward.PLATINUM;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +56,7 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('images/silver.png'),
+                      image: AssetImage(reward.background),
                     ),
                   ),
                   child: Column(
@@ -37,19 +69,19 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
                         child: Row(
                           children: [
                             Container(
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 26.dynamic,
-                                child: Icon(
-                                  Icons.person,
-                                  size: 20.dynamic,
-                                ),
-                              ),
+                              width: 52.dynamic,
+                              height: 52.dynamic,
+                              alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colour.appBlue,
+                                image: DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: AssetImage('images/user.png'),
                                 ),
-                                borderRadius: BorderRadius.circular(30.dynamic),
+                                border: Border.all(
+                                  color: Colors.blue,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(37.5.dynamic),
                               ),
                             ),
                             Expanded(
@@ -100,7 +132,7 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('images/myreward_silver.png'),
+                              image: AssetImage(reward.cardBackground),
                             ),
                           ),
                           child: Column(
@@ -116,7 +148,7 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
                                       strokeWidth: 2,
                                       strokeColor: Colors.white,
                                       child: Text(
-                                        'SILVER',
+                                        reward.title.toUpperCase(),
                                         style: TextStyle(
                                             // color: Color(0xFF97735D),
                                             // color: Color(0x70707070),
@@ -151,7 +183,7 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
                                           ),
                                         ),
                                         Image.asset(
-                                          'images/silver_crown.png',
+                                          reward.crown,
                                           width: 83.46.dynamic,
                                           height: 50.46.dynamic,
                                           fit: BoxFit.cover,

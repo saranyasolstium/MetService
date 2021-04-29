@@ -13,9 +13,14 @@ class TimeOutScreen extends StatelessWidget {
         title: Text('Mark Attendance'),
         backgroundColor: CupertinoColors.white,
         elevation: 0,
-        leading: Icon(
-          Icons.arrow_back,
-          color: Colour.appBlue,
+        leading: RawMaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: Colour.appBlue,
+          ),
         ),
       ),
       body: SingleChildScrollView(

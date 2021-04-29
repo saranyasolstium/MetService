@@ -24,12 +24,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           elevation: 0,
           backgroundColor: Color(0xFFFFFFFF),
           leading: RawMaterialButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Nav(),
-              ),
-            ),
+            onPressed: () => Navigator.pop(context),
             child: Icon(
               Icons.arrow_back,
               color: Colour.appBlue,
