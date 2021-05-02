@@ -1,6 +1,41 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 import '../model/login_model.dart';
+
+enum EndPoint {
+  profile,
+  login,
+}
+
+extension EndPointRawValue on EndPoint {
+  String get rawValue {
+    switch (this) {
+      case EndPoint.profile:
+        return "Profile";
+      case EndPoint.login:
+        return "login";
+    }
+    return "";
+  }
+}
+
+class APIManager {
+  void some(EndPoint url) {
+    some(EndPoint.profile);
+  }
+  //Request Parameters
+  /*
+  1. Url
+  2. header
+  3. parameter or body
+  4. encoding - safe to send data
+  5. Methods - get, post, delete, Multipart
+   */
+
+  Future<http.Response> serviceCall() {}
+}
 
 class APIService {
   static final shared = APIService();
