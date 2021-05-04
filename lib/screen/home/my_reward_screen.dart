@@ -39,7 +39,7 @@ extension ERewardExtention on EReward {
 }
 
 class _MyRewardScreenState extends State<MyRewardScreen> {
-  final EReward reward = EReward.PLATINUM;
+  final EReward reward = EReward.BRONZE;
 
   @override
   Widget build(BuildContext context) {

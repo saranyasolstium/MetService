@@ -86,10 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Nav()),
-          ); //temp
           if (_formkey.currentState.validate()) {
             FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -128,10 +124,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   duration: Duration(seconds: 1),
                 ),
               );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Something went wrong. Please try again'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
             }
             print("Validated");
           } else {
-            print("Not Validated");
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text('Something went wrong. Please try again'),
+            //     duration: Duration(seconds: 1),
+            //   ),
+            // );
           }
         },
         child: Text('Login',
