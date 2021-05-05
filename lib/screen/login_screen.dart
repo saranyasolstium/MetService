@@ -1,12 +1,14 @@
+import 'dart:convert';
+
 import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/api/urls.dart';
+import 'package:eagle_pixels/colors.dart';
+import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/login_model.dart';
+import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:eagle_pixels/screen/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:eagle_pixels/screen/nav_bottom.dart';
-
-import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:eagle_pixels/colors.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -92,15 +94,24 @@ class _LoginScreenState extends State<LoginScreen> {
             if (!currentFocus.hasPrimaryFocus) {
               currentFocus.unfocus();
             }
-            print(email);
-            print(password);
             setState(() {
               isApiCallService = true;
             });
             LoginRequestModel loginRequestModel =
                 LoginRequestModel(email: email, password: password);
-            LoginResponseModel model =
-                await APIService.shared.login(loginRequestModel);
+            LoginResponseModel model;
+            try {
+              var response = await API.service.call(
+                  endPoint: EndPoint.login, body: loginRequestModel.toJson());
+              model = LoginResponseModel.fromJson(jsonDecode(response.body));
+            } catch (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('$error'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            }
 
             setState(() {
               isApiCallService = false;
