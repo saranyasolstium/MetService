@@ -1,5 +1,13 @@
 import 'package:eagle_pixels/api/urls.dart';
 
+extension Method on EndPoint {
+  HTTPMethod get method {
+    switch (this) {
+    }
+    return HTTPMethod.post;
+  }
+}
+
 enum HTTPMethod { get, post }
 
 extension HTTPMethodString on HTTPMethod {
@@ -11,17 +19,5 @@ extension HTTPMethodString on HTTPMethod {
         return "POST";
     }
     return "GET";
-  }
-}
-
-extension Method on EndPoint {
-  HTTPMethod get method {
-    switch (this) {
-      case EndPoint.login:
-        return HTTPMethod.post;
-      case EndPoint.profile:
-        return HTTPMethod.get;
-    }
-    return HTTPMethod.get;
   }
 }

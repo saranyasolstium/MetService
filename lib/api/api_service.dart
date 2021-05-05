@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:eagle_pixels/api/headers.dart';
@@ -50,13 +51,6 @@ class API {
    */
 
   final APIRouter route = APIRouter();
-  Map<String, String> get defaultHeader {
-    return {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.acceptHeader: 'application/json',
-      'client_secret': 'XHZgV3oFMGAZOzYEG9e9EqWE7OTWECS2MICTjoGX',
-    };
-  }
 
   static final service = API();
   Future<http.Response> call({
@@ -69,6 +63,7 @@ class API {
     print('url $url');
     print('header $header');
     print('body $body');
+    print('method ${endPoint.method}');
     if (endPoint.method == HTTPMethod.post) {
       var resp =
           await http.post(Uri.parse(url), headers: safeHeader, body: body);
@@ -78,8 +73,27 @@ class API {
       final Map<String, String> queryParam = body;
       final Uri uri = Uri.parse(url);
       var resp = await http.get(uri, headers: safeHeader);
+
       print("response - ${resp.body.toString()}");
       return resp;
+    }
+  }
+}
+
+bool success(String status) {
+  if (status == 'success') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+extension StatusExtension on String {
+  bool get isSuccess {
+    if (this == 'success') {
+      return true;
+    } else {
+      return false;
     }
   }
 }
