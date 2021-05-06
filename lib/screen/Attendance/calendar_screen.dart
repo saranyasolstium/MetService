@@ -1,43 +1,23 @@
+import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
 import 'package:flutter_calendar_carousel/classes/event.dart';
-import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:month_picker_dialog/month_picker_dialog.dart';
-import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 
-import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:eagle_pixels/screen/nav_bottom.dart';
 import '../../colors.dart';
 
-class CalendarScreen extends StatefulWidget {
-  @override
-  _CalendarScreenState createState() => _CalendarScreenState();
-}
-
-class _CalendarScreenState extends State<CalendarScreen> {
+class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Attendance',
-        ),
-        backgroundColor: CupertinoColors.white,
-        elevation: 0,
-        leading: RawMaterialButton(
-          onPressed: () => Navigator.pop(context),
-          child: Icon(
-            Icons.arrow_back,
-            color: Colour.appBlue,
-          ),
-        ),
-      ),
+      appBar: this.appBar,
       backgroundColor: HexColor.fromHex("F7F7F7"),
       body: Padding(
         padding: const EdgeInsets.only(top: 27.0),
@@ -46,146 +26,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 17, right: 14.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Year',
-                              style: TextStyle(
-                                  color: Colour.appDarkGrey,
-                                  fontSize: 14.dynamic,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            SizedBox(
-                              height: 11.dynamic,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4.0),
-                                color: Color(0xFFFFFFFF),
-                              ),
-                              padding: EdgeInsets.only(
-                                  top: 12.0, left: 13.0, bottom: 12.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            '   2020',
-                                            style: TextStyle(
-                                                color: Colour.appText,
-                                                fontSize: 14.dynamic,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            DateTime newDateTime =
-                                                await showRoundedDatePicker(
-                                              context: context,
-                                              initialDatePickerMode:
-                                                  DatePickerMode.year,
-                                              theme: ThemeData(
-                                                  primarySwatch: Colors.green),
-                                            );
-                                            print(newDateTime);
-                                          },
-                                          child: Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: Colour.appBlack,
-                                            size: 30.dynamic,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 14, right: 17.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Month',
-                              style: TextStyle(
-                                  color: Colour.appDarkGrey,
-                                  fontSize: 14.dynamic,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            SizedBox(
-                              height: 11.dynamic,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4.0),
-                                color: Color(0xFFFFFFFF),
-                              ),
-                              padding: EdgeInsets.only(
-                                  top: 12.0, left: 13.0, bottom: 12.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      showMonthPicker(
-                                        context: context,
-                                        firstDate: DateTime.now(),
-                                        lastDate: DateTime(2030),
-                                        initialDate: DateTime.now(),
-                                      );
-                                    },
-                                    child: Container(
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              '   Sep',
-                                              style: TextStyle(
-                                                  color: Colour.appText,
-                                                  fontSize: 14.dynamic,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ),
-                                          Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: Colour.appBlack,
-                                            size: 30.dynamic,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              this.yearMonth,
               SizedBox(
                 height: 35.dynamic,
               ),
               Container(
-                child: CalendarView(),
+                child: this.calendarSurround,
               ),
               SizedBox(
                 height: 86.dynamic,
@@ -207,7 +53,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       Radius.circular(5.dynamic),
                     ),
                   ),
-                  // margin: EdgeInsets.symmetric(vertical: 32.dynamic),
+// margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                   width: double.infinity,
                   child: TextButton(
                     onPressed: () {
@@ -234,21 +80,205 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 }
 
-class CalendarView extends StatefulWidget {
-  final String title;
+extension CalendarWidgets on CalendarScreen {
+  AppBar get appBar {
+    AppBar(
+      title: Text(
+        'Attendance',
+      ),
+      backgroundColor: CupertinoColors.white,
+      elevation: 0,
+      leading: RawMaterialButton(
+        onPressed: () => Get.back(),
+        child: Icon(
+          Icons.arrow_back,
+          color: Colour.appBlue,
+        ),
+      ),
+    );
+  }
 
-  const CalendarView({Key key, this.title}) : super(key: key);
+  Widget get yearMonth {
+    return Container(
+      child: Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: 17, right: 14.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Year',
+                    style: TextStyle(
+                        color: Colour.appDarkGrey,
+                        fontSize: 14.dynamic,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  SizedBox(
+                    height: 11.dynamic,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: Color(0xFFFFFFFF),
+                    ),
+                    padding:
+                        EdgeInsets.only(top: 12.0, left: 13.0, bottom: 12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  '   2020',
+                                  style: TextStyle(
+                                      color: Colour.appText,
+                                      fontSize: 14.dynamic,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  DateTime newDateTime =
+                                      await showRoundedDatePicker(
+                                    context: Get.context,
+                                    initialDatePickerMode: DatePickerMode.year,
+                                    theme:
+                                        ThemeData(primarySwatch: Colors.green),
+                                  );
+                                  print(newDateTime);
+                                },
+                                child: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Colour.appBlack,
+                                  size: 30.dynamic,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: 14, right: 17.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Month',
+                    style: TextStyle(
+                        color: Colour.appDarkGrey,
+                        fontSize: 14.dynamic,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  SizedBox(
+                    height: 11.dynamic,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: Color(0xFFFFFFFF),
+                    ),
+                    padding:
+                        EdgeInsets.only(top: 12.0, left: 13.0, bottom: 12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showMonthPicker(
+                              context: Get.context,
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2030),
+                              initialDate: DateTime.now(),
+                            );
+                          },
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '   Sep',
+                                    style: TextStyle(
+                                        color: Colour.appText,
+                                        fontSize: 14.dynamic,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Colour.appBlack,
+                                  size: 30.dynamic,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  @override
-  _CalendarViewState createState() => new _CalendarViewState();
-}
+  Widget get calendarSurround {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(
+              color: Colour.appBlue,
+            ),
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    top: 12.dynamic, left: 16, bottom: 12.dynamic),
+                child: Container(
+                  child: Text(
+                    DateFormat('MMMM, y').format(DateTime.now()).toString(),
+                    style: TextStyle(
+                      fontSize: 14.dynamic,
+                      fontWeight: FontWeight.w600,
+                      color: HexColor.fromHex('#0494FC'),
+                    ),
+                  ),
+                ),
+              ),
+              Divider(
+                color: Colour.appBlue,
+                thickness: 1.0,
+              ),
+              this.calendar,
+            ],
+          ),
+        ), //
+      ],
+    );
+  }
 
-class _CalendarViewState extends State<CalendarView> {
-  DateTime _currentDate = DateTime(2021, 4, 26);
-
-  @override
-  Widget build(BuildContext context) {
-    final _calendarCarouselNoHeader = CalendarCarousel<Event>(
+  Widget get calendar {
+    return CalendarCarousel<Event>(
       todayBorderColor: Colors.transparent,
       customDayBuilder: (isSelectable,
           index,
@@ -309,10 +339,10 @@ class _CalendarViewState extends State<CalendarView> {
           ),
         );
       },
-      minSelectedDate: _currentDate.subtract(Duration(days: 360)),
-      maxSelectedDate: _currentDate.add(Duration(days: 360)),
+      // minSelectedDate: _currentDate.subtract(Duration(days: 360)),
+      // maxSelectedDate: _currentDate.add(Duration(days: 360)),
       scrollDirection: Axis.horizontal,
-      isScrollable: true,
+      isScrollable: false,
       prevDaysTextStyle: TextStyle(
         fontSize: 16,
         color: Colors.pinkAccent,
@@ -336,46 +366,6 @@ class _CalendarViewState extends State<CalendarView> {
         }
         print('long pressed date $date');
       },
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(
-              color: Colour.appBlue,
-            ),
-          ),
-          margin: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    top: 12.dynamic, left: 16, bottom: 12.dynamic),
-                child: Container(
-                  child: Text(
-                    DateFormat('MMMM, y').format(DateTime.now()).toString(),
-                    style: TextStyle(
-                      fontSize: 14.dynamic,
-                      fontWeight: FontWeight.w600,
-                      color: HexColor.fromHex('#0494FC'),
-                    ),
-                  ),
-                ),
-              ),
-              Divider(
-                color: Colour.appBlue,
-                thickness: 1.0,
-              ),
-              _calendarCarouselNoHeader,
-            ],
-          ),
-        ), //
-      ],
     );
   }
 }

@@ -2,6 +2,9 @@ import 'dart:core';
 import 'dart:math';
 
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/screen/Attendance/calendar_screen.dart';
+import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
+import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +12,14 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'colors.dart';
+import 'controller/app_binder.dart';
 import 'dynamic_font.dart';
-import 'screen/nav_bottom.dart';
+
+class NavPage {
+  static String calendar = '/calendar';
+  static String clockIn = '/clockIn';
+  static String clockOut = '/clockOut';
+}
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +51,9 @@ class MyApp extends StatelessWidget {
                 return AppController.to.rootView();
               });
             }),
+        GetPage(name: NavPage.calendar, page: () => CalendarScreen()),
+        GetPage(name: NavPage.clockIn, page: () => TimeInScreen()),
+        GetPage(name: NavPage.clockOut, page: () => TimeOutScreen()),
       ],
       initialBinding: AppBinding(),
       theme: ThemeData(

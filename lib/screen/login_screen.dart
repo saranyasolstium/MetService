@@ -6,7 +6,7 @@ import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/login_model.dart';
-import 'package:eagle_pixels/screen/nav_bottom.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
