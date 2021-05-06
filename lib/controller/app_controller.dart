@@ -45,7 +45,7 @@ class AppController extends GetxController {
     // ever(AppController.to.isLogged, AppController.to.setupUI());
     super.onInit();
 
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 2), () {
       isLogged.value = (storage.token.isNotEmpty);
       print('token ${storage.token}');
     });
