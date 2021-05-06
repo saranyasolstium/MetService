@@ -1,4 +1,4 @@
-enum EndPoint { profile, login, scheduled_job_list }
+enum EndPoint { profile, login, scheduled_job_list, register }
 
 extension EndPointString on EndPoint {
   String get string {
@@ -7,8 +7,12 @@ extension EndPointString on EndPoint {
         return "Profile";
       case EndPoint.login:
         return "token";
+
       case EndPoint.scheduled_job_list:
         return "get_scheduled_job_list?date=2021-02-09";
+
+      case EndPoint.register:
+        return "register";
     }
     return "";
   }
@@ -37,6 +41,8 @@ extension BaseURLString on EBaseURL {
     var extend = "";
     if (endPoint == EndPoint.login.string) {
       extend = 'oauth';
+    } else if (endPoint == EndPoint.register.string) {
+      extend = 'api/v1';
     } else {
       extend = "api/v1/employee";
     }

@@ -19,10 +19,6 @@ extension Method on EndPoint {
     switch (this) {
       case EndPoint.login:
         return HTTPMethod.post;
-      case EndPoint.profile:
-        return HTTPMethod.get;
-      case EndPoint.scheduled_job_list:
-        return HTTPMethod.get;
     }
     return HTTPMethod.get;
   }

@@ -27,8 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool _obsecureText = false;
   bool isApiCallService = false;
-  String email;
-  String password;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         EmailValidator(errorText: "Enter valid email id"),
       ]),
       obscureText: false,
-      onChanged: (emailTyped) => email = emailTyped,
+      controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       style: style,
       decoration: InputDecoration(
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
         MaxLengthValidator(15,
             errorText: "Password should not be greater than 15 characters")
       ]),
-      onChanged: (pass) => password = pass,
+      controller: _passwordController,
       obscureText: _obsecureText,
       style: style,
       decoration: InputDecoration(
@@ -89,6 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () async {
+          var email = _emailController.text;
+          var password = _passwordController.text;
           if (_formkey.currentState.validate()) {
             FocusScopeNode currentFocus = FocusScope.of(context);
             currentFocus.unfocus();
@@ -122,6 +124,10 @@ class _LoginScreenState extends State<LoginScreen> {
               Get.snackbar('Login Unsuccessful',
                   'Something went wrong. Please try again');
             }
+
+            print("Validated");
+          } else {
+            print('Not Validated');
           }
         },
         child: Text('Login',

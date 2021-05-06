@@ -27,5 +27,6 @@ extension Header on EndPoint {
       default:
         Header.defaultHeader;
     }
+    return {};
   }
 }
