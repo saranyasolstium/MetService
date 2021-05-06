@@ -1,7 +1,4 @@
-enum EndPoint {
-  profile,
-  login,
-}
+enum EndPoint { profile, login, scheduled_job_list }
 
 extension EndPointString on EndPoint {
   String get string {
@@ -10,6 +7,8 @@ extension EndPointString on EndPoint {
         return "Profile";
       case EndPoint.login:
         return "token";
+      case EndPoint.scheduled_job_list:
+        return "get_scheduled_job_list?date=2021-02-09";
     }
     return "";
   }

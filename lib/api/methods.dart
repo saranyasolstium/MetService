@@ -21,6 +21,8 @@ extension Method on EndPoint {
         return HTTPMethod.post;
       case EndPoint.profile:
         return HTTPMethod.get;
+      case EndPoint.scheduled_job_list:
+        return HTTPMethod.get;
     }
     return HTTPMethod.get;
   }
