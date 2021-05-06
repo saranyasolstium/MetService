@@ -41,6 +41,8 @@ dependencies:
   month_picker_dialog: ^0.4.0
   flutter_rounded_date_picker: ^2.0.1
   pretty_json:
+  get: ^4.1.4
+  get_storage:
 
 
 dev_dependencies:

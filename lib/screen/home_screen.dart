@@ -1,4 +1,5 @@
 import 'package:eagle_pixels/colors.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:flutter/material.dart';
 
@@ -111,10 +112,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           name: 'Attendance',
                         ),
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CalendarScreen()));
+                          // Future.delayed(Duration(seconds: 5), () {
+                          // AppController.to.isLogged.value = false;
+                          // });
+                          showLoading();
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => CalendarScreen()));
                         },
                       ),
                       SizedBox(

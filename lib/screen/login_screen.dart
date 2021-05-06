@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/colors.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/login_model.dart';
 import 'package:eagle_pixels/screen/nav_bottom.dart';
@@ -10,6 +11,7 @@ import 'package:eagle_pixels/screen/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -31,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     _obsecureText = false;
-
     super.initState();
   }
 
@@ -90,67 +91,37 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () async {
           if (_formkey.currentState.validate()) {
             FocusScopeNode currentFocus = FocusScope.of(context);
+            currentFocus.unfocus();
 
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-            setState(() {
-              isApiCallService = true;
-            });
+            showLoading();
+
             LoginRequestModel loginRequestModel =
                 LoginRequestModel(email: email, password: password);
-            LoginResponseModel model;
+            Map<String, dynamic> map;
             try {
               var response = await API.service.call(
                   endPoint: EndPoint.login, body: loginRequestModel.toJson());
-              model = LoginResponseModel.fromJson(jsonDecode(response.body));
+              map = jsonDecode(response.body);
             } catch (error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('$error'),
-                  duration: Duration(seconds: 1),
-                ),
-              );
+              Get.snackbar("Login Failed", '$error');
             }
 
-            setState(() {
-              isApiCallService = false;
-            });
-
-            if (model.accessToken.isNotEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Login Successful'),
-                  duration: Duration(seconds: 1),
-                ),
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Nav()),
-              );
-            } else if (model.error != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Login Unsuccessful'),
-                  duration: Duration(seconds: 1),
-                ),
-              );
+            hideLoading();
+            if (map['error'] != null) {
+              Get.snackbar("Login Failed", '${map['error']}');
+            } else if (map['access_token'].toString().isNotEmpty) {
+              AppController.to.storage
+                  .write('token', map['access_token'].toString());
+              print('Stored Token - ${AppController.to.storage.read('token')}');
+              AppController.to.isLogged.value = true;
+              Future.delayed(
+                  Duration(seconds: 1),
+                  () =>
+                      Get.snackbar("Login Success", 'Successfully logged in.'));
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Something went wrong. Please try again'),
-                  duration: Duration(seconds: 1),
-                ),
-              );
+              Get.snackbar('Login Unsuccessful',
+                  'Something went wrong. Please try again');
             }
-            print("Validated");
-          } else {
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(
-            //     content: Text('Something went wrong. Please try again'),
-            //     duration: Duration(seconds: 1),
-            //   ),
-            // );
           }
         },
         child: Text('Login',
@@ -329,6 +300,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
+          AppController.to.defaultLoaderView(),
         ],
       ),
     );
