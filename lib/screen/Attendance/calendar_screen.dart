@@ -1,19 +1,52 @@
+import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
-import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:jiffy/jiffy.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 import '../../colors.dart';
 
+extension CalendarAction on CalendarScreen {
+  startTheDay() {}
+  selectMonth() {
+    final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
+    showMonthPicker(
+      context: Get.context,
+      firstDate: DateTime(currentYear - 30),
+      lastDate: DateTime(currentYear + 1),
+      initialDate: DateTime.now(),
+    ).then((value) {
+      var month = DateFormat.MMMM().format(value);
+      attendance.selectedMonth.value = month.toString();
+    });
+  }
+
+  selectYear() {
+    final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
+    showDatePicker(
+      context: Get.context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(currentYear - 1),
+      lastDate: DateTime(currentYear + 1),
+      initialDatePickerMode: DatePickerMode.year,
+      initialEntryMode: DatePickerEntryMode.calendar,
+    ).then((value) {
+      print(value);
+      var year = DateFormat.y().format(value);
+      attendance.selectedYear.value = year.toString();
+    });
+  }
+}
+
 class CalendarScreen extends StatelessWidget {
+  final AttendanceController attendance = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,12 +69,17 @@ class CalendarScreen extends StatelessWidget {
               SizedBox(
                 height: 86.dynamic,
               ),
-              Text(
-                '09:10 AM  |  21st September 2021',
-                style: TextStyle(
-                  fontSize: 14.dynamic,
-                  fontWeight: FontWeight.w600,
-                  color: HexColor.fromHex("333333"),
+              Obx(
+                () => Text(
+                  // var time = DateFormat('hh:mm a').format(DateTime.now());
+                  Jiffy(DateTime.now()).format('hh:mm a  |  do MMMM yyyy'),
+                  // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
+                  // '09:10 AM  |  21st September 2021',
+                  style: TextStyle(
+                    fontSize: 14.dynamic,
+                    fontWeight: FontWeight.w600,
+                    color: HexColor.fromHex("333333"),
+                  ),
                 ),
               ),
               Padding(
@@ -56,12 +94,7 @@ class CalendarScreen extends StatelessWidget {
 // margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                   width: double.infinity,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TimeInScreen()),
-                      );
-                    },
+                    onPressed: () => this.startTheDay(),
                     child: Text(
                       'Start the day',
                       style: TextStyle(
@@ -82,7 +115,7 @@ class CalendarScreen extends StatelessWidget {
 
 extension CalendarWidgets on CalendarScreen {
   AppBar get appBar {
-    AppBar(
+    return AppBar(
       title: Text(
         'Attendance',
       ),
@@ -132,24 +165,29 @@ extension CalendarWidgets on CalendarScreen {
                           child: Row(
                             children: [
                               Expanded(
-                                child: Text(
-                                  '   2020',
-                                  style: TextStyle(
-                                      color: Colour.appText,
-                                      fontSize: 14.dynamic,
-                                      fontWeight: FontWeight.w400),
-                                ),
+                                child: Obx(() {
+                                  return Text(
+                                    '   ${attendance.selectedYear}',
+                                    style: TextStyle(
+                                        color: Colour.appText,
+                                        fontSize: 14.dynamic,
+                                        fontWeight: FontWeight.w400),
+                                  );
+                                }),
                               ),
                               GestureDetector(
-                                onTap: () async {
-                                  DateTime newDateTime =
-                                      await showRoundedDatePicker(
-                                    context: Get.context,
-                                    initialDatePickerMode: DatePickerMode.year,
-                                    theme:
-                                        ThemeData(primarySwatch: Colors.green),
-                                  );
-                                  print(newDateTime);
+                                onTap: () {
+                                  this.selectYear();
+                                  // DateTime newDateTime =
+                                  //     await showRoundedDatePicker(
+                                  //   context: Get.context,
+                                  //   initialDatePickerMode: DatePickerMode.year,
+                                  //   theme:
+                                  //       ThemeData(primarySwatch: Colors.green),
+                                  // ).then((value) {
+                                  //   print(value);
+                                  // });
+                                  // print(newDateTime);
                                 },
                                 child: Icon(
                                   Icons.keyboard_arrow_down,
@@ -194,25 +232,20 @@ extension CalendarWidgets on CalendarScreen {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            showMonthPicker(
-                              context: Get.context,
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2030),
-                              initialDate: DateTime.now(),
-                            );
-                          },
+                          onTap: this.selectMonth,
                           child: Container(
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: Text(
-                                    '   Sep',
-                                    style: TextStyle(
-                                        color: Colour.appText,
-                                        fontSize: 14.dynamic,
-                                        fontWeight: FontWeight.w400),
-                                  ),
+                                  child: Obx(() {
+                                    return Text(
+                                      '   ${attendance.selectedMonth}',
+                                      style: TextStyle(
+                                          color: Colour.appText,
+                                          fontSize: 14.dynamic,
+                                          fontWeight: FontWeight.w400),
+                                    );
+                                  }),
                                 ),
                                 Icon(
                                   Icons.keyboard_arrow_down,
@@ -254,16 +287,16 @@ extension CalendarWidgets on CalendarScreen {
               Padding(
                 padding: EdgeInsets.only(
                     top: 12.dynamic, left: 16, bottom: 12.dynamic),
-                child: Container(
-                  child: Text(
-                    DateFormat('MMMM, y').format(DateTime.now()).toString(),
+                child: Container(child: Obx(() {
+                  return Text(
+                    '${attendance.selectedMonth}, ${attendance.selectedYear}',
                     style: TextStyle(
                       fontSize: 14.dynamic,
                       fontWeight: FontWeight.w600,
                       color: HexColor.fromHex('#0494FC'),
                     ),
-                  ),
-                ),
+                  );
+                })),
               ),
               Divider(
                 color: Colour.appBlue,
@@ -423,38 +456,6 @@ class CalendarItem extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-enum DayStatus {
-  PRESENT,
-  ABSENT,
-  HALFDAY,
-}
-
-extension StatusExtension on DayStatus {
-  Color get color {
-    switch (this) {
-      case DayStatus.ABSENT:
-        return HexColor.fromHex('#D85151');
-      case DayStatus.PRESENT:
-        return HexColor.fromHex('#14E19C');
-      case DayStatus.HALFDAY:
-        return HexColor.fromHex('#EFD100');
-    }
-    return Colors.black;
-  }
-
-  String get text {
-    switch (this) {
-      case DayStatus.ABSENT:
-        return 'ABSENT';
-      case DayStatus.PRESENT:
-        return 'PRESENT';
-      case DayStatus.HALFDAY:
-        return 'HALF DAY';
-    }
-    return '';
   }
 }
 
