@@ -3,17 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/screen/home/mypurchase_detail_screen.dart';
+import 'package:get/get.dart';
+import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 
-class ScheduleScreen extends StatefulWidget {
-  static String id = '/schedule_screen';
-
-  @override
-  _ScheduleScreenState createState() => _ScheduleScreenState();
-}
-
-class _ScheduleScreenState extends State<ScheduleScreen> {
-  TextStyle style =
+class ScheduleScreen extends StatelessWidget {
+  final TextStyle style =
       TextStyle(fontSize: 14.dynamic, fontWeight: FontWeight.w300);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

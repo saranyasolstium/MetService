@@ -1,15 +1,17 @@
 // To parse this JSON data, do
 //
-//     final welcome = welcomeFromJson(jsonString);
+//     final getScheduledList = getScheduledListFromJson(jsonString);
 
 import 'dart:convert';
 
-Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
+GetScheduledList getScheduledListFromJson(String str) =>
+    GetScheduledList.fromJson(json.decode(str));
 
-String welcomeToJson(Welcome data) => json.encode(data.toJson());
+String getScheduledListToJson(GetScheduledList data) =>
+    json.encode(data.toJson());
 
-class Welcome {
-  Welcome({
+class GetScheduledList {
+  GetScheduledList({
     this.status,
     this.message,
     this.data,
@@ -17,12 +19,14 @@ class Welcome {
 
   String status;
   String message;
-  List<Datum> data;
+  List<ScheduleList> data;
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+  factory GetScheduledList.fromJson(Map<String, dynamic> json) =>
+      GetScheduledList(
         status: json["status"],
         message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<ScheduleList>.from(
+            json["data"].map((x) => ScheduleList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,8 +36,8 @@ class Welcome {
       };
 }
 
-class Datum {
-  Datum({
+class ScheduleList {
+  ScheduleList({
     this.id,
     this.requesterId,
     this.siteId,
@@ -67,7 +71,7 @@ class Datum {
   String description;
   String name;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory ScheduleList.fromJson(Map<String, dynamic> json) => ScheduleList(
         id: json["id"],
         requesterId: json["requester_id"],
         siteId: json["site_id"],

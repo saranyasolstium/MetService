@@ -49,6 +49,14 @@ class API {
   7. Exeception Handling
 
    */
+  String queryParam(Map<String, String> query) {
+    var initial = '';
+    query.forEach((key, value) {
+      initial = '$initial&$key=$value';
+    });
+
+    return initial.substring(1);
+  }
 
   final APIRouter route = APIRouter();
 
@@ -57,6 +65,7 @@ class API {
     @required EndPoint endPoint,
     Map<dynamic, dynamic> body,
     Map<String, String> header,
+    Map<String, String> query,
   }) async {
     final String url = route.url(endPoint.string);
     final Map<String, String> safeHeader = header ??= endPoint.header;
@@ -70,10 +79,10 @@ class API {
       print("response - ${resp.body.toString()}");
       return resp;
     } else {
-      final Map<String, String> queryParam = body;
-      final Uri uri = Uri.parse(url);
+      final String getParam = queryParam(query);
+      print('Query param - $getParam');
+      final Uri uri = Uri.parse('$url?$getParam');
       var resp = await http.get(uri, headers: safeHeader);
-
       print("response - ${resp.body.toString()}");
       return resp;
     }

@@ -6,6 +6,7 @@ import 'package:eagle_pixels/screen/Attendance/calendar_screen.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
+import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class NavPage {
   static String calendar = '/calendar';
   static String clockIn = '/clockIn';
   static String clockOut = '/clockOut';
+  static String scheduleScreen = '/schedule_screen';
 }
 
 void main() {
@@ -54,6 +56,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: NavPage.calendar, page: () => CalendarScreen()),
         GetPage(name: NavPage.clockIn, page: () => TimeInScreen()),
         GetPage(name: NavPage.clockOut, page: () => TimeOutScreen()),
+        GetPage(name: NavPage.scheduleScreen, page: () => ScheduleScreen()),
       ],
       initialBinding: AppBinding(),
       theme: ThemeData(

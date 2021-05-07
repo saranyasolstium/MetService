@@ -7,9 +7,8 @@ extension EndPointString on EndPoint {
         return "Profile";
       case EndPoint.login:
         return "token";
-
       case EndPoint.scheduled_job_list:
-        return "get_scheduled_job_list?date=2021-02-09";
+        return "get_scheduled_job_list";
 
       case EndPoint.register:
         return "register";
