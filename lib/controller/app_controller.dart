@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class AppController extends GetxController {
   static AppController get to => Get.find<AppController>();
@@ -35,13 +36,8 @@ class AppController extends GetxController {
   Widget defaultLoaderView() {
     return GetBuilder<AppController>(
       builder: (con) {
-        if (showLoading > 0) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return Container();
-        }
+        return ModalProgressHUD(
+            opacity: 0.3, inAsyncCall: showLoading > 0, child: Container());
       },
     );
   }

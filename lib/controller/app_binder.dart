@@ -1,3 +1,4 @@
+import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/model/get_scheduled_job.dart';
 
 import 'package:eagle_pixels/controller/attendance_controller.dart';
@@ -11,7 +12,7 @@ class AppBinding implements Bindings {
   void dependencies() {
     Get.put(AppController(), permanent: true);
 
-    Get.put(GetScheduledList());
+    Get.create(() => ScheduleListController());
 
     Get.lazyPut(() => AttendanceController());
   }

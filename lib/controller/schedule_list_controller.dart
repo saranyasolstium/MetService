@@ -4,6 +4,7 @@ import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:eagle_pixels/reuse/date_manager.dart';
 
 class ScheduleListController extends GetxController {
   var scheduleList = List<ScheduleList>().obs;
@@ -19,16 +20,26 @@ class ScheduleListController extends GetxController {
   void fetchProducts() async {
     try {
       showLoading();
+
       scheduleList.value = await _fetchList();
     } finally {
       hideLoading();
     }
   }
 
+  String serviceDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  // String displayDate() {
+  //
+  //   return DateFormat('yyyy-MM-dd').format(selectedDate.value);
+  // }
+
   Future<List<ScheduleList>> _fetchList() async {
     var response = await API.service.call(
         endPoint: EndPoint.scheduled_job_list,
-        query: {'date': DateFormat('yyyy-MM-dd').format(selectedDate.value)});
+        query: {'date': serviceDate(selectedDate.value)});
     if (response.statusCode == 200) {
       var jsonString = response.body;
       print(jsonString);
