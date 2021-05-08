@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:bordered_text/bordered_text.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:bordered_text/bordered_text.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MyRewardScreen extends StatefulWidget {
   @override
@@ -45,6 +46,18 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          title: Text(''),
+          leading: TextButton(
+            onPressed: Get.back,
+            child: Icon(
+              Icons.arrow_back,
+              color: Colour.appBlue,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
         body: SafeArea(
           child: Container(
             width: MediaQuery.of(context).size.width,

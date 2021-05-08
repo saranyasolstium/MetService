@@ -1,17 +1,24 @@
 import 'package:eagle_pixels/colors.dart';
+import 'package:eagle_pixels/constant.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'schedule/schedule_screen.dart';
+extension HomeAction on HomeScreen {
+  onAttendance() {
+    Get.toNamed(NavPage.calendar);
+  }
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
+  onScheduleJob() {
+    Get.toNamed(NavPage.scheduleScreen);
+  }
+
+  onJobHistory() {}
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,144 +28,150 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  padding: EdgeInsets.only(top: 9.0, left: 17.0, bottom: 22.0),
-                  constraints: BoxConstraints(
-                    minHeight: 75.dynamic,
-                  ),
-                  color: Color(0xFFFFFFFF),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Logged in as ',
-                        style: TextStyle(
-                            color: Colour.appDarkGrey,
-                            fontSize: 12.dynamic,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      Container(
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 30.dynamic,
-                              height: 30.dynamic,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: AssetImage('images/user.png'),
-                                ),
-                                border: Border.all(
-                                  color: Colors.blue,
-                                ),
-                                borderRadius:
-                                    BorderRadius.circular(37.5.dynamic),
-                              ),
-                            ),
-                            Text(
-                              '   Jhon Doe',
-                              style: TextStyle(
-                                  color: Colour.appText,
-                                  fontSize: 16.dynamic,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colour.appBlue,
-                              size: 30.dynamic,
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                profileView,
                 SizedBox(
                   height: 22.dynamic,
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 17.0),
-                  color: Colour.appLightGrey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          HomeCard(
-                            color: Color(0xFF14CE1A),
-                            jobCount: '123',
-                            jobName: 'Jobs Completed',
-                          ),
-                          SizedBox(
-                            width: 16.dynamic,
-                          ),
-                          HomeCard(
-                            color: Colour.appBlue,
-                            jobCount: '80',
-                            jobName: 'Service Days',
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 18.dynamic,
-                      ),
-                      GestureDetector(
-                        child: HomeMainCard(
-                          imageName: 'images/attendence.png',
-                          name: 'Attendance',
-                        ),
-                        onTap: () {
-                          Get.toNamed(NavPage.calendar);
-                        },
-                      ),
-                      SizedBox(
-                        height: 18.dynamic,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ScheduleScreen(),
-                            ),
-                          );
-                        },
-                        child: HomeMainCard(
-                          imageName: 'images/schedule.png',
-                          name: 'Scheduled Job',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 18.dynamic,
-                      ),
-                      HomeMainCard(
-                        imageName: 'images/job_history.png',
-                        name: 'Job History',
-                      ),
-                      SafeArea(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 26.0, bottom: 34.0),
-                          child: Center(
-                            child: Image.asset(
-                              'images/poweredby.png',
-                              fit: BoxFit.fill,
-                              // width: 60.dynamic,
-                              // height: 60.dynamic,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                homeContent,
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+extension HomeWidgets on HomeScreen {
+  Widget get profileView {
+    return Container(
+      padding: EdgeInsets.only(top: 9.0, left: 17.0, bottom: 22.0),
+      constraints: BoxConstraints(
+        minHeight: 75.dynamic,
+      ),
+      color: Color(0xFFFFFFFF),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Logged in as ',
+            style: TextStyle(
+                color: Colour.appDarkGrey,
+                fontSize: 12.dynamic,
+                fontWeight: FontWeight.w400),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Container(
+            child: Row(
+              children: [
+                Container(
+                  width: 30.dynamic,
+                  height: 30.dynamic,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: AssetImage('images/user.png'),
+                    ),
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
+                    borderRadius: BorderRadius.circular(37.5.dynamic),
+                  ),
+                ),
+                Text(
+                  '   ${safeString(AppController.profile.name)}',
+                  style: TextStyle(
+                      color: Colour.appText,
+                      fontSize: 16.dynamic,
+                      fontWeight: FontWeight.w400),
+                ),
+                Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Colour.appBlue,
+                  size: 30.dynamic,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget get jobStatus {
+    return Row(
+      children: [
+        HomeCard(
+          color: Color(0xFF14CE1A),
+          jobCount: '123',
+          jobName: 'Jobs Completed',
+        ),
+        SizedBox(
+          width: 16.dynamic,
+        ),
+        HomeCard(
+          color: Colour.appBlue,
+          jobCount: '80',
+          jobName: 'Service Days',
+        ),
+      ],
+    );
+  }
+
+  Widget get homeContent {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 17.0),
+      color: Colour.appLightGrey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 18.dynamic,
+          ),
+          GestureDetector(
+            child: HomeMainCard(
+              imageName: 'images/attendence.png',
+              name: 'Attendance',
+            ),
+            onTap: this.onAttendance,
+          ),
+          SizedBox(
+            height: 18.dynamic,
+          ),
+          GestureDetector(
+            onTap: this.onScheduleJob,
+            child: HomeMainCard(
+              imageName: 'images/schedule.png',
+              name: 'Scheduled Job',
+            ),
+          ),
+          SizedBox(
+            height: 18.dynamic,
+          ),
+          GestureDetector(
+            onTap: this.onJobHistory,
+            child: HomeMainCard(
+              imageName: 'images/job_history.png',
+              name: 'Job History',
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(top: 26.0, bottom: 34.0),
+              child: Center(
+                child: Image.asset(
+                  'images/poweredby.png',
+                  fit: BoxFit.fill,
+                  // width: 60.dynamic,
+                  // height: 60.dynamic,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

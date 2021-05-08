@@ -1,12 +1,11 @@
 import 'dart:core';
 import 'dart:math';
 
-import 'package:eagle_pixels/controller/app_controller.dart';
-import 'package:eagle_pixels/screen/Attendance/calendar_screen.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
+import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,13 +13,16 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'colors.dart';
 import 'controller/app_binder.dart';
+import 'controller/app_controller.dart';
 import 'dynamic_font.dart';
+import 'screen/Attendance/calendar_screen.dart';
 
 class NavPage {
   static String calendar = '/calendar';
   static String clockIn = '/clockIn';
   static String clockOut = '/clockOut';
   static String scheduleScreen = '/schedule_screen';
+  static String jobCompleted = '/jobCompleted';
 }
 
 void main() {
@@ -57,13 +59,14 @@ class MyApp extends StatelessWidget {
         GetPage(name: NavPage.clockIn, page: () => TimeInScreen()),
         GetPage(name: NavPage.clockOut, page: () => TimeOutScreen()),
         GetPage(name: NavPage.scheduleScreen, page: () => ScheduleScreen()),
+        GetPage(name: NavPage.jobCompleted, page: () => JobCompletedScreen()),
       ],
       initialBinding: AppBinding(),
       theme: ThemeData(
           primaryColor: Colour.appBlue,
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
-      initialRoute: '/',
+      initialRoute: NavPage.jobCompleted, //'/',
     );
   }
 }

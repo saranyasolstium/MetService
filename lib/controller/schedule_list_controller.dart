@@ -20,7 +20,6 @@ class ScheduleListController extends GetxController {
   void fetchProducts() async {
     try {
       showLoading();
-
       scheduleList.value = await _fetchList();
     } finally {
       hideLoading();

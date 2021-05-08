@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AppController.to.storage
                   .write('token', map['access_token'].toString());
               print('Stored Token - ${AppController.to.storage.read('token')}');
-              AppController.to.isLogged.value = true;
+              AppController.to.loginStatus.value = LoginStatus.logged;
               Future.delayed(
                   Duration(seconds: 1),
                   () =>

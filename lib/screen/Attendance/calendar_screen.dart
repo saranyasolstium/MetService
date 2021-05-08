@@ -69,17 +69,15 @@ class CalendarScreen extends StatelessWidget {
               SizedBox(
                 height: 86.dynamic,
               ),
-              Obx(
-                () => Text(
-                  // var time = DateFormat('hh:mm a').format(DateTime.now());
-                  Jiffy(DateTime.now()).format('hh:mm a  |  do MMMM yyyy'),
-                  // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
-                  // '09:10 AM  |  21st September 2021',
-                  style: TextStyle(
-                    fontSize: 14.dynamic,
-                    fontWeight: FontWeight.w600,
-                    color: HexColor.fromHex("333333"),
-                  ),
+              Text(
+                // var time = DateFormat('hh:mm a').format(DateTime.now());
+                Jiffy(DateTime.now()).format('hh:mm a  |  do MMMM yyyy'),
+                // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
+                // '09:10 AM  |  21st September 2021',
+                style: TextStyle(
+                  fontSize: 14.dynamic,
+                  fontWeight: FontWeight.w600,
+                  color: HexColor.fromHex("333333"),
                 ),
               ),
               Padding(
@@ -93,14 +91,16 @@ class CalendarScreen extends StatelessWidget {
                   ),
 // margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                   width: double.infinity,
-                  child: TextButton(
-                    onPressed: () => this.startTheDay(),
-                    child: Text(
-                      'Start the day',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.dynamic,
-                          fontWeight: FontWeight.w300),
+                  child: RawMaterialButton(
+                    child: TextButton(
+                      onPressed: this.startTheDay,
+                      child: Text(
+                        'Start the day',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.dynamic,
+                            fontWeight: FontWeight.w300),
+                      ),
                     ),
                   ),
                 ),
@@ -136,104 +136,92 @@ extension CalendarWidgets on CalendarScreen {
       child: Row(
         children: [
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 17, right: 14.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Year',
-                    style: TextStyle(
-                        color: Colour.appDarkGrey,
-                        fontSize: 14.dynamic,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  SizedBox(
-                    height: 11.dynamic,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: Color(0xFFFFFFFF),
+            child: GestureDetector(
+              onTap: this.selectYear,
+              child: Padding(
+                padding: EdgeInsets.only(left: 17, right: 14.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Year',
+                      style: TextStyle(
+                          color: Colour.appDarkGrey,
+                          fontSize: 14.dynamic,
+                          fontWeight: FontWeight.w400),
                     ),
-                    padding:
-                        EdgeInsets.only(top: 12.0, left: 13.0, bottom: 12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Obx(() {
-                                  return Text(
-                                    '   ${attendance.selectedYear}',
-                                    style: TextStyle(
-                                        color: Colour.appText,
-                                        fontSize: 14.dynamic,
-                                        fontWeight: FontWeight.w400),
-                                  );
-                                }),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  this.selectYear();
-                                  // DateTime newDateTime =
-                                  //     await showRoundedDatePicker(
-                                  //   context: Get.context,
-                                  //   initialDatePickerMode: DatePickerMode.year,
-                                  //   theme:
-                                  //       ThemeData(primarySwatch: Colors.green),
-                                  // ).then((value) {
-                                  //   print(value);
-                                  // });
-                                  // print(newDateTime);
-                                },
-                                child: Icon(
+                    SizedBox(
+                      height: 11.dynamic,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        color: Color(0xFFFFFFFF),
+                      ),
+                      padding:
+                          EdgeInsets.only(top: 12.0, left: 13.0, bottom: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Obx(() {
+                                    return Text(
+                                      '   ${attendance.selectedYear}',
+                                      style: TextStyle(
+                                          color: Colour.appText,
+                                          fontSize: 14.dynamic,
+                                          fontWeight: FontWeight.w400),
+                                    );
+                                  }),
+                                ),
+                                Icon(
                                   Icons.keyboard_arrow_down,
                                   color: Colour.appBlack,
                                   size: 30.dynamic,
                                 ),
-                              )
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 14, right: 17.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Month',
-                    style: TextStyle(
-                        color: Colour.appDarkGrey,
-                        fontSize: 14.dynamic,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  SizedBox(
-                    height: 11.dynamic,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: Color(0xFFFFFFFF),
+            child: GestureDetector(
+              onTap: this.selectMonth,
+              child: Padding(
+                padding: EdgeInsets.only(left: 14, right: 17.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Month',
+                      style: TextStyle(
+                          color: Colour.appDarkGrey,
+                          fontSize: 14.dynamic,
+                          fontWeight: FontWeight.w400),
                     ),
-                    padding:
-                        EdgeInsets.only(top: 12.0, left: 13.0, bottom: 12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: this.selectMonth,
-                          child: Container(
+                    SizedBox(
+                      height: 11.dynamic,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        color: Color(0xFFFFFFFF),
+                      ),
+                      padding:
+                          EdgeInsets.only(top: 12.0, left: 13.0, bottom: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
                             child: Row(
                               children: [
                                 Expanded(
@@ -255,11 +243,11 @@ extension CalendarWidgets on CalendarScreen {
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
