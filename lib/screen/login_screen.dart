@@ -94,38 +94,29 @@ class _LoginScreenState extends State<LoginScreen> {
           if (_formkey.currentState.validate()) {
             FocusScopeNode currentFocus = FocusScope.of(context);
             currentFocus.unfocus();
-
-            showLoading();
-
             LoginRequestModel loginRequestModel =
                 LoginRequestModel(email: email, password: password);
-            Map<String, dynamic> map;
-            try {
-              var response = await API.service.call(
-                  endPoint: EndPoint.login, body: loginRequestModel.toJson());
-              map = jsonDecode(response.body);
-            } catch (error) {
-              Get.snackbar("Login Failed", '$error');
-            }
 
-            hideLoading();
-            if (map['error'] != null) {
-              Get.snackbar("Login Failed", '${map['error']}');
-            } else if (map['access_token'].toString().isNotEmpty) {
-              AppController.to.storage
-                  .write('token', map['access_token'].toString());
-              print('Stored Token - ${AppController.to.storage.read('token')}');
+            var response = await API.service.call(
+                model: LoginResponseModel(),
+                endPoint: EndPoint.login,
+                body: loginRequestModel.toJson());
+
+            var map = response.map;
+            var token = map['access_token'] as String;
+            if (token != null && token.isNotEmpty) {
+              AppController.to.storage.write('token', token);
+              print('Stored Token - $token');
               AppController.to.loginStatus.value = LoginStatus.logged;
               Future.delayed(
-                  Duration(seconds: 1),
-                  () =>
-                      Get.snackbar("Login Success", 'Successfully logged in.'));
+                Duration(seconds: 1),
+                () => Get.snackbar("Login Success", 'Successfully logged in.'),
+              );
             } else {
-              Get.snackbar('Login Unsuccessful',
-                  'Something went wrong. Please try again');
+              var message =
+                  map['error'] ??= 'Something went wrong. Please try again';
+              Get.snackbar("Login Failed", '$message');
             }
-
-            print("Validated");
           } else {
             print('Not Validated');
           }

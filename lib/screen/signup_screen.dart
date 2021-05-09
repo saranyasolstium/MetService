@@ -37,60 +37,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _confirmPassword;
   String _countryCode;
   String _phoneNumber;
-  register(BuildContext context) async {
-    //   RegisterRequestModel registerRequestModel = RegisterRequestModel(
-    //       firstName: 'demo',
-    //       lastName: 'acc',
-    //       password: '123456',
-    //       email: 'demo@yopmail.com',
-    //       confirmPassword: '123456',
-    //       countryCode: '+91',
-    //       dob: '01-01-1999',
-    //       mobileNumber: '7410075100',
-    //       userName: 'demouser');
-    //
-    RegisterRequestModel registerRequestModel = RegisterRequestModel(
-        firstName: _firstName,
-        lastName: _lastName,
-        password: _password,
-        email: _email,
-        confirmPassword: _confirmPassword,
-        countryCode: _countryCode,
-        dob: txt.text,
-        mobileNumber: _phoneNumber,
-        userName: _userName);
-    RegisterResponseModel model;
-
-    try {
-      setState(() {
-        isApiCallService = true;
-      });
-      var response = await API.service.call(
-          endPoint: EndPoint.register, body: registerRequestModel.toJson());
-      model = RegisterResponseModel.fromJson(jsonDecode(response.body));
-      if (model.status.isSuccess) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Register Successful'),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${model.message} Hello Welcome'),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      }
-      print('ERROR${model.status}');
-    } catch (err) {
-      print(err);
-    }
-    setState(() {
-      isApiCallService = false;
-    });
-  }
+  // register(BuildContext context) async {
+  //   //   RegisterRequestModel registerRequestModel = RegisterRequestModel(
+  //   //       firstName: 'demo',
+  //   //       lastName: 'acc',
+  //   //       password: '123456',
+  //   //       email: 'demo@yopmail.com',
+  //   //       confirmPassword: '123456',
+  //   //       countryCode: '+91',
+  //   //       dob: '01-01-1999',
+  //   //       mobileNumber: '7410075100',
+  //   //       userName: 'demouser');
+  //   //
+  //   RegisterRequestModel registerRequestModel = RegisterRequestModel(
+  //       firstName: _firstName,
+  //       lastName: _lastName,
+  //       password: _password,
+  //       email: _email,
+  //       confirmPassword: _confirmPassword,
+  //       countryCode: _countryCode,
+  //       dob: txt.text,
+  //       mobileNumber: _phoneNumber,
+  //       userName: _userName);
+  //   RegisterResponseModel model;
+  //
+  //   try {
+  //     setState(() {
+  //       isApiCallService = true;
+  //     });
+  //     var response = await API.service.call(
+  //         endPoint: EndPoint.register, body: registerRequestModel.toJson());
+  //     model = RegisterResponseModel.fromJson(jsonDecode(response.body));
+  //     if (model.status.isSuccess) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text('Register Successful'),
+  //           duration: Duration(seconds: 1),
+  //         ),
+  //       );
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text('${model.message} Hello Welcome'),
+  //           duration: Duration(seconds: 1),
+  //         ),
+  //       );
+  //     }
+  //     print('ERROR${model.status}');
+  //   } catch (err) {
+  //     print(err);
+  //   }
+  //   setState(() {
+  //     isApiCallService = false;
+  //   });
+  // }
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -639,12 +639,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         isApiCallService = true;
                                       });
                                       var response = await API.service.call(
+                                          model: RegisterResponseModel(),
                                           endPoint: EndPoint.register,
                                           body: registerRequestModel.toJson());
-                                      print(response.body);
-                                      model = RegisterResponseModel.fromJson(
-                                        jsonDecode(response.body),
-                                      );
+                                      model = response.model;
                                       print(model.message);
                                       if (model.status.isSuccess) {
                                         print('true');

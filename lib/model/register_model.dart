@@ -7,8 +7,9 @@ import 'dart:convert';
 // RegisterResponseModel welcomeFromJson(String str) => RegisterResponseModel.fromJson(json.decode(str));
 //
 // String welcomeToJson(RegisterResponseModel data) => json.encode(data.toJson());
+import 'package:eagle_pixels/api/api_service.dart';
 
-class RegisterResponseModel {
+class RegisterResponseModel implements Codable {
   RegisterResponseModel({
     this.status,
     this.message,
@@ -19,18 +20,19 @@ class RegisterResponseModel {
   String message;
   List<dynamic> data;
 
-  factory RegisterResponseModel.fromJson(Map<String, dynamic> json) =>
-      RegisterResponseModel(
-        status: json["status"],
-        message: json["message"],
-        // data: List<dynamic>.from(json["data"].map((x) => x)),
-      );
+  fromJson(Map<String, dynamic> json) {
+    var model = RegisterResponseModel();
+    model.status = json["status"];
+    model.message = json["message"];
+    return model;
+  }
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
         // "data": List<dynamic>.from(data.map((x) => x)),
       };
+  bool get isValid => true;
 }
 
 class RegisterRequestModel {

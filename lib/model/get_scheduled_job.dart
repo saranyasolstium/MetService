@@ -4,14 +4,16 @@
 
 import 'dart:convert';
 
-GetScheduledList getScheduledListFromJson(String str) =>
-    GetScheduledList.fromJson(json.decode(str));
+import 'package:eagle_pixels/api/api_service.dart';
 
-String getScheduledListToJson(GetScheduledList data) =>
-    json.encode(data.toJson());
+// ScheduleResponse getScheduledListFromJson(String str) =>
+//     ScheduleResponse.fromJson(json.decode(str));
+//
+// String getScheduledListToJson(ScheduleResponse data) =>
+//     json.encode(data.toJson());
 
-class GetScheduledList {
-  GetScheduledList({
+class ScheduleResponse implements Codable {
+  ScheduleResponse({
     this.status,
     this.message,
     this.data,
@@ -21,19 +23,22 @@ class GetScheduledList {
   String message;
   List<ScheduleList> data;
 
-  factory GetScheduledList.fromJson(Map<String, dynamic> json) =>
-      GetScheduledList(
-        status: json["status"],
-        message: json["message"],
-        data: List<ScheduleList>.from(
-            json["data"].map((x) => ScheduleList.fromJson(x))),
-      );
+  fromJson(Map<String, dynamic> json) {
+    var model = ScheduleResponse();
+    model.status = json["status"];
+    model.message = json["message"];
+    model.data = List<ScheduleList>.from(
+        json["data"].map((x) => ScheduleList.fromJson(x)));
+    return model;
+  }
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
       };
+
+  bool get isValid => true;
 }
 
 class ScheduleList {

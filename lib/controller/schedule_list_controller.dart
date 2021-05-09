@@ -18,12 +18,19 @@ class ScheduleListController extends GetxController {
   }
 
   void fetchProducts() async {
-    try {
-      showLoading();
-      scheduleList.value = await _fetchList();
-    } finally {
-      hideLoading();
-    }
+    var resp = await API.service.call(
+      model: ScheduleResponse(),
+      endPoint: EndPoint.scheduled_job_list,
+      body: {'date': serviceDate(selectedDate.value)},
+    );
+    scheduleList.value = resp.model.data;
+
+    // try {
+    //   showLoading();
+    //   scheduleList.value = await _fetchList();
+    // } finally {
+    //   hideLoading();
+    // }
   }
 
   String serviceDate(DateTime date) {
@@ -35,17 +42,17 @@ class ScheduleListController extends GetxController {
   //   return DateFormat('yyyy-MM-dd').format(selectedDate.value);
   // }
 
-  Future<List<ScheduleList>> _fetchList() async {
-    var response = await API.service.call(
-        endPoint: EndPoint.scheduled_job_list,
-        query: {'date': serviceDate(selectedDate.value)});
-    if (response.statusCode == 200) {
-      var jsonString = response.body;
-      print(jsonString);
-      return getScheduledListFromJson(jsonString).data;
-    } else {
-      //show error message
-      return [];
-    }
-  }
+  // Future<List<ScheduleList>> _fetchList() async {
+  //   var response = await API.service.call(
+  //       endPoint: EndPoint.scheduled_job_list,
+  //       query: {'date': serviceDate(selectedDate.value)});
+  //   if (response.statusCode == 200) {
+  //     var jsonString = response.body;
+  //     print(jsonString);
+  //     return getScheduledListFromJson(jsonString).data;
+  //   } else {
+  //     //show error message
+  //     return [];
+  //   }
+  // }
 }
