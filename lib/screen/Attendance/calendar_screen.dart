@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:eagle_pixels/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -14,7 +15,10 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 import '../../colors.dart';
 
 extension CalendarAction on CalendarScreen {
-  startTheDay() {}
+  startTheDay() {
+    Get.toNamed(NavPage.clockIn);
+  }
+
   selectMonth() {
     final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
     showMonthPicker(

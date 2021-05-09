@@ -3,12 +3,24 @@ import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 extension HomeAction on HomeScreen {
   onAttendance() {
     Get.toNamed(NavPage.calendar);
+
+    // Get.dialog(
+    //   ConfirmationScreen(),
+    //   barrierDismissible: false,
+    // ).then((value) {
+    //   if (value == true) {
+    //     print('yes clicked');
+    //   } else {
+    //     print('no clicked');
+    //   }
+    // });
   }
 
   onScheduleJob() {

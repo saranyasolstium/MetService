@@ -1,11 +1,23 @@
+import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../colors.dart';
 
+extension TimeInAction on TimeInScreen {
+  startDay() {
+    Get.toNamed(NavPage.clockOut);
+  }
+}
+
 class TimeInScreen extends StatelessWidget {
+  final TimerController timer = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,9 +26,7 @@ class TimeInScreen extends StatelessWidget {
         backgroundColor: CupertinoColors.white,
         elevation: 0,
         leading: RawMaterialButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: Get.back,
           child: Icon(
             Icons.arrow_back,
             color: Colour.appBlue,
@@ -85,29 +95,36 @@ class TimeInScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TimeComponentItem(
-                      topText: "HH",
-                      bottomText: "01",
-                    ),
-                    TimeComponentItem(
-                      topText: "",
-                      bottomText: ":",
-                    ),
-                    TimeComponentItem(
-                      topText: "MM",
-                      bottomText: "01",
-                    ),
+                    Obx(() => TimeComponentItem(
+                          topText: "HH",
+                          bottomText:
+                              DateFormat('hh').format(timer.currentDate.value),
+                        )),
                     TimeComponentItem(
                       topText: "",
                       bottomText: ":",
                     ),
+                    Obx(() => TimeComponentItem(
+                          topText: "MM",
+                          bottomText:
+                              DateFormat('mm').format(timer.currentDate.value),
+                        )),
                     TimeComponentItem(
-                      topText: "SS",
-                      bottomText: "01",
+                      topText: "",
+                      bottomText: ":",
                     ),
+                    Obx(() => Container(
+                          width: 45.dynamic,
+                          child: TimeComponentItem(
+                            topText: "SS",
+                            bottomText: DateFormat('ss')
+                                .format(timer.currentDate.value),
+                          ),
+                        )),
                     TimeComponentItem(
                       topText: '',
-                      bottomText: "AM",
+                      bottomText:
+                          DateFormat('a').format(timer.currentDate.value),
                       bottomTextColor: '9A9A9A',
                     ),
                   ],
@@ -123,12 +140,7 @@ class TimeInScreen extends StatelessWidget {
                 margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TimeOutScreen()),
-                    );
-                  },
+                  onPressed: this.startDay,
                   child: Text(
                     'Start the day',
                     style: TextStyle(

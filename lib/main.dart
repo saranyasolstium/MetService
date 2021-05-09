@@ -3,8 +3,10 @@ import 'dart:math';
 
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
+import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
+import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +25,8 @@ class NavPage {
   static String clockOut = '/clockOut';
   static String scheduleScreen = '/schedule_screen';
   static String jobCompleted = '/jobCompleted';
+  static String myReward = '/myReward';
+  // static String confirmation = '/confirmation';
 }
 
 void main() {
@@ -60,13 +64,15 @@ class MyApp extends StatelessWidget {
         GetPage(name: NavPage.clockOut, page: () => TimeOutScreen()),
         GetPage(name: NavPage.scheduleScreen, page: () => ScheduleScreen()),
         GetPage(name: NavPage.jobCompleted, page: () => JobCompletedScreen()),
+        GetPage(name: NavPage.myReward, page: () => MyRewardScreen()),
+        // GetPage(name: NavPage.confirmation, page: () => ConfirmationScreen()),
       ],
       initialBinding: AppBinding(),
       theme: ThemeData(
           primaryColor: Colour.appBlue,
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
-      initialRoute: NavPage.jobCompleted, //'/',
+      initialRoute: '/',
     );
   }
 }

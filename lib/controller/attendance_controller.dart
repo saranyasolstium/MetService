@@ -10,6 +10,7 @@ class AttendanceController extends GetxController {
   var month = MonthData().obs;
   var selectedYear = "2021".obs;
   var selectedMonth = "01".obs;
+  var jobStartedTime = DateTime.now().obs;
   @override
   void onInit() {
     selectedMonth.value = DateFormat.MMMM().format(DateTime.now());

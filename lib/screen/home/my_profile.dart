@@ -1,5 +1,7 @@
+import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:qr/qr.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -201,12 +203,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             ),
                             RawMaterialButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MyRewardScreen(),
-                                  ),
-                                );
+                                Get.toNamed(NavPage.clockOut);
                               },
                               child: ListOptions(
                                 listName: 'Rewards',

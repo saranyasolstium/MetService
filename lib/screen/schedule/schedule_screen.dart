@@ -53,7 +53,7 @@ class ScheduleScreen extends StatelessWidget {
           elevation: 0,
           backgroundColor: Color(0xFFFFFFFF),
           leading: RawMaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Get.back(),
             child: Icon(
               Icons.arrow_back,
               color: Colour.appBlue,
