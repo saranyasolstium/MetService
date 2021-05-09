@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../colors.dart';
+import '../../constant.dart';
 
 extension TimeInAction on TimeInScreen {
   startDay() {
@@ -22,7 +23,7 @@ class TimeInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mark Attendance'),
+        title: titleText('Mark Attendance'),
         backgroundColor: CupertinoColors.white,
         elevation: 0,
         leading: RawMaterialButton(

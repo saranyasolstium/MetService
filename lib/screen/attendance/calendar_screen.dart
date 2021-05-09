@@ -1,3 +1,4 @@
+import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
@@ -120,9 +121,7 @@ class CalendarScreen extends StatelessWidget {
 extension CalendarWidgets on CalendarScreen {
   AppBar get appBar {
     return AppBar(
-      title: Text(
-        'Attendance',
-      ),
+      title: titleText('Attendance'),
       backgroundColor: CupertinoColors.white,
       elevation: 0,
       leading: RawMaterialButton(

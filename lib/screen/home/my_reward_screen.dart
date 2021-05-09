@@ -4,6 +4,8 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../constant.dart';
+
 class MyRewardScreen extends StatefulWidget {
   @override
   _MyRewardScreenState createState() => _MyRewardScreenState();
@@ -47,7 +49,7 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(''),
+          title: titleText(''),
           leading: TextButton(
             onPressed: Get.back,
             child: Icon(

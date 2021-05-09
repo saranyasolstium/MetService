@@ -4,6 +4,8 @@ import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/screen/home/mypurchase_detail_screen.dart';
 
+import '../../constant.dart';
+
 class MyPurchaseScreen extends StatefulWidget {
   static String id = '/schedule_screen';
 
@@ -33,12 +35,8 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
           //     color: Colour.appBlue,
           //   ),
           // ),
-          title: Text(
+          title: titleText(
             'My Purchases',
-            style: TextStyle(
-                color: Colour.appBlack,
-                fontWeight: FontWeight.w400,
-                fontSize: 16.dynamic),
           ),
         ),
         body: Padding(

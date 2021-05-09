@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/screen/nav_bottom.dart';
+import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -11,33 +12,10 @@ import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
-extension ScheduleAction on ScheduleScreen {
-  String get todayOrDay {
-    String selected = schedule.serviceDate(schedule.selectedDate.value);
-    if (schedule.serviceDate(DateTime.now()) == selected) {
-      return "Today";
-    } else {
-      return 'Day';
-    }
-  }
-
-  changeDate() {
-    final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
-    showDatePicker(
-      context: Get.context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(currentYear - 1),
-      lastDate: DateTime(currentYear + 1),
-      initialDatePickerMode: DatePickerMode.day,
-      initialEntryMode: DatePickerEntryMode.calendar,
-    ).then((value) {
-      print(value);
-      // var year = DateFormat.y().format(value);
-      schedule.selectedDate.value = value;
-      schedule.fetchProducts();
-    });
-  }
-}
+// extension ScheduleAction on ScheduleScreen {
+//
+//
+// }
 
 class ScheduleScreen extends StatelessWidget {
   final TextStyle style =
@@ -59,13 +37,7 @@ class ScheduleScreen extends StatelessWidget {
               color: Colour.appBlue,
             ),
           ),
-          title: Text(
-            'Scheduled Job',
-            style: TextStyle(
-                color: Colour.appBlack,
-                fontWeight: FontWeight.w400,
-                fontSize: 16.dynamic),
-          ),
+          title: titleText('Scheduled Job'),
         ),
         body: Stack(
           children: [
@@ -74,69 +46,12 @@ class ScheduleScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14.dynamic,
-                      vertical: 13.dynamic,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.calendar_today,
-                          size: 23.dynamic,
-                          color: Colour.appBlue,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Obx(
-                                () => Text(
-                                  todayOrDay,
-                                  style: TextStyle(
-                                      color: Colour.appDarkGrey,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12.dynamic),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              Obx(
-                                () => Text(
-                                  // '3rd March, 2021',
-                                  Jiffy(schedule.selectedDate.value)
-                                      .format('do MMMM yyyy'),
-                                  style: TextStyle(
-                                      color: Colour.appBlack,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14.dynamic),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        RawMaterialButton(
-                          onPressed: changeDate,
-                          child: Text(
-                            'Change',
-                            style: TextStyle(
-                                color: Colour.appBlue,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16.dynamic),
-                          ),
-                        ),
-                      ],
-                    ),
+                  ChangeDateView(
+                    date: schedule.selectedDate,
+                    didEnd: () {
+                      print('change date called');
+                      schedule.fetchProducts();
+                    },
                   ),
                   SizedBox(
                     height: 17.dynamic,

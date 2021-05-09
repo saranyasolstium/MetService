@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
 import '../../colors.dart';
+import '../../constant.dart';
 
 class TimeOutScreen extends StatelessWidget {
   final TimerController timer = Get.find();
@@ -21,15 +22,22 @@ class TimeOutScreen extends StatelessWidget {
     var hour = current.difference(start).inHours;
     var min = current.difference(start).inMinutes.remainder(60);
     var second = current.difference(start).inSeconds.remainder(60);
-
-    return '${hour > 9 ? hour : '0$hour'}:${min > 9 ? min : '0$min'}:${second > 9 ? second : '0$second'} ${hour > 0 ? "Hrs" : "Mins"}';
+    var txt = "Hrs";
+    if (hour == 0) {
+      if (min == 0) {
+        txt = 'Seconds';
+      } else {
+        txt = 'Mins';
+      }
+    }
+    return '${hour > 9 ? hour : '0$hour'}:${min > 9 ? min : '0$min'}:${second > 9 ? second : '0$second'} $txt';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Close Attendance'),
+        title: titleText('Close Attendance'),
         backgroundColor: CupertinoColors.white,
         elevation: 0,
         leading: RawMaterialButton(

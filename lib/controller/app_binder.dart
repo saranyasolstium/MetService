@@ -1,4 +1,5 @@
 import 'package:eagle_pixels/controller/attendance_controller.dart';
+import 'package:eagle_pixels/controller/job_history_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ class AppBinding implements Bindings {
     Get.create(() => ScheduleListController());
     Get.lazyPut(() => AttendanceController(), fenix: true);
     Get.create(() => TimerController());
+    Get.create(() => JobHistoryController());
     // Get.create(() => TimerController(), tag: 'out');
   }
 }

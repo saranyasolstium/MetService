@@ -1,5 +1,7 @@
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -232,6 +234,58 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             ),
                             ListOptions(
                               listName: 'Help Centre',
+                            ),
+                            SizedBox(
+                              height: 18.dynamic,
+                            ),
+                            RawMaterialButton(
+                              onPressed: () {
+                                showCupertinoDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return CupertinoAlertDialog(
+                                        title: Text('Confirmation'),
+                                        content: Text(
+                                            'Are you sure you want to logout?'),
+                                        actions: [
+                                          CupertinoButton(
+                                            child: Text('No'),
+                                            onPressed: () {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop();
+                                            },
+                                          ),
+                                          CupertinoButton(
+                                            child: Text('Yes'),
+                                            onPressed: () {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop(true);
+                                              AppController.to.storage
+                                                  .remove('token');
+                                              AppController.to.loginStatus
+                                                  .value = LoginStatus.logout;
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    });
+                                // Get.defaultDialog(
+                                //     title: 'Confirm',
+                                //     content: Text(
+                                //         'Are you sure you want to logout?'),
+                                //     textConfirm: 'Confirm',
+                                //     textCancel: 'Cancel',
+                                //     onConfirm: () {
+                                //       AppController.to.storage.remove('token');
+                                //       AppController.to.loginStatus.value =
+                                //           LoginStatus.logout;
+                                //     });
+                              },
+                              child: ListOptions(
+                                listName: 'Logout',
+                              ),
                             ),
                           ],
                         ),

@@ -103,7 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 body: loginRequestModel.toJson());
 
             var map = response.map;
+
             var token = map['access_token'] as String;
+            token = "fdasfd"; //temp
             if (token != null && token.isNotEmpty) {
               AppController.to.storage.write('token', token);
               print('Stored Token - $token');

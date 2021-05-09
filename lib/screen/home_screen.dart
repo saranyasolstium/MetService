@@ -27,7 +27,10 @@ extension HomeAction on HomeScreen {
     Get.toNamed(NavPage.scheduleScreen);
   }
 
-  onJobHistory() {}
+  onJobHistory() {
+    print('job history called');
+    Get.toNamed(NavPage.jobHistory);
+  }
 }
 
 class HomeScreen extends StatelessWidget {

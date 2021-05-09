@@ -9,4 +9,8 @@ extension AppDateTime on DateTime {
   String string(String format) {
     return Jiffy(this).format(format);
   }
+
+  String get changeDay {
+    return DateFormat(AppDateFormat.yyyy_MM_dd).format(this);
+  }
 }

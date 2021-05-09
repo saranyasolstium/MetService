@@ -1,25 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
-
 import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/api/methods.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'urls.dart';
-//Request Parameters
-/*
-  1. Url - Completed.
-  2. header - Completed.
-  3. parameter or body
-  4. encoding - safe to send data
-  5. Methods - get, post, delete, Multipart
-  6. Generic
-  7. Exeception Handling
-  */
 
 abstract class Codable {
   toJson();
@@ -50,7 +37,10 @@ class API {
     print('method ${endPoint.method}');
 
     try {
-      showLoading();
+      if (needLoader) {
+        showLoading();
+      }
+
       if (endPoint.method == HTTPMethod.post) {
         response =
             await http.post(Uri.parse(url), headers: safeHeader, body: body);
@@ -61,20 +51,22 @@ class API {
         response = await http.get(uri, headers: safeHeader);
       }
     } finally {
-      hideLoading();
+      if (needLoader) {
+        hideLoading();
+      }
     }
 
     print("response - ${response.body.toString()}");
     return APIResponse(model, response);
   }
 
-  String queryParam(Map<String, String> query) {
+  String queryParam(Map<dynamic, dynamic> query) {
     if (query == null) {
       return '';
     }
     var initial = '';
     query.forEach((key, value) {
-      initial = '$initial&$key=$value';
+      initial = '$initial&${key.toString()}=${value.toString()}';
     });
 
     return initial.substring(1);
