@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:eagle_pixels/api/headers.dart';
@@ -42,21 +43,28 @@ class API {
       }
 
       if (endPoint.method == HTTPMethod.post) {
-        response =
-            await http.post(Uri.parse(url), headers: safeHeader, body: body);
+        response = await http
+            .post(Uri.parse(url), headers: safeHeader, body: body)
+            .timeout(Duration(seconds: 2));
       } else {
         final String getParam = queryParam(body);
         print('Query param - $getParam');
         final Uri uri = Uri.parse('$url?$getParam');
-        response = await http.get(uri, headers: safeHeader);
+        response = await http
+            .get(uri, headers: safeHeader)
+            .timeout(Duration(seconds: 1));
       }
-    } finally {
+    } on TimeoutException catch (_) {} finally {
       if (needLoader) {
         hideLoading();
       }
     }
+    if (response != null) {
+      print("response - ${(response.body)}");
+    } else {
+      print("response - Empty");
+    }
 
-    print("response - ${response.body.toString()}");
     return APIResponse(model, response);
   }
 
@@ -77,6 +85,10 @@ class APIResponse<T> {
   T _model;
   T get model {
     return models[0];
+  }
+
+  bool get isValidModel {
+    return (model as Codable).isValid;
   }
 
   Map<dynamic, dynamic> get map {

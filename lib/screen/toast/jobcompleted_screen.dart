@@ -85,7 +85,9 @@ class JobCompletedScreen extends StatelessWidget {
                       ),
                       width: Get.width * 0.7,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.offAllNamed('/');
+                        },
                         child: Text(
                           'Back to Home',
                           style: TextStyle(

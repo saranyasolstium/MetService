@@ -15,7 +15,7 @@ class _NavState extends State<Nav> {
   List<Widget> _widgetOptions = <Widget>[
     MyProfileScreen(),
     AppController.to.isEngineer ? HomeScreen() : MyPurchaseScreen(),
-    MyPurchaseScreen(),
+    // MyPurchaseScreen(),
   ];
 
   void _onItemTap(int index) {
@@ -50,21 +50,21 @@ class _NavState extends State<Nav> {
       //   MyProfileScreen(),
       //   MyPurchaseScreen(),
       // ];
+      bottomBar.add(
+        BottomNavigationBarItem(
+          icon: Image(
+            height: 23.98,
+            image: AssetImage('images/my_purchase_icon_inactive.png'),
+          ),
+          activeIcon: Image(
+            height: 23.98,
+            image: AssetImage('images/my_purchase_icon.png'),
+          ),
+          label: 'My Purchase',
+        ),
+      );
     }
 
-    bottomBar.add(
-      BottomNavigationBarItem(
-        icon: Image(
-          height: 23.98,
-          image: AssetImage('images/my_purchase_icon_inactive.png'),
-        ),
-        activeIcon: Image(
-          height: 23.98,
-          image: AssetImage('images/my_purchase_icon.png'),
-        ),
-        label: 'My Purchase',
-      ),
-    );
     return bottomBar;
   }
 

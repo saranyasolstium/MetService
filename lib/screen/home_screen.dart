@@ -6,21 +6,11 @@ import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:eagle_pixels/model/profile_model.dart';
 
 extension HomeAction on HomeScreen {
   onAttendance() {
     Get.toNamed(NavPage.calendar);
-
-    // Get.dialog(
-    //   ConfirmationScreen(),
-    //   barrierDismissible: false,
-    // ).then((value) {
-    //   if (value == true) {
-    //     print('yes clicked');
-    //   } else {
-    //     print('no clicked');
-    //   }
-    // });
   }
 
   onScheduleJob() {
@@ -97,7 +87,7 @@ extension HomeWidgets on HomeScreen {
                   ),
                 ),
                 Text(
-                  '   ${safeString(AppController.profile.name)}',
+                  '   ${safeString(AppController.to.user.value.name)}',
                   style: TextStyle(
                       color: Colour.appText,
                       fontSize: 16.dynamic,

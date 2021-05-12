@@ -4,7 +4,7 @@ extension EndPointString on EndPoint {
   String get string {
     switch (this) {
       case EndPoint.profile:
-        return "Profile";
+        return "profile";
       case EndPoint.login:
         return "token";
       case EndPoint.scheduled_job_list:

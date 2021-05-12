@@ -3,6 +3,7 @@ import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
+import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -241,7 +242,19 @@ class TimeOutScreen extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                       width: double.infinity,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.dialog(
+                            ConfirmationScreen(),
+                            barrierDismissible: false,
+                          ).then((value) {
+                            if (value == true) {
+                              print('yes clicked');
+                              Get.offAllNamed('/');
+                            } else {
+                              print('no clicked');
+                            }
+                          });
+                        },
                         child: Text(
                           'End the day',
                           style: TextStyle(

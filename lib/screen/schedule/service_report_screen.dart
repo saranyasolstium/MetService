@@ -15,10 +15,9 @@ import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
 
-class JobCheckListScreen extends StatelessWidget {
+class ServiceReportScreen extends StatelessWidget {
   final TimerController time = Get.find();
-  final JobCheckListController checkListController =
-      Get.put(JobCheckListController());
+  final JobCheckListController checkListController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +42,8 @@ class JobCheckListScreen extends StatelessWidget {
               color: Colour.appBlue,
             ),
           ),
-          title: titleText('Job Checklist'),
+          title: titleText('Service Report'),
           actions: [
-            Image.asset(
-              'images/clock.png',
-              width: 21.dynamic,
-              height: 21.dynamic,
-            ),
             SizedBox(
               width: 7.dynamic,
             ),
@@ -62,7 +56,7 @@ class JobCheckListScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.dynamic,
                       fontWeight: FontWeight.w700,
-                      color: Colour.appBlue,
+                      color: Colour.appDarkGrey,
                     ),
                   ),
                 ),
@@ -79,9 +73,11 @@ class JobCheckListScreen extends StatelessWidget {
                   builder: (_) {
                     return ListView.builder(
                       itemBuilder: (builder, index) {
-                        return CheckListItem(index: index);
+                        return ReportItem(
+                          index: index,
+                        );
                       },
-                      itemCount: checkListController.checkList.length,
+                      itemCount: checkListController.selectedList.length,
                     );
                   },
                 ),
@@ -121,10 +117,10 @@ class JobCheckListScreen extends StatelessWidget {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            Get.toNamed(NavPage.jobServiceReportScreen);
+                            Get.toNamed(NavPage.jobCompleted);
                           },
                           child: Text(
-                            'Save & Continue',
+                            'Submit',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.dynamic,
@@ -132,20 +128,26 @@ class JobCheckListScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 14.dynamic,
+                      ),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.white,
+                          border: Border.all(width: 1.5, color: Colour.appBlue),
                           borderRadius: BorderRadius.all(
                             Radius.circular(5.dynamic),
                           ),
                         ),
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.back();
+                          },
                           child: Text(
-                            'Cancel',
+                            'Re-Check',
                             style: TextStyle(
-                                color: Colour.appRed,
+                                color: Colour.appBlue,
                                 fontSize: 16.dynamic,
                                 fontWeight: FontWeight.w300),
                           ),
@@ -163,14 +165,19 @@ class JobCheckListScreen extends StatelessWidget {
   }
 }
 
-class CheckListItem extends StatelessWidget {
+class ReportItem extends StatelessWidget {
   final JobCheckListController checkListController = Get.find();
   final int index;
+
   ACheckList get item {
-    return checkListController.checkList[index];
+    return checkListController.selectedList[index];
   }
 
-  CheckListItem({@required this.index});
+  MCheckListItem get selectedItem {
+    return item.selectedItem;
+  }
+
+  ReportItem({@required this.index});
   // final _remarkController = TextEditingController();
 
   @override
@@ -195,35 +202,39 @@ class CheckListItem extends StatelessWidget {
           ),
           border: Border.all(
             width: 1.5,
-            color: item.selectedItem == null
-                ? Colors.grey
-                : item.selectedItem.color,
+            color: selectedItem.color,
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              safeString(item.title),
-              style: TextStyle(
-                color: Colour.appBlack,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            SizedBox(
-              height: 6.dynamic,
-            ),
             Row(
-              mainAxisSize: MainAxisSize.max,
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // mainAxisSize: MainAxisSize.max,
               children: [
-                CheckListSelectionView(section: index, row: 0),
-                SizedBox(
-                  width: 20.dynamic,
+                Expanded(
+                  child: Text(
+                    safeString(item.title),
+                    style: TextStyle(
+                      color: Colour.appBlack,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ),
-                CheckListSelectionView(section: index, row: 1),
+                // Expanded(child: Container()),
+                ReportCheckbox(item: selectedItem),
               ],
             ),
+            Divider(
+              color: Colour.appDarkGrey,
+            ),
+            // Row(
+            //   mainAxisSize: MainAxisSize.max,
+            //   children: [
+            //     CheckListSelectionView(section: index, row: 0),
+            //   ],
+            // ),
             // Expanded(
             //   child: Container(
             //     child: StaggeredGridView.countBuilder(
@@ -239,13 +250,13 @@ class CheckListItem extends StatelessWidget {
             // ),
             Padding(
               padding: EdgeInsets.only(
-                top: 13.dynamic,
-                bottom: 9.dynamic,
+                top: 10.5.dynamic,
+                bottom: 5.dynamic,
               ),
               child: Text(
                 'Remarks',
                 style: TextStyle(
-                  color: Colour.appBlack,
+                  color: Colour.appRed,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
                 ),
@@ -254,27 +265,12 @@ class CheckListItem extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(
-                  8.0,
-                ),
-                border: Border.all(
-                  color: Colour.appDarkGrey,
-                ),
               ),
-              child: TextFormField(
-                onChanged: (txt) {
-                  item.remarks = txt;
-                },
-                obscureText: false,
-                // controller: _remarkController,
-                keyboardType: TextInputType.multiline,
-                maxLines: 4,
+              child: Text(
+                safeString(item.remarks),
                 style: TextStyle(
-                    fontSize: 14.dynamic, fontWeight: FontWeight.w300),
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  hintText: "elaborate about the condition here...",
-                  border: InputBorder.none,
+                  fontSize: 14.dynamic,
+                  color: Colour.appDarkGrey,
                 ),
               ),
             )
@@ -285,76 +281,49 @@ class CheckListItem extends StatelessWidget {
   }
 }
 
-class CheckListSelectionView extends StatelessWidget {
-  final int section;
-  final int row;
-  final JobCheckListController checklistController = Get.find();
+class ReportCheckbox extends StatelessWidget {
+  final MCheckListItem item;
 
-  MCheckListItem get item {
-    return checklistController.checkList[section].options[row];
-  }
-
-  // String get selected {
-  //   return checklistController.checkList[section].selectedItem.id;
-  // }
-
-  bool get isSelected {
-    return checklistController.checkList[section].selectedItem != null &&
-        checklistController.checkList[section].selectedItem.id == item.id;
-  }
-
-  CheckListSelectionView({@required this.section, @required this.row});
+  ReportCheckbox({@required this.item});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.only(
-          top: 10.dynamic,
-          left: 12.dynamic,
-          right: 16.dynamic,
-          bottom: 10.dynamic,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(
+          8.0,
         ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(
-            8.0,
+      ),
+      child: Row(
+        children: [
+          Text(
+            safeString(item.title),
+            style: TextStyle(
+              color: Colour.appBlack,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-          border: Border.all(
-            width: 1.5,
-            color: isSelected ? item.color : Colors.grey,
+          SizedBox(
+            width: 8.dynamic,
           ),
-        ),
-        child: Row(
-          children: [
-            CustomCheckbox(
-              isChecked: isSelected,
-              size: 24.dynamic,
-              selectedColor: isSelected ? item.color : Colors.grey,
-              selectedIconColor: Colors.white,
-              didSelect: (checkbox) {
-                if (checkbox) {
-                  checklistController.checkList[section].selectedItem = item;
-                } else {
-                  checklistController.checkList[section].selectedItem = null;
-                }
-
-                checklistController.update();
-              },
-            ),
-            SizedBox(
-              width: 8.dynamic,
-            ),
-            Text(
-              safeString(item.title),
-              style: TextStyle(
-                color: Colour.appBlack,
-                fontSize: 14.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
+          CustomCheckbox(
+            isChecked: true,
+            size: 18.dynamic,
+            selectedColor: item.color,
+            selectedIconColor: Colors.white,
+            // didSelect: (checkbox) {
+            //   if (checkbox) {
+            //     checklistController.checkList[section].selectedItem = item;
+            //   } else {
+            //     checklistController.checkList[section].selectedItem = null;
+            //   }
+            //
+            //   checklistController.update();
+            // },
+          ),
+        ],
       ),
     );
   }

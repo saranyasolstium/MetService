@@ -14,6 +14,13 @@ class JobHistoryController extends GetxController {
   }
 
   void fetchProducts() async {
+    List<int> sampleList = [];
+
+    for (int i = 1; i <= 10; i++) {
+      sampleList.add(i);
+    }
+
+    jobList.value = sampleList;
     // var resp = await API.service.call(
     //   model: ScheduleResponse(),
     //   endPoint: EndPoint.scheduled_job_list,

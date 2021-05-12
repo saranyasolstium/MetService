@@ -98,23 +98,28 @@ class ConfirmationScreen extends StatelessWidget {
                         width: 25.dynamic,
                       ),
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1.5,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1.5,
+                                  color: HexColor.fromHex('DB1A1A'),
+                                ),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              'NO',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.dynamic,
                                 color: HexColor.fromHex('DB1A1A'),
+                                fontWeight: FontWeight.normal,
                               ),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Text(
-                            'NO',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16.dynamic,
-                              color: HexColor.fromHex('DB1A1A'),
-                              fontWeight: FontWeight.normal,
                             ),
+                            padding: EdgeInsets.all(10.dynamic),
                           ),
-                          padding: EdgeInsets.all(10.dynamic),
                         ),
                       ),
                     ],

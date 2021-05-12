@@ -28,8 +28,10 @@ class ChangeDateView extends StatelessWidget {
     ).then((value) {
       print(value);
       // var year = DateFormat.y().format(value);
-      date.value = value;
-      didEnd();
+      if (value != null) {
+        date.value = value;
+        didEnd();
+      }
       // schedule.fetchProducts();
     });
   }

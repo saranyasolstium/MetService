@@ -1,6 +1,8 @@
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_history_controller.dart';
+import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
+import 'package:eagle_pixels/screen/views/service_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -14,6 +16,7 @@ class JobHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colour.appLightGrey,
       appBar: this.appBar,
       body: Stack(
         children: [
@@ -32,14 +35,24 @@ class JobHistoryScreen extends StatelessWidget {
                 SizedBox(
                   height: 17.dynamic,
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return JobHistoryItem();
-                    },
-                    itemCount: 10,
+                Obx(
+                  () => Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        var item = ScheduleList();
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 15.0),
+                          child: ServiceView(
+                              isNeedDetail: true,
+                              item: item,
+                              onJob: () {},
+                              onSeeDetail: () {}),
+                        );
+                      },
+                      itemCount: history.jobList.length,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),

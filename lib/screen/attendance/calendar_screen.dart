@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
+import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,15 +75,18 @@ class CalendarScreen extends StatelessWidget {
               SizedBox(
                 height: 86.dynamic,
               ),
-              Text(
-                // var time = DateFormat('hh:mm a').format(DateTime.now());
-                Jiffy(DateTime.now()).format('hh:mm a  |  do MMMM yyyy'),
-                // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
-                // '09:10 AM  |  21st September 2021',
-                style: TextStyle(
-                  fontSize: 14.dynamic,
-                  fontWeight: FontWeight.w600,
-                  color: HexColor.fromHex("333333"),
+              Obx(
+                () => Text(
+                  // var time = DateFormat('hh:mm a').format(DateTime.now());
+                  Jiffy(TimerController.to.currentDate.value)
+                      .format('hh:mm a  |  do MMMM yyyy'),
+                  // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
+                  // '09:10 AM  |  21st September 2021',
+                  style: TextStyle(
+                    fontSize: 14.dynamic,
+                    fontWeight: FontWeight.w600,
+                    color: HexColor.fromHex("333333"),
+                  ),
                 ),
               ),
               Padding(

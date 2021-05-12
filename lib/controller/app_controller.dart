@@ -11,11 +11,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-enum LoginStatus { logged, logout, loading }
+import 'package:eagle_pixels/model/profile_model.dart';
 
-class MProfile {
-  String name;
-}
+enum LoginStatus { logged, logout, loading }
 
 class AppController extends GetxController {
   bool get isEngineer {
@@ -26,6 +24,7 @@ class AppController extends GetxController {
   static var profile = MProfile();
   var loginStatus = LoginStatus.loading.obs;
   var showLoading = 0.obs;
+  var user = MProfile().obs;
   GetStorage storage = GetStorage();
 
   @override
@@ -37,20 +36,20 @@ class AppController extends GetxController {
   }
 
   fetchProfile() async {
-    try {
-      showLoading();
-      var response = API.service.call(endPoint: EndPoint.profile);
-      // MProfile model =
-    } finally {
-      hideLoading();
+    var response = await API.service
+        .call(model: MProfileResponse(), endPoint: EndPoint.profile);
+    if (response.isValidModel) {
+      user.value = response.model.data.first;
+      loginStatus.value = LoginStatus.logged;
+    } else {
+      //temp
     }
   }
 
   loadInitialState() async {
     await GetStorage.init();
     if (storage.token.isNotEmpty) {
-      await fetchProfile();
-      loginStatus.value = LoginStatus.logged;
+      fetchProfile();
     } else {
       loginStatus.value = LoginStatus.logout;
     }
@@ -67,7 +66,7 @@ class AppController extends GetxController {
           body: Container(
             child: Center(
                 child: Text(
-              'Loading',
+              'Loading...',
               style: TextStyle(
                 fontSize: 20.dynamic,
               ),

@@ -6,7 +6,9 @@ import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
 import 'package:eagle_pixels/screen/job_history/job_history_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
+import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
+import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +30,16 @@ class NavPage {
   static String jobCompleted = '/jobCompleted';
   static String myReward = '/myReward';
   static String jobHistory = '/jobHistory';
+  static String jobCheckListScreen = '/joCheckList';
+  static String jobServiceReportScreen = '/jobServiceReport';
   // static String confirmation = '/confirmation';
 }
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
+  );
 
   runApp(MaterialApp(home: MyApp()));
 }
@@ -68,6 +73,11 @@ class MyApp extends StatelessWidget {
         GetPage(name: NavPage.jobCompleted, page: () => JobCompletedScreen()),
         GetPage(name: NavPage.myReward, page: () => MyRewardScreen()),
         GetPage(name: NavPage.jobHistory, page: () => JobHistoryScreen()),
+        GetPage(
+            name: NavPage.jobCheckListScreen, page: () => JobCheckListScreen()),
+        GetPage(
+            name: NavPage.jobServiceReportScreen,
+            page: () => ServiceReportScreen()),
         // GetPage(name: NavPage.confirmation, page: () => ConfirmationScreen()),
       ],
       initialBinding: AppBinding(),
@@ -76,6 +86,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
       initialRoute: '/',
+      // home: JobCheckListScreen(),
     );
   }
 }
