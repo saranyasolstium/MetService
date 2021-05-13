@@ -10,7 +10,7 @@ import 'package:eagle_pixels/controller/my_purchase_controller.dart';
 import '../../constant.dart';
 
 class MyPurchaseScreen extends StatelessWidget {
-  final MyPurchaseController history = Get.find();
+  final MyPurchaseController purchase = Get.find();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,10 +42,11 @@ class MyPurchaseScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ChangeDateView(
-                  date: history.selectedDate,
-                  didEnd: () {
-                    //temp
-                  }),
+                date: purchase.selectedDate,
+                didEnd: () {
+                  purchase.fetchProducts();
+                },
+              ),
               // Container(
               //   padding: EdgeInsets.symmetric(
               //     horizontal: 14.dynamic,

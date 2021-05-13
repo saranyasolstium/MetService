@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pretty_json/pretty_json.dart';
 
 void main() async {
+  runApp(TestScreen());
   // RegisterRequestModel registerRequestModel = RegisterRequestModel(
   //     firstName: 'demo',
   //     lastName: 'acc',
@@ -27,4 +30,44 @@ void main() async {
   // var resp = await http.get(Uri.parse('https://reqres.in/api/unknown'));
   // var response = APIResponse(Resource(), resp).model;
   // print('${response.data.map((e) => e.name)}');
+}
+
+class TestScreen extends StatelessWidget {
+  const TestScreen({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: ListView.builder(
+            shrinkWrap: false,
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return TestItem();
+            }),
+      ),
+    );
+  }
+}
+
+class TestItem extends StatelessWidget {
+  const TestItem({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      children: [
+        Text('Text1'),
+        Text('Text2'),
+      ],
+    );
+    return Column(
+      children: [
+        Text('Text1'),
+        Text('Text2'),
+      ],
+    );
+  }
 }
