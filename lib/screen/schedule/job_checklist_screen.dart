@@ -224,19 +224,6 @@ class CheckListItem extends StatelessWidget {
                 CheckListSelectionView(section: index, row: 1),
               ],
             ),
-            // Expanded(
-            //   child: Container(
-            //     child: StaggeredGridView.countBuilder(
-            //       crossAxisCount: 2,
-            //       itemCount: item.options.length,
-            //       itemBuilder: (builder, row) {
-            //         var selection = item.options[index];
-            //         return CheckListSelectionView(section: index, row: row);
-            //       },
-            //       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-            //     ),
-            //   ),
-            // ),
             Padding(
               padding: EdgeInsets.only(
                 top: 13.dynamic,
