@@ -13,6 +13,7 @@ import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
@@ -85,8 +86,94 @@ class MyApp extends StatelessWidget {
           primaryColor: Colour.appBlue,
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
-      initialRoute: '/',
-      // home: JobCheckListScreen(),
+      // initialRoute: NavPage.jobCheckListScreen,
+      home: Demo(),
     );
   }
 }
+
+// class Demo extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("ListView"),
+//       ),
+//       body: Container(
+//         color: Colors.yellow,
+//         child: ListView.builder(
+//           itemBuilder: (context, index) {
+//             return TestItem();
+//           },
+//           itemCount: 2,
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// class TestItem extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: GridView.count(
+//         shrinkWrap: true,
+//         scrollDirection: Axis.horizontal,
+//         crossAxisCount: 2,
+//         physics: NeverScrollableScrollPhysics(),
+//         children: [
+//           Text('fdsa'),
+//           Text('fafds'),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+class Demo extends StatelessWidget {
+  final list = generateNumbers();
+  Widget content() {
+    return ListView.builder(
+      itemBuilder: (con, index) {
+        return Column(
+          children: [
+            Text('TopView'),
+            GridView.builder(
+                itemCount: list.length,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, childAspectRatio: 3),
+                shrinkWrap: true,
+                itemBuilder: (con, ind) {
+                  var i = list[ind];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      // height: 20,
+                      child: Text(i.toString()),
+                      color: Colors.blue,
+                    ),
+                  );
+                }),
+          ],
+        );
+      },
+      itemCount: 4,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(),
+      home: SafeArea(
+        child: Scaffold(
+          body: content(),
+        ),
+      ),
+    );
+  }
+}
+
+List<int> generateNumbers() => List<int>.generate(10, (i) => i + 1);
+// List<int> generateList() => List<int>.generate(2, (i) => i + 1);
