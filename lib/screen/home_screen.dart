@@ -30,16 +30,15 @@ class HomeScreen extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colour.appLightGrey,
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                profileView,
-                SizedBox(
-                  height: 22.dynamic,
+          child: Column(
+            children: [
+              profileView,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: homeContent,
                 ),
-                homeContent,
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -20,8 +20,12 @@ class AttendanceController extends GetxController {
   }
 
   bool get clockIn {
-    return true;
+    return false;
   }
+
+  // onClockIn() async {
+  //   var response =
+  // }
 
   fetchAttendance() {
     update();

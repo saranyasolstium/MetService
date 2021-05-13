@@ -60,32 +60,43 @@ class ScheduleScreen extends StatelessWidget {
                   SizedBox(
                     height: 17.dynamic,
                   ),
-                  Obx(
-                    () => Expanded(
-                      child: ListView.builder(
-                        itemBuilder: (context, index) {
-                          var item = schedule.scheduleList[index];
-                          print('item $index');
-                          // var item = ScheduleList();
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 15.0),
-                            child: ServiceView(
-                                item: item,
-                                buttonTitle: 'Start Job',
-                                // isNeedStatus: ,
-                                isNeedDetail: true,
-                                onJob: () {
-                                  Get.toNamed(NavPage.jobCheckListScreen);
-                                },
-                                onSeeDetail: () {}),
-                          );
-                        },
-                        // return Text('Hello');
-                        // },
-                        // itemCount: 10,
-                        itemCount: schedule.scheduleList.length,
-                      ),
-                    ),
+                  Expanded(
+                    child: Obx(() {
+                      if (schedule.viewState.value.isSuccess) {
+                        return ListView.builder(
+                          itemBuilder: (context, index) {
+                            var item = schedule.scheduleList[index];
+                            print('item $index');
+                            // var item = ScheduleList();
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15.0),
+                              child: ServiceView(
+                                  item: item,
+                                  buttonTitle: 'Start Job',
+                                  // isNeedStatus: ,
+                                  isNeedDetail: true,
+                                  onJob: () {
+                                    Get.toNamed(NavPage.jobCheckListScreen);
+                                  },
+                                  onSeeDetail: () {}),
+                            );
+                          },
+                          // return Text('Hello');
+                          // },
+                          // itemCount: 10,
+                          itemCount: schedule.scheduleList.length,
+                        );
+                      } else if (schedule.viewState.value.isFailed) {
+                        return Center(
+                          child: Text(
+                            'No Scheduled job on this day',
+                            style: TextStyle(fontSize: 15.dynamic),
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
                   ),
                 ],
               ),

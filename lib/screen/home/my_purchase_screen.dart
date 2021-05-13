@@ -1,19 +1,16 @@
+import 'package:eagle_pixels/controller/job_history_controller.dart';
 import 'package:eagle_pixels/screen/nav_bottom.dart';
+import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/screen/home/mypurchase_detail_screen.dart';
-
+import 'package:get/get.dart';
+import 'package:eagle_pixels/controller/my_purchase_controller.dart';
 import '../../constant.dart';
 
-class MyPurchaseScreen extends StatefulWidget {
-  static String id = '/schedule_screen';
-
-  @override
-  _MyPurchaseScreenState createState() => _MyPurchaseScreenState();
-}
-
-class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
+class MyPurchaseScreen extends StatelessWidget {
+  final MyPurchaseController history = Get.find();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,61 +41,66 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 14.dynamic,
-                  vertical: 13.dynamic,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      size: 23.dynamic,
-                      color: Colour.appBlue,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Today',
-                            style: TextStyle(
-                                color: Colour.appDarkGrey,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.dynamic),
-                          ),
-                          SizedBox(
-                            height: 1,
-                          ),
-                          Text(
-                            '3rd March, 2021',
-                            style: TextStyle(
-                                color: Colour.appBlack,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14.dynamic),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      'Change',
-                      style: TextStyle(
-                          color: Colour.appBlue,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16.dynamic),
-                    ),
-                  ],
-                ),
-              ),
+              ChangeDateView(
+                  date: history.selectedDate,
+                  didEnd: () {
+                    //temp
+                  }),
+              // Container(
+              //   padding: EdgeInsets.symmetric(
+              //     horizontal: 14.dynamic,
+              //     vertical: 13.dynamic,
+              //   ),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(8.0),
+              //     color: Colors.white,
+              //   ),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: [
+              //       Icon(
+              //         Icons.calendar_today,
+              //         size: 23.dynamic,
+              //         color: Colour.appBlue,
+              //       ),
+              //       SizedBox(
+              //         width: 5,
+              //       ),
+              //       Expanded(
+              //         child: Column(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             Text(
+              //               'Today',
+              //               style: TextStyle(
+              //                   color: Colour.appDarkGrey,
+              //                   fontWeight: FontWeight.w400,
+              //                   fontSize: 12.dynamic),
+              //             ),
+              //             SizedBox(
+              //               height: 1,
+              //             ),
+              //             Text(
+              //               '3rd March, 2021',
+              //               style: TextStyle(
+              //                   color: Colour.appBlack,
+              //                   fontWeight: FontWeight.w400,
+              //                   fontSize: 14.dynamic),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //       Text(
+              //         'Change',
+              //         style: TextStyle(
+              //             color: Colour.appBlue,
+              //             fontWeight: FontWeight.w400,
+              //             fontSize: 16.dynamic),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: 17.dynamic,
               ),

@@ -11,7 +11,7 @@ class TimerController extends GetxController {
   void onInit() {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       currentDate.value = DateTime.now();
-      print('Timer called ');
+      // print('Timer called ');
     });
     super.onInit();
   }

@@ -17,11 +17,11 @@ enum LoginStatus { logged, logout, loading }
 
 class AppController extends GetxController {
   bool get isEngineer {
-    return true;
+    return user.value.isEngineer; //temp
   }
 
   static AppController get to => Get.find<AppController>();
-  static var profile = MProfile();
+  // static var profile = MProfile();
   var loginStatus = LoginStatus.loading.obs;
   var showLoading = 0.obs;
   var user = MProfile().obs;
@@ -40,9 +40,16 @@ class AppController extends GetxController {
         .call(model: MProfileResponse(), endPoint: EndPoint.profile);
     if (response.isValidModel) {
       user.value = response.model.data.first;
-      loginStatus.value = LoginStatus.logged;
+      if (user.value.isActive) {
+        loginStatus.value = LoginStatus.logged;
+      } else {
+        loginStatus.value = LoginStatus.logout;
+        print('Account not active');
+        // TODO: Show account inactive toast
+      }
     } else {
-      //temp
+      loginStatus.value = LoginStatus.logout;
+      // TODO: try again request;
     }
   }
 
@@ -74,6 +81,7 @@ class AppController extends GetxController {
           ),
         );
     }
+    return Container();
   }
 
   Widget defaultLoaderView() {

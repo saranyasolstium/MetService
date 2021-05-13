@@ -29,8 +29,10 @@ extension CalendarAction on CalendarScreen {
       lastDate: DateTime(currentYear + 1),
       initialDate: DateTime.now(),
     ).then((value) {
-      var month = DateFormat.MMMM().format(value);
-      attendance.selectedMonth.value = month.toString();
+      if (value != null) {
+        var month = DateFormat.MMMM().format(value);
+        attendance.selectedMonth.value = month.toString();
+      }
     });
   }
 
@@ -44,9 +46,11 @@ extension CalendarAction on CalendarScreen {
       initialDatePickerMode: DatePickerMode.year,
       initialEntryMode: DatePickerEntryMode.calendar,
     ).then((value) {
-      print(value);
-      var year = DateFormat.y().format(value);
-      attendance.selectedYear.value = year.toString();
+      if (value != null) {
+        print(value);
+        var year = DateFormat.y().format(value);
+        attendance.selectedYear.value = year.toString();
+      }
     });
   }
 }

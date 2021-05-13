@@ -4,7 +4,7 @@ import 'package:eagle_pixels/controller/job_history_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:get/get.dart';
-
+import 'package:eagle_pixels/controller/my_purchase_controller.dart';
 import 'app_controller.dart';
 
 class AppBinding implements Bindings {
@@ -13,11 +13,9 @@ class AppBinding implements Bindings {
     // Get.smartManagement = SmartManagement.keepFactory;
     Get.put(AppController(), permanent: true);
     // Get.create(() => ScheduleListController());
-    Get.lazyPut(() => AttendanceController());
+    Get.put(AttendanceController());
     Get.put(TimerController(), permanent: true);
-    Get.lazyPut(
-      () => JobHistoryController(),
-    );
+    Get.put(MyPurchaseController(), permanent: true);
     // Get.lazyPut(
     //   () => JobCheckListController(),
     // );

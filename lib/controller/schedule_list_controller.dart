@@ -6,9 +6,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/date_manager.dart';
 
+import '../constant.dart';
+
 class ScheduleListController extends GetxController {
-  var scheduleList = <ScheduleList>[].obs;
+  var scheduleList = <MScheduledJobItem>[].obs;
   final selectedDate = DateTime.now().obs;
+  final viewState = ViewState.loading.obs;
   // var isLoading = true.obs;
 
   @override
@@ -39,25 +42,22 @@ class ScheduleListController extends GetxController {
       endPoint: EndPoint.scheduled_job_list,
       body: {'date': serviceDate(selectedDate.value)},
     );
-    print('reached');
     scheduleList.value = resp.model.data;
-
-    List<ScheduleList> sampleList = [];
-
-    for (int i = 1; i <= 10; i++) {
-      ScheduleList scheduleListdemo = ScheduleList();
-
-      sampleList.add(scheduleListdemo);
+    if (scheduleList.length > 0) {
+      viewState.value = ViewState.success;
+    } else {
+      viewState.value = ViewState.failed;
     }
-
-    scheduleList.value = sampleList;
-    print(scheduleList);
-
-    @override
-    void disposeId(Object id) {
-      print('dispoed id $id');
-      super.disposeId(id);
-    }
+    // List<MScheduledJobItem> sampleList = [];
+    //
+    // for (int i = 1; i <= 10; i++) {
+    //   MScheduledJobItem scheduleListdemo = MScheduledJobItem();
+    //
+    //   sampleList.add(scheduleListdemo);
+    // }
+    //
+    // scheduleList.value = sampleList;
+    // print(scheduleList);
 
     // try {
     //   showLoading();
@@ -65,6 +65,12 @@ class ScheduleListController extends GetxController {
     // } finally {
     //   hideLoading();
     // }
+  }
+
+  @override
+  void disposeId(Object id) {
+    print('dispoed id $id');
+    super.disposeId(id);
   }
 
   String serviceDate(DateTime date) {

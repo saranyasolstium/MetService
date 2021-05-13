@@ -12,7 +12,8 @@ import '../../constant.dart';
 
 class JobHistoryScreen extends StatelessWidget {
   // const JobHistoryScreen({Key key}) : super(key: key);
-  final JobHistoryController history = Get.find();
+  final JobHistoryController history = Get.put(JobHistoryController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +40,7 @@ class JobHistoryScreen extends StatelessWidget {
                   () => Expanded(
                     child: ListView.builder(
                       itemBuilder: (context, index) {
-                        var item = ScheduleList();
+                        var item = MScheduledJobItem();
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 15.0),
                           child: ServiceView(

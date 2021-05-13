@@ -22,3 +22,15 @@ Widget titleText(String title) => Text(
           fontWeight: FontWeight.w400,
           fontSize: 16.dynamic),
     );
+
+enum ViewState { loading, updating, refreshing, failed, success }
+
+extension ViewStateExtension on ViewState {
+  bool get isSuccess {
+    return this == ViewState.success;
+  }
+
+  bool get isFailed {
+    return this == ViewState.failed;
+  }
+}

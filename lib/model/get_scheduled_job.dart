@@ -5,7 +5,7 @@
 import 'dart:convert';
 
 import 'package:eagle_pixels/api/api_service.dart';
-
+import 'abstract_class.dart';
 // ScheduleResponse getScheduledListFromJson(String str) =>
 //     ScheduleResponse.fromJson(json.decode(str));
 //
@@ -21,14 +21,14 @@ class ScheduleResponse implements Codable {
 
   String status;
   String message;
-  List<ScheduleList> data;
+  List<MScheduledJobItem> data;
 
   fromJson(Map<String, dynamic> json) {
     var model = ScheduleResponse();
     model.status = json["status"];
     model.message = json["message"];
-    model.data = List<ScheduleList>.from(
-        json["data"].map((x) => ScheduleList.fromJson(x)));
+    model.data = List<MScheduledJobItem>.from(
+        json["data"].map((x) => MScheduledJobItem.fromJson(x)));
     return model;
   }
 
@@ -41,8 +41,8 @@ class ScheduleResponse implements Codable {
   bool get isValid => true;
 }
 
-class ScheduleList {
-  ScheduleList({
+class MScheduledJobItem implements AServiceItem {
+  MScheduledJobItem({
     this.id,
     this.requesterId,
     this.siteId,
@@ -64,7 +64,7 @@ class ScheduleList {
   int requesterId;
   int siteId;
   int ticketId;
-  dynamic productId;
+  String productId;
   String productName;
   String productImage;
   String sku;
@@ -76,7 +76,8 @@ class ScheduleList {
   String description;
   String name;
 
-  factory ScheduleList.fromJson(Map<String, dynamic> json) => ScheduleList(
+  factory MScheduledJobItem.fromJson(Map<String, dynamic> json) =>
+      MScheduledJobItem(
         id: json["id"],
         requesterId: json["requester_id"],
         siteId: json["site_id"],
@@ -111,4 +112,10 @@ class ScheduleList {
         "description": description,
         "name": name,
       };
+
+  String get aCctvID => productId;
+  String get aCustomerName => customerName;
+  String get aImage => customerImage;
+  String get aName => productName;
+  String get aPurchaseDate => purchaseDate;
 }

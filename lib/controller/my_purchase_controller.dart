@@ -1,12 +1,7 @@
-import 'package:eagle_pixels/api/api_service.dart';
-import 'package:eagle_pixels/api/urls.dart';
-import 'package:eagle_pixels/model/get_scheduled_job.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:eagle_pixels/model/job_history_item.dart';
-import 'package:eagle_pixels/reuse/date_manager.dart';
+import 'package:get/get.dart';
 
-class JobHistoryController extends GetxController {
+class MyPurchaseController extends GetxController {
   // ignore: deprecated_member_use
   var jobList = List<MJobHistoryItem>().obs;
   final selectedDate = DateTime.now().obs;
@@ -20,7 +15,7 @@ class JobHistoryController extends GetxController {
 
   void fetchProducts() async {
     List<MJobHistoryItem> sampleList = [];
-
+    //temp service integration pull to refresh, pagination, pdf functionality.
     for (int i = 1; i <= 10; i++) {
       sampleList.add(MJobHistoryItem());
     }

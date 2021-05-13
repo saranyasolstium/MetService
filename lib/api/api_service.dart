@@ -45,14 +45,14 @@ class API {
       if (endPoint.method == HTTPMethod.post) {
         response = await http
             .post(Uri.parse(url), headers: safeHeader, body: body)
-            .timeout(Duration(seconds: 2));
+            .timeout(Duration(seconds: 60));
       } else {
         final String getParam = queryParam(body);
         print('Query param - $getParam');
         final Uri uri = Uri.parse('$url?$getParam');
         response = await http
             .get(uri, headers: safeHeader)
-            .timeout(Duration(seconds: 1));
+            .timeout(Duration(seconds: 60));
       }
     } on TimeoutException catch (_) {} finally {
       if (needLoader) {
@@ -65,7 +65,7 @@ class API {
       print("response - Empty");
     }
 
-    return APIResponse(model, response);
+    return APIResponse(model, response: response, isNeedModel: (model != null));
   }
 
   String queryParam(Map<dynamic, dynamic> query) {
@@ -82,7 +82,8 @@ class API {
 }
 
 class APIResponse<T> {
-  T _model;
+  final T _model;
+  final bool isNeedModel;
   T get model {
     return models[0];
   }
@@ -106,7 +107,8 @@ class APIResponse<T> {
   //   }
   // }
 
-  APIResponse(this._model, http.Response response) {
+  APIResponse(this._model,
+      {@required http.Response response, this.isNeedModel = false}) {
     // _model = object;
     updateResponse(response);
   }
@@ -122,7 +124,9 @@ class APIResponse<T> {
           _maps = [decoded];
           // models = [(_model as Codable).fromJson(map) as T];
         }
-
+        if (!isNeedModel) {
+          return;
+        }
         if (_model != null) {
           (_maps).forEach((element) {
             var newModel = (_model as Codable).fromJson(element);
@@ -135,7 +139,7 @@ class APIResponse<T> {
     } on SocketException {
       print('No internet connection');
     } catch (error) {
-      print('Error in service');
+      print('Error in service $error');
     } finally {
       if (models.length == 0) {
         models = [_model];

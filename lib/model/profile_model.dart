@@ -36,7 +36,10 @@ class MProfileResponse implements Codable {
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
       };
   bool get isValid {
-    return (data != null && data.length > 0);
+    return (data != null &&
+        data.length > 0 &&
+        data[0].userType != null &&
+        data[0].status != null);
   }
 }
 
@@ -72,6 +75,22 @@ class MProfile {
   int totalCompletedJobs;
   int totalServiceDays;
   MEmployeeDetails employeeDetails;
+
+  bool get isEngineer {
+    if (userType == 2) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool get isActive {
+    if (status == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   factory MProfile.fromJson(Map<String, dynamic> json) => MProfile(
         id: json["id"],

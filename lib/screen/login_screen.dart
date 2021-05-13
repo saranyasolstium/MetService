@@ -103,13 +103,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 body: loginRequestModel.toJson());
 
             var map = response.map;
-
             var token = map['access_token'] as String;
-
             if (token != null && token.isNotEmpty) {
-              AppController.to.storage.write('token', token);
+              await AppController.to.storage.write('token', token);
               print('Stored Token - $token');
-              AppController.to.loginStatus.value = LoginStatus.logged;
+              AppController.to.fetchProfile();
               Future.delayed(
                 Duration(seconds: 1),
                 () => Get.snackbar("Login Success", 'Successfully logged in.'),

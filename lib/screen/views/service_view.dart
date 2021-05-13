@@ -3,7 +3,7 @@ import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-
+import 'package:eagle_pixels/model/abstract_class.dart';
 import '../../colors.dart';
 import '../../constant.dart';
 
@@ -25,7 +25,7 @@ class ServiceView extends StatelessWidget {
   final String buttonTitle;
   final Function onSeeDetail;
   final Function onJob;
-  final ScheduleList item;
+  final AServiceItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class ServiceView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CachedNetworkImage(
-                imageUrl: item.customerImage,
+                imageUrl: item.aImage,
                 placeholder: (_, url) => Image.asset(
                   'images/camera.png',
                 ),
@@ -60,7 +60,7 @@ class ServiceView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      safeString(item.productName),
+                      safeString(item.aName),
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w400,
@@ -70,7 +70,7 @@ class ServiceView extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      'ID - ${safeString(item.ticketId)}',
+                      'ID - ${safeString(item.aCctvID)}',
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
