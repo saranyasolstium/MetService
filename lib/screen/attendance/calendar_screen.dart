@@ -17,7 +17,9 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 import '../../colors.dart';
 
 extension CalendarAction on CalendarScreen {
-  startTheDay() {
+  startTheDay() async {
+    var response = await attendance.onClockIn();
+    if (response.isValid) {}
     Get.toNamed(NavPage.clockIn);
   }
 
@@ -32,6 +34,7 @@ extension CalendarAction on CalendarScreen {
       if (value != null) {
         var month = DateFormat.MMMM().format(value);
         attendance.selectedMonth.value = month.toString();
+        attendance.fetchAttendance(isShowLoading: true);
       }
     });
   }
@@ -50,6 +53,7 @@ extension CalendarAction on CalendarScreen {
         print(value);
         var year = DateFormat.y().format(value);
         attendance.selectedYear.value = year.toString();
+        attendance.fetchAttendance(isShowLoading: true);
       }
     });
   }
@@ -59,6 +63,10 @@ class CalendarScreen extends StatelessWidget {
   final AttendanceController attendance = Get.find();
   @override
   Widget build(BuildContext context) {
+    if (!attendance.isAttendanceHereForSelected) {
+      attendance.fetchAttendance(isShowLoading: true);
+    }
+
     return Scaffold(
       appBar: this.appBar,
       backgroundColor: HexColor.fromHex("F7F7F7"),
@@ -301,7 +309,9 @@ extension CalendarWidgets on CalendarScreen {
                 color: Colour.appBlue,
                 thickness: 1.0,
               ),
-              this.calendar,
+              GetBuilder<AttendanceController>(builder: (_) {
+                return this.calendar;
+              }),
             ],
           ),
         ), //
@@ -322,18 +332,19 @@ extension CalendarWidgets on CalendarScreen {
           isThisMonthDay,
           now) {
         return CalendarItem(
-            isSelectable,
-            index,
-            isSelectedDay,
-            isToday,
-            isPrevMonthDay,
-            styleForBuilder,
-            isNextMonthDay,
-            isThisMonthDay,
-            now,
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]);
+          isSelectable,
+          index,
+          isSelectedDay,
+          isToday,
+          isPrevMonthDay,
+          styleForBuilder,
+          isNextMonthDay,
+          isThisMonthDay,
+          now,
+          attendance.presentedDays(),
+          attendance.absentDays(),
+          attendance.halfPresentedDays(),
+        );
       },
       // onDayPressed: (date, events) {
       //   this.setState(() => _currentDate2 = date);

@@ -5,3 +5,7 @@ abstract class AServiceItem {
   String get aPurchaseDate;
   String get aCustomerName;
 }
+
+abstract class AAttendanceStatus {
+  DateTime startedDate;
+}

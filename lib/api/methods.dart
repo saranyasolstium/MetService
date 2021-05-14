@@ -18,6 +18,8 @@ extension Method on EndPoint {
   HTTPMethod get method {
     switch (this) {
       case EndPoint.login:
+      case EndPoint.attendance:
+      case EndPoint.clockIn:
         return HTTPMethod.post;
     }
     return HTTPMethod.get;

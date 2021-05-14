@@ -1,4 +1,12 @@
-enum EndPoint { profile, login, scheduled_job_list, register, job_history_list }
+enum EndPoint {
+  profile,
+  login,
+  scheduled_job_list,
+  register,
+  job_history_list,
+  attendance,
+  clockIn
+}
 
 extension EndPointString on EndPoint {
   String get string {
@@ -13,6 +21,10 @@ extension EndPointString on EndPoint {
         return "register";
       case EndPoint.job_history_list:
         return 'get_job_history_list';
+      case EndPoint.attendance:
+        return 'monthattendencelist';
+      case EndPoint.clockIn:
+        return 'clockin';
     }
     return "";
   }

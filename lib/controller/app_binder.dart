@@ -13,7 +13,11 @@ class AppBinding implements Bindings {
     // Get.smartManagement = SmartManagement.keepFactory;
     Get.put(AppController(), permanent: true);
     // Get.create(() => ScheduleListController());
-    Get.put(AttendanceController());
+    // Get.asap(() => AttendanceController(), condition: () {
+    //   print('checkedd');
+    //   return (AppController.to.loginStatus.value == LoginStatus.logged);
+    // });
+    Get.put(AttendanceController(), permanent: true);
     Get.put(TimerController(), permanent: true);
     Get.put(MyPurchaseController(), permanent: true);
     // Get.lazyPut(

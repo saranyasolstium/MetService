@@ -33,6 +33,7 @@ class NavPage {
   static String jobHistory = '/jobHistory';
   static String jobCheckListScreen = '/joCheckList';
   static String jobServiceReportScreen = '/jobServiceReport';
+  static String root = '/';
   // static String confirmation = '/confirmation';
 }
 
@@ -86,8 +87,8 @@ class MyApp extends StatelessWidget {
           primaryColor: Colour.appBlue,
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
-      // initialRoute: NavPage.jobCheckListScreen,
-      home: Demo(),
+      initialRoute: NavPage.root,
+      // home: Demo(),
     );
   }
 }
