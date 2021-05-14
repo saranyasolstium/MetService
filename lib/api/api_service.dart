@@ -4,8 +4,6 @@ import 'dart:io';
 import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/api/methods.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'urls.dart';
 
@@ -13,24 +11,24 @@ abstract class Codable {
   toJson();
   Codable fromJson(Map<String, dynamic> map);
   bool get isValid;
-  String status;
+  String? status;
 }
 
 class API {
   final APIRouter route = APIRouter();
   static final service = API();
 
-  Future<APIResponse<T>> call<T>({
-    T model,
-    @required EndPoint endPoint,
-    Map<dynamic, dynamic> body,
-    Map<String, String> header,
+  Future<APIResponse<T?>> call<T>({
+    T? model,
+    required EndPoint endPoint,
+    Map<dynamic, dynamic>? body,
+    Map<String, String>? header,
     // Map<String, String> query,
     bool needLoader = true,
   }) async {
     final String url = route.url(endPoint.string);
     final Map<String, String> safeHeader = header ??= endPoint.header;
-    http.Response response;
+    http.Response? response;
 
     print('url $url');
     print('header $header');
@@ -68,7 +66,7 @@ class API {
     return APIResponse(model, response: response, isNeedModel: (model != null));
   }
 
-  String queryParam(Map<dynamic, dynamic> query) {
+  String queryParam(Map<dynamic, dynamic>? query) {
     if (query == null) {
       return '';
     }
@@ -96,7 +94,7 @@ class APIResponse<T> {
     return _maps[0];
   }
 
-  http.Response responseObj;
+  http.Response? responseObj;
   List<dynamic> _maps = [];
   List<T> models = [];
   // bool get isSuccess {
@@ -108,15 +106,15 @@ class APIResponse<T> {
   // }
 
   APIResponse(this._model,
-      {@required http.Response response, this.isNeedModel = false}) {
+      {required http.Response? response, this.isNeedModel = false}) {
     // _model = object;
     updateResponse(response);
   }
 
-  updateResponse(http.Response response) {
+  updateResponse(http.Response? response) {
     try {
       responseObj = response;
-      var decoded = jsonDecode(responseObj.body);
+      var decoded = jsonDecode(responseObj!.body);
       if (decoded != null) {
         if (decoded is List<dynamic>) {
           _maps = decoded;
@@ -151,7 +149,7 @@ class APIResponse<T> {
   }
 }
 
-extension StringStatus on String {
+extension StringStatus on String? {
   bool get isSuccess {
     if (this == 'success') {
       return true;

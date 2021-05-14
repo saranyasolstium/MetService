@@ -1,15 +1,11 @@
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
-import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:intl/intl.dart';
@@ -170,7 +166,7 @@ class CheckListItem extends StatelessWidget {
     return checkListController.checkList[index];
   }
 
-  CheckListItem({@required this.index});
+  CheckListItem({required this.index});
   // final _remarkController = TextEditingController();
 
   @override
@@ -197,7 +193,7 @@ class CheckListItem extends StatelessWidget {
             width: 1.5,
             color: item.selectedItem == null
                 ? Colors.grey
-                : item.selectedItem.color,
+                : item.selectedItem!.color,
           ),
         ),
         child: Column(
@@ -278,7 +274,7 @@ class CheckListSelectionView extends StatelessWidget {
   final JobCheckListController checklistController = Get.find();
 
   MCheckListItem get item {
-    return checklistController.checkList[section].options[row];
+    return checklistController.checkList[section].options![row];
   }
 
   // String get selected {
@@ -287,10 +283,10 @@ class CheckListSelectionView extends StatelessWidget {
 
   bool get isSelected {
     return checklistController.checkList[section].selectedItem != null &&
-        checklistController.checkList[section].selectedItem.id == item.id;
+        checklistController.checkList[section].selectedItem!.id == item.id;
   }
 
-  CheckListSelectionView({@required this.section, @required this.row});
+  CheckListSelectionView({required this.section, required this.row});
 
   @override
   Widget build(BuildContext context) {

@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/login_model.dart';
-import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       validator: MultiValidator([
         RequiredValidator(errorText: "* Required"),
         EmailValidator(errorText: "Enter valid email id"),
-      ]),
+      ]) as String? Function(String?)?,
       obscureText: false,
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
@@ -62,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
             errorText: "Password should be atleast 6 characters"),
         MaxLengthValidator(15,
             errorText: "Password should not be greater than 15 characters")
-      ]),
+      ]) as String? Function(String?)?,
       controller: _passwordController,
       obscureText: _obsecureText,
       style: style,
@@ -91,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () async {
           var email = _emailController.text;
           var password = _passwordController.text;
-          if (_formkey.currentState.validate()) {
+          if (_formkey.currentState!.validate()) {
             FocusScopeNode currentFocus = FocusScope.of(context);
             currentFocus.unfocus();
             LoginRequestModel loginRequestModel =
@@ -103,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 body: loginRequestModel.toJson());
 
             var map = response.map;
-            var token = map['access_token'] as String;
+            var token = map['access_token'] as String?;
             if (token != null && token.isNotEmpty) {
               await AppController.to.storage.write('token', token);
               print('Stored Token - $token');

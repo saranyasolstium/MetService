@@ -25,7 +25,6 @@ extension ERewardExtention on EReward {
       case EReward.PLATINUM:
         return 'platinum';
     }
-    return '';
   }
 
   String get background {

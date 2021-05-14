@@ -1,15 +1,12 @@
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
-import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:intl/intl.dart';
@@ -173,11 +170,11 @@ class ReportItem extends StatelessWidget {
     return checkListController.selectedList[index];
   }
 
-  MCheckListItem get selectedItem {
+  MCheckListItem? get selectedItem {
     return item.selectedItem;
   }
 
-  ReportItem({@required this.index});
+  ReportItem({required this.index});
   // final _remarkController = TextEditingController();
 
   @override
@@ -202,7 +199,7 @@ class ReportItem extends StatelessWidget {
           ),
           border: Border.all(
             width: 1.5,
-            color: selectedItem.color,
+            color: selectedItem!.color,
           ),
         ),
         child: Column(
@@ -282,9 +279,9 @@ class ReportItem extends StatelessWidget {
 }
 
 class ReportCheckbox extends StatelessWidget {
-  final MCheckListItem item;
+  final MCheckListItem? item;
 
-  ReportCheckbox({@required this.item});
+  ReportCheckbox({required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -298,7 +295,7 @@ class ReportCheckbox extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            safeString(item.title),
+            safeString(item!.title),
             style: TextStyle(
               color: Colour.appBlack,
               fontSize: 14.0,
@@ -311,7 +308,7 @@ class ReportCheckbox extends StatelessWidget {
           CustomCheckbox(
             isChecked: true,
             size: 18.dynamic,
-            selectedColor: item.color,
+            selectedColor: item!.color,
             selectedIconColor: Colors.white,
             // didSelect: (checkbox) {
             //   if (checkbox) {

@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
-import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
+import 'package:eagle_pixels/model/profile_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,15 +12,25 @@ import 'package:intl/intl.dart';
 
 import '../../colors.dart';
 import '../../constant.dart';
+import 'package:eagle_pixels/api/api_service.dart';
 
 extension TimeInAction on TimeInScreen {
-  startDay() {
-    Get.toNamed(NavPage.clockOut);
+  startDay() async {
+    var model = await attendance.onClockIn();
+    if (model?.status?.isSuccess ?? false) {
+      Get.toNamed(NavPage.clockOut);
+    } else {
+      //TODO: show error toast
+    }
   }
 }
 
 class TimeInScreen extends StatelessWidget {
   final TimerController timer = Get.find();
+  final AttendanceController attendance = Get.find();
+  MProfile get user {
+    return AppController.user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,25 +68,49 @@ class TimeInScreen extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Image.asset(
-                  'images/user.png',
+                // child: Image.asset(
+                //   'images/user.png',
+                // ),
+                child: CachedNetworkImage(
+                  width: 64.dynamic,
+                  height: 64.dynamic,
+                  imageUrl: user.employeeDetails?.profileImage ?? "",
+                  placeholder: (_, url) => Image.asset(
+                    'images/user.png',
+                  ),
                 ),
               ),
               Row(
                 children: [
-                  TimeInOutDetailItem(),
-                  TimeInOutDetailItem(),
+                  TimeInOutDetailItem(
+                    title: 'Name:',
+                    description: user.name,
+                  ),
+                  TimeInOutDetailItem(
+                    title: 'Designation::',
+                    description: user.employeeDetails?.designation,
+                  ),
                 ],
               ),
               Row(
                 children: [
-                  TimeInOutDetailItem(),
-                  TimeInOutDetailItem(),
+                  TimeInOutDetailItem(
+                    title: 'Department::',
+                    description: user.employeeDetails?.department,
+                  ),
+                  TimeInOutDetailItem(
+                    title: 'Employee ID::',
+                    description: user.employeeCode,
+                  ),
                 ],
               ),
               Row(
                 children: [
-                  TimeInOutDetailItem(),
+                  TimeInOutDetailItem(
+                    title: 'Joining Date::',
+                    description: DateFormat('dd:MM:yyyy')
+                        .format(user.employeeDetails!.registerationDate!),
+                  ),
                 ],
               ),
               Container(
@@ -200,6 +237,11 @@ class TimeComponentItem extends StatelessWidget {
 }
 
 class TimeInOutDetailItem extends StatelessWidget {
+  final String title;
+  final String? description;
+
+  TimeInOutDetailItem({required this.title, required this.description});
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -209,7 +251,7 @@ class TimeInOutDetailItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Title',
+              title,
               style: TextStyle(
                 fontSize: 12.dynamic,
                 fontWeight: FontWeight.normal,
@@ -217,7 +259,7 @@ class TimeInOutDetailItem extends StatelessWidget {
               ),
             ),
             Text(
-              'Description',
+              safeString(description),
               style: TextStyle(
                 fontSize: 14.dynamic,
                 fontWeight: FontWeight.w600,

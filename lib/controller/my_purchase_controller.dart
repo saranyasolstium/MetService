@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class MyPurchaseController extends GetxController {
   // ignore: deprecated_member_use
-  var jobList = List<MJobHistoryItem>().obs;
+  var jobList = <MJobHistoryItem>[].obs;
   final selectedDate = DateTime.now().obs;
   // var isLoading = true.obs;
 

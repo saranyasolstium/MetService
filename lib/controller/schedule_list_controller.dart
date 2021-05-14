@@ -1,10 +1,9 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/model/get_scheduled_job.dart';
-import 'package:eagle_pixels/reuse/loader.dart';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:eagle_pixels/reuse/date_manager.dart';
 
 import '../constant.dart';
 
@@ -42,7 +41,7 @@ class ScheduleListController extends GetxController {
       endPoint: EndPoint.scheduled_job_list,
       body: {'date': serviceDate(selectedDate.value)},
     );
-    scheduleList.value = resp.model.data;
+    scheduleList.value = resp.model!.data!;
     if (scheduleList.length > 0) {
       viewState.value = ViewState.success;
     } else {

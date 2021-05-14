@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/reuse/storage.dart';
-import 'package:get_storage/get_storage.dart';
 
 extension Header on EndPoint {
   static Map<String, String> get profile {

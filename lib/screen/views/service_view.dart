@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eagle_pixels/model/get_scheduled_job.dart';
+
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -8,21 +8,21 @@ import '../../colors.dart';
 import '../../constant.dart';
 
 abstract class MService {
-  String name;
+  String? name;
 }
 
 class ServiceView extends StatelessWidget {
   ServiceView({
-    @required this.item,
-    @required this.buttonTitle,
+    required this.item,
+    this.buttonTitle,
     this.isNeedDetail = true,
-    @required this.onJob,
+    required this.onJob,
     this.isNeedStatus = false,
-    @required this.onSeeDetail,
+    required this.onSeeDetail,
   });
   final bool isNeedStatus;
   final bool isNeedDetail;
-  final String buttonTitle;
+  final String? buttonTitle;
   final Function onSeeDetail;
   final Function onJob;
   final AServiceItem item;
@@ -46,7 +46,7 @@ class ServiceView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CachedNetworkImage(
-                imageUrl: item.aImage,
+                imageUrl: item.aImage ?? "",
                 placeholder: (_, url) => Image.asset(
                   'images/camera.png',
                 ),
@@ -179,9 +179,9 @@ class ServiceView extends StatelessWidget {
                             minWidth: 121.dynamic,
                             height: 44.dynamic,
                             padding: EdgeInsets.symmetric(horizontal: 40),
-                            onPressed: onJob,
+                            onPressed: onJob as void Function()?,
                             child: Text(
-                              buttonTitle,
+                              buttonTitle ?? "",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
@@ -233,9 +233,9 @@ class ServiceView extends StatelessWidget {
 class ExpanderOrContainer extends StatelessWidget {
   ExpanderOrContainer({this.child, this.isContainer = true});
   final bool isContainer;
-  final Widget child;
+  final Widget? child;
   @override
   Widget build(BuildContext context) {
-    return isContainer ? Container(child: child) : Expanded(child: child);
+    return isContainer ? Container(child: child) : Expanded(child: child!);
   }
 }

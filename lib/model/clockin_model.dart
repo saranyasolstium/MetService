@@ -1,16 +1,16 @@
 import 'package:eagle_pixels/api/api_service.dart';
 
 class MClockInResponse implements Codable {
-  String status;
-  String message;
-  MClockInItem data;
+  String? status;
+  String? message;
+  MClockInItem? data;
 
   MClockInResponse({this.status, this.message, this.data});
 
   fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? MClockInItem.fromJson(json['data']) : {};
+    data = (json['data'] != null ? MClockInItem.fromJson(json['data']) : {}) as MClockInItem?;
     return this;
   }
 
@@ -19,28 +19,28 @@ class MClockInResponse implements Codable {
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data.toJson();
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 
-  bool get isValid => data.attendenceDate != null;
+  bool get isValid => data!.attendenceDate != null;
 }
 
 class MClockInItem {
-  String attendenceDate;
-  String employeeCode;
-  String siteID;
-  String serviceID;
-  String siteName;
-  String employeeName;
-  String inTimeHour;
-  String inTimeMinute;
-  String latIn;
-  String longIn;
-  int iD;
+  String? attendenceDate;
+  String? employeeCode;
+  String? siteID;
+  String? serviceID;
+  String? siteName;
+  String? employeeName;
+  String? inTimeHour;
+  String? inTimeMinute;
+  String? latIn;
+  String? longIn;
+  int? iD;
   Null employeeType;
-  MClockInSiteDetail siteDetails;
+  MClockInSiteDetail? siteDetails;
 
   MClockInItem.fromJson(Map<String, dynamic> json) {
     attendenceDate = json['AttendenceDate'];
@@ -55,9 +55,9 @@ class MClockInItem {
     longIn = json['LongIn'];
     iD = json['ID'];
     employeeType = json['EmployeeType'];
-    siteDetails = json['siteDetails'] != null
+    siteDetails = (json['siteDetails'] != null
         ? new MClockInSiteDetail.fromJson(json['siteDetails'])
-        : {};
+        : {}) as MClockInSiteDetail?;
   }
 
   Map<String, dynamic> toJson() {
@@ -75,26 +75,26 @@ class MClockInItem {
     data['ID'] = this.iD;
     data['EmployeeType'] = this.employeeType;
     if (this.siteDetails != null) {
-      data['siteDetails'] = this.siteDetails.toJson();
+      data['siteDetails'] = this.siteDetails!.toJson();
     }
     return data;
   }
 }
 
 class MClockInSiteDetail {
-  int id;
-  int clientId;
+  int? id;
+  int? clientId;
   Null location;
   Null sublocation;
-  String name;
-  String address1;
+  String? name;
+  String? address1;
   Null address2;
-  String country;
-  String state;
-  String city;
-  String zipCode;
-  String status;
-  String createdAt;
+  String? country;
+  String? state;
+  String? city;
+  String? zipCode;
+  String? status;
+  String? createdAt;
   Null updatedAt;
 
   MClockInSiteDetail.fromJson(Map<String, dynamic> json) {

@@ -1,9 +1,6 @@
 import 'package:eagle_pixels/controller/timer_controller.dart';
-import 'package:eagle_pixels/screen/home_screen.dart';
-import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:awesome_dropdown/awesome_dropdown.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:get/get.dart';

@@ -1,9 +1,9 @@
 import 'package:eagle_pixels/api/api_service.dart';
 
 class MAttendanceResponse implements Codable {
-  String status;
-  String message;
-  List<MAttendanceItem> data;
+  String? status;
+  String? message;
+  List<MAttendanceItem>? data;
 
   fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -11,7 +11,7 @@ class MAttendanceResponse implements Codable {
     data = <MAttendanceItem>[];
     if (json['data'] != null) {
       json['data'].forEach((v) {
-        data.add(MAttendanceItem.fromJson(v));
+        data!.add(MAttendanceItem.fromJson(v));
       });
     }
     return this;
@@ -22,63 +22,63 @@ class MAttendanceResponse implements Codable {
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 
-  bool get isValid => data.length > 0;
+  bool get isValid => data!.length > 0;
 }
 
 class MAttendanceItem {
-  int iD;
-  String employeeCode;
+  int? iD;
+  String? employeeCode;
   Null empCode1;
-  String attendenceDate;
-  int inTimeHour;
-  int inTimeMinute;
-  int outTimeHour;
-  int outTimeMinute;
+  String? attendenceDate;
+  int? inTimeHour;
+  int? inTimeMinute;
+  int? outTimeHour;
+  int? outTimeMinute;
   Null nWorkUnit;
   Null jobType;
-  String employeeName;
+  String? employeeName;
   Null eMPStatus;
-  String siteID;
-  int serviceID;
-  String siteName;
-  double latIn;
-  double longIn;
-  double latOut;
-  double longOut;
+  String? siteID;
+  int? serviceID;
+  String? siteName;
+  double? latIn;
+  double? longIn;
+  double? latOut;
+  double? longOut;
   Null imageIn;
   Null imageOut;
-  bool isactive;
+  bool? isactive;
   Null attId;
-  int id;
-  String firstName;
+  int? id;
+  String? firstName;
   Null joiningDate;
-  String lastName;
-  String userName;
-  String email;
-  String designation;
+  String? lastName;
+  String? userName;
+  String? email;
+  String? designation;
   Null networkUserId;
-  String countryCode;
-  int mobileNumber;
-  String registerationDate;
+  String? countryCode;
+  int? mobileNumber;
+  String? registerationDate;
   Null dob;
-  String department;
+  String? department;
   Null employeeType;
   Null finNumber;
-  String finStartDate;
-  String finEndDate;
+  String? finStartDate;
+  String? finEndDate;
   Null passportNumber;
   Null passportStartDate;
   Null passportEndDate;
-  String finCertificate;
-  String passportCertificate;
-  String profileImage;
-  String status;
-  String deletedAt;
+  String? finCertificate;
+  String? passportCertificate;
+  String? profileImage;
+  String? status;
+  String? deletedAt;
 
   MAttendanceItem.fromJson(Map<String, dynamic> json) {
     iD = json['ID'];

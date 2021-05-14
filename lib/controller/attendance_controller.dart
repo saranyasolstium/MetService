@@ -2,7 +2,7 @@ import 'dart:core';
 import 'dart:ui';
 
 import 'package:eagle_pixels/api/urls.dart';
-import 'package:eagle_pixels/controller/app_controller.dart';
+
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/attendance_model.dart';
 import 'package:eagle_pixels/model/clockin_model.dart';
@@ -15,12 +15,20 @@ import 'package:eagle_pixels/api/api_service.dart';
 
 class AttendanceController extends GetxController {
   var selectedYear = "2021".obs;
-  var selectedMonth = "01".obs;
+  var selectedMonth = "January".obs;
+  String selectedMonthInNumber = '1';
 
-  var jobStartedTime = DateTime.now().obs;
+  DateTime get selectedDate {
+    return DateTime(
+        int.parse(selectedYear.value), int.parse(selectedMonthInNumber));
+  }
 
-  var attendance = Map<String, List<MAttendanceItem>>();
-  AAttendanceStatus attendanceStatus;
+  DateTime? get jobStartedTime {
+    return attendanceStatus.value?.startedDate;
+  }
+
+  var attendance = Map<String, List<MAttendanceItem>?>();
+  final Rx<AAttendanceStatus?> attendanceStatus = null.obs;
   @override
   void onInit() {
     selectedMonth.value = DateFormat.MMMM().format(DateTime.now());
@@ -29,21 +37,32 @@ class AttendanceController extends GetxController {
   }
 
   resetAttendance() {
-    attendanceStatus = null;
+    attendanceStatus.value = null;
     selectedMonth.value = DateFormat.MMMM().format(DateTime.now());
     selectedYear.value = DateFormat.y().format(DateTime.now());
   }
 
   bool get isClockedIn {
-    return false; //attendanceStatus.startedDate;
+    return jobStartedTime != null;
   }
 
-  Future<MClockInResponse> onClockIn() async {
+  Future<MClockInResponse?> onClockIn() async {
     var body = {'SiteID': 0, 'latitude': 0, 'longitude': 0, 'serviceID': 0};
 
     var response = await API.service.call(
       model: MClockInResponse(),
       endPoint: EndPoint.clockIn,
+      body: body,
+    );
+    return response.model;
+  }
+
+  Future<MClockInResponse?> onClockOut() async {
+    var body = {'SiteID': 0, 'latitude': 0, 'longitude': 0, 'serviceID': 0};
+
+    var response = await API.service.call(
+      model: MClockInResponse(),
+      endPoint: EndPoint.clockOut,
       body: body,
     );
     return response.model;
@@ -55,7 +74,7 @@ class AttendanceController extends GetxController {
     return (selectedDayAttendance != null && selectedDayAttendance.length > 0);
   }
 
-  fetchAttendance({@required bool isShowLoading}) async {
+  fetchAttendance({required bool isShowLoading}) async {
     var month = this.selectedMonth.value;
     var year = this.selectedYear.value;
     var response = await API.service.call(
@@ -68,7 +87,7 @@ class AttendanceController extends GetxController {
       },
     );
     if (response.isValidModel) {
-      attendance['$month$year'] = response.model.data;
+      attendance['$month$year'] = response.model!.data;
     }
     update();
   }
@@ -81,9 +100,9 @@ class AttendanceController extends GetxController {
         attendanceInSelectedMonth.length > 0) {
       attendanceInSelectedMonth.forEach((element) {
         if (element.inTimeHour != null && element.outTimeHour != null) {
-          if (element.outTimeHour - element.inTimeHour > 4) {
-            var elementDate =
-                DateFormat('yyyy-MM-dd HH:mm:ss').parse(element.attendenceDate);
+          if (element.outTimeHour! - element.inTimeHour! > 4) {
+            var elementDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+                .parse(element.attendenceDate!);
             days.add(elementDate.day);
           }
         }
@@ -100,9 +119,9 @@ class AttendanceController extends GetxController {
         attendanceInSelectedMonth.length > 0) {
       attendanceInSelectedMonth.forEach((element) {
         if (element.inTimeHour != null && element.outTimeHour != null) {
-          if (element.outTimeHour - element.inTimeHour > 4) {
-            var elementDate =
-                DateFormat('yyyy-MM-dd HH:mm:ss').parse(element.attendenceDate);
+          if (element.outTimeHour! - element.inTimeHour! > 4) {
+            var elementDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+                .parse(element.attendenceDate!);
             days.add(elementDate.day);
           }
         }
@@ -119,9 +138,9 @@ class AttendanceController extends GetxController {
         attendanceInSelectedMonth.length > 0) {
       attendanceInSelectedMonth.forEach((element) {
         if (element.inTimeHour != null && element.outTimeHour != null) {
-          if (element.outTimeHour - element.inTimeHour < 4) {
-            var elementDate =
-                DateFormat('yyyy-MM-dd HH:mm:ss').parse(element.attendenceDate);
+          if (element.outTimeHour! - element.inTimeHour! < 4) {
+            var elementDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+                .parse(element.attendenceDate!);
             days.add(elementDate.day);
           }
         }
@@ -137,7 +156,7 @@ enum DayStatus {
   HALFDAY,
 }
 
-extension StatusExtension on DayStatus {
+extension StatusExtension on DayStatus? {
   Color get color {
     switch (this) {
       case DayStatus.ABSENT:
@@ -146,8 +165,9 @@ extension StatusExtension on DayStatus {
         return HexColor.fromHex('#14E19C');
       case DayStatus.HALFDAY:
         return HexColor.fromHex('#EFD100');
+      default:
+        return Colors.black;
     }
-    return Colors.black;
   }
 
   String get text {
@@ -158,7 +178,8 @@ extension StatusExtension on DayStatus {
         return 'PRESENT';
       case DayStatus.HALFDAY:
         return 'HALF DAY';
+      default:
+        return "";
     }
-    return '';
   }
 }

@@ -1,5 +1,3 @@
-import 'package:eagle_pixels/screen/home_screen.dart';
-import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';

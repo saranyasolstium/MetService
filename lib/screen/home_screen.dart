@@ -3,10 +3,8 @@ import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
-import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:eagle_pixels/model/profile_model.dart';
 
 extension HomeAction on HomeScreen {
   onAttendance() {
@@ -86,7 +84,7 @@ extension HomeWidgets on HomeScreen {
                   ),
                 ),
                 Text(
-                  '   ${safeString(AppController.to.user.value.name)}',
+                  '   ${safeString(AppController.user.name)}',
                   style: TextStyle(
                       color: Colour.appText,
                       fontSize: 16.dynamic,
@@ -182,8 +180,8 @@ extension HomeWidgets on HomeScreen {
 }
 
 class HomeMainCard extends StatelessWidget {
-  final String imageName;
-  final String name;
+  final String? imageName;
+  final String? name;
   HomeMainCard({this.imageName, this.name});
 
   @override
@@ -204,13 +202,13 @@ class HomeMainCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image(
-            image: AssetImage(imageName),
+            image: AssetImage(imageName!),
           ),
           SizedBox(
             height: 15.1.dynamic,
           ),
           Text(
-            name,
+            name!,
             style: TextStyle(
                 color: Colour.appBlue,
                 fontSize: 16.dynamic,
@@ -223,9 +221,9 @@ class HomeMainCard extends StatelessWidget {
 }
 
 class HomeCard extends StatelessWidget {
-  final Color color;
-  final String jobName;
-  final String jobCount;
+  final Color? color;
+  final String? jobName;
+  final String? jobCount;
   HomeCard({this.color, this.jobCount, this.jobName});
 
   @override

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomCheckbox extends StatelessWidget {
-  final bool isChecked;
-  final double size;
-  final double iconSize;
-  final Color selectedColor;
-  final Color selectedIconColor;
-  final Function(bool) didSelect;
+  final bool? isChecked;
+  final double? size;
+  final double? iconSize;
+  final Color? selectedColor;
+  final Color? selectedIconColor;
+  final Function(bool)? didSelect;
 
   CustomCheckbox(
       {this.isChecked,
@@ -19,17 +19,17 @@ class CustomCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        didSelect(!this.isChecked);
+        didSelect!(!this.isChecked!);
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
         curve: Curves.fastLinearToSlowEaseIn,
         decoration: BoxDecoration(
-            color: this.isChecked
+            color: this.isChecked!
                 ? selectedColor ?? Colors.blue
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(5.0),
-            border: this.isChecked
+            border: this.isChecked!
                 ? null
                 : Border.all(
                     color: Colors.grey,
@@ -37,7 +37,7 @@ class CustomCheckbox extends StatelessWidget {
                   )),
         width: size ?? 30,
         height: size ?? 30,
-        child: this.isChecked
+        child: this.isChecked!
             ? Icon(
                 Icons.check,
                 color: selectedIconColor ?? Colors.white,

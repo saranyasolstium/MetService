@@ -10,11 +10,11 @@ class LoginResponseModel {
     this.error,
   });
 
-  String tokenType;
-  int expiresIn;
-  String accessToken;
-  String refreshToken;
-  String error;
+  String? tokenType;
+  int? expiresIn;
+  String? accessToken;
+  String? refreshToken;
+  String? error;
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
       LoginResponseModel(
         tokenType: json["token_type"],
@@ -33,8 +33,8 @@ class LoginResponseModel {
 }
 
 class LoginRequestModel {
-  String email;
-  String password;
+  String? email;
+  String? password;
 
   // ignore: non_constant_identifier_names
   LoginRequestModel({
@@ -44,8 +44,8 @@ class LoginRequestModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'username': email.trim(),
-      'password': password.trim(),
+      'username': email!.trim(),
+      'password': password!.trim(),
       'grant_type': 'password',
       'client_id': '6',
       'client_secret': 'XHZgV3oFMGAZOzYEG9e9EqWE7OTWECS2MICTjoGX',

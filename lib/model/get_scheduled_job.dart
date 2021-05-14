@@ -2,8 +2,6 @@
 //
 //     final getScheduledList = getScheduledListFromJson(jsonString);
 
-import 'dart:convert';
-
 import 'package:eagle_pixels/api/api_service.dart';
 import 'abstract_class.dart';
 // ScheduleResponse getScheduledListFromJson(String str) =>
@@ -19,9 +17,9 @@ class ScheduleResponse implements Codable {
     this.data,
   });
 
-  String status;
-  String message;
-  List<MScheduledJobItem> data;
+  String? status;
+  String? message;
+  List<MScheduledJobItem>? data;
 
   fromJson(Map<String, dynamic> json) {
     var model = ScheduleResponse();
@@ -35,7 +33,7 @@ class ScheduleResponse implements Codable {
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 
   bool get isValid => true;
@@ -60,21 +58,21 @@ class MScheduledJobItem implements AServiceItem {
     this.name,
   });
 
-  int id;
-  int requesterId;
-  int siteId;
-  int ticketId;
-  String productId;
-  String productName;
-  String productImage;
-  String sku;
-  String serialNumber;
-  String purchaseDate;
-  String customerName;
-  String customerImage;
-  String subject;
-  String description;
-  String name;
+  int? id;
+  int? requesterId;
+  int? siteId;
+  int? ticketId;
+  String? productId;
+  String? productName;
+  String? productImage;
+  String? sku;
+  String? serialNumber;
+  String? purchaseDate;
+  String? customerName;
+  String? customerImage;
+  String? subject;
+  String? description;
+  String? name;
 
   factory MScheduledJobItem.fromJson(Map<String, dynamic> json) =>
       MScheduledJobItem(
@@ -113,9 +111,9 @@ class MScheduledJobItem implements AServiceItem {
         "name": name,
       };
 
-  String get aCctvID => productId;
-  String get aCustomerName => customerName;
-  String get aImage => customerImage;
-  String get aName => productName;
-  String get aPurchaseDate => purchaseDate;
+  String? get aCctvID => productId;
+  String? get aCustomerName => customerName;
+  String? get aImage => customerImage;
+  String? get aName => productName;
+  String? get aPurchaseDate => purchaseDate;
 }

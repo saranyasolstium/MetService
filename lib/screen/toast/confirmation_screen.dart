@@ -9,7 +9,7 @@ extension ConfiramtionAction on ConfirmationScreen {
   onYes() {
     // Get.back();
     print('yes called');
-    navigator.pop();
+    navigator!.pop();
   }
 
   onNo() {

@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:pretty_json/pretty_json.dart';
 
 void main() async {
   runApp(TestScreen());
@@ -33,7 +29,7 @@ void main() async {
 }
 
 class TestScreen extends StatelessWidget {
-  const TestScreen({Key key}) : super(key: key);
+  const TestScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +47,13 @@ class TestScreen extends StatelessWidget {
 }
 
 class TestItem extends StatelessWidget {
-  const TestItem({Key key}) : super(key: key);
+  const TestItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: 2,
-      children: [
-        Text('Text1'),
-        Text('Text2'),
-      ],
-    );
-    return Column(
       children: [
         Text('Text1'),
         Text('Text2'),

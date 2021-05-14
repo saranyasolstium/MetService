@@ -1,7 +1,6 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/storage.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:eagle_pixels/screen/nav_bottom.dart';
@@ -17,14 +16,18 @@ enum LoginStatus { logged, logout, loading }
 
 class AppController extends GetxController {
   bool get isEngineer {
-    return user.value.isEngineer; //temp
+    return _user.value.isEngineer; //temp
   }
 
   static AppController get to => Get.find<AppController>();
   // static var profile = MProfile();
   var loginStatus = LoginStatus.loading.obs;
   var showLoading = 0.obs;
-  var user = MProfile().obs;
+  static var _user = MProfile().obs;
+  static MProfile get user {
+    return _user.value;
+  }
+
   GetStorage storage = GetStorage();
 
   @override
@@ -39,8 +42,8 @@ class AppController extends GetxController {
     var response = await API.service
         .call(model: MProfileResponse(), endPoint: EndPoint.profile);
     if (response.isValidModel) {
-      user.value = response.model.data.first;
-      if (user.value.isActive) {
+      _user.value = response.model!.data!.first;
+      if (_user.value.isActive) {
         loginStatus.value = LoginStatus.logged;
       } else {
         loginStatus.value = LoginStatus.logout;
@@ -81,7 +84,6 @@ class AppController extends GetxController {
           ),
         );
     }
-    return Container();
   }
 
   Widget defaultLoaderView() {

@@ -1,5 +1,3 @@
-import 'package:eagle_pixels/controller/job_history_controller.dart';
-import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';

@@ -2,8 +2,6 @@
 //
 //     final welcome = welcomeFromJson(jsonString);
 
-import 'dart:convert';
-
 // RegisterResponseModel welcomeFromJson(String str) => RegisterResponseModel.fromJson(json.decode(str));
 //
 // String welcomeToJson(RegisterResponseModel data) => json.encode(data.toJson());
@@ -16,9 +14,9 @@ class RegisterResponseModel implements Codable {
     this.data,
   });
 
-  String status;
-  String message;
-  List<dynamic> data;
+  String? status;
+  String? message;
+  List<dynamic>? data;
 
   fromJson(Map<String, dynamic> json) {
     var model = RegisterResponseModel();
@@ -36,15 +34,15 @@ class RegisterResponseModel implements Codable {
 }
 
 class RegisterRequestModel {
-  String email;
-  String password;
-  String firstName;
-  String lastName;
-  String dob;
-  String countryCode;
-  String mobileNumber;
-  String confirmPassword;
-  String userName;
+  String? email;
+  String? password;
+  String? firstName;
+  String? lastName;
+  String? dob;
+  String? countryCode;
+  String? mobileNumber;
+  String? confirmPassword;
+  String? userName;
 
   RegisterRequestModel(
       {this.email,
@@ -59,15 +57,15 @@ class RegisterRequestModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'first_name': firstName.trim(),
-      'last_name': lastName.trim(),
+      'first_name': firstName!.trim(),
+      'last_name': lastName!.trim(),
       'dob': dob,
-      'email': email.trim(),
-      'country_code': countryCode.trim(),
-      'mobile_number': mobileNumber.trim(),
-      'password': password.trim(),
-      'confirm_password': confirmPassword.trim(),
-      'user_name': userName.trim(),
+      'email': email!.trim(),
+      'country_code': countryCode!.trim(),
+      'mobile_number': mobileNumber!.trim(),
+      'password': password!.trim(),
+      'confirm_password': confirmPassword!.trim(),
+      'user_name': userName!.trim(),
     };
     return map;
   }

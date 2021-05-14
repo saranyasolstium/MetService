@@ -5,7 +5,8 @@ enum EndPoint {
   register,
   job_history_list,
   attendance,
-  clockIn
+  clockIn,
+  clockOut
 }
 
 extension EndPointString on EndPoint {
@@ -25,8 +26,9 @@ extension EndPointString on EndPoint {
         return 'monthattendencelist';
       case EndPoint.clockIn:
         return 'clockin';
+      case EndPoint.clockOut:
+        return 'clockout';
     }
-    return "";
   }
 }
 
@@ -46,7 +48,6 @@ extension BaseURLString on EBaseURL {
       case EBaseURL.debug:
         return "https://pixel.solstium.net";
     }
-    return "https://pixel.solstium.net";
   }
 
   String withExtend(String endPoint) {

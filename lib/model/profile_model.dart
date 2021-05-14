@@ -2,8 +2,6 @@
 //
 //     final profile = profileFromJson(jsonString);
 
-import 'dart:convert';
-
 import 'package:eagle_pixels/api/api_service.dart';
 
 // Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
@@ -17,9 +15,9 @@ class MProfileResponse implements Codable {
     this.data,
   });
 
-  String status;
-  String message;
-  List<MProfile> data;
+  String? status;
+  String? message;
+  List<MProfile>? data;
 
   fromJson(Map<String, dynamic> json) {
     var model = MProfileResponse();
@@ -33,13 +31,13 @@ class MProfileResponse implements Codable {
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
   bool get isValid {
     return (data != null &&
-        data.length > 0 &&
-        data[0].userType != null &&
-        data[0].status != null);
+        data!.length > 0 &&
+        data![0].userType != null &&
+        data![0].status != null);
   }
 }
 
@@ -61,20 +59,20 @@ class MProfile {
     this.employeeDetails,
   });
 
-  int id;
-  String name;
-  String email;
+  int? id;
+  String? name;
+  String? email;
   dynamic emailVerifiedAt;
-  int userType;
-  String role;
-  String employeeCode;
-  int status;
-  DateTime createdAt;
-  DateTime updatedAt;
+  int? userType;
+  String? role;
+  String? employeeCode;
+  int? status;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   dynamic joiningDate;
-  int totalCompletedJobs;
-  int totalServiceDays;
-  MEmployeeDetails employeeDetails;
+  int? totalCompletedJobs;
+  int? totalServiceDays;
+  MEmployeeDetails? employeeDetails;
 
   bool get isEngineer {
     if (userType == 2) {
@@ -118,12 +116,12 @@ class MProfile {
         "role": role,
         "employee_code": employeeCode,
         "status": status,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
         "joining_date": joiningDate,
         "total_completed_jobs": totalCompletedJobs,
         "total_service_days": totalServiceDays,
-        "employeeDetails": employeeDetails.toJson(),
+        "employeeDetails": employeeDetails!.toJson(),
       };
 }
 
@@ -151,26 +149,26 @@ class MEmployeeDetails {
     this.profileImage,
   });
 
-  int id;
-  String firstName;
-  String lastName;
-  String employeeCode;
-  String userName;
-  String designation;
-  String countryCode;
-  int mobileNumber;
-  DateTime registerationDate;
-  String department;
+  int? id;
+  String? firstName;
+  String? lastName;
+  String? employeeCode;
+  String? userName;
+  String? designation;
+  String? countryCode;
+  int? mobileNumber;
+  DateTime? registerationDate;
+  String? department;
   dynamic employeeType;
   dynamic finNumber;
-  DateTime finStartDate;
-  DateTime finEndDate;
+  DateTime? finStartDate;
+  DateTime? finEndDate;
   dynamic passportNumber;
   dynamic passportStartDate;
   dynamic passportEndDate;
-  String finCertificate;
-  String passportCertificate;
-  String profileImage;
+  String? finCertificate;
+  String? passportCertificate;
+  String? profileImage;
 
   factory MEmployeeDetails.fromJson(Map<String, dynamic> json) =>
       MEmployeeDetails(
@@ -205,14 +203,14 @@ class MEmployeeDetails {
         "designation": designation,
         "country_code": countryCode,
         "mobile_number": mobileNumber,
-        "registeration_date": registerationDate.toIso8601String(),
+        "registeration_date": registerationDate!.toIso8601String(),
         "department": department,
         "employee_type": employeeType,
         "fin_number": finNumber,
         "fin_start_date":
-            "${finStartDate.year.toString().padLeft(4, '0')}-${finStartDate.month.toString().padLeft(2, '0')}-${finStartDate.day.toString().padLeft(2, '0')}",
+            "${finStartDate!.year.toString().padLeft(4, '0')}-${finStartDate!.month.toString().padLeft(2, '0')}-${finStartDate!.day.toString().padLeft(2, '0')}",
         "fin_end_date":
-            "${finEndDate.year.toString().padLeft(4, '0')}-${finEndDate.month.toString().padLeft(2, '0')}-${finEndDate.day.toString().padLeft(2, '0')}",
+            "${finEndDate!.year.toString().padLeft(4, '0')}-${finEndDate!.month.toString().padLeft(2, '0')}-${finEndDate!.day.toString().padLeft(2, '0')}",
         "passport_number": passportNumber,
         "passport_start_date": passportStartDate,
         "passport_end_date": passportEndDate,

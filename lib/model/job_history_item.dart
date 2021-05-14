@@ -2,9 +2,9 @@ import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 
 class MJobHistoryListResponse implements Codable {
-  String status;
-  String message;
-  List<MJobHistoryItem> data;
+  String? status;
+  String? message;
+  List<MJobHistoryItem>? data;
 
   fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -12,7 +12,7 @@ class MJobHistoryListResponse implements Codable {
     data = <MJobHistoryItem>[];
     if (json['data'] != null) {
       json['data'].forEach((v) {
-        data.add(new MJobHistoryItem().fromJson(v));
+        data!.add(new MJobHistoryItem().fromJson(v));
       });
     }
     return this;
@@ -23,7 +23,7 @@ class MJobHistoryListResponse implements Codable {
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -32,23 +32,23 @@ class MJobHistoryListResponse implements Codable {
 }
 
 class MJobHistoryItem implements AServiceItem {
-  int id;
-  int requesterId;
-  String siteId;
-  int ticketId;
-  String productId;
-  String productName;
-  String productImage;
-  String sku;
-  String serialNumber;
-  String purchaseDate;
-  String customerName;
-  String customerImage;
-  String subject;
-  String description;
-  String name;
-  int engineerStatus;
-  String status;
+  int? id;
+  int? requesterId;
+  String? siteId;
+  int? ticketId;
+  String? productId;
+  String? productName;
+  String? productImage;
+  String? sku;
+  String? serialNumber;
+  String? purchaseDate;
+  String? customerName;
+  String? customerImage;
+  String? subject;
+  String? description;
+  String? name;
+  int? engineerStatus;
+  String? status;
 
   fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -92,9 +92,9 @@ class MJobHistoryItem implements AServiceItem {
     return data;
   }
 
-  String get aCctvID => productId;
-  String get aCustomerName => customerName;
-  String get aImage => productImage;
-  String get aName => productName;
-  String get aPurchaseDate => purchaseDate;
+  String? get aCctvID => productId;
+  String? get aCustomerName => customerName;
+  String? get aImage => productImage;
+  String? get aName => productName;
+  String? get aPurchaseDate => purchaseDate;
 }

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class TimerController extends GetxController {
   static TimerController get to => Get.find<TimerController>();
-  Timer timer;
+  Timer? timer;
   final currentDate = DateTime.now().obs;
 
   @override
@@ -23,7 +23,7 @@ class TimerController extends GetxController {
   }
 
   clearMemory() {
-    timer.cancel();
+    timer!.cancel();
     timer = null;
     print('Timer controller deinited');
   }

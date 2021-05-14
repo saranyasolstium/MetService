@@ -1,4 +1,3 @@
-import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -12,6 +11,19 @@ import 'package:jiffy/jiffy.dart';
 
 import '../../colors.dart';
 import '../../constant.dart';
+import '../../main.dart';
+import 'package:eagle_pixels/api/api_service.dart';
+
+extension TimeOutAction on TimeOutScreen {
+  onEndDay() async {
+    var model = await attendance.onClockOut();
+    if (model?.status?.isSuccess ?? false) {
+      Get.toNamed(NavPage.clockOut);
+    } else {
+      //TODO: show error toast
+    }
+  }
+}
 
 class TimeOutScreen extends StatelessWidget {
   final TimerController timer = Get.find();
@@ -19,10 +31,13 @@ class TimeOutScreen extends StatelessWidget {
 
   String get difference {
     var current = timer.currentDate.value;
-    var start = attendance.jobStartedTime.value;
+    var start = attendance.jobStartedTime;
+    if (start == null) {
+      return '00 : 00 : 00 Hrs';
+    }
     var hour = current.difference(start).inHours;
-    var min = current.difference(start).inMinutes.remainder(60);
-    var second = current.difference(start).inSeconds.remainder(60);
+    num min = current.difference(start).inMinutes.remainder(60);
+    num second = current.difference(start).inSeconds.remainder(60);
     var txt = "Hrs";
     if (hour == 0) {
       if (min == 0) {
@@ -42,7 +57,11 @@ class TimeOutScreen extends StatelessWidget {
         backgroundColor: CupertinoColors.white,
         elevation: 0,
         leading: RawMaterialButton(
-          onPressed: Get.back,
+          onPressed: () {
+            // Get.offNamed(NavPage.calendar);
+            navigator!
+                .popUntil((route) => route.settings.name == NavPage.calendar);
+          },
           child: Icon(
             Icons.arrow_back,
             color: Colour.appBlue,
@@ -65,8 +84,7 @@ class TimeOutScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      Jiffy(attendance.jobStartedTime.value)
-                          .format('do MMMM yyyy'),
+                      Jiffy(attendance.jobStartedTime).format('do MMMM yyyy'),
                       style: TextStyle(
                         fontSize: 12.dynamic,
                         fontWeight: FontWeight.normal,
@@ -75,8 +93,10 @@ class TimeOutScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 5.dynamic),
                     Text(
-                      DateFormat('hh:mm:ss a')
-                          .format(attendance.jobStartedTime.value),
+                      attendance.isClockedIn
+                          ? DateFormat('hh:mm:ss a')
+                              .format(attendance.jobStartedTime!)
+                          : '00:00:00',
                       style: TextStyle(
                         fontSize: 16.dynamic,
                         fontWeight: FontWeight.w600,
@@ -148,30 +168,30 @@ class TimeOutScreen extends StatelessWidget {
                         'images/user.png',
                       ),
                     ),
-                    Row(
-                      children: [
-                        TimeInOutDetailItem(),
-                        TimeInOutDetailItem(),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        TimeInOutDetailItem(),
-                        TimeInOutDetailItem(),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        TimeInOutDetailItem(),
-                        TimeInOutDetailItem(),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        TimeInOutDetailItem(),
-                        TimeInOutDetailItem(),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     TimeInOutDetailItem(),
+                    //     TimeInOutDetailItem(),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     TimeInOutDetailItem(),
+                    //     TimeInOutDetailItem(),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     TimeInOutDetailItem(),
+                    //     TimeInOutDetailItem(),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     TimeInOutDetailItem(),
+                    //     TimeInOutDetailItem(),
+                    //   ],
+                    // ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 22.dynamic),
                       child: Align(

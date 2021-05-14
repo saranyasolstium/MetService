@@ -17,22 +17,28 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 import '../../colors.dart';
 
 extension CalendarAction on CalendarScreen {
-  startTheDay() async {
-    var response = await attendance.onClockIn();
-    if (response.isValid) {}
-    Get.toNamed(NavPage.clockIn);
+  startOrEndDay() async {
+    if (attendance.isClockedIn) {
+      Get.toNamed(NavPage.clockOut);
+    } else {
+      Get.toNamed(NavPage.clockIn);
+    }
+    // var response = await attendance.onClockIn();
+    // if (response!.isValid) {}
   }
 
   selectMonth() {
     final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
     showMonthPicker(
-      context: Get.context,
+      context: Get.context!,
       firstDate: DateTime(currentYear - 30),
       lastDate: DateTime(currentYear + 1),
-      initialDate: DateTime.now(),
+      initialDate: attendance.selectedDate,
     ).then((value) {
       if (value != null) {
         var month = DateFormat.MMMM().format(value);
+        var selectedMonthInNumber = DateFormat('MM').format(value);
+        attendance.selectedMonthInNumber = selectedMonthInNumber;
         attendance.selectedMonth.value = month.toString();
         attendance.fetchAttendance(isShowLoading: true);
       }
@@ -42,8 +48,8 @@ extension CalendarAction on CalendarScreen {
   selectYear() {
     final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
     showDatePicker(
-      context: Get.context,
-      initialDate: DateTime.now(),
+      context: Get.context!,
+      initialDate: attendance.selectedDate,
       firstDate: DateTime(currentYear - 1),
       lastDate: DateTime(currentYear + 1),
       initialDatePickerMode: DatePickerMode.year,
@@ -113,10 +119,13 @@ class CalendarScreen extends StatelessWidget {
 // margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                   width: double.infinity,
                   child: RawMaterialButton(
+                    onPressed: () {},
                     child: TextButton(
-                      onPressed: this.startTheDay,
+                      onPressed: this.startOrEndDay,
                       child: Text(
-                        'Start the day',
+                        attendance.isClockedIn
+                            ? 'End the day'
+                            : 'Start the day',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.dynamic,
@@ -321,6 +330,8 @@ extension CalendarWidgets on CalendarScreen {
 
   Widget get calendar {
     return CalendarCarousel<Event>(
+      targetDateTime: DateTime(int.parse(attendance.selectedYear.value),
+          int.parse(attendance.selectedMonthInNumber)),
       todayBorderColor: Colors.transparent,
       customDayBuilder: (isSelectable,
           index,
@@ -356,10 +367,10 @@ extension CalendarWidgets on CalendarScreen {
       daysHaveCircularBorder: false,
       showOnlyCurrentMonthDate: false,
       // w      thisMonthDayBorderColor: Colors.transparent,
-      height: 287.dynamic,
+      height: 320.dynamic,
       // selectedDateTime: _currentDate2,
       // targetDateTime: _targetDateTime,
-      // customGridViewPhysics: NeverScrollableScrollPhysics(),
+      customGridViewPhysics: NeverScrollableScrollPhysics(),
       showHeader: false,
       todayTextStyle: TextStyle(
         color: Colors.blue,
@@ -377,7 +388,7 @@ extension CalendarWidgets on CalendarScreen {
             style: TextStyle(
               fontSize: 14.dynamic,
               fontWeight: FontWeight.w500,
-              color: index == 0 ? Colors.red : Colors.grey,
+              color: (index == 0 || index == 6) ? Colors.red : Colors.grey,
             ),
           ),
         );
@@ -401,13 +412,13 @@ extension CalendarWidgets on CalendarScreen {
       //   });
       // },
       onDayLongPressed: (DateTime date) {
-        int day = int.parse(DateFormat.d().format(date));
-        if ([4, 5, 6].contains(day)) {
-          print('contain');
-        } else {
-          print('not contain');
-        }
-        print('long pressed date $date');
+        // int day = int.parse(DateFormat.d().format(date));
+        // if ([4, 5, 6].contains(day)) {
+        //   print('contain');
+        // } else {
+        //   print('not contain');
+        // }
+        // print('long pressed date $date');
       },
     );
   }
@@ -449,9 +460,13 @@ class CalendarItem extends StatelessWidget {
       child: Container(
         child: Builder(
           builder: (context) {
-            if (isPrevMonthDay || isNextMonthDay)
+            bool isCurrentMonth = !(isPrevMonthDay || isNextMonthDay);
+            if (now.weekday == 6 || now.weekday == 7) {
+              return DateItemText(
+                  now: now, color: isCurrentMonth ? Colors.red : Colors.grey);
+            } else if (!isCurrentMonth) {
               return DateItemText(now: now, color: Colors.grey);
-            else if (presentedDays
+            } else if (presentedDays
                 .contains(int.parse(DateFormat.d().format(now)))) {
               return WorkingDates(now: now, status: DayStatus.PRESENT);
             } else if (absentsDays
@@ -470,7 +485,7 @@ class CalendarItem extends StatelessWidget {
 }
 
 class WorkingDates extends StatelessWidget {
-  const WorkingDates({@required this.now, @required this.status});
+  const WorkingDates({required this.now, required this.status});
   final DateTime now;
   final DayStatus status;
   @override
@@ -493,7 +508,7 @@ class WorkingDates extends StatelessWidget {
 }
 
 class DatePresentText extends StatelessWidget {
-  final DayStatus status;
+  final DayStatus? status;
   const DatePresentText({this.status});
 
   @override
@@ -518,15 +533,15 @@ class DatePresentText extends StatelessWidget {
 class DateItemText extends StatelessWidget {
   DateItemText({this.now, this.color});
 
-  final DateTime now;
-  final Color color;
+  final DateTime? now;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return FittedBox(
       fit: BoxFit.fitHeight,
       child: Text(
-        DateFormat.d().format(now),
+        DateFormat.d().format(now!),
         style: TextStyle(
           fontSize: 14.dynamic,
           color: color,

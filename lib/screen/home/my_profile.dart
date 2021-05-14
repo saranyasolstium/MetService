@@ -1,7 +1,6 @@
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
-import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -221,7 +220,7 @@ extension MyProfileScreenWidgets on MyProfileScreen {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '   ${safeString(AppController.to.user.value.name)}',
+                  '   ${safeString(AppController.user.name)}',
                   style: TextStyle(
                       color: Colour.appText,
                       fontSize: 16.dynamic,
@@ -311,7 +310,7 @@ extension MyProfileScreenWidgets on MyProfileScreen {
 }
 
 class ListOptions extends StatelessWidget {
-  final String listName;
+  final String? listName;
   ListOptions({this.listName});
 
   @override

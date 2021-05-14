@@ -10,7 +10,6 @@ extension HTTPMethodString on HTTPMethod {
       case HTTPMethod.post:
         return "POST";
     }
-    return "GET";
   }
 }
 
@@ -21,7 +20,8 @@ extension Method on EndPoint {
       case EndPoint.attendance:
       case EndPoint.clockIn:
         return HTTPMethod.post;
+      default:
+        return HTTPMethod.get;
     }
-    return HTTPMethod.get;
   }
 }

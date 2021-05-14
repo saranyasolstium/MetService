@@ -1,7 +1,4 @@
 import 'package:eagle_pixels/controller/attendance_controller.dart';
-import 'package:eagle_pixels/controller/job_checklist_controller.dart';
-import 'package:eagle_pixels/controller/job_history_controller.dart';
-import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/my_purchase_controller.dart';
@@ -12,17 +9,8 @@ class AppBinding implements Bindings {
   void dependencies() {
     // Get.smartManagement = SmartManagement.keepFactory;
     Get.put(AppController(), permanent: true);
-    // Get.create(() => ScheduleListController());
-    // Get.asap(() => AttendanceController(), condition: () {
-    //   print('checkedd');
-    //   return (AppController.to.loginStatus.value == LoginStatus.logged);
-    // });
     Get.put(AttendanceController(), permanent: true);
     Get.put(TimerController(), permanent: true);
     Get.put(MyPurchaseController(), permanent: true);
-    // Get.lazyPut(
-    //   () => JobCheckListController(),
-    // );
-    // Get.create(() => TimerController(), tag: 'out');
   }
 }

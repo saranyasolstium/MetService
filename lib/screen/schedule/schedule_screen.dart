@@ -1,18 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
-import 'package:eagle_pixels/model/get_scheduled_job.dart';
-import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:eagle_pixels/screen/views/service_view.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:eagle_pixels/screen/home/mypurchase_detail_screen.dart';
+
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
-import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
 
 import '../../main.dart';
 

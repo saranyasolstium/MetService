@@ -19,7 +19,7 @@ class ChangeDateView extends StatelessWidget {
   changeDate() {
     final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
     showDatePicker(
-      context: Get.context,
+      context: Get.context!,
       initialDate: DateTime.now(),
       firstDate: DateTime(currentYear - 1),
       lastDate: DateTime(currentYear + 1),
@@ -38,7 +38,7 @@ class ChangeDateView extends StatelessWidget {
 
   final Rx<DateTime> date;
   final Function() didEnd;
-  const ChangeDateView({@required this.date, @required this.didEnd});
+  const ChangeDateView({required this.date, required this.didEnd});
 
   @override
   Widget build(BuildContext context) {

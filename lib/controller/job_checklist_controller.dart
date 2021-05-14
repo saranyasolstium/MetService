@@ -9,23 +9,23 @@ class MCheckListItem {
   String title;
   Color color;
   MCheckListItem(
-      {@required this.id, @required this.title, @required this.color});
+      {required this.id, required this.title, required this.color});
 }
 
 abstract class ACheckList {
-  String id;
-  MCheckListItem selectedItem;
+  String? id;
+  MCheckListItem? selectedItem;
 
-  List<MCheckListItem> options;
-  String title;
-  String remarks;
+  List<MCheckListItem>? options;
+  String? title;
+  String? remarks;
 }
 
 class MCheckList implements ACheckList, Codable {
-  List<MCheckListItem> options;
-  MCheckListItem selectedItem;
+  List<MCheckListItem>? options;
+  MCheckListItem? selectedItem;
 
-  String status;
+  String? status;
 
   Codable fromJson(Map<String, dynamic> map) {
     var model = MCheckList();
@@ -40,13 +40,13 @@ class MCheckList implements ACheckList, Codable {
   }
 
   @override
-  String remarks;
+  String? remarks;
 
   @override
-  String title;
+  String? title;
 
   @override
-  String id;
+  String? id;
 }
 
 class JobCheckListController extends GetxController {
@@ -61,9 +61,9 @@ class JobCheckListController extends GetxController {
       var model = MCheckList();
       model.options = [];
 
-      model.options
+      model.options!
           .add(MCheckListItem(id: '1', title: "Fixed", color: Colour.appBlue));
-      model.options.add(
+      model.options!.add(
           MCheckListItem(id: '2', title: "Non Fixable", color: Colour.appRed));
       models.add(model);
     }

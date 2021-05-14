@@ -8,7 +8,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter/gestures.dart';
-import 'dart:convert';
 
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
@@ -25,18 +24,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   DateTime selectedDate = DateTime.now();
   var txt = TextEditingController();
   final DateFormat format = DateFormat('dd-MM-yyyy');
-  bool _checkboxAgree = false;
-  bool _checkboxTerms = false;
+  bool? _checkboxAgree = false;
+  bool? _checkboxTerms = false;
   bool isApiCallService = false;
 
-  String _userName;
-  String _firstName;
-  String _lastName;
-  String _email;
-  String _password;
-  String _confirmPassword;
-  String _countryCode;
-  String _phoneNumber;
+  String? _userName;
+  String? _firstName;
+  String? _lastName;
+  String? _email;
+  String? _password;
+  String? _confirmPassword;
+  String? _countryCode;
+  String? _phoneNumber;
   // register(BuildContext context) async {
   //   //   RegisterRequestModel registerRequestModel = RegisterRequestModel(
   //   //       firstName: 'demo',
@@ -93,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // }
 
   Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
@@ -231,7 +230,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       MinLengthValidator(6,
                                           errorText:
                                               "userName should be atleast 6 characters"),
-                                    ]),
+                                    ]) as String? Function(String?)?,
                                     obscureText: false,
                                     onChanged: (userName) =>
                                         _userName = userName,
@@ -259,7 +258,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     validator: MultiValidator([
                                       RequiredValidator(
                                           errorText: "* Required"),
-                                    ]),
+                                    ]) as String? Function(String?)?,
                                     obscureText: false,
                                     onChanged: (firstName) =>
                                         _firstName = firstName,
@@ -287,7 +286,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     validator: MultiValidator([
                                       RequiredValidator(
                                           errorText: "* Required"),
-                                    ]),
+                                    ]) as String? Function(String?)?,
                                     obscureText: false,
                                     onChanged: (lastName) =>
                                         _lastName = lastName,
@@ -318,7 +317,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       validator: MultiValidator([
                                         RequiredValidator(
                                             errorText: "* Required"),
-                                      ]),
+                                      ]) as String? Function(String?)?,
                                       obscureText: false,
                                       readOnly: true,
 
@@ -351,7 +350,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     validator: MultiValidator([
                                       RequiredValidator(
                                           errorText: "* Required"),
-                                    ]),
+                                    ]) as String? Function(String?)?,
                                     obscureText: false,
                                     onChanged: (email) => _email = email,
                                     keyboardType: TextInputType.text,
@@ -385,7 +384,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       MaxLengthValidator(15,
                                           errorText:
                                               "Password should not be greater than 15 characters")
-                                    ]),
+                                    ]) as String? Function(String?)?,
                                     obscureText: false,
                                     onChanged: (password) =>
                                         _password = password,
@@ -419,7 +418,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       MaxLengthValidator(15,
                                           errorText:
                                               "Password should not be greater than 15 characters")
-                                    ]),
+                                    ]) as String? Function(String?)?,
                                     obscureText: false,
                                     onChanged: (confirmPassword) =>
                                         _confirmPassword = confirmPassword,
@@ -489,7 +488,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             ),
                                           ],
                                         ),
-                                        _checkboxAgree
+                                        _checkboxAgree!
                                             ? Container()
                                             : Text(
                                                 state.errorText ?? '',
@@ -502,7 +501,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     );
                                   },
                                   validator: (value) {
-                                    if (!_checkboxAgree) {
+                                    if (!_checkboxAgree!) {
                                       return 'You must  accept the agreement';
                                     } else {
                                       return null;
@@ -522,7 +521,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               ),
                                               child: Checkbox(
                                                   value: _checkboxTerms,
-                                                  onChanged: (bool val) {
+                                                  onChanged: (bool? val) {
                                                     setState(() {
                                                       _checkboxTerms = val;
                                                       state.didChange(val);
@@ -596,7 +595,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             ),
                                           ],
                                         ),
-                                        _checkboxTerms
+                                        _checkboxTerms!
                                             ? Container()
                                             : Text(
                                                 state.errorText ?? '',
@@ -609,7 +608,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     );
                                   },
                                   validator: (val) {
-                                    if (!_checkboxTerms) {
+                                    if (!_checkboxTerms!) {
                                       return 'You must  accept the Terms and Conditions';
                                     } else {
                                       return null;
@@ -656,7 +655,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               dob: txt.text,
                                               mobileNumber: _phoneNumber,
                                               userName: _userName);
-                                      RegisterResponseModel model;
+                                      RegisterResponseModel? model;
 
                                       try {
                                         setState(() {
@@ -668,7 +667,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             body:
                                                 registerRequestModel.toJson());
                                         model = response.model;
-                                        print(model.message);
+                                        print(model!.message);
                                         if (model.status.isSuccess) {
                                           print('true');
                                           ScaffoldMessenger.of(context)
@@ -701,7 +700,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       if (!currentFocus.hasPrimaryFocus) {
                                         currentFocus.unfocus();
                                       }
-                                      if (_formkey.currentState.validate()) {
+                                      if (_formkey.currentState!.validate()) {
                                         print('Validated');
                                       } else {
                                         print('Not Validated');
