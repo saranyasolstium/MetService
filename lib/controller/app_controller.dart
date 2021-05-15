@@ -51,7 +51,7 @@ class AppController extends GetxController {
         // TODO: Show account inactive toast
       }
     } else {
-      loginStatus.value = LoginStatus.logout;
+      // loginStatus.value = LoginStatus.logout;
       // TODO: try again request;
     }
   }

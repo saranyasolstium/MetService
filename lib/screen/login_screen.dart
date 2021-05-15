@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       validator: MultiValidator([
         RequiredValidator(errorText: "* Required"),
         EmailValidator(errorText: "Enter valid email id"),
-      ]) as String? Function(String?)?,
+      ]),
       obscureText: false,
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
             errorText: "Password should be atleast 6 characters"),
         MaxLengthValidator(15,
             errorText: "Password should not be greater than 15 characters")
-      ]) as String? Function(String?)?,
+      ]),
       controller: _passwordController,
       obscureText: _obsecureText,
       style: style,

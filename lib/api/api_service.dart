@@ -29,7 +29,7 @@ class API {
     final String url = route.url(endPoint.string);
     final Map<String, String> safeHeader = header ??= endPoint.header;
     http.Response? response;
-
+    String? error;
     print('url $url');
     print('header $header');
     print('body $body');
@@ -41,8 +41,12 @@ class API {
       }
 
       if (endPoint.method == HTTPMethod.post) {
+        Map<String, String> convertedBody = {};
+        body?.forEach((key, value) {
+          convertedBody['$key'] = '$value';
+        });
         response = await http
-            .post(Uri.parse(url), headers: safeHeader, body: body)
+            .post(Uri.parse(url), headers: safeHeader, body: convertedBody)
             .timeout(Duration(seconds: 60));
       } else {
         final String getParam = queryParam(body);
@@ -52,18 +56,32 @@ class API {
             .get(uri, headers: safeHeader)
             .timeout(Duration(seconds: 60));
       }
-    } on TimeoutException catch (_) {} finally {
+    } on SocketException catch (networkError) {
+      error = networkError.message;
+    } on TimeoutException catch (timeOutError) {
+      error = timeOutError.message;
+      // print(timeOutError.message);
+    } catch (otherErrors) {
+      print('${otherErrors.toString()}');
+      error = "Something went wrong. Please try again";
+    } finally {
       if (needLoader) {
         hideLoading();
       }
-    }
-    if (response != null) {
-      print("response - ${(response.body)}");
-    } else {
-      print("response - Empty");
-    }
 
-    return APIResponse(model, response: response, isNeedModel: (model != null));
+      if (response != null) {
+        print("response - ${(response.body)}");
+      } else {
+        print("response - Empty");
+      }
+      // ignore: control_flow_in_finally
+      return APIResponse(
+        model,
+        response: response,
+        error: error,
+        isNeedModel: (model != null),
+      );
+    }
   }
 
   String queryParam(Map<dynamic, dynamic>? query) {
@@ -87,7 +105,7 @@ class APIResponse<T> {
   }
 
   bool get isValidModel {
-    return (model as Codable).isValid;
+    return (model as Codable).isValid && error == null;
   }
 
   Map<dynamic, dynamic> get map {
@@ -97,6 +115,7 @@ class APIResponse<T> {
   http.Response? responseObj;
   List<dynamic> _maps = [];
   List<T> models = [];
+  String? error;
   // bool get isSuccess {
   //   if (this == 'success') {
   //     return true;
@@ -106,13 +125,18 @@ class APIResponse<T> {
   // }
 
   APIResponse(this._model,
-      {required http.Response? response, this.isNeedModel = false}) {
+      {required http.Response? response,
+      this.error,
+      this.isNeedModel = false}) {
     // _model = object;
     updateResponse(response);
   }
 
   updateResponse(http.Response? response) {
     try {
+      if (error != null) {
+        throw Exception(error!);
+      }
       responseObj = response;
       var decoded = jsonDecode(responseObj!.body);
       if (decoded != null) {
@@ -134,9 +158,8 @@ class APIResponse<T> {
           });
         }
       }
-    } on SocketException {
-      print('No internet connection');
-    } catch (error) {
+    } catch (err) {
+      error = err.toString();
       print('Error in service $error');
     } finally {
       if (models.length == 0) {

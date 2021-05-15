@@ -54,15 +54,13 @@ class MyApp extends StatelessWidget {
     double defaultSize = 360;
     scale = minimum / defaultSize;
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      // title: 'Flutter Demo',
       getPages: [
         GetPage(name: '/login', page: () => LoginScreen()),
         GetPage(
             name: '/',
             page: () {
-              print('root loaded');
               return Obx(() {
-                print('root loaded');
                 return AppController.to.rootView();
               });
             }),

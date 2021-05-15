@@ -47,7 +47,12 @@ class AttendanceController extends GetxController {
   }
 
   Future<MClockInResponse?> onClockIn() async {
-    var body = {'SiteID': 0, 'latitude': 0, 'longitude': 0, 'serviceID': 0};
+    var body = {
+      'SiteID': '0',
+      'latitude': '0',
+      'longitude': '0',
+      'serviceID': '0'
+    };
 
     var response = await API.service.call(
       model: MClockInResponse(),
@@ -58,7 +63,12 @@ class AttendanceController extends GetxController {
   }
 
   Future<MClockInResponse?> onClockOut() async {
-    var body = {'SiteID': 0, 'latitude': 0, 'longitude': 0, 'serviceID': 0};
+    var body = {
+      'SiteID': '0',
+      'latitude': '0',
+      'longitude': '0',
+      'serviceID': '0'
+    };
 
     var response = await API.service.call(
       model: MClockInResponse(),

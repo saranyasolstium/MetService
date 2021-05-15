@@ -1,6 +1,8 @@
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:eagle_pixels/model/profile_model.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,18 +18,31 @@ import 'package:eagle_pixels/api/api_service.dart';
 
 extension TimeOutAction on TimeOutScreen {
   onEndDay() async {
-    var model = await attendance.onClockOut();
-    if (model?.status?.isSuccess ?? false) {
-      Get.toNamed(NavPage.clockOut);
-    } else {
-      //TODO: show error toast
-    }
+    Get.dialog(
+      ConfirmationScreen(),
+      barrierDismissible: false,
+    ).then((value) async {
+      if (value == true) {
+        print('yes clicked');
+        var model = await attendance.onClockOut();
+        if (model?.status?.isSuccess ?? false) {
+          navigator!.popUntil((route) => route.settings.name == NavPage.root);
+        } else {
+          //TODO: show error toast
+        }
+      } else {
+        print('no clicked');
+      }
+    });
   }
 }
 
 class TimeOutScreen extends StatelessWidget {
   final TimerController timer = Get.find();
   final AttendanceController attendance = Get.find();
+  MProfile get user {
+    return AppController.user;
+  }
 
   String get difference {
     var current = timer.currentDate.value;
@@ -168,30 +183,60 @@ class TimeOutScreen extends StatelessWidget {
                         'images/user.png',
                       ),
                     ),
-                    // Row(
-                    //   children: [
-                    //     TimeInOutDetailItem(),
-                    //     TimeInOutDetailItem(),
-                    //   ],
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     TimeInOutDetailItem(),
-                    //     TimeInOutDetailItem(),
-                    //   ],
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     TimeInOutDetailItem(),
-                    //     TimeInOutDetailItem(),
-                    //   ],
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     TimeInOutDetailItem(),
-                    //     TimeInOutDetailItem(),
-                    //   ],
-                    // ),
+                    Row(
+                      children: [
+                        TimeInOutDetailItem(
+                          title: 'Name:',
+                          description: user.name,
+                        ),
+                        TimeInOutDetailItem(
+                          title: 'Designation::',
+                          description: user.employeeDetails?.designation,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        TimeInOutDetailItem(
+                          title: 'Department::',
+                          description: user.employeeDetails?.department,
+                        ),
+                        TimeInOutDetailItem(
+                          title: 'Employee ID::',
+                          description: user.employeeCode,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        TimeInOutDetailItem(
+                          title: 'Joining Date:',
+                          description: DateFormat('dd:MM:yyyy')
+                              .format(user.employeeDetails!.registerationDate!),
+                        ),
+                        TimeInOutDetailItem(
+                          title: 'Today:',
+                          description:
+                              Jiffy(timer.currentDate).format('do MMMM yyyy'),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        TimeInOutDetailItem(
+                            title: 'Time in:',
+                            description: attendance.isClockedIn
+                                ? Jiffy(attendance.jobStartedTime)
+                                    .format('hh:mm:ss a')
+                                : '00:00:00'),
+                        Obx(
+                          () => TimeInOutDetailItem(
+                            title: 'Time Count:',
+                            description: this.difference,
+                          ),
+                        ),
+                      ],
+                    ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 22.dynamic),
                       child: Align(
@@ -262,19 +307,7 @@ class TimeOutScreen extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 32.dynamic),
                       width: double.infinity,
                       child: TextButton(
-                        onPressed: () {
-                          Get.dialog(
-                            ConfirmationScreen(),
-                            barrierDismissible: false,
-                          ).then((value) {
-                            if (value == true) {
-                              print('yes clicked');
-                              Get.offAllNamed('/');
-                            } else {
-                              print('no clicked');
-                            }
-                          });
-                        },
+                        onPressed: this.onEndDay,
                         child: Text(
                           'End the day',
                           style: TextStyle(
