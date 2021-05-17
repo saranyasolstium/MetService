@@ -1,7 +1,10 @@
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
+import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -162,7 +165,7 @@ class JobCheckListScreen extends StatelessWidget {
 class CheckListItem extends StatelessWidget {
   final JobCheckListController checkListController = Get.find();
   final int index;
-  ACheckList get item {
+  ACheckListItem get item {
     return checkListController.checkList[index];
   }
 
@@ -190,11 +193,7 @@ class CheckListItem extends StatelessWidget {
             8.0,
           ),
           border: Border.all(
-            width: 1.5,
-            color: item.selectedItem == null
-                ? Colors.grey
-                : item.selectedItem!.color,
-          ),
+              width: 1.5, color: item.selectedItem?.color ?? Colors.grey),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -210,16 +209,47 @@ class CheckListItem extends StatelessWidget {
             SizedBox(
               height: 6.dynamic,
             ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
+            // Obx(() {
+            Wrap(
+              spacing: 10,
+              alignment: WrapAlignment.spaceBetween,
+              // runAlignment: WrapAlignment.start,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              direction: Axis.horizontal,
+              runSpacing: 10,
               children: [
                 CheckListSelectionView(section: index, row: 0),
-                SizedBox(
-                  width: 20.dynamic,
-                ),
                 CheckListSelectionView(section: index, row: 1),
+                CheckListSelectionView(section: index, row: 2),
+                CheckListSelectionView(section: index, row: 3),
+                CheckListSelectionView(section: index, row: 4),
               ],
             ),
+            // return GridView.builder(
+            //     itemCount: item.options?.length ?? 0,
+            //     physics: NeverScrollableScrollPhysics(),
+            //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //         crossAxisCount: 2, childAspectRatio: 3),
+            //     shrinkWrap: true,
+            //     itemBuilder: (con, ind) {
+            //       return Padding(
+            //         padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+            //         child: Expanded(
+            //             child:
+            //                 CheckListSelectionView(section: index, row: ind)),
+            //       );
+            //     });
+            // }),
+            // Row(
+            //   mainAxisSize: MainAxisSize.max,
+            //   children: [
+            //     CheckListSelectionView(section: index, row: 0),
+            //     SizedBox(
+            //       width: 20.dynamic,
+            //     ),
+            //     CheckListSelectionView(section: index, row: 1),
+            //   ],
+            // ),
             Padding(
               padding: EdgeInsets.only(
                 top: 13.dynamic,
@@ -260,7 +290,7 @@ class CheckListItem extends StatelessWidget {
                   border: InputBorder.none,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -273,7 +303,7 @@ class CheckListSelectionView extends StatelessWidget {
   final int row;
   final JobCheckListController checklistController = Get.find();
 
-  MCheckListItem get item {
+  MCheckListOption get item {
     return checklistController.checkList[section].options![row];
   }
 
@@ -290,7 +320,9 @@ class CheckListSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+          minWidth: (Get.width - (34.dynamic + 28.dynamic + 15)) / 2),
       child: Container(
         padding: EdgeInsets.only(
           top: 10.dynamic,
@@ -309,6 +341,7 @@ class CheckListSelectionView extends StatelessWidget {
           ),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             CustomCheckbox(
               isChecked: isSelected,
@@ -329,7 +362,7 @@ class CheckListSelectionView extends StatelessWidget {
               width: 8.dynamic,
             ),
             Text(
-              safeString(item.title),
+              safeString(item.name),
               style: TextStyle(
                 color: Colour.appBlack,
                 fontSize: 14.0,

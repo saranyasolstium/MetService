@@ -6,7 +6,8 @@ enum EndPoint {
   job_history_list,
   attendance,
   clockIn,
-  clockOut
+  clockOut,
+  checkList
 }
 
 extension EndPointString on EndPoint {
@@ -28,6 +29,8 @@ extension EndPointString on EndPoint {
         return 'clockin';
       case EndPoint.clockOut:
         return 'clockout';
+      case EndPoint.checkList:
+        return 'checklist';
     }
   }
 }

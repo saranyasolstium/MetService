@@ -85,7 +85,7 @@ class AttendanceController extends GetxController {
   }
 
   fetchAttendance({required bool isShowLoading}) async {
-    var month = this.selectedMonth.value;
+    var month = this.selectedMonthInNumber;
     var year = this.selectedYear.value;
     var response = await API.service.call(
       model: MAttendanceResponse(),

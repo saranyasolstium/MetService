@@ -79,6 +79,7 @@ class MyApp extends StatelessWidget {
         // GetPage(name: NavPage.confirmation, page: () => ConfirmationScreen()),
       ],
       initialBinding: AppBinding(),
+
       theme: ThemeData(
           primaryColor: Colour.appBlue,
           primarySwatch: Colors.blue,

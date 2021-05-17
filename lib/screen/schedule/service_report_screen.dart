@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
+import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:eagle_pixels/model/check_list_model.dart';
 
 class ServiceReportScreen extends StatelessWidget {
   final TimerController time = Get.find();
@@ -74,7 +76,7 @@ class ServiceReportScreen extends StatelessWidget {
                           index: index,
                         );
                       },
-                      itemCount: checkListController.selectedList.length,
+                      itemCount: checkListController.selectedlist.length,
                     );
                   },
                 ),
@@ -166,12 +168,12 @@ class ReportItem extends StatelessWidget {
   final JobCheckListController checkListController = Get.find();
   final int index;
 
-  ACheckList get item {
-    return checkListController.selectedList[index];
+  ACheckListItem get item {
+    return checkListController.selectedlist[index];
   }
 
-  MCheckListItem? get selectedItem {
-    return item.selectedItem;
+  MCheckListOption get selectedItem {
+    return item.selectedItem!;
   }
 
   ReportItem({required this.index});
@@ -199,7 +201,7 @@ class ReportItem extends StatelessWidget {
           ),
           border: Border.all(
             width: 1.5,
-            color: selectedItem!.color,
+            color: selectedItem.color,
           ),
         ),
         child: Column(
@@ -279,7 +281,7 @@ class ReportItem extends StatelessWidget {
 }
 
 class ReportCheckbox extends StatelessWidget {
-  final MCheckListItem? item;
+  final MCheckListOption item;
 
   ReportCheckbox({required this.item});
 
@@ -295,7 +297,7 @@ class ReportCheckbox extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            safeString(item!.title),
+            safeString(item.name),
             style: TextStyle(
               color: Colour.appBlack,
               fontSize: 14.0,
@@ -308,7 +310,7 @@ class ReportCheckbox extends StatelessWidget {
           CustomCheckbox(
             isChecked: true,
             size: 18.dynamic,
-            selectedColor: item!.color,
+            selectedColor: item.color,
             selectedIconColor: Colors.white,
             // didSelect: (checkbox) {
             //   if (checkbox) {

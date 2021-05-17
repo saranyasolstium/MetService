@@ -149,20 +149,20 @@ class MEmployeeDetails {
     this.profileImage,
   });
 
-  int? id;
+  dynamic? id;
   String? firstName;
   String? lastName;
   String? employeeCode;
   String? userName;
   String? designation;
   String? countryCode;
-  int? mobileNumber;
-  DateTime? registerationDate;
+  dynamic? mobileNumber;
+  dynamic? registerationDate;
   String? department;
   dynamic employeeType;
   dynamic finNumber;
-  DateTime? finStartDate;
-  DateTime? finEndDate;
+  dynamic? finStartDate;
+  dynamic? finEndDate;
   dynamic passportNumber;
   dynamic passportStartDate;
   dynamic passportEndDate;
@@ -180,12 +180,12 @@ class MEmployeeDetails {
         designation: json["designation"],
         countryCode: json["country_code"],
         mobileNumber: json["mobile_number"],
-        registerationDate: DateTime.parse(json["registeration_date"]),
+        registerationDate: ["registeration_date"],
         department: json["department"],
         employeeType: json["employee_type"],
         finNumber: json["fin_number"],
-        finStartDate: DateTime.parse(json["fin_start_date"]),
-        finEndDate: DateTime.parse(json["fin_end_date"]),
+        finStartDate: json["fin_start_date"],
+        finEndDate: json["fin_end_date"],
         passportNumber: json["passport_number"],
         passportStartDate: json["passport_start_date"],
         passportEndDate: json["passport_end_date"],

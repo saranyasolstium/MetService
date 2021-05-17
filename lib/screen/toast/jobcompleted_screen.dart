@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:eagle_pixels/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -86,7 +87,8 @@ class JobCompletedScreen extends StatelessWidget {
                       width: Get.width * 0.7,
                       child: TextButton(
                         onPressed: () {
-                          Get.offAllNamed('/');
+                          navigator!.popUntil(
+                              (route) => route.settings.name == NavPage.root);
                         },
                         child: Text(
                           'Back to Home',

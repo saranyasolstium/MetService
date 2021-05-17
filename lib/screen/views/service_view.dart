@@ -4,6 +4,7 @@ import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:get/get.dart';
 import '../../colors.dart';
 import '../../constant.dart';
 
@@ -46,7 +47,7 @@ class ServiceView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CachedNetworkImage(
-                imageUrl: item.aImage ?? "",
+                imageUrl: item.aImage ?? "", //temp
                 placeholder: (_, url) => Image.asset(
                   'images/camera.png',
                 ),
@@ -198,19 +199,24 @@ class ServiceView extends StatelessWidget {
                   ? Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          showModalBottomSheet(
-                            context: context,
+                          Get.bottomSheet(
+                            ScheduleJobDetailsScreen(),
                             isScrollControlled: true,
-                            builder: (context) => SingleChildScrollView(
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom),
-                                child: ScheduleJobDetailsScreen(),
-                              ),
-                            ),
+                            ignoreSafeArea: false,
                           );
+                          // showModalBottomSheet(
+                          //   context: context,
+                          //   isScrollControlled: true,
+                          //   builder: (context) => SingleChildScrollView(
+                          //     child: Container(
+                          //       padding: EdgeInsets.only(
+                          //           bottom: MediaQuery.of(context)
+                          //               .viewInsets
+                          //               .bottom),
+                          //       child: ScheduleJobDetailsScreen(),
+                          //     ),
+                          //   ),
+                          // );
                         },
                         child: Text(
                           'View Details',

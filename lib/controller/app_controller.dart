@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
+import 'package:eagle_pixels/controller/app_binder.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/reuse/storage.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
@@ -87,6 +88,7 @@ class AppController extends GetxController {
   }
 
   Widget defaultLoaderView() {
+    // return Container();
     return GetBuilder<AppController>(
       builder: (con) {
         return ModalProgressHUD(

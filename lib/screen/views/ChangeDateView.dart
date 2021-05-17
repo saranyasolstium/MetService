@@ -20,7 +20,7 @@ class ChangeDateView extends StatelessWidget {
     final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
     showDatePicker(
       context: Get.context!,
-      initialDate: DateTime.now(),
+      initialDate: DateTime(2021, 2, 9), //temp //DateTime.now(),
       firstDate: DateTime(currentYear - 1),
       lastDate: DateTime(currentYear + 1),
       initialDatePickerMode: DatePickerMode.day,
