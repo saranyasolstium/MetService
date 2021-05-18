@@ -10,10 +10,13 @@ import 'package:eagle_pixels/model/clockin_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:local_auth/auth_strings.dart';
 
 import '../colors.dart';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
+
+import 'package:local_auth/local_auth.dart';
 
 class AttendanceController extends GetxController {
   var selectedYear = "2021".obs;
@@ -37,6 +40,7 @@ class AttendanceController extends GetxController {
   void onInit() {
     selectedMonth.value = DateFormat.MMMM().format(DateTime.now());
     selectedYear.value = DateFormat.y().format(DateTime.now());
+    _getAllBiometrics();
     super.onInit();
   }
 
@@ -111,6 +115,80 @@ class AttendanceController extends GetxController {
       });
     }
     return days;
+  }
+
+  var _localAuth = LocalAuthentication();
+  var hasFingerPrintLock = false.obs;
+  var hasFaceLock = false.obs;
+  var isUserAuthenticated = false.obs;
+
+  void _getAllBiometrics() async {
+    // Check whether there is local authentication available on this device or not
+    final isAvailable = await _localAuth.canCheckBiometrics;
+    final isDeviceSupported = await _localAuth.isDeviceSupported();
+    bool hasLocalAuthentication = await _localAuth.canCheckBiometrics;
+    if (isAvailable && isDeviceSupported) {
+      if (hasLocalAuthentication) {
+        List<BiometricType> availableBiometrics =
+            await _localAuth.getAvailableBiometrics();
+        hasFaceLock.value = availableBiometrics.contains(BiometricType.face);
+        hasFingerPrintLock.value =
+            availableBiometrics.contains(BiometricType.fingerprint);
+      } else {
+        showSnackBar(
+            title: "Error",
+            message: 'Local Authentication not available',
+            backgroundColor: Colors.red);
+      }
+    } else {
+      showSnackBar(
+          title: "Error",
+          message: 'Local Authentication not available',
+          backgroundColor: Colors.red);
+    }
+  }
+
+  void showSnackBar(
+      {required String title,
+      required String message,
+      Color? backgroundColor}) {
+    Get.snackbar(title, message,
+        colorText: Colors.white,
+        backgroundColor: backgroundColor,
+        snackPosition: SnackPosition.BOTTOM);
+  }
+
+  void authenticateUser() async {
+    try {
+      const androidMessage = const AndroidAuthMessages(
+        cancelButton: 'Cancel',
+        goToSettingsButton: 'settings',
+        goToSettingsDescription: 'Please set up your Fingerprint/Face.',
+        biometricHint: 'Verify your identity',
+      );
+      isUserAuthenticated.value = await _localAuth.authenticate(
+        localizedReason: 'Authenticate Yourself',
+        biometricOnly: false,
+        useErrorDialogs: true,
+        stickyAuth: true,
+        androidAuthStrings: androidMessage,
+      );
+      if (isUserAuthenticated.value) {
+        showSnackBar(
+            title: "Success",
+            message: "You are authenticated",
+            backgroundColor: Colors.green);
+      } else {
+        showSnackBar(
+            title: "Error",
+            message: "Authentication Cancelled",
+            backgroundColor: Colors.red);
+      }
+    } on Exception catch (e) {
+      print(e);
+      showSnackBar(
+          title: "Error", message: e.toString(), backgroundColor: Colors.red);
+    }
   }
 }
 

@@ -24,7 +24,8 @@ import 'package:eagle_pixels/api/api_service.dart';
 
 extension TimeInAction on TimeInScreen {
   startDay() async {
-    await getImage();
+    // await getImage();
+    attendance.authenticateUser();
   }
 
   Future getImage() async {
@@ -79,6 +80,7 @@ extension TimeInAction on TimeInScreen {
 class TimeInScreen extends StatelessWidget {
   final TimerController timer = Get.find();
   final AttendanceController attendance = Get.find();
+
   MProfile get user {
     return AppController.user;
   }
