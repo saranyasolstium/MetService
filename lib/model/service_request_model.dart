@@ -126,8 +126,8 @@
 //   }
 //
 //   String get aCctvID => productId;
-//   String get aCustomerName => name; //temp
-//   String get aImage => 'http//'; //temp
+//   String get aCustomerName => name;
+//   String get aImage => 'http//';
 //   String get aName => name;
-//   String get aPurchaseDate => serviceDate; //temp
+//   String get aPurchaseDate => serviceDate;
 // }

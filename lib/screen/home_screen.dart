@@ -1,6 +1,7 @@
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 extension HomeAction on HomeScreen {
   onAttendance() {
     Get.toNamed(NavPage.calendar);
+    Get.find<AttendanceController>().fetchAttendanceStatus();
   }
 
   onScheduleJob() {

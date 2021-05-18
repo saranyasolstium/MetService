@@ -62,6 +62,7 @@ class JobCheckListController extends GetxController {
         'message': 'test close via API' //temp param
       },
     );
+    print(response.model);
     this.checklistData.value = response.model!;
     update();
   }
@@ -89,7 +90,7 @@ class JobCheckListController extends GetxController {
   void onInit() {
     // checkList.value = sampleData();
     // ever(checkList, some());
-    fetchCheckList();
+    Future.delayed(Duration(seconds: 1), () => fetchCheckList());
     super.onInit();
   }
 

@@ -7,7 +7,8 @@ enum EndPoint {
   attendance,
   clockIn,
   clockOut,
-  checkList
+  checkList,
+  attendanceStatus,
 }
 
 extension EndPointString on EndPoint {
@@ -31,6 +32,8 @@ extension EndPointString on EndPoint {
         return 'clockout';
       case EndPoint.checkList:
         return 'checklist';
+      case EndPoint.attendanceStatus:
+        return 'timecard';
     }
   }
 }

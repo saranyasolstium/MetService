@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 LoginRequestModel(email: email, password: password);
 
             var response = await API.service.call(
-                model: LoginResponseModel(),
+                // model: LoginResponseModel(),
                 endPoint: EndPoint.login,
                 body: loginRequestModel.toJson());
 

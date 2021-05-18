@@ -10,7 +10,8 @@ class MClockInResponse implements Codable {
   fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = (json['data'] != null ? MClockInItem.fromJson(json['data']) : {}) as MClockInItem?;
+    data = (json['data'] != null ? MClockInItem.fromJson(json['data']) : {})
+        as MClockInItem?;
     return this;
   }
 
@@ -55,9 +56,7 @@ class MClockInItem {
     longIn = json['LongIn'];
     iD = json['ID'];
     employeeType = json['EmployeeType'];
-    siteDetails = (json['siteDetails'] != null
-        ? new MClockInSiteDetail.fromJson(json['siteDetails'])
-        : {}) as MClockInSiteDetail?;
+    siteDetails = MClockInSiteDetail.fromJson(json['siteDetails'] ?? {});
   }
 
   Map<String, dynamic> toJson() {

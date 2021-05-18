@@ -1,3 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:eagle_pixels/model/attendece_status_model.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:eagle_pixels/api/headers.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
@@ -16,11 +24,54 @@ import 'package:eagle_pixels/api/api_service.dart';
 
 extension TimeInAction on TimeInScreen {
   startDay() async {
-    var model = await attendance.onClockIn();
-    if (model?.status?.isSuccess ?? false) {
-      Get.toNamed(NavPage.clockOut);
-    } else {
-      //TODO: show error toast
+    await getImage();
+  }
+
+  Future getImage() async {
+    try {
+      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      print('image picked');
+      if (pickedFile != null) {
+        _image = pickedFile;
+        var res = await uploadImage(_image.path,
+            'https://pixel.solstium.net/api/v1/employee/upload_sign');
+        if (res?.isSuccess ?? false) {
+          var model = await attendance.onClockIn();
+          if (model?.status?.isSuccess ?? false) {
+            var resp = MAttendanceStatusResponse();
+            resp.startedDate = DateTime.now();
+            attendance.attendanceStatus.value = resp;
+            Get.toNamed(NavPage.clockOut);
+          } else {
+            //TODO: Clock in error
+          }
+        } else {
+          //TODO: Failed to upload
+        }
+      } else {
+        print('No image selected.');
+      }
+    } catch (error) {
+      print('Error $error');
+    }
+  }
+
+  Future<String?> uploadImage(filepath, url) async {
+    try {
+      showLoading();
+      print('image uploading');
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.fields['service_id'] = '1';
+      request.files.add(await http.MultipartFile.fromPath('image', filepath));
+      request.headers.addAll(Header.defaultHeader);
+      var res = await request.send();
+      var jsonResponse = await http.Response.fromStream(res);
+      return jsonDecode(jsonResponse.body)["status"];
+      // return res.reasonPhrase;
+    } catch (e) {
+      print('Error$e');
+    } finally {
+      hideLoading();
     }
   }
 }
@@ -31,6 +82,9 @@ class TimeInScreen extends StatelessWidget {
   MProfile get user {
     return AppController.user;
   }
+
+  late PickedFile _image;
+  final picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -47,150 +101,161 @@ class TimeInScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 17.dynamic),
-          color: HexColor.fromHex("F7F7F7"),
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 22.dynamic),
-                child: Align(
-                  child: Text(
-                    'Employee Information',
-                    style: TextStyle(
-                        color: Colour.appBlue,
-                        fontSize: 16.dynamic,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  alignment: Alignment.centerLeft,
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                // child: Image.asset(
-                //   'images/user.png',
-                // ),
-                child: CachedNetworkImage(
-                  width: 64.dynamic,
-                  height: 64.dynamic,
-                  imageUrl: user.employeeDetails?.profileImage ?? "",
-                  placeholder: (_, url) => Image.asset(
-                    'images/user.png',
-                  ),
-                ),
-              ),
-              Row(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 17.dynamic),
+              color: HexColor.fromHex("F7F7F7"),
+              child: Column(
                 children: [
-                  TimeInOutDetailItem(
-                    title: 'Name:',
-                    description: user.name,
-                  ),
-                  TimeInOutDetailItem(
-                    title: 'Designation::',
-                    description: user.employeeDetails?.designation,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  TimeInOutDetailItem(
-                    title: 'Department::',
-                    description: user.employeeDetails?.department,
-                  ),
-                  TimeInOutDetailItem(
-                    title: 'Employee ID::',
-                    description: user.employeeCode,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  TimeInOutDetailItem(
-                    title: 'Joining Date::',
-                    description: DateFormat('dd:MM:yyyy')
-                        .format(user.employeeDetails!.registerationDate!),
-                  ),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 85.dynamic, bottom: 23.dynamic),
-                child: Align(
-                  child: Text(
-                    'Time In',
-                    style: TextStyle(
-                        color: Colour.appBlue,
-                        fontSize: 16.dynamic,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  alignment: Alignment.centerLeft,
-                ),
-              ),
-              Container(
-                color: Colors.white,
-                height: 100,
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(() => TimeComponentItem(
-                          topText: "HH",
-                          bottomText:
-                              DateFormat('hh').format(timer.currentDate.value),
-                        )),
-                    TimeComponentItem(
-                      topText: "",
-                      bottomText: ":",
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 22.dynamic),
+                    child: Align(
+                      child: Text(
+                        'Employee Information',
+                        style: TextStyle(
+                            color: Colour.appBlue,
+                            fontSize: 16.dynamic,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      alignment: Alignment.centerLeft,
                     ),
-                    Obx(() => TimeComponentItem(
-                          topText: "MM",
-                          bottomText:
-                              DateFormat('mm').format(timer.currentDate.value),
-                        )),
-                    TimeComponentItem(
-                      topText: "",
-                      bottomText: ":",
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    // child: Image.asset(
+                    //   'images/user.png',
+                    // ),
+                    child: CachedNetworkImage(
+                      width: 64.dynamic,
+                      height: 64.dynamic,
+                      imageUrl: user.employeeDetails?.profileImage ?? "",
+                      placeholder: (_, url) => Image.asset(
+                        'images/user.png',
+                      ),
                     ),
-                    Obx(() => Container(
-                          width: 45.dynamic,
-                          child: TimeComponentItem(
-                            topText: "SS",
-                            bottomText: DateFormat('ss')
-                                .format(timer.currentDate.value),
+                  ),
+                  Row(
+                    children: [
+                      TimeInOutDetailItem(
+                        title: 'Name:',
+                        description: user.name,
+                      ),
+                      TimeInOutDetailItem(
+                        title: 'Designation::',
+                        description: user.employeeDetails?.designation,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      TimeInOutDetailItem(
+                        title: 'Department::',
+                        description: user.employeeDetails?.department,
+                      ),
+                      TimeInOutDetailItem(
+                        title: 'Employee ID::',
+                        description: user.employeeCode,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      TimeInOutDetailItem(
+                          title: 'Joining Date:',
+                          description:
+                              (user.employeeDetails?.aRegisteraionDate != null)
+                                  ? DateFormat('dd.MM.yyyy').format(
+                                      user.employeeDetails!.aRegisteraionDate!)
+                                  : 'NA'
+                          // DateFormat('dd:MM:yyyy')
+                          //     .format(user.employeeDetails?.registerationDate ?? ''),
                           ),
-                        )),
-                    TimeComponentItem(
-                      topText: '',
-                      bottomText:
-                          DateFormat('a').format(timer.currentDate.value),
-                      bottomTextColor: '9A9A9A',
+                    ],
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 85.dynamic, bottom: 23.dynamic),
+                    child: Align(
+                      child: Text(
+                        'Time In',
+                        style: TextStyle(
+                            color: Colour.appBlue,
+                            fontSize: 16.dynamic,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      alignment: Alignment.centerLeft,
                     ),
-                  ],
-                ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    height: 100,
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(() => TimeComponentItem(
+                              topText: "HH",
+                              bottomText: DateFormat('hh')
+                                  .format(timer.currentDate.value),
+                            )),
+                        TimeComponentItem(
+                          topText: "",
+                          bottomText: ":",
+                        ),
+                        Obx(() => TimeComponentItem(
+                              topText: "MM",
+                              bottomText: DateFormat('mm')
+                                  .format(timer.currentDate.value),
+                            )),
+                        TimeComponentItem(
+                          topText: "",
+                          bottomText: ":",
+                        ),
+                        Obx(() => Container(
+                              width: 45.dynamic,
+                              child: TimeComponentItem(
+                                topText: "SS",
+                                bottomText: DateFormat('ss')
+                                    .format(timer.currentDate.value),
+                              ),
+                            )),
+                        TimeComponentItem(
+                          topText: '',
+                          bottomText:
+                              DateFormat('a').format(timer.currentDate.value),
+                          bottomTextColor: '9A9A9A',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: HexColor.fromHex("14CE1A"),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.dynamic),
+                      ),
+                    ),
+                    margin: EdgeInsets.symmetric(vertical: 32.dynamic),
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: this.startDay,
+                      child: Text(
+                        'Start the day',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.dynamic,
+                            fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                  )
+                ],
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: HexColor.fromHex("14CE1A"),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.dynamic),
-                  ),
-                ),
-                margin: EdgeInsets.symmetric(vertical: 32.dynamic),
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: this.startDay,
-                  child: Text(
-                    'Start the day',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.dynamic,
-                        fontWeight: FontWeight.w300),
-                  ),
-                ),
-              )
-            ],
+            ),
           ),
-        ),
+          AppController.to.defaultLoaderView(),
+        ],
       ),
     );
   }

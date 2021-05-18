@@ -1,4 +1,5 @@
 import 'package:eagle_pixels/constant.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -76,68 +77,73 @@ class CalendarScreen extends StatelessWidget {
     return Scaffold(
       appBar: this.appBar,
       backgroundColor: HexColor.fromHex("F7F7F7"),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 27.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              this.yearMonth,
-              SizedBox(
-                height: 35.dynamic,
-              ),
-              Container(
-                child: this.calendarSurround,
-              ),
-              SizedBox(
-                height: 86.dynamic,
-              ),
-              Obx(
-                () => Text(
-                  // var time = DateFormat('hh:mm a').format(DateTime.now());
-                  Jiffy(TimerController.to.currentDate.value)
-                      .format('hh:mm a  |  do MMMM yyyy'),
-                  // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
-                  // '09:10 AM  |  21st September 2021',
-                  style: TextStyle(
-                    fontSize: 14.dynamic,
-                    fontWeight: FontWeight.w600,
-                    color: HexColor.fromHex("333333"),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 27.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  this.yearMonth,
+                  SizedBox(
+                    height: 35.dynamic,
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colour.appBlue,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5.dynamic),
-                    ),
+                  Container(
+                    child: this.calendarSurround,
                   ),
-// margin: EdgeInsets.symmetric(vertical: 32.dynamic),
-                  width: double.infinity,
-                  child: RawMaterialButton(
-                    onPressed: () {},
-                    child: TextButton(
-                      onPressed: this.startOrEndDay,
-                      child: Text(
-                        attendance.isClockedIn
-                            ? 'End the day'
-                            : 'Start the day',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.dynamic,
-                            fontWeight: FontWeight.w300),
+                  SizedBox(
+                    height: 86.dynamic,
+                  ),
+                  Obx(
+                    () => Text(
+                      // var time = DateFormat('hh:mm a').format(DateTime.now());
+                      Jiffy(TimerController.to.currentDate.value)
+                          .format('hh:mm a  |  do MMMM yyyy'),
+                      // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
+                      // '09:10 AM  |  21st September 2021',
+                      style: TextStyle(
+                        fontSize: 14.dynamic,
+                        fontWeight: FontWeight.w600,
+                        color: HexColor.fromHex("333333"),
                       ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colour.appBlue,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5.dynamic),
+                        ),
+                      ),
+// margin: EdgeInsets.symmetric(vertical: 32.dynamic),
+                      width: double.infinity,
+                      child: RawMaterialButton(
+                        onPressed: () {},
+                        child: TextButton(
+                          onPressed: this.startOrEndDay,
+                          child: Obx(() => Text(
+                                attendance.isClockedIn
+                                    ? 'End the day'
+                                    : 'Start the day',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.dynamic,
+                                    fontWeight: FontWeight.w300),
+                              )),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          AppController.to.defaultLoaderView(),
+        ],
       ),
     );
   }

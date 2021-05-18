@@ -3,6 +3,8 @@
 //     final profile = profileFromJson(jsonString);
 
 import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/reuse/date_manager.dart';
+import 'package:intl/intl.dart';
 
 // Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
 //
@@ -157,7 +159,11 @@ class MEmployeeDetails {
   String? designation;
   String? countryCode;
   dynamic? mobileNumber;
-  dynamic? registerationDate;
+  String? registerationDate;
+  DateTime? get aRegisteraionDate {
+    return DateFormat(AppDateFormat.defaultF).parse(registerationDate ?? "");
+  }
+
   String? department;
   dynamic employeeType;
   dynamic finNumber;
@@ -180,7 +186,7 @@ class MEmployeeDetails {
         designation: json["designation"],
         countryCode: json["country_code"],
         mobileNumber: json["mobile_number"],
-        registerationDate: ["registeration_date"],
+        registerationDate: json["registeration_date"],
         department: json["department"],
         employeeType: json["employee_type"],
         finNumber: json["fin_number"],
@@ -203,7 +209,7 @@ class MEmployeeDetails {
         "designation": designation,
         "country_code": countryCode,
         "mobile_number": mobileNumber,
-        "registeration_date": registerationDate!.toIso8601String(),
+        "registeration_date": registerationDate,
         "department": department,
         "employee_type": employeeType,
         "fin_number": finNumber,

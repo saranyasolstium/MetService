@@ -20,6 +20,7 @@ extension Method on EndPoint {
       case EndPoint.attendance:
       case EndPoint.clockIn:
       case EndPoint.clockOut:
+      case EndPoint.attendanceStatus:
         return HTTPMethod.post;
       default:
         return HTTPMethod.get;

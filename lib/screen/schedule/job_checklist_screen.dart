@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/main.dart';
@@ -69,93 +70,98 @@ class JobCheckListScreen extends StatelessWidget {
             )
           ],
         ),
-        body: Container(
-          color: Colour.appLightGrey,
-          child: Column(
-            children: [
-              Expanded(
-                child: GetBuilder<JobCheckListController>(
-                  builder: (_) {
-                    return ListView.builder(
-                      itemBuilder: (builder, index) {
-                        return CheckListItem(index: index);
-                      },
-                      itemCount: checkListController.checkList.length,
-                    );
-                  },
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.0),
-                    topRight: Radius.circular(15.0),
-                  ),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                    )
-                  ],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: 19.dynamic,
-                    left: 17.dynamic,
-                    right: 17.dynamic,
-                    bottom: 10.dynamic,
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colour.appBlue,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.dynamic),
-                          ),
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            Get.toNamed(NavPage.jobServiceReportScreen);
+        body: Stack(
+          children: [
+            Container(
+              color: Colour.appLightGrey,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: GetBuilder<JobCheckListController>(
+                      builder: (_) {
+                        return ListView.builder(
+                          itemBuilder: (builder, index) {
+                            return CheckListItem(index: index);
                           },
-                          child: Text(
-                            'Save & Continue',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.dynamic,
-                                fontWeight: FontWeight.w300),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.dynamic),
-                          ),
-                        ),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                                color: Colour.appRed,
-                                fontSize: 16.dynamic,
-                                fontWeight: FontWeight.w300),
-                          ),
-                        ),
-                      ),
-                    ],
+                          itemCount: checkListController.checkList.length,
+                        );
+                      },
+                    ),
                   ),
-                ),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0),
+                      ),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                        )
+                      ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 19.dynamic,
+                        left: 17.dynamic,
+                        right: 17.dynamic,
+                        bottom: 10.dynamic,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colour.appBlue,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.dynamic),
+                              ),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                Get.toNamed(NavPage.jobServiceReportScreen);
+                              },
+                              child: Text(
+                                'Save & Continue',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.dynamic,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.dynamic),
+                              ),
+                            ),
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(
+                                    color: Colour.appRed,
+                                    fontSize: 16.dynamic,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            AppController.to.defaultLoaderView(),
+          ],
         ),
       ),
     );
@@ -217,14 +223,16 @@ class CheckListItem extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               direction: Axis.horizontal,
               runSpacing: 10,
-              children: [
-                CheckListSelectionView(section: index, row: 0),
-                CheckListSelectionView(section: index, row: 1),
-                CheckListSelectionView(section: index, row: 2),
-                CheckListSelectionView(section: index, row: 3),
-                CheckListSelectionView(section: index, row: 4),
-              ],
+              children: List.generate(
+                item.options?.length ?? 0,
+                (row) => CheckListSelectionView(section: index, row: row),
+              ),
             ),
+            // checkListController.checkList
+            //     .map((e) =>
+            //CheckListSelectionView(section: index, row: e))
+            //.toList(),
+            // ),
             // return GridView.builder(
             //     itemCount: item.options?.length ?? 0,
             //     physics: NeverScrollableScrollPhysics(),

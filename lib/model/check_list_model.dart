@@ -64,9 +64,7 @@ class MCheckList {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-
     data['list'] = this.list?.map((v) => v.toJson()).toList();
-
     return data;
   }
 }
@@ -83,22 +81,24 @@ class MCheckListItem implements ACheckListItem {
     noteRequired = json['note_required'];
     if (json['options'] != null) {
       var opts = json['options'] ?? [];
-      for (var i = 0; i < 20; i++) {
-        opts.add('Some $i ${Iterable.generate(i, (index) {
-          return '$i';
-        }).toString()}');
-      }
+      // for (var i = 0; i < 20; i++) {
+      //   opts.add('Some $i ${Iterable.generate(i, (index) {
+      //     return '$i';
+      //   }).toString()}');
+      // }
       // if (opts is List<String>) {
       // 1,2,3,4,5,6,7,8,9,10
       // 1,2,3,4,5,1,2,3,4,5
+
       var colors = [
         Colour.appBlue,
         Colour.appRed,
         Colors.yellow,
         Colors.green,
-        Colors.orange
+        Colors.orange,
       ];
       options = [];
+
       for (var i = 0; i < (opts.length ?? 0); i++) {
         var strValue = opts[i];
         options!.add(MCheckListOption(strValue, colors[i % 5]));

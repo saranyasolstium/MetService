@@ -47,7 +47,7 @@ class ServiceView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CachedNetworkImage(
-                imageUrl: item.aImage ?? "", //temp
+                imageUrl: item.aImage ?? "",
                 placeholder: (_, url) => Image.asset(
                   'images/camera.png',
                 ),

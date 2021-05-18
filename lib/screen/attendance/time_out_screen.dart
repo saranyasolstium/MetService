@@ -45,6 +45,8 @@ class TimeOutScreen extends StatelessWidget {
   }
 
   String get difference {
+    // print(timer.currentDate.value);
+    // print(attendance.jobStartedTime);
     var current = timer.currentDate.value;
     var start = attendance.jobStartedTime;
     if (start == null) {
@@ -83,245 +85,257 @@ class TimeOutScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      body: Stack(
         children: [
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(
-                vertical: 12.dynamic, horizontal: 17.dynamic),
-            child: Row(
-              // mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(
+                    vertical: 12.dynamic, horizontal: 17.dynamic),
+                child: Row(
+                  // mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      Jiffy(attendance.jobStartedTime).format('do MMMM yyyy'),
-                      style: TextStyle(
-                        fontSize: 12.dynamic,
-                        fontWeight: FontWeight.normal,
-                        color: Colour.appDarkGrey,
-                      ),
-                    ),
-                    SizedBox(height: 5.dynamic),
-                    Text(
-                      attendance.isClockedIn
-                          ? DateFormat('hh:mm:ss a')
-                              .format(attendance.jobStartedTime!)
-                          : '00:00:00',
-                      style: TextStyle(
-                        fontSize: 16.dynamic,
-                        fontWeight: FontWeight.w600,
-                        color: Colour.appBlack,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Timer Count',
-                      style: TextStyle(
-                        fontSize: 12.dynamic,
-                        fontWeight: FontWeight.normal,
-                        color: Colour.appDarkGrey,
-                      ),
-                    ),
-                    SizedBox(height: 5.dynamic),
-                    Row(
+                    Column(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset('images/clock.png'),
-                        SizedBox(width: 10),
-                        Obx(
-                          () => Text(
-                            this.difference,
-                            style: TextStyle(
-                              fontSize: 16.dynamic,
-                              fontWeight: FontWeight.w600,
-                              color: Colour.appBlack,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                // margin: EdgeInsets.only(top: 100),
-                padding: EdgeInsets.symmetric(horizontal: 17.dynamic),
-                color: HexColor.fromHex("F7F7F7"),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 22.dynamic),
-                      child: Align(
-                        child: Text(
-                          'Employee Information',
+                        Text(
+                          attendance.isClockedIn
+                              ? Jiffy(attendance.jobStartedTime)
+                                  .format('do MMMM yyyy')
+                              : '00:00:00',
                           style: TextStyle(
-                              color: Colour.appBlue,
-                              fontSize: 16.dynamic,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        alignment: Alignment.centerLeft,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset(
-                        'images/user.png',
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        TimeInOutDetailItem(
-                          title: 'Name:',
-                          description: user.name,
-                        ),
-                        TimeInOutDetailItem(
-                          title: 'Designation::',
-                          description: user.employeeDetails?.designation,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        TimeInOutDetailItem(
-                          title: 'Department::',
-                          description: user.employeeDetails?.department,
-                        ),
-                        TimeInOutDetailItem(
-                          title: 'Employee ID::',
-                          description: user.employeeCode,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        TimeInOutDetailItem(
-                          title: 'Joining Date:',
-                          description: DateFormat('dd:MM:yyyy')
-                              .format(user.employeeDetails!.registerationDate!),
-                        ),
-                        TimeInOutDetailItem(
-                          title: 'Today:',
-                          description:
-                              Jiffy(timer.currentDate).format('do MMMM yyyy'),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        TimeInOutDetailItem(
-                            title: 'Time in:',
-                            description: attendance.isClockedIn
-                                ? Jiffy(attendance.jobStartedTime)
-                                    .format('hh:mm:ss a')
-                                : '00:00:00'),
-                        Obx(
-                          () => TimeInOutDetailItem(
-                            title: 'Time Count:',
-                            description: this.difference,
+                            fontSize: 12.dynamic,
+                            fontWeight: FontWeight.normal,
+                            color: Colour.appDarkGrey,
                           ),
                         ),
-                      ],
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 22.dynamic),
-                      child: Align(
-                        child: Text(
-                          'Time Out',
+                        SizedBox(height: 5.dynamic),
+                        Text(
+                          attendance.isClockedIn
+                              ? DateFormat('hh:mm:ss a')
+                                  .format(attendance.jobStartedTime!)
+                              : '00:00:00',
                           style: TextStyle(
-                              color: Colour.appBlue,
-                              fontSize: 16.dynamic,
-                              fontWeight: FontWeight.normal),
+                            fontSize: 16.dynamic,
+                            fontWeight: FontWeight.w600,
+                            color: Colour.appBlack,
+                          ),
                         ),
-                        alignment: Alignment.centerLeft,
-                      ),
+                      ],
                     ),
-                    Container(
-                      color: Colors.white,
-                      height: 100,
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Obx(() => TimeComponentItem(
-                                topText: "HH",
-                                bottomText: DateFormat('hh')
-                                    .format(timer.currentDate.value),
-                                bottomTextColor: 'DB1A1A',
-                              )),
-                          TimeComponentItem(
-                            topText: "",
-                            bottomText: ":",
-                            bottomTextColor: 'DB1A1A',
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Timer Count',
+                          style: TextStyle(
+                            fontSize: 12.dynamic,
+                            fontWeight: FontWeight.normal,
+                            color: Colour.appDarkGrey,
                           ),
-                          Obx(() => TimeComponentItem(
-                                topText: "MM",
-                                bottomText: DateFormat('mm')
-                                    .format(timer.currentDate.value),
-                                bottomTextColor: 'DB1A1A',
-                              )),
-                          TimeComponentItem(
-                            topText: "",
-                            bottomText: ":",
-                            bottomTextColor: 'DB1A1A',
-                          ),
-                          Obx(() => Container(
-                                width: 45.dynamic,
-                                child: TimeComponentItem(
-                                  topText: "SS",
-                                  bottomText: DateFormat('ss')
-                                      .format(timer.currentDate.value),
-                                  bottomTextColor: 'DB1A1A',
+                        ),
+                        SizedBox(height: 5.dynamic),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset('images/clock.png'),
+                            SizedBox(width: 10),
+                            Obx(
+                              () => Text(
+                                this.difference,
+                                style: TextStyle(
+                                  fontSize: 16.dynamic,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colour.appBlack,
                                 ),
-                              )),
-                          Obx(() => TimeComponentItem(
-                                topText: '',
-                                bottomText: DateFormat('a')
-                                    .format(timer.currentDate.value),
-                                bottomTextColor: '9A9A9A',
-                              ))
-                        ],
-                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colour.appRed,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5.dynamic),
-                        ),
-                      ),
-                      margin: EdgeInsets.symmetric(vertical: 32.dynamic),
-                      width: double.infinity,
-                      child: TextButton(
-                        onPressed: this.onEndDay,
-                        child: Text(
-                          'End the day',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.dynamic,
-                              fontWeight: FontWeight.w300),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
-            ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    // margin: EdgeInsets.only(top: 100),
+                    padding: EdgeInsets.symmetric(horizontal: 17.dynamic),
+                    color: HexColor.fromHex("F7F7F7"),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 22.dynamic),
+                          child: Align(
+                            child: Text(
+                              'Employee Information',
+                              style: TextStyle(
+                                  color: Colour.appBlue,
+                                  fontSize: 16.dynamic,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Image.asset(
+                            'images/user.png',
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            TimeInOutDetailItem(
+                              title: 'Name:',
+                              description: user.name,
+                            ),
+                            TimeInOutDetailItem(
+                              title: 'Designation::',
+                              description: user.employeeDetails?.designation,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            TimeInOutDetailItem(
+                              title: 'Department::',
+                              description: user.employeeDetails?.department,
+                            ),
+                            TimeInOutDetailItem(
+                              title: 'Employee ID::',
+                              description: user.employeeCode,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            TimeInOutDetailItem(
+                              title: 'Joining Date:',
+                              description: (user
+                                          .employeeDetails?.aRegisteraionDate !=
+                                      null)
+                                  ? DateFormat('dd.MM.yyyy').format(
+                                      user.employeeDetails!.aRegisteraionDate!)
+                                  : 'NA',
+                            ),
+                            TimeInOutDetailItem(
+                              title: 'Today:',
+                              description: Jiffy(timer.currentDate.value)
+                                  .format('do MMMM yyyy'),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            TimeInOutDetailItem(
+                                title: 'Time in:',
+                                description: attendance.isClockedIn
+                                    ? Jiffy(attendance.jobStartedTime)
+                                        .format('hh:mm:ss a')
+                                    : '00:00:00'),
+                            Obx(
+                              () => TimeInOutDetailItem(
+                                title: 'Time Count:',
+                                description: this.difference,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 22.dynamic),
+                          child: Align(
+                            child: Text(
+                              'Time Out',
+                              style: TextStyle(
+                                  color: Colour.appBlue,
+                                  fontSize: 16.dynamic,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          height: 100,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Obx(() => TimeComponentItem(
+                                    topText: "HH",
+                                    bottomText: DateFormat('hh')
+                                        .format(timer.currentDate.value),
+                                    bottomTextColor: 'DB1A1A',
+                                  )),
+                              TimeComponentItem(
+                                topText: "",
+                                bottomText: ":",
+                                bottomTextColor: 'DB1A1A',
+                              ),
+                              Obx(() => TimeComponentItem(
+                                    topText: "MM",
+                                    bottomText: DateFormat('mm')
+                                        .format(timer.currentDate.value),
+                                    bottomTextColor: 'DB1A1A',
+                                  )),
+                              TimeComponentItem(
+                                topText: "",
+                                bottomText: ":",
+                                bottomTextColor: 'DB1A1A',
+                              ),
+                              Obx(() => Container(
+                                    width: 45.dynamic,
+                                    child: TimeComponentItem(
+                                      topText: "SS",
+                                      bottomText: DateFormat('ss')
+                                          .format(timer.currentDate.value),
+                                      bottomTextColor: 'DB1A1A',
+                                    ),
+                                  )),
+                              Obx(() => TimeComponentItem(
+                                    topText: '',
+                                    bottomText: DateFormat('a')
+                                        .format(timer.currentDate.value),
+                                    bottomTextColor: '9A9A9A',
+                                  ))
+                            ],
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colour.appRed,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.dynamic),
+                            ),
+                          ),
+                          margin: EdgeInsets.symmetric(vertical: 32.dynamic),
+                          width: double.infinity,
+                          child: TextButton(
+                            onPressed: this.onEndDay,
+                            child: Text(
+                              'End the day',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.dynamic,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
+          AppController.to.defaultLoaderView(),
         ],
       ),
     );

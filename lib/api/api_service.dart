@@ -157,6 +157,7 @@ class APIResponse<T> {
             }
           });
         }
+        print('model created');
       }
     } catch (err) {
       error = err.toString();

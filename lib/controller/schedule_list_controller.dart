@@ -9,7 +9,7 @@ import '../constant.dart';
 
 class ScheduleListController extends GetxController {
   var scheduleList = <MScheduledJobItem>[].obs;
-  final selectedDate = DateTime.now().obs;
+  final selectedDate = DateTime(2021, 2, 9).obs; //temp
   final viewState = ViewState.loading.obs;
   // var isLoading = true.obs;
 

@@ -1,6 +1,7 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/controller/app_binder.dart';
+import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/reuse/storage.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
@@ -17,7 +18,7 @@ enum LoginStatus { logged, logout, loading }
 
 class AppController extends GetxController {
   bool get isEngineer {
-    return _user.value.isEngineer; //temp
+    return _user.value.isEngineer;
   }
 
   static AppController get to => Get.find<AppController>();
@@ -46,6 +47,7 @@ class AppController extends GetxController {
       _user.value = response.model!.data!.first;
       if (_user.value.isActive) {
         loginStatus.value = LoginStatus.logged;
+        Get.find<AttendanceController>().fetchAttendanceStatus();
       } else {
         loginStatus.value = LoginStatus.logout;
         print('Account not active');
