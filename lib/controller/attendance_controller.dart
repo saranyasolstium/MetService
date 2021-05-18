@@ -26,7 +26,8 @@ class AttendanceController extends GetxController {
   }
 
   DateTime? get jobStartedTime {
-    return attendanceStatus.value?.startedDate;
+    // print(attendanceStatus.value?.startedDate);
+    return attendanceStatus.value?.startedDate?.toLocal();
   }
 
   var attendance = Map<String, List<MAttendanceItem>?>();

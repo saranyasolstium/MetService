@@ -7,6 +7,7 @@ import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
 import 'package:eagle_pixels/screen/job_history/job_history_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
+import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
 import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
@@ -31,6 +32,7 @@ class NavPage {
   static String jobHistory = '/jobHistory';
   static String jobCheckListScreen = '/joCheckList';
   static String jobServiceReportScreen = '/jobServiceReport';
+  static String scheduleJobDetailsScreen = '/scheduleJobDetailsScreen';
   static String root = '/';
   // static String confirmation = '/confirmation';
 }
@@ -68,6 +70,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: NavPage.clockIn, page: () => TimeInScreen()),
         GetPage(name: NavPage.clockOut, page: () => TimeOutScreen()),
         GetPage(name: NavPage.scheduleScreen, page: () => ScheduleScreen()),
+        GetPage(
+            name: NavPage.scheduleJobDetailsScreen,
+            page: () => ScheduleJobDetailsScreen()),
         GetPage(name: NavPage.jobCompleted, page: () => JobCompletedScreen()),
         GetPage(name: NavPage.myReward, page: () => MyRewardScreen()),
         GetPage(name: NavPage.jobHistory, page: () => JobHistoryScreen()),

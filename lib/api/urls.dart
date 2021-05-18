@@ -9,6 +9,8 @@ enum EndPoint {
   clockOut,
   checkList,
   attendanceStatus,
+  jobdetail,
+  site
 }
 
 extension EndPointString on EndPoint {
@@ -34,6 +36,10 @@ extension EndPointString on EndPoint {
         return 'checklist';
       case EndPoint.attendanceStatus:
         return 'timecard';
+      case EndPoint.jobdetail:
+        return 'get_scheduled_job_details';
+      case EndPoint.site:
+        return 'storelist';
     }
   }
 }

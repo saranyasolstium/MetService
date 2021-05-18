@@ -19,3 +19,24 @@ abstract class ACheckListItem {
   String get title;
   late String remarks;
 }
+
+abstract class AJobDetail {
+  String? get aCameraImage;
+  String? get aCameraName;
+  String? get aCameraID;
+
+  String? get aPurchaseDate;
+  String? get aPurchaseOrderNumber;
+  String? get aScheduleDate;
+  String? get aCustomerName;
+  String? get aScheduleTime;
+  String? get aScheduledBy;
+  String? get aWarrantyStatus;
+  String? get aWarrantyEndingOn;
+  String? get aCustomerInstruction;
+
+  String? get aStartTime;
+  String? get aEndTime;
+  String? get aWarrantyCard;
+  List<ACheckListItem> get checkList;
+}

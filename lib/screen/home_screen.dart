@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
@@ -74,11 +75,20 @@ extension HomeWidgets on HomeScreen {
                   width: 30.dynamic,
                   height: 30.dynamic,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: AssetImage('images/user.png'),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.fill,
+                    imageUrl:
+                        AppController.user.employeeDetails?.profileImage ?? "",
+                    placeholder: (_, url) => Image.asset(
+                      'images/user.png',
                     ),
+                  ),
+                  decoration: BoxDecoration(
+                    // image: DecorationImage(
+                    //   fit: BoxFit.contain,
+                    //
+                    //   image: AssetImage('images/user.png'),
+                    // ),
                     border: Border.all(
                       color: Colors.blue,
                     ),

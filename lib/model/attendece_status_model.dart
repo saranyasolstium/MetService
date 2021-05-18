@@ -98,7 +98,7 @@ class MAttendanceStatusItem {
     employeeCode = json['EmployeeCode'];
     empCode1 = json['EmpCode1'];
     attendenceDate =
-        DateFormat(AppDateFormat.defaultF).parse(json['AttendenceDate']);
+        DateFormat(AppDateFormat.defaultF).parse(json['AttendenceDate'], true);
     inTimeHour = json['InTime_Hour'];
     inTimeMinute = json['InTime_Minute'];
     outTimeHour = json['OutTime_Hour'];

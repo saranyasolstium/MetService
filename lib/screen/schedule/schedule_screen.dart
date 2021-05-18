@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:eagle_pixels/screen/views/service_view.dart';
 import 'package:flutter/material.dart';
@@ -69,9 +70,13 @@ class ScheduleScreen extends StatelessWidget {
                                   item: item,
                                   buttonTitle: 'Start Job',
                                   // isNeedStatus: ,
-                                  isNeedDetail: true,
+                                  isNeedDetail: false,
                                   onJob: () {
-                                    Get.toNamed(NavPage.jobCheckListScreen);
+                                    Get.bottomSheet(
+                                      ScheduleJobDetailsScreen(),
+                                      ignoreSafeArea: false,
+                                      isScrollControlled: true,
+                                    );
                                   },
                                   onSeeDetail: () {}),
                             );

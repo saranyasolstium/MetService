@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
@@ -193,26 +194,38 @@ extension MyProfileScreenWidgets on MyProfileScreen {
             height: 75.dynamic,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.contain,
-                  image: AssetImage('images/user.png'),
-                ),
+                // image: DecorationImage(
+                //   fit: BoxFit.contain,
+                //   image: AssetImage('images/user.png'),
+                // ),
                 border: Border.all(
                   color: Colors.blue,
                 ),
                 borderRadius: BorderRadius.circular(37.5.dynamic)),
-            child: Container(
-              width: 37.5.dynamic,
-              height: 37.5.dynamic,
-              margin: EdgeInsets.only(left: 40.dynamic, top: 40.dynamic),
-              decoration: BoxDecoration(
-                  color: Colors.white,
+            child: Stack(
+              children: [
+                CachedNetworkImage(
+                  fit: BoxFit.fill,
+                  imageUrl:
+                      AppController.user.employeeDetails?.profileImage ?? "",
+                  placeholder: (_, url) => Image.asset(
+                    'images/user.png',
+                  ),
+                ),
+                Container(
+                  width: 37.5.dynamic,
+                  height: 37.5.dynamic,
+                  margin: EdgeInsets.only(left: 40.dynamic, top: 40.dynamic),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
 // border: Border.all(
 //   color: Colors.blue,
 // ),
-                  borderRadius: BorderRadius.circular(37.5.dynamic)),
-              child: Image.asset('images/platinum_crown.png'),
+                      borderRadius: BorderRadius.circular(37.5.dynamic)),
+                  child: Image.asset('images/platinum_crown.png'),
 // color: Colors.red,
+                ),
+              ],
             ),
           ),
           Expanded(
