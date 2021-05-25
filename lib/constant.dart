@@ -30,6 +30,10 @@ extension ViewStateExtension on ViewState {
     return this == ViewState.success;
   }
 
+  bool get isLoading {
+    return this == ViewState.loading;
+  }
+
   bool get isFailed {
     return this == ViewState.failed;
   }

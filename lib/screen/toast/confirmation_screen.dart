@@ -5,18 +5,18 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import '../../colors.dart';
 import 'package:eagle_pixels/colors.dart';
 
-extension ConfiramtionAction on ConfirmationScreen {
-  onYes() {
-    // Get.back();
-    print('yes called');
-    navigator!.pop();
-  }
-
-  onNo() {
-    Get.back();
-    // Navigator.of(Get.overlayContext).pop();
-  }
-}
+// extension ConfiramtionAction on ConfirmationScreen {
+//   onYes() {
+//     // Get.back();
+//     print('yes called');
+//     navigator!.pop();
+//   }
+//
+//   onNo() {
+//     Get.back();
+//     // Navigator.of(Get.overlayContext).pop();
+//   }
+// }
 
 class ConfirmationScreen extends StatelessWidget {
   @override

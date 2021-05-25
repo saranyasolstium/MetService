@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/constant.dart';
+import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
@@ -14,14 +16,22 @@ import '../../main.dart';
 
 class ScheduleJobDetailsScreen extends StatelessWidget {
   final detailController = Get.put(JobDetailController());
+
+  final bool isNeedServiceReport;
+  final bool isNeedBottomView;
+
+  ScheduleJobDetailsScreen(
+      {this.isNeedBottomView = false, this.isNeedServiceReport = false});
   AJobDetail get detail {
     return detailController.detail.value;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Obx(() => Container(
+    return Scaffold(
+      body: SafeArea(
+        child: Obx(
+          () => Container(
             color: Color(0xff757575),
             child: Container(
               // padding: EdgeInsets.only(top: 30.0),
@@ -69,171 +79,46 @@ class ScheduleJobDetailsScreen extends StatelessWidget {
                               height: 21.dynamic,
                             ),
                             this.cameraInfoView,
-                            SizedBox(
-                              height: 20.dynamic,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                JobDetailTitleDescriptionView(
-                                    'Purchase Date:', detail.aPurchaseDate),
-                                JobDetailTitleDescriptionView(
-                                    'Purchase Order Number:',
-                                    detail.aPurchaseOrderNumber),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15.dynamic,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                JobDetailTitleDescriptionView(
-                                    'Scheduled Date:', detail.aScheduleDate),
-                                JobDetailTitleDescriptionImageView(
-                                    'Customer Name:',
-                                    detail.aCustomerName,
-                                    detail.aCameraImage ?? '')
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15.dynamic,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                JobDetailTitleDescriptionView(
-                                    'Scheduled Time:', detail.aScheduleTime),
-                                JobDetailTitleDescriptionImageView(
-                                    'Scheduled By:',
-                                    detail.aScheduledBy,
-                                    detail.aScheduledBy)
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15.dynamic,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                JobDetailTitleDescriptionView(
-                                    'Warranty Status', detail.aWarrantyStatus),
-                                JobDetailTitleDescriptionView(
-                                    'Warranty Ending On',
-                                    detail.aWarrantyEndingOn),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15.dynamic,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Instructions from Customer',
-                                        style: TextStyle(
-                                            color: Colour.appDarkGrey,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12.dynamic),
-                                      ),
-                                      SizedBox(
-                                        height: 4.dynamic,
-                                      ),
-                                      Text(
-                                        detail.aCustomerInstruction ?? 'NA',
-                                        style: TextStyle(
-                                            color: Colour.appRed,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14.dynamic),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                            this.detailsView,
+                            isNeedServiceReport
+                                ? Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 10.dynamic,
+                                        ),
+                                        Divider(
+                                          color: Colors.grey,
+                                        ),
+                                        SizedBox(
+                                          height: 10.dynamic,
+                                        ),
+                                        Text(
+                                          'Service Report',
+                                          style: TextStyle(
+                                              color: Colour.appBlue,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16.dynamic),
+                                        ),
+                                        this.serviceReportView
+                                      ],
+                                    ),
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15.0),
-                        topRight: Radius.circular(15.0),
-                      ),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 10,
-                          spreadRadius: 1,
-                        )
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: 19.dynamic,
-                        left: 17.dynamic,
-                        right: 17.dynamic,
-                        bottom: 10.dynamic,
-                      ),
-                      child: Column(
-                        children: [
-                          Obx(
-                            () => Text(
-                              // var time = DateFormat('hh:mm a').format(DateTime.now());
-                              Jiffy(TimerController.to.currentDate.value)
-                                  .format('hh:mm a  |  do MMMM yyyy'),
-                              // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
-                              // '09:10 AM  |  21st September 2021',
-                              style: TextStyle(
-                                fontSize: 14.dynamic,
-                                fontWeight: FontWeight.w600,
-                                color: HexColor.fromHex("333333"),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 19.dynamic,
-                          ),
-                          androidDropdown(),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colour.appBlue,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.dynamic),
-                              ),
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                Get.toNamed(NavPage.jobCheckListScreen);
-                              },
-                              child: Text(
-                                'Save & Continue',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.dynamic,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  isNeedBottomView ? this.bottomView : Container(),
                 ],
               ),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -351,11 +236,196 @@ extension JobDetailWidgets on ScheduleJobDetailsScreen {
   }
 
   Widget get detailsView {
-    return Text('');
+    return Column(
+      children: [
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Purchase Date:', detail.aPurchaseDate),
+            JobDetailTitleDescriptionView(
+                'Purchase Order Number:', detail.aPurchaseOrderNumber),
+          ],
+        ),
+        SizedBox(
+          height: 15.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Scheduled Date:', detail.aScheduleDate),
+            JobDetailTitleDescriptionImageView('Customer Name:',
+                detail.aCustomerName, detail.aCameraImage ?? '')
+          ],
+        ),
+        SizedBox(
+          height: 15.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Scheduled Time:', detail.aScheduleTime),
+            JobDetailTitleDescriptionImageView(
+                'Scheduled By:', detail.aScheduledBy, detail.aScheduledBy)
+          ],
+        ),
+        SizedBox(
+          height: 15.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Warranty Status', detail.aWarrantyStatus),
+            JobDetailTitleDescriptionView(
+                'Warranty Ending On', detail.aWarrantyEndingOn),
+          ],
+        ),
+        SizedBox(
+          height: 15.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Instructions from Customer',
+                    style: TextStyle(
+                        color: Colour.appDarkGrey,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.dynamic),
+                  ),
+                  SizedBox(
+                    height: 4.dynamic,
+                  ),
+                  Text(
+                    detail.aCustomerInstruction ?? 'NA',
+                    style: TextStyle(
+                        color: Colour.appRed,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14.dynamic),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget get serviceReportView {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Job Start Time:', detail.aPurchaseDate),
+            JobDetailTitleDescriptionView(
+                'Job  End Time:', detail.aPurchaseOrderNumber),
+          ],
+        ),
+        // GetBuilder<JobCheckListController>(
+        //   builder: (_) {
+        //     return ListView.builder(
+        //       shrinkWrap: true,
+        //       physics: NeverScrollableScrollPhysics(),
+        //       itemBuilder: (builder, index) {
+        //         var item = checkListController.selectedlist[index];
+        //         return ReportItem(
+        //           item: item,
+        //         );
+        //       },
+        //       itemCount: checkListController.selectedlist.length,
+        //     );
+        //   },
+        // ),
+      ],
+    );
   }
 
   Widget get bottomView {
-    return Text('');
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        ),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            spreadRadius: 1,
+          )
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: 19.dynamic,
+          left: 17.dynamic,
+          right: 17.dynamic,
+          bottom: 10.dynamic,
+        ),
+        child: Column(
+          children: [
+            Obx(
+              () => Text(
+                // var time = DateFormat('hh:mm a').format(DateTime.now());
+                Jiffy(TimerController.to.currentDate.value)
+                    .format('hh:mm a  |  do MMMM yyyy'),
+                // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
+                // '09:10 AM  |  21st September 2021',
+                style: TextStyle(
+                  fontSize: 14.dynamic,
+                  fontWeight: FontWeight.w600,
+                  color: HexColor.fromHex("333333"),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 19.dynamic,
+            ),
+            androidDropdown(),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colour.appBlue,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.dynamic),
+                ),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Get.toNamed(NavPage.jobCheckListScreen);
+                },
+                child: Text(
+                  'Save & Continue',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.dynamic,
+                      fontWeight: FontWeight.w300),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

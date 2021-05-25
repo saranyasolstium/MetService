@@ -1,7 +1,9 @@
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +15,14 @@ import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:signature/signature.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ServiceReportScreen extends StatelessWidget {
   final TimerController time = Get.find();
   final JobCheckListController checkListController = Get.find();
-
+  final signatureController = SignatureController().obs;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -63,101 +68,201 @@ class ServiceReportScreen extends StatelessWidget {
             )
           ],
         ),
-        body: Container(
-          color: Colour.appLightGrey,
-          child: Column(
-            children: [
-              Expanded(
-                child: GetBuilder<JobCheckListController>(
-                  builder: (_) {
-                    return ListView.builder(
-                      itemBuilder: (builder, index) {
-                        return ReportItem(
-                          index: index,
-                        );
-                      },
-                      itemCount: checkListController.selectedlist.length,
-                    );
-                  },
-                ),
+        body: Stack(
+          children: [
+            Container(
+              color: Colour.appLightGrey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          GetBuilder<JobCheckListController>(
+                            builder: (_) {
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (builder, index) {
+                                  var item =
+                                      checkListController.selectedlist[index];
+                                  return ReportItem(
+                                    item: item,
+                                  );
+                                },
+                                itemCount:
+                                    checkListController.selectedlist.length,
+                              );
+                            },
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Customer E-Sign',
+                                  style: TextStyle(
+                                    fontSize: 12.dynamic,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colour.appText,
+                                  ),
+                                ),
+                                SizedBox(height: 12.dynamic),
+                                DottedBorder(
+                                  color: Colour.appDarkGrey,
+                                  borderType: BorderType.RRect,
+                                  dashPattern: [4.dynamic, 4.dynamic],
+                                  child: Signature(
+                                    height: 67.dynamic,
+                                    width: Get.width - 60.dynamic,
+                                    controller: signatureController.value,
+                                    backgroundColor: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 12.dynamic),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Feedback',
+                                  style: TextStyle(
+                                    fontSize: 12.dynamic,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colour.appText,
+                                  ),
+                                ),
+                                SizedBox(height: 12.dynamic),
+                                RatingBar.builder(
+                                  unratedColor: HexColor.fromHex('B1D7DD'),
+                                  initialRating: 0,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: false,
+                                  itemCount: 5,
+                                  itemPadding:
+                                      EdgeInsets.symmetric(horizontal: 4.0),
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 42.dynamic),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0),
+                      ),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                        )
+                      ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 19.dynamic,
+                        left: 17.dynamic,
+                        right: 17.dynamic,
+                        bottom: 10.dynamic,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colour.appBlue,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.dynamic),
+                              ),
+                            ),
+                            child: TextButton(
+                              onPressed: () async {
+                                showLoading();
+                                await AppController.to.localAuth();
+                                hideLoading();
+                                Get.toNamed(NavPage.jobCompleted);
+                              },
+                              child: Text(
+                                'Submit',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.dynamic,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 14.dynamic,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border:
+                                  Border.all(width: 1.5, color: Colour.appBlue),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.dynamic),
+                              ),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text(
+                                'Re-Check',
+                                style: TextStyle(
+                                    color: Colour.appBlue,
+                                    fontSize: 16.dynamic,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.0),
-                    topRight: Radius.circular(15.0),
-                  ),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                    )
-                  ],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: 19.dynamic,
-                    left: 17.dynamic,
-                    right: 17.dynamic,
-                    bottom: 10.dynamic,
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colour.appBlue,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.dynamic),
-                          ),
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            Get.toNamed(NavPage.jobCompleted);
-                          },
-                          child: Text(
-                            'Submit',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.dynamic,
-                                fontWeight: FontWeight.w300),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 14.dynamic,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(width: 1.5, color: Colour.appBlue),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.dynamic),
-                          ),
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Text(
-                            'Re-Check',
-                            style: TextStyle(
-                                color: Colour.appBlue,
-                                fontSize: 16.dynamic,
-                                fontWeight: FontWeight.w300),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+            AppController.to.defaultLoaderView(),
+          ],
         ),
       ),
     );
@@ -165,18 +270,19 @@ class ServiceReportScreen extends StatelessWidget {
 }
 
 class ReportItem extends StatelessWidget {
-  final JobCheckListController checkListController = Get.find();
-  final int index;
+  // final JobCheckListController checkListController = Get.find();
+  // final int index;
+  //
+  // ACheckListItem get item {
+  //   return checkListController.selectedlist[index];
+  // }
+  //
+  // MCheckListOption get selectedItem {
+  //   return item.selectedItem!;
+  // }
 
-  ACheckListItem get item {
-    return checkListController.selectedlist[index];
-  }
-
-  MCheckListOption get selectedItem {
-    return item.selectedItem!;
-  }
-
-  ReportItem({required this.index});
+  final ACheckListItem item;
+  ReportItem({required this.item});
   // final _remarkController = TextEditingController();
 
   @override
@@ -201,7 +307,7 @@ class ReportItem extends StatelessWidget {
           ),
           border: Border.all(
             width: 1.5,
-            color: selectedItem.color,
+            color: item.selectedItem?.color ?? Colors.grey,
           ),
         ),
         child: Column(
@@ -210,19 +316,23 @@ class ReportItem extends StatelessWidget {
             Row(
               // mainAxisAlignment: MainAxisAlignment.spaceAround,
               // mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Text(
                     safeString(item.title),
                     style: TextStyle(
                       color: Colour.appBlack,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 16.0.dynamic,
+                      fontWeight: FontWeight.normal,
                     ),
                   ),
                 ),
                 // Expanded(child: Container()),
-                ReportCheckbox(item: selectedItem),
+                SizedBox(width: 5.dynamic),
+                ReportCheckbox(
+                    item:
+                        item.selectedItem ?? MCheckListOption('', Colors.grey)),
               ],
             ),
             Divider(
@@ -272,7 +382,67 @@ class ReportItem extends StatelessWidget {
                   color: Colour.appDarkGrey,
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              height: 10.dynamic,
+            ),
+            Row(
+              children: [
+                // Image.asset(
+                //   'images/add.png',
+                //   width: 19.dynamic,
+                //   height: 19.dynamic,
+                // ),
+                Text(
+                  'Photo Added',
+                  style: TextStyle(
+                    fontSize: 14.dynamic,
+                    fontWeight: FontWeight.w400,
+                    color: Colour.appText,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16.dynamic,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  item.selectedImages.length,
+                  (row) => Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colour.appBlue),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5.0),
+                          clipBehavior: Clip.hardEdge,
+                          child: Image.file(
+                            item.selectedImages[row],
+                            height: 43.dynamic,
+                            width: 43.dynamic,
+                            fit: BoxFit.fill,
+                            isAntiAlias: false,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20.dynamic,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10.dynamic,
+            ),
           ],
         ),
       ),

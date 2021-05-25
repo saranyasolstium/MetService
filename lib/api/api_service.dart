@@ -6,6 +6,7 @@ import 'package:eagle_pixels/api/methods.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:http/http.dart' as http;
 import 'urls.dart';
+import 'package:pretty_json/pretty_json.dart';
 
 abstract class Codable {
   toJson();
@@ -30,10 +31,10 @@ class API {
     final Map<String, String> safeHeader = header ??= endPoint.header;
     http.Response? response;
     String? error;
-    print('url $url');
-    print('header $header');
-    print('body $body');
-    print('method ${endPoint.method}');
+    print('url -> ${endPoint.method.string} $url');
+    // print('header $header');
+    print('body ->');
+    printPrettyJson(body, indent: 2);
 
     try {
       if (needLoader) {
@@ -50,7 +51,6 @@ class API {
             .timeout(Duration(seconds: 60));
       } else {
         final String getParam = queryParam(body);
-        print('Query param - $getParam');
         final Uri uri = Uri.parse('$url?$getParam');
         response = await http
             .get(uri, headers: safeHeader)
@@ -69,11 +69,12 @@ class API {
         hideLoading();
       }
 
-      if (response != null) {
-        print("response - ${(response.body)}");
-      } else {
-        print("response - Empty");
-      }
+      // if (response != null) {
+      //   print(
+      //       "response - ${(JsonEncoder.withIndent(' ').convert(response.body))}");
+      // } else {
+      //   print("response - Empty");
+      // }
       // ignore: control_flow_in_finally
       return APIResponse(
         model,
@@ -135,11 +136,16 @@ class APIResponse<T> {
   updateResponse(http.Response? response) {
     try {
       if (error != null) {
+        print('response - Empty');
         throw Exception(error!);
       }
       responseObj = response;
       var decoded = jsonDecode(responseObj!.body);
+
       if (decoded != null) {
+        print('response');
+        printPrettyJson(decoded, indent: 2);
+        // print(JsonEncoder.withIndent(" ").convert(decoded));
         if (decoded is List<dynamic>) {
           _maps = decoded;
         } else {
@@ -158,6 +164,8 @@ class APIResponse<T> {
           });
         }
         print('model created');
+      } else {
+        print('response - Empty');
       }
     } catch (err) {
       error = err.toString();

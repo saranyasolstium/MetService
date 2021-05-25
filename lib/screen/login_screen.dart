@@ -247,27 +247,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                   SizedBox(
                                     height: 10.0,
                                   ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: RawMaterialButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                SignUpScreen(),
-                                          ),
-                                        );
-                                      },
-                                      child: Text(
-                                        'Create new account',
-                                        style: TextStyle(
-                                            color: Colour.appBlue,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16.0.dynamic),
-                                      ),
-                                    ),
-                                  ),
+                                  // Align(
+                                  //   alignment: Alignment.center,
+                                  //   child: RawMaterialButton(
+                                  //     onPressed: () {
+                                  //       Navigator.push(
+                                  //         context,
+                                  //         MaterialPageRoute(
+                                  //           builder: (context) =>
+                                  //               SignUpScreen(),
+                                  //         ),
+                                  //       );
+                                  //     },
+                                  //     child: Text(
+                                  //       'Create new account',
+                                  //       style: TextStyle(
+                                  //           color: Colour.appBlue,
+                                  //           fontWeight: FontWeight.w400,
+                                  //           fontSize: 16.0.dynamic),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   SafeArea(
                                     child: Padding(
                                       padding: const EdgeInsets.only(

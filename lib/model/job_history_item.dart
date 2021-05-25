@@ -97,4 +97,12 @@ class MJobHistoryItem implements AServiceItem {
   String? get aImage => productImage;
   String? get aName => productName;
   String? get aPurchaseDate => purchaseDate;
+
+  String? get aEndDay => '';
+
+  String? get aRequestNo => '';
+
+  String? get aStartDay => '';
+
+  String? get aServiceType => '';
 }

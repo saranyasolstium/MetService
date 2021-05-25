@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
@@ -6,20 +8,34 @@ import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
+import 'package:eagle_pixels/screen/toast/photo_choose_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
+
+extension CheckListItemAction on CheckListItem {
+  onPickImage() async {
+    // Get.dialog(PhotoChooseScreen(), barrierDismissible: false);
+    File? selectedImage =
+        await Get.dialog(PhotoChooseScreen(), barrierDismissible: false);
+    print('picked image path - ${selectedImage?.path ?? 'null'}');
+    if (selectedImage != null) {
+      checkListController.checkList[index].selectedImages.add(selectedImage);
+      checkListController.update();
+    }
+  }
+}
 
 class JobCheckListScreen extends StatelessWidget {
   final TimerController time = Get.find();
   final JobCheckListController checkListController =
       Get.put(JobCheckListController());
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -297,6 +313,68 @@ class CheckListItem extends StatelessWidget {
                   hintText: "elaborate about the condition here...",
                   border: InputBorder.none,
                 ),
+              ),
+            ),
+            SizedBox(
+              height: 16.dynamic,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  item.selectedImages.length,
+                  (row) => Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colour.appBlue),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5.0),
+                          clipBehavior: Clip.hardEdge,
+                          child: Image.file(
+                            item.selectedImages[row],
+                            height: 43.dynamic,
+                            width: 43.dynamic,
+                            fit: BoxFit.fill,
+                            isAntiAlias: false,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20.dynamic,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10.dynamic,
+            ),
+            GestureDetector(
+              onTap: () async {
+                this.onPickImage();
+              },
+              child: Row(
+                children: [
+                  Image.asset(
+                    'images/add.png',
+                    width: 19.dynamic,
+                    height: 19.dynamic,
+                  ),
+                  Text(
+                    '  Add Photo',
+                    style: TextStyle(
+                      fontSize: 14.dynamic,
+                      fontWeight: FontWeight.w400,
+                      color: Colour.appBlue,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

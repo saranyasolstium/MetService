@@ -10,6 +10,7 @@ class AppBinding implements Bindings {
     // Get.smartManagement = SmartManagement.keepFactory;
     Get.put(AppController(), permanent: true);
     Get.put(AttendanceController(), permanent: true);
+    // Get.lazyPut(() => TimerController(), fenix: true);
     Get.put(TimerController(), permanent: true);
     Get.put(MyPurchaseController(), permanent: true);
   }

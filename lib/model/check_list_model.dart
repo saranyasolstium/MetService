@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
@@ -76,6 +78,7 @@ class MCheckListItem implements ACheckListItem {
   List<MCheckListOption>? options;
 
   MCheckListItem.fromJson(Map<String, dynamic> json) {
+    selectedImages = [];
     name = json['name'];
     type = json['type'];
     noteRequired = json['note_required'];
@@ -135,6 +138,8 @@ class MCheckListItem implements ACheckListItem {
   String get title {
     return name ?? '';
   }
+
+  late List<File> selectedImages;
 }
 
 class MCheckListOption {

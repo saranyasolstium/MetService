@@ -116,4 +116,12 @@ class MScheduledJobItem implements AServiceItem {
   String? get aImage => customerImage;
   String? get aName => productName;
   String? get aPurchaseDate => purchaseDate;
+
+  String? get aEndDay => '';
+
+  String? get aRequestNo => '';
+
+  String? get aStartDay => '';
+
+  String? get aServiceType => '';
 }

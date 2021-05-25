@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:signature/signature.dart';
 
 import '../colors.dart';
 
@@ -44,7 +45,6 @@ import '../colors.dart';
 
 class JobCheckListController extends GetxController {
   var checklistData = MCheckListResponse().obs;
-
   List<MCheckListItem> get checkList {
     return checklistData.value.data?.first?.list ?? [];
   }

@@ -2,12 +2,15 @@ import 'dart:core';
 import 'dart:ui';
 
 import 'package:eagle_pixels/api/urls.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/attendance_model.dart';
 import 'package:eagle_pixels/model/attendece_status_model.dart';
 import 'package:eagle_pixels/model/clockin_model.dart';
+import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:local_auth/auth_strings.dart';
@@ -17,6 +20,8 @@ import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 
 import 'package:local_auth/local_auth.dart';
+
+import '../constant.dart';
 
 class AttendanceController extends GetxController {
   var selectedYear = "2021".obs;
@@ -31,6 +36,19 @@ class AttendanceController extends GetxController {
   DateTime? get jobStartedTime {
     // print(attendanceStatus.value?.startedDate);
     return attendanceStatus.value?.startedDate?.toLocal();
+  }
+
+  var arrService = <AServiceItem>[].obs;
+
+  final viewState = ViewState.loading.obs;
+
+  fetchService() async {
+    viewState.value = ViewState.loading;
+
+    Future.delayed(Duration(seconds: 2), () {
+      arrService.add(MScheduledJobItem());
+      viewState.value = ViewState.success;
+    });
   }
 
   var attendance = Map<String, List<MAttendanceItem>?>();
@@ -158,7 +176,7 @@ class AttendanceController extends GetxController {
         snackPosition: SnackPosition.BOTTOM);
   }
 
-  void authenticateUser() async {
+  Future<bool> authenticateUser() async {
     try {
       const androidMessage = const AndroidAuthMessages(
         cancelButton: 'Cancel',
@@ -174,20 +192,23 @@ class AttendanceController extends GetxController {
         androidAuthStrings: androidMessage,
       );
       if (isUserAuthenticated.value) {
-        showSnackBar(
-            title: "Success",
-            message: "You are authenticated",
-            backgroundColor: Colors.green);
+        return true;
+        // showSnackBar(
+        //     title: "Success",
+        //     message: "You are authenticated",
+        //     backgroundColor: Colors.green);
       } else {
         showSnackBar(
             title: "Error",
             message: "Authentication Cancelled",
             backgroundColor: Colors.red);
+        return false;
       }
     } on Exception catch (e) {
       print(e);
       showSnackBar(
           title: "Error", message: e.toString(), backgroundColor: Colors.red);
+      return false;
     }
   }
 }
@@ -212,26 +233,32 @@ extension AttendanceControllerService on AttendanceController {
   }
 
   Future<MClockInResponse?> onClockIn() async {
-    var body = {
-      'SiteID': '0',
-      'latitude': '0',
-      'longitude': '0',
-      'serviceID': '0'
-    };
+    try {
+      Position position = await AppController.to.determinePosition();
+      var body = {
+        'SiteID': '0',
+        'latitude': '${position.latitude}',
+        'longitude': '${position.longitude}',
+        'serviceID': '0'
+      };
 
-    var response = await API.service.call(
-      model: MClockInResponse(),
-      endPoint: EndPoint.clockIn,
-      body: body,
-    );
-    return response.model;
+      var response = await API.service.call(
+        model: MClockInResponse(),
+        endPoint: EndPoint.clockIn,
+        body: body,
+      );
+      return response.model;
+    } catch (error) {
+      print('$error');
+    }
   }
 
   Future<MClockInResponse?> onClockOut() async {
+    Position position = await AppController.to.determinePosition();
     var body = {
       'SiteID': '0',
-      'latitude': '0',
-      'longitude': '0',
+      'latitude': '${position.latitude}',
+      'longitude': '${position.longitude}',
       'serviceID': '0'
     };
 

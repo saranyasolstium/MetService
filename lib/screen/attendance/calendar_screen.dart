@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/model/attendece_status_model.dart';
+import 'package:eagle_pixels/model/profile_model.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,21 +17,101 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:jiffy/jiffy.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:eagle_pixels/api/api_service.dart';
 import '../../colors.dart';
+import 'package:colorize/colorize.dart';
 
 extension CalendarAction on CalendarScreen {
   startOrEndDay() async {
     if (attendance.isClockedIn) {
       Get.toNamed(NavPage.clockOut);
     } else {
-      Get.toNamed(NavPage.clockIn);
+      startDay();
     }
     // var response = await attendance.onClockIn();
     // if (response!.isValid) {}
+  }
+
+  startDay() async {
+    bool isVerified = await attendance.authenticateUser();
+    if (isVerified) {
+      try {
+        var model = await attendance.onClockIn();
+        // if model != null
+        // print('Clock in model ${model!.data!.siteName}');
+        await getImage();
+        if (model?.status?.isSuccess ?? false) {
+          var resp = MAttendanceStatusResponse();
+          resp.startedDate = DateTime.now();
+          attendance.attendanceStatus.value = resp;
+          Get.toNamed(NavPage.clockOut);
+        } else {
+          print('Enter in error');
+          //TODO: Clock in error
+        }
+      } finally {}
+    }
+  }
+
+  Future getImage() async {
+    try {
+      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      print('image picked');
+      if (pickedFile != null) {
+        _image = pickedFile;
+        print(_image.path);
+        var res = await uploadImage(_image.path,
+            'https://pixel.solstium.net/api/v1/employee/upload_sign');
+        if (res?.isSuccess ?? false) {
+          var model = await attendance.onClockIn();
+          if (model?.status?.isSuccess ?? false) {
+            var resp = MAttendanceStatusResponse();
+            resp.startedDate = DateTime.now();
+            attendance.attendanceStatus.value = resp;
+            Get.toNamed(NavPage.clockOut);
+          } else {
+            //TODO: Clock in error
+          }
+        } else {
+          //TODO: Failed to upload
+        }
+      } else {
+        print('No image selected.');
+      }
+    } catch (error) {
+      print('Error $error');
+    }
+  }
+
+  Future<String?> uploadImage(filepath, url) async {
+    try {
+      showLoading();
+      print('image uploading');
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.fields['service_id'] = '1';
+      request.files.add(await http.MultipartFile.fromPath('image', filepath));
+      request.headers.addAll(Header.defaultHeader);
+      var res = await request.send();
+      var jsonResponse = await http.Response.fromStream(res);
+      return jsonDecode(jsonResponse.body)["status"];
+      // return res.reasonPhrase;
+    } catch (e) {
+      print('Error$e');
+    } finally {
+      hideLoading();
+    }
+  }
+
+  showAttendance() {
+    print('showAttendance');
+    Get.toNamed(NavPage.attendanceServiceList);
+    attendance.fetchService();
   }
 
   selectMonth() {
@@ -66,12 +152,22 @@ extension CalendarAction on CalendarScreen {
   }
 }
 
+// ignore: must_be_immutable
 class CalendarScreen extends StatelessWidget {
   final AttendanceController attendance = Get.find();
+
+  MProfile get user {
+    return AppController.user;
+  }
+
+  late PickedFile _image;
+  final picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     if (!attendance.isAttendanceHereForSelected) {
       attendance.fetchAttendance(isShowLoading: true);
+      // color("Bold Italic Underline", front: Styles., isBold: true);
     }
 
     return Scaffold(
@@ -137,6 +233,30 @@ class CalendarScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(width: 1.5, color: Colour.appGreen),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.dynamic),
+                      ),
+                    ),
+                    child: TextButton(
+                      onPressed: this.showAttendance,
+                      child: Text(
+                        'Show Attendance',
+                        style: TextStyle(
+                            color: Colour.appGreen,
+                            fontSize: 16.dynamic,
+                            fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 14.dynamic,
                   ),
                 ],
               ),

@@ -12,6 +12,7 @@ extension HomeAction on HomeScreen {
   onAttendance() {
     Get.toNamed(NavPage.calendar);
     Get.find<AttendanceController>().fetchAttendanceStatus();
+    // Get.find<AttendanceController>().fetchAttendance(isShowLoading: true);
   }
 
   onScheduleJob() {

@@ -57,8 +57,8 @@ class MAttendanceStatusItem {
   String? siteId;
   int? serviceId;
   dynamic siteName;
-  int? latIn;
-  int? longIn;
+  double? latIn;
+  double? longIn;
   dynamic latOut;
   dynamic longOut;
   dynamic imageIn;

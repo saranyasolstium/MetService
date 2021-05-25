@@ -8,6 +8,7 @@ import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -24,20 +25,56 @@ extension TimeOutAction on TimeOutScreen {
     ).then((value) async {
       if (value == true) {
         print('yes clicked');
-        var model = await attendance.onClockOut();
-        if (model?.status?.isSuccess ?? false) {
-          navigator!.popUntil((route) => route.settings.name == NavPage.root);
-        } else {
-          //TODO: show error toast
+        bool isVerified = await attendance.authenticateUser();
+        if (isVerified) {
+          await getImage();
+          var model = await attendance.onClockOut();
+          if (model?.status?.isSuccess ?? false) {
+            navigator!.popUntil((route) => route.settings.name == NavPage.root);
+          } else {
+            //TODO: show error toast
+          }
         }
       } else {
         print('no clicked');
       }
     });
   }
+
+  Future getImage() async {
+    try {
+      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      print('image picked');
+      if (pickedFile != null) {
+        _image = pickedFile;
+        print(_image.path);
+        // var res = await uploadImage(_image.path,
+        //     'https://pixel.solstium.net/api/v1/employee/upload_sign');
+        // if (res?.isSuccess ?? false) {
+        //   var model = await attendance.onClockIn();
+        //   if (model?.status?.isSuccess ?? false) {
+        //     var resp = MAttendanceStatusResponse();
+        //     resp.startedDate = DateTime.now();
+        //     attendance.attendanceStatus.value = resp;
+        //     Get.toNamed(NavPage.clockOut);
+        //   } else {
+        //     //TODO: Clock in error
+        //   }
+        // } else {
+        //   //TODO: Failed to upload
+        // }
+      } else {
+        print('No image selected.');
+      }
+    } catch (error) {
+      print('Error $error');
+    }
+  }
 }
 
 class TimeOutScreen extends StatelessWidget {
+  final picker = ImagePicker();
+  late PickedFile _image;
   final TimerController timer = Get.find();
   final AttendanceController attendance = Get.find();
   MProfile get user {

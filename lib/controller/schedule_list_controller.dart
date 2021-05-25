@@ -4,6 +4,7 @@ import 'package:eagle_pixels/model/get_scheduled_job.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:signature/signature.dart';
 
 import '../constant.dart';
 
@@ -11,6 +12,7 @@ class ScheduleListController extends GetxController {
   var scheduleList = <MScheduledJobItem>[].obs;
   final selectedDate = DateTime(2021, 2, 9).obs; //temp
   final viewState = ViewState.loading.obs;
+
   // var isLoading = true.obs;
 
   @override

@@ -42,4 +42,8 @@ extension Colour on Colors {
   static Color get appRed {
     return HexColor.fromHex('#DB1A1A');
   }
+
+  static Color get appGreen {
+    return HexColor.fromHex('#14CE1A');
+  }
 }

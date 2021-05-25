@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'dart:math';
 
+// import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
@@ -21,6 +22,7 @@ import 'controller/app_binder.dart';
 import 'controller/app_controller.dart';
 import 'dynamic_font.dart';
 import 'screen/Attendance/calendar_screen.dart';
+import 'screen/attendance/attendance_service_list_screen.dart';
 
 class NavPage {
   static String calendar = '/calendar';
@@ -34,6 +36,7 @@ class NavPage {
   static String jobServiceReportScreen = '/jobServiceReport';
   static String scheduleJobDetailsScreen = '/scheduleJobDetailsScreen';
   static String root = '/';
+  static String attendanceServiceList = 'AttendanceServiceList';
   // static String confirmation = '/confirmation';
 }
 
@@ -70,14 +73,19 @@ class MyApp extends StatelessWidget {
         GetPage(name: NavPage.clockIn, page: () => TimeInScreen()),
         GetPage(name: NavPage.clockOut, page: () => TimeOutScreen()),
         GetPage(name: NavPage.scheduleScreen, page: () => ScheduleScreen()),
-        GetPage(
-            name: NavPage.scheduleJobDetailsScreen,
-            page: () => ScheduleJobDetailsScreen()),
+        // GetPage(
+        //     name: NavPage.scheduleJobDetailsScreen,
+        //     page: () => ScheduleJobDetailsScreen()),
         GetPage(name: NavPage.jobCompleted, page: () => JobCompletedScreen()),
         GetPage(name: NavPage.myReward, page: () => MyRewardScreen()),
         GetPage(name: NavPage.jobHistory, page: () => JobHistoryScreen()),
         GetPage(
-            name: NavPage.jobCheckListScreen, page: () => JobCheckListScreen()),
+            name: NavPage.attendanceServiceList,
+            page: () => AttendanceServiceListScreen()),
+        GetPage(
+          name: NavPage.jobCheckListScreen,
+          page: () => JobCheckListScreen(),
+        ),
         GetPage(
             name: NavPage.jobServiceReportScreen,
             page: () => ServiceReportScreen()),
@@ -90,7 +98,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
       initialRoute: NavPage.root,
-      // home: Demo(),
+      // home: JobCheckListScreen(),
     );
   }
 }

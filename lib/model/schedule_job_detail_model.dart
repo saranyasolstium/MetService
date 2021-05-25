@@ -134,5 +134,29 @@ class MJobDetail implements AJobDetail {
 
   String? get aWarrantyStatus => warrantyStatus;
 
-  List<ACheckListItem> get checkList => []; //temp
+  List<ACheckListItem> get checkList => [];
+
+  String? get aDescription => '';
+
+  String? get aPriority => '';
+
+  String? get aSource => '';
+
+  String? get aStatus => '';
+
+  String? get aSubject => '';
+
+  String? get aTicketID => '';
+
+  String? get aSaleOrder => '';
+
+  String? get aSerialNumber => '';
+
+  String? get aSite => '';
+
+  String? get aSubSite => '';
+
+  String? get item => '';
+
+  String? get aItem => ''; //temp
 }

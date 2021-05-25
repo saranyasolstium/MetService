@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:latlong/latlong.dart';
 import '../../colors.dart';
 import '../../constant.dart';
 
@@ -94,7 +97,7 @@ class ServiceView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Purchase Date:',
+                      'Type of Servive',
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
@@ -104,7 +107,7 @@ class ServiceView extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      '12th May, 2020',
+                      safeString(item.aServiceType),
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w600,
@@ -162,6 +165,58 @@ class ServiceView extends StatelessWidget {
               ),
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
+                child: Text(
+                  'Site MAP:',
+                  style: TextStyle(
+                      color: Colour.appDarkGrey,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 12.dynamic),
+                ),
+              ),
+            ],
+          ),
+          Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.dynamic),
+            ),
+            height: 112.dynamic,
+            child: IgnorePointer(
+              child: FlutterMap(
+                options: MapOptions(
+                  center: LatLng(12.22532035463426, 79.68630931341535),
+                  zoom: 11.0,
+                  boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(8.0)),
+                ),
+                layers: [
+                  TileLayerOptions(
+                      urlTemplate:
+                          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                      subdomains: ['a', 'b', 'c']),
+                  MarkerLayerOptions(
+                    markers: [
+                      Marker(
+                        width: 80.0,
+                        height: 80.0,
+                        point: LatLng(12.226456173312162, 79.65054512543048),
+                        builder: (ctx) => Container(
+                          child: Icon(
+                            Icons.location_on,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
           SizedBox(
             height: 15.dynamic,
           ),
@@ -169,7 +224,7 @@ class ServiceView extends StatelessWidget {
             children: [
               buttonTitle != null
                   ? ExpanderOrContainer(
-                      isContainer: !isNeedDetail,
+                      isContainer: true,
                       child: Container(
                         margin: EdgeInsets.only(right: 18.dynamic),
                         child: Material(
@@ -180,7 +235,9 @@ class ServiceView extends StatelessWidget {
                             minWidth: 121.dynamic,
                             height: 44.dynamic,
                             padding: EdgeInsets.symmetric(horizontal: 40),
-                            onPressed: onJob as void Function()?,
+                            onPressed: () {
+                              onJob();
+                            },
                             child: Text(
                               buttonTitle ?? "",
                               textAlign: TextAlign.center,
@@ -200,10 +257,11 @@ class ServiceView extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           Get.bottomSheet(
-                            ScheduleJobDetailsScreen(),
-                            isScrollControlled: true,
+                            JobDetailScreen(),
                             ignoreSafeArea: false,
+                            isScrollControlled: true,
                           );
+                          // Get.bottomSheet(JobDetailScreen());
                           // showModalBottomSheet(
                           //   context: context,
                           //   isScrollControlled: true,
