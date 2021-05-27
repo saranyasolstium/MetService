@@ -15,6 +15,10 @@ import '../../constant.dart';
 
 class AttendanceServiceListScreen extends StatelessWidget {
   final AttendanceController attendance = Get.find();
+
+  AShowAttendance get detail {
+    return attendance.showAttendenceDetail.value;
+  }
   // final JobCheckListController checkListController =
   //     Get.put(JobCheckListController());
   // const AttendanceServiceList({Key key}) : super(key: key);

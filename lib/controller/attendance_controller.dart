@@ -7,6 +7,7 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/attendance_model.dart';
 import 'package:eagle_pixels/model/attendece_status_model.dart';
+import 'package:eagle_pixels/model/show_attendence_model.dart';
 import 'package:eagle_pixels/model/clockin_model.dart';
 import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,21 @@ class AttendanceController extends GetxController {
   var arrService = <AServiceItem>[].obs;
 
   final viewState = ViewState.loading.obs;
+
+  //ShowAttendanceModel
+  Rx<AShowAttendance> showAttendenceDetail = MShowAttendenceDetail().obs;
+
+  fetchShowAttendenceDetail() async {
+    var response = await API.service.call(
+        model: MShowAttendenceResponse(),
+        endPoint: EndPoint.jobdetail,
+        body: {K.job_id: '1'} //temp
+        );
+
+    if (response.isValidModel) {
+      showAttendenceDetail.value = response.model!.data! as AShowAttendance;
+    }
+  }
 
   fetchService() async {
     viewState.value = ViewState.loading;

@@ -46,11 +46,11 @@ import '../colors.dart';
 class JobCheckListController extends GetxController {
   var checklistData = MCheckListResponse().obs;
   List<MCheckListItem> get checkList {
-    return checklistData.value.data?.first?.list ?? [];
+    return checklistData.value.data?.first.list ?? [];
   }
 
   List<MCheckListItem> get selectedlist {
-    return checklistData.value.data?.first?.selectedItems ?? [];
+    return checklistData.value.data?.first.selectedItems ?? [];
   }
 
   fetchCheckList() async {

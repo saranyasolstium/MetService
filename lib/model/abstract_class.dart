@@ -14,6 +14,17 @@ abstract class AServiceItem {
   String? get aServiceType;
 }
 
+abstract class AShowAttendance {
+  String? get aImage;
+  String? get aProductName;
+  String? get aCctvID;
+  String? get aServiceReqNo;
+  String? get aCustomerName;
+  String? get aCustomerImage;
+  String? get aStartDay;
+  String? get aEndDay;
+}
+
 abstract class AAttendanceStatus {
   DateTime? startedDate;
 }
@@ -41,24 +52,21 @@ abstract class AJobDetail {
   String? get aDescription;
 
   //Customer Information
+  String? get aCustomerName;
+  String? get aCustomerImage;
   String? get aItem;
   String? get aSerialNumber;
   String? get aSite;
   String? get aSubSite;
   String? get aSaleOrder;
+  String? get aSiteMapLat;
+  String? get aSiteMapLang;
 
-  String? get aPurchaseDate;
-  String? get aPurchaseOrderNumber;
-  String? get aScheduleDate;
-  String? get aCustomerName;
-  String? get aScheduleTime;
-  String? get aScheduledBy;
-  String? get aWarrantyStatus;
-  String? get aWarrantyEndingOn;
-  String? get aCustomerInstruction;
+  // Service Information
+  String? get aTypeOfService;
+  String? get aServiceAmount;
+  String? get aService;
+  String? get aFloorPlan;
 
-  String? get aStartTime;
-  String? get aEndTime;
-  String? get aWarrantyCard;
   List<ACheckListItem> get checkList;
 }
