@@ -167,7 +167,7 @@ class CalendarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!attendance.isAttendanceHereForSelected) {
       attendance.fetchAttendance(isShowLoading: true);
-      // color("Bold Italic Underline", front: Styles., isBold: true);
+      color("Bold Italic Underline", front: Styles.RED, isBold: true);
     }
 
     return Scaffold(

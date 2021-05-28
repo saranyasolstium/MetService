@@ -257,7 +257,9 @@ class ServiceView extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           Get.bottomSheet(
-                            JobDetailScreen(),
+                            JobDetailScreen(
+                              isNeedContainer: false,
+                            ),
                             ignoreSafeArea: false,
                             isScrollControlled: true,
                           );

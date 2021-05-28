@@ -17,8 +17,12 @@ import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 
 import '../../colors.dart';
 
+// ignore: must_be_immutable
 class JobDetailScreen extends StatelessWidget {
   final controller = Get.put(JobDetailController());
+
+  final bool isNeedContainer;
+  JobDetailScreen({this.isNeedContainer = false});
 
   late PDFDocument document;
   AJobDetail get detail {
@@ -206,7 +210,7 @@ class JobDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        this.bottomView, //temp
+                        isNeedContainer ? this.bottomView : Container(), //temp
                       ],
                     ),
                   ),
