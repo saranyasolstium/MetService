@@ -6,6 +6,7 @@ import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/controller/app_binder.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:eagle_pixels/model/site_model.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/storage.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
@@ -33,6 +34,10 @@ enum LoginStatus { logged, logout, loading }
 class AppController extends GetxController {
   bool get isEngineer {
     return _user.value.isEngineer;
+  }
+
+  bool get isAttendanceEngineer {
+    return false;
   }
 
   //Local Auth

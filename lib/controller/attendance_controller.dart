@@ -10,6 +10,7 @@ import 'package:eagle_pixels/model/attendece_status_model.dart';
 import 'package:eagle_pixels/model/show_attendence_model.dart';
 import 'package:eagle_pixels/model/clockin_model.dart';
 import 'package:eagle_pixels/model/get_scheduled_job.dart';
+import 'package:eagle_pixels/model/site_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -46,26 +47,9 @@ class AttendanceController extends GetxController {
   //ShowAttendanceModel
   Rx<AShowAttendance> showAttendenceDetail = MShowAttendenceDetail().obs;
 
-  fetchShowAttendenceDetail() async {
-    var response = await API.service.call(
-        model: MShowAttendenceResponse(),
-        endPoint: EndPoint.jobdetail,
-        body: {K.job_id: '1'} //temp
-        );
-
-    if (response.isValidModel) {
-      showAttendenceDetail.value = response.model!.data! as AShowAttendance;
-    }
-  }
-
-  fetchService() async {
-    viewState.value = ViewState.loading;
-
-    Future.delayed(Duration(seconds: 2), () {
-      arrService.add(MScheduledJobItem());
-      viewState.value = ViewState.success;
-    });
-  }
+  var arrSite =
+      <MSite>[].obs; //Attendance engineer use the site for mark the attendance.
+  late Rx<MSite?> selectedSite = Rx(null);
 
   var attendance = Map<String, List<MAttendanceItem>?>();
   final Rx<AAttendanceStatus?> attendanceStatus =
@@ -250,9 +234,12 @@ extension AttendanceControllerService on AttendanceController {
 
   Future<MClockInResponse?> onClockIn() async {
     try {
+      final siteID = AppController.to.isAttendanceEngineer
+          ? "${selectedSite.value?.id ?? 0}"
+          : "0";
       Position position = await AppController.to.determinePosition();
       var body = {
-        'SiteID': '0',
+        'SiteID': siteID,
         'latitude': '${position.latitude}',
         'longitude': '${position.longitude}',
         'serviceID': '0'
@@ -293,6 +280,40 @@ extension AttendanceControllerService on AttendanceController {
         body: {K.service_id: '0'} //temp
         );
     attendanceStatus.value = response.model;
+  }
+
+  fetchShowAttendenceDetail() async {
+    var response = await API.service.call(
+        model: MShowAttendenceResponse(),
+        endPoint: EndPoint.jobdetail,
+        body: {K.job_id: '1'} //temp
+        );
+
+    if (response.isValidModel) {
+      showAttendenceDetail.value = response.model!.data! as AShowAttendance;
+    }
+  }
+
+  fetchService() async {
+    viewState.value = ViewState.loading;
+
+    Future.delayed(Duration(seconds: 2), () {
+      arrService.add(MScheduledJobItem());
+      viewState.value = ViewState.success;
+    });
+  }
+
+  fetchSite() async {
+    var response = await API.service.call(
+        model: MSiteResponse(),
+        endPoint: EndPoint.site,
+        body: {K.service_id: '2'} //temp
+        );
+
+    if (response.isValidModel) {
+      arrSite.value = response.model!.data!;
+      selectedSite.value = arrSite.first;
+    }
   }
 }
 
