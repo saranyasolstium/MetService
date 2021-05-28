@@ -83,7 +83,7 @@ class TimeOutScreen extends StatelessWidget {
 
   String get difference {
     // print(timer.currentDate.value);
-    print(attendance.jobStartedTime);
+    // print(attendance.jobStartedTime);
     var current = timer.currentDate.value;
     var start = attendance.jobStartedTime;
     if (start == null) {

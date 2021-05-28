@@ -10,8 +10,15 @@ import 'package:get/get.dart';
 
 extension HomeAction on HomeScreen {
   onAttendance() {
+    AttendanceController attendance = Get.find();
     Get.toNamed(NavPage.calendar);
-    Get.find<AttendanceController>().fetchAttendanceStatus();
+    attendance.fetchAttendanceStatus();
+    if (AppController.to.isAttendanceEngineer &&
+        !attendance.isClockedIn &&
+        attendance.arrSite.length == 0) {
+      attendance.fetchSite();
+    }
+
     // Get.find<AttendanceController>().fetchAttendance(isShowLoading: true);
   }
 

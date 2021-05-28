@@ -39,6 +39,12 @@ extension CalendarAction on CalendarScreen {
   }
 
   startDay() async {
+    if (AppController.to.isAttendanceEngineer) {
+      if (attendance.selectedSite.value == null) {
+        //temp toast
+        return;
+      }
+    }
     bool isVerified = await attendance.authenticateUser();
     if (isVerified) {
       try {
@@ -167,7 +173,6 @@ class CalendarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!attendance.isAttendanceHereForSelected) {
       attendance.fetchAttendance(isShowLoading: true);
-      color("Bold Italic Underline", front: Styles.RED, isBold: true);
     }
 
     return Scaffold(
@@ -192,72 +197,10 @@ class CalendarScreen extends StatelessWidget {
                   SizedBox(
                     height: 86.dynamic,
                   ),
-                  Obx(
-                    () => Text(
-                      // var time = DateFormat('hh:mm a').format(DateTime.now());
-                      Jiffy(TimerController.to.currentDate.value)
-                          .format('hh:mm a  |  do MMMM yyyy'),
-                      // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
-                      // '09:10 AM  |  21st September 2021',
-                      style: TextStyle(
-                        fontSize: 14.dynamic,
-                        fontWeight: FontWeight.w600,
-                        color: HexColor.fromHex("333333"),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colour.appBlue,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5.dynamic),
-                        ),
-                      ),
-// margin: EdgeInsets.symmetric(vertical: 32.dynamic),
-                      width: double.infinity,
-                      child: RawMaterialButton(
-                        onPressed: () {},
-                        child: TextButton(
-                          onPressed: this.startOrEndDay,
-                          child: Obx(() => Text(
-                                attendance.isClockedIn
-                                    ? 'End the day'
-                                    : 'Start the day',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.dynamic,
-                                    fontWeight: FontWeight.w300),
-                              )),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(width: 1.5, color: Colour.appGreen),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5.dynamic),
-                      ),
-                    ),
-                    child: TextButton(
-                      onPressed: this.showAttendance,
-                      child: Text(
-                        'Show Attendance',
-                        style: TextStyle(
-                            color: Colour.appGreen,
-                            fontSize: 16.dynamic,
-                            fontWeight: FontWeight.w300),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 14.dynamic,
-                  ),
+                  (AppController.to.isAttendanceEngineer &&
+                          !attendance.isClockedIn)
+                      ? bottomView1
+                      : bottomView2,
                 ],
               ),
             ),
@@ -546,6 +489,194 @@ extension CalendarWidgets on CalendarScreen {
         // }
         // print('long pressed date $date');
       },
+    );
+  }
+
+  Widget androidDropdown() {
+    List<DropdownMenuItem<String>> dropdownItems = [];
+    var siteList = attendance.arrSite;
+    siteList.forEach((site) {
+      dropdownItems.add(
+        DropdownMenuItem(
+          child: Text(site.displayText),
+          value: site.displayText,
+        ),
+      );
+    });
+    return Container(
+      margin: EdgeInsets.only(bottom: 19.dynamic),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colour.appLightGrey,
+        borderRadius: BorderRadius.all(
+          Radius.circular(5.dynamic),
+        ),
+      ),
+      child: DropdownButton<String>(
+        value: attendance.selectedSite.value?.displayText ?? '',
+        items: dropdownItems,
+        underline: Container(),
+        icon: Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(
+                Icons.keyboard_arrow_down,
+                size: 30.dynamic,
+                color: Colour.appDarkGrey,
+              ),
+            ],
+          ),
+        ),
+        onChanged: (value) {
+          attendance.selectedSite.value = attendance.arrSite
+              .where((element) => element.displayText == value)
+              .first;
+        },
+      ),
+    );
+  }
+
+  Widget get bottomView1 {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        ),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            spreadRadius: 1,
+          )
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: 19.dynamic,
+          left: 17.dynamic,
+          right: 17.dynamic,
+          bottom: 10.dynamic,
+        ),
+        child: Column(
+          children: [
+            Obx(
+              () => Text(
+                // var time = DateFormat('hh:mm a').format(DateTime.now());
+                Jiffy(TimerController.to.currentDate.value)
+                    .format('hh:mm a  |  do MMMM yyyy'),
+                // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
+                // '09:10 AM  |  21st September 2021',
+                style: TextStyle(
+                  fontSize: 14.dynamic,
+                  fontWeight: FontWeight.w600,
+                  color: HexColor.fromHex("333333"),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 19.dynamic,
+            ),
+            androidDropdown(),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colour.appBlue,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.dynamic),
+                ),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Get.toNamed(NavPage.jobCheckListScreen);
+                },
+                child: Text(
+                  'Start the day',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.dynamic,
+                      fontWeight: FontWeight.w300),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget get bottomView2 {
+    return Column(
+      children: [
+        Obx(
+          () => Text(
+            // var time = DateFormat('hh:mm a').format(DateTime.now());
+            Jiffy(TimerController.to.currentDate.value)
+                .format('hh:mm a  |  do MMMM yyyy'),
+            // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
+            // '09:10 AM  |  21st September 2021',
+            style: TextStyle(
+              fontSize: 14.dynamic,
+              fontWeight: FontWeight.w600,
+              color: HexColor.fromHex("333333"),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colour.appBlue,
+              borderRadius: BorderRadius.all(
+                Radius.circular(5.dynamic),
+              ),
+            ),
+// margin: EdgeInsets.symmetric(vertical: 32.dynamic),
+            width: double.infinity,
+            child: RawMaterialButton(
+              onPressed: () {},
+              child: TextButton(
+                onPressed: this.startOrEndDay,
+                child: Obx(() => Text(
+                      attendance.isClockedIn ? 'End the day' : 'Start the day',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.dynamic,
+                          fontWeight: FontWeight.w300),
+                    )),
+              ),
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(width: 1.5, color: Colour.appGreen),
+            borderRadius: BorderRadius.all(
+              Radius.circular(5.dynamic),
+            ),
+          ),
+          child: TextButton(
+            onPressed: this.showAttendance,
+            child: Text(
+              'Show Attendance',
+              style: TextStyle(
+                  color: Colour.appGreen,
+                  fontSize: 16.dynamic,
+                  fontWeight: FontWeight.w300),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 14.dynamic,
+        ),
+      ],
     );
   }
 }

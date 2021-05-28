@@ -31,10 +31,8 @@ class API {
     final Map<String, String> safeHeader = header ??= endPoint.header;
     http.Response? response;
     String? error;
-    print('url -> ${endPoint.method.string} $url');
+
     // print('header $header');
-    print('body ->');
-    printPrettyJson(body, indent: 2);
 
     try {
       if (needLoader) {
@@ -65,6 +63,10 @@ class API {
       print('${otherErrors.toString()}');
       error = "Something went wrong. Please try again";
     } finally {
+      print('url -> ${endPoint.method.string} $url');
+      print('body ->');
+      printPrettyJson(body, indent: 2);
+
       if (needLoader) {
         hideLoading();
       }
@@ -143,7 +145,7 @@ class APIResponse<T> {
       var decoded = jsonDecode(responseObj!.body);
 
       if (decoded != null) {
-        print('response');
+        print('response ->');
         printPrettyJson(decoded, indent: 2);
         // print(JsonEncoder.withIndent(" ").convert(decoded));
         if (decoded is List<dynamic>) {
@@ -163,7 +165,7 @@ class APIResponse<T> {
             }
           });
         }
-        print('model created');
+        // print('model created');
       } else {
         print('response - Empty');
       }
