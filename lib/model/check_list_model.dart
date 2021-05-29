@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
-import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:flutter/material.dart';
 
 import '../colors.dart';

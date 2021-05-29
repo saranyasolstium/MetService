@@ -345,4 +345,6 @@ class MJobDetail implements AJobDetail {
   String? get aTypeOfService => serviceType;
 
   List<ACheckListItem> get checkList => [];
+
+  String? get aServiceId => id.toString();
 }

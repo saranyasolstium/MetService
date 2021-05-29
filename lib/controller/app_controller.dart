@@ -28,6 +28,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:eagle_pixels/model/profile_model.dart';
 import 'package:eagle_pixels/screen/toast/feedback_screen.dart';
+import 'package:toast/toast.dart';
 
 enum LoginStatus { logged, logout, loading }
 
@@ -45,9 +46,11 @@ class AppController extends GetxController {
   var hasFingerPrintLock = false.obs;
   var hasFaceLock = false.obs;
   var isUserAuthenticated = false.obs;
+
   // Image Picker
   late PickedFile _image;
   final picker = ImagePicker();
+
   // Geolocation
   Position? position;
   double? latitude;
@@ -106,12 +109,15 @@ class AppController extends GetxController {
   }
 
   Future<Position> determinePosition() async {
+    showLoading();
     bool serviceEnabled;
     LocationPermission permission;
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      Toast.show('Location services are disabled.', Get.context);
+      hideLoading();
       return Future.error('Location services are disabled.');
     }
 
@@ -119,6 +125,8 @@ class AppController extends GetxController {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        Toast.show('Location permissions are denied', Get.context);
+        hideLoading();
         return Future.error('Location permissions are denied');
       }
     }
@@ -128,8 +136,9 @@ class AppController extends GetxController {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-
-    return await Geolocator.getCurrentPosition();
+    var pos = await Geolocator.getCurrentPosition();
+    hideLoading();
+    return pos;
   }
 
   Future<bool> authenticateUser() async {
@@ -208,11 +217,18 @@ class AppController extends GetxController {
   }
 
   static AppController get to => Get.find<AppController>();
+
   // static var profile = MProfile();
   var loginStatus = LoginStatus.loading.obs;
   var showLoading = 0.obs;
 
+  // void showLoader({int load = 0}) {
+  //   showLoading.value = load;
+  //   update();
+  // }
+
   static var _user = MProfile().obs;
+
   static MProfile get user {
     return _user.value;
   }
@@ -284,34 +300,15 @@ class AppController extends GetxController {
     }
   }
 
+  // addOverLay() {}
+
   Widget defaultLoaderView() {
-    // return Container();
-    return GetBuilder<AppController>(
-      builder: (con) {
-        return ModalProgressHUD(
-            opacity: 0.3, inAsyncCall: showLoading > 0, child: Container());
-      },
-    );
+    return Obx(() {
+      if (showLoading.value > 0) {
+        return ModalProgressHUD(inAsyncCall: true, child: Container());
+      } else {
+        return Container();
+      }
+    });
   }
 }
-
-// var storedKey;
-// updateLoaderView() {
-//   if (showLoading > 0) {
-//     print('Show requested');
-//     showDialog(
-//       context: Get.context,
-//       builder: (_) => Center(
-//         key: Key('defaultLoader'),
-//         child: CircularProgressIndicator(),
-//       ),
-//     );
-//     storedKey = navigator.widget.key;
-//   } else {
-//     Future.delayed(Duration(seconds: 10), () {
-//       print('hide requested');
-//       print('Got Key - ${navigator.context.widget.key} - $storedKey');
-//       Navigator.of(Get.context).pop();
-//     });
-//   }
-// }

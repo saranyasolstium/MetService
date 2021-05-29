@@ -50,10 +50,12 @@ class ServiceView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CachedNetworkImage(
-                imageUrl: item.aImage ?? "",
+                imageUrl: item.aProductImage ?? "",
                 placeholder: (_, url) => Image.asset(
                   'images/camera.png',
                 ),
+                width: 61.dynamic,
+                height: 61.dynamic,
               ),
               SizedBox(
                 width: 13.dynamic,
@@ -64,7 +66,7 @@ class ServiceView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      safeString(item.aName),
+                      safeString(item.aProdouctName),
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w400,
@@ -152,7 +154,7 @@ class ServiceView extends StatelessWidget {
                           width: 7.dynamic,
                         ),
                         Text(
-                          'Luis Philippe',
+                          safeString(item.aCustomerName),
                           style: TextStyle(
                               color: Colour.appBlack,
                               fontWeight: FontWeight.w600,
@@ -256,27 +258,11 @@ class ServiceView extends StatelessWidget {
                   ? Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          Get.bottomSheet(
+                          Get.to(
                             JobDetailScreen(
-                              isNeedContainer: false,
+                              isNeedContainer: true,
                             ),
-                            ignoreSafeArea: false,
-                            isScrollControlled: true,
                           );
-                          // Get.bottomSheet(JobDetailScreen());
-                          // showModalBottomSheet(
-                          //   context: context,
-                          //   isScrollControlled: true,
-                          //   builder: (context) => SingleChildScrollView(
-                          //     child: Container(
-                          //       padding: EdgeInsets.only(
-                          //           bottom: MediaQuery.of(context)
-                          //               .viewInsets
-                          //               .bottom),
-                          //       child: ScheduleJobDetailsScreen(),
-                          //     ),
-                          //   ),
-                          // );
                         },
                         child: Text(
                           'View Details',

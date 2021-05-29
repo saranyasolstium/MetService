@@ -1,13 +1,17 @@
 import 'dart:io';
 
+import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
-import 'package:eagle_pixels/controller/job_checklist_controller.dart';
+import 'package:eagle_pixels/controller/job_detail_controller.dart';
+import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
+import 'package:eagle_pixels/reuse/Keys.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/toast/photo_choose_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +22,7 @@ import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
+import 'package:toast/toast.dart';
 
 extension CheckListItemAction on CheckListItem {
   onPickImage() async {
@@ -32,7 +37,34 @@ extension CheckListItemAction on CheckListItem {
   }
 }
 
+extension StopJobAction on JobCheckListScreen {
+  onStopJob() async {
+    showLoading();
+    await schedule.onStopJob(service_id: detail.aServiceId ?? '0');
+    hideLoading();
+    Get.toNamed(NavPage.scheduleScreen);
+    // String status = res[K.status] ?? '';
+    // String error = res['error'] ?? '';
+    // if (isSuccess(K.success) || error == K.already_checkIn) {
+    //   Get.toNamed(NavPage.jobCheckListScreen);
+    // } else {
+    //   Toast.show(error, Get.context);
+    // }
+    // showLoading();
+    // await AppController.to.localAuth();
+    // hideLoading();
+    // Get.toNamed(NavPage.jobCheckListScreen);
+  }
+}
+
 class JobCheckListScreen extends StatelessWidget {
+  AJobDetail get detail {
+    return controller.detail.value;
+  }
+
+  final controller = Get.put(JobDetailController());
+  final ScheduleListController schedule = Get.find();
+
   final TimerController time = Get.find();
   final JobCheckListController checkListController =
       Get.put(JobCheckListController());
@@ -125,7 +157,7 @@ class JobCheckListScreen extends StatelessWidget {
                         top: 19.dynamic,
                         left: 17.dynamic,
                         right: 17.dynamic,
-                        bottom: 10.dynamic,
+                        // bottom: 10.dynamic,
                       ),
                       child: Column(
                         children: [
@@ -143,6 +175,28 @@ class JobCheckListScreen extends StatelessWidget {
                               },
                               child: Text(
                                 'Save & Continue',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.dynamic,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colour.appRed,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.dynamic),
+                              ),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                onStopJob();
+                              },
+                              child: Text(
+                                'Stop Job',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16.dynamic,

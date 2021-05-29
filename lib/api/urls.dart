@@ -10,7 +10,11 @@ enum EndPoint {
   checkList,
   attendanceStatus,
   jobdetail,
-  site
+  site,
+  startJob,
+  stopJob,
+  submitJob,
+  completeJob,
 }
 
 extension EndPointString on EndPoint {
@@ -40,6 +44,14 @@ extension EndPointString on EndPoint {
         return 'get_scheduled_job_details';
       case EndPoint.site:
         return 'storelist';
+      case EndPoint.startJob:
+        return 'start_job';
+      case EndPoint.stopJob:
+        return 'stop_job';
+      case EndPoint.submitJob:
+        return 'storelist';
+      case EndPoint.completeJob:
+        return 'complete_job';
     }
   }
 }
@@ -67,6 +79,8 @@ extension BaseURLString on EBaseURL {
     if (endPoint == EndPoint.login.string) {
       extend = 'oauth';
     } else if (endPoint == EndPoint.register.string) {
+      extend = 'api/v1';
+    } else if (endPoint == EndPoint.profile.string) {
       extend = 'api/v1';
     } else {
       extend = "api/v1/employee";

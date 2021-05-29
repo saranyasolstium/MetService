@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
@@ -12,11 +13,6 @@ import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 
 import '../../main.dart';
-
-// extension ScheduleAction on ScheduleScreen {
-//
-//
-// }
 
 class ScheduleScreen extends StatelessWidget {
   final TextStyle style =
@@ -73,11 +69,19 @@ class ScheduleScreen extends StatelessWidget {
                                   // isNeedStatus: ,
                                   isNeedDetail: true,
                                   onJob: () {
-                                    Get.bottomSheet(
-                                      JobDetailScreen(),
-                                      ignoreSafeArea: false,
-                                      isScrollControlled: true,
+                                    Get.to(
+                                      JobDetailScreen(
+                                        isNeedContainer: true,
+                                      ),
                                     );
+
+                                    // Get.bottomSheet(
+                                    //   JobDetailScreen(
+                                    //     isNeedContainer: true,
+                                    //   ),
+                                    //   ignoreSafeArea: false,
+                                    //   isScrollControlled: true,
+                                    // );
                                   },
                                   onSeeDetail: () {}),
                             );

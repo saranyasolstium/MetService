@@ -2,6 +2,8 @@
 //
 //     final getScheduledList = getScheduledListFromJson(jsonString);
 
+import 'dart:ffi';
+
 import 'package:eagle_pixels/api/api_service.dart';
 import 'abstract_class.dart';
 // ScheduleResponse getScheduledListFromJson(String str) =>
@@ -58,21 +60,23 @@ class MScheduledJobItem implements AServiceItem {
     this.name,
   });
 
-  int? id;
-  int? requesterId;
-  int? siteId;
-  int? ticketId;
-  String? productId;
-  String? productName;
-  String? productImage;
-  String? sku;
-  String? serialNumber;
-  String? purchaseDate;
-  String? customerName;
-  String? customerImage;
-  String? subject;
-  String? description;
-  String? name;
+  dynamic? productImage;
+  dynamic? productName;
+  dynamic? productId;
+  dynamic? id;
+  dynamic? requesterId;
+  dynamic? siteId;
+  dynamic? ticketId;
+  dynamic? sku;
+  dynamic? serialNumber;
+  dynamic? purchaseDate;
+  dynamic? customerName;
+  dynamic? customerImage;
+  dynamic? subject;
+  dynamic? description;
+  dynamic? name;
+  dynamic? lat;
+  dynamic? long;
 
   factory MScheduledJobItem.fromJson(Map<String, dynamic> json) =>
       MScheduledJobItem(
@@ -111,17 +115,19 @@ class MScheduledJobItem implements AServiceItem {
         "name": name,
       };
 
-  String? get aCctvID => productId;
-  String? get aCustomerName => customerName;
-  String? get aImage => customerImage;
-  String? get aName => productName;
-  String? get aPurchaseDate => purchaseDate;
-
-  String? get aEndDay => '';
-
-  String? get aRequestNo => '';
-
-  String? get aStartDay => '';
+  String? get aProductImage => productImage;
+  String? get aProdouctName => productName;
+  String? get aCctvID => productId.toString();
 
   String? get aServiceType => '';
+  String? get aCustomerName => customerName;
+  String? get aCustomerImage => customerImage;
+
+  double? get aLat => lat; //temp
+  double? get aLong => long; //temp
+
+  String? get aPurchaseDate => purchaseDate;
+  String? get aEndDay => '';
+  String? get aRequestNo => '';
+  String? get aStartDay => '';
 }

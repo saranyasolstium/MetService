@@ -1,10 +1,12 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:eagle_pixels/model/check_list_model.dart';
 
 abstract class AServiceItem {
-  String? get aImage;
-  String? get aName;
+  String? get aProductImage;
+  String? get aCustomerImage;
+  String? get aProdouctName;
   String? get aCctvID;
   String? get aPurchaseDate;
   String? get aCustomerName;
@@ -12,6 +14,8 @@ abstract class AServiceItem {
   String? get aStartDay;
   String? get aEndDay;
   String? get aServiceType;
+  double? get aLat;
+  double? get aLong;
 }
 
 abstract class AShowAttendance {
@@ -39,6 +43,9 @@ abstract class ACheckListItem {
 }
 
 abstract class AJobDetail {
+  //Service id
+  String? get aServiceId;
+
   String? get aCameraImage;
   String? get aCameraName;
   String? get aCameraID;

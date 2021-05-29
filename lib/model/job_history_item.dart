@@ -94,15 +94,19 @@ class MJobHistoryItem implements AServiceItem {
 
   String? get aCctvID => productId;
   String? get aCustomerName => customerName;
-  String? get aImage => productImage;
-  String? get aName => productName;
+  String? get aProductImage => productImage;
+  String? get aProdouctName => productName;
   String? get aPurchaseDate => purchaseDate;
 
+  String? get aServiceType => '';
+
   String? get aEndDay => '';
-
   String? get aRequestNo => '';
-
   String? get aStartDay => '';
 
-  String? get aServiceType => '';
+  String? get aCustomerImage => customerImage;
+
+  double? get aLat => 0; //temp
+
+  double? get aLong => 0; //temp
 }

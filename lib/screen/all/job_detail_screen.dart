@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
+import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,15 +17,38 @@ import 'package:jiffy/jiffy.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:toast/toast.dart';
 
 import '../../colors.dart';
 
 // ignore: must_be_immutable
+extension JobDetailAction on JobDetailScreen {
+  onStartJob() async {
+    showLoading();
+    var res = await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
+    hideLoading();
+    String status = res[K.status] ?? '';
+    String error = res['error'] ?? '';
+    if (isSuccess(K.success) || error == K.already_checkIn) {
+      Get.toNamed(NavPage.jobCheckListScreen);
+    } else {
+      Toast.show(error, Get.context);
+    }
+
+    print('Reached onstart job');
+    // showLoading();
+    // await AppController.to.localAuth();
+    // hideLoading();
+    // Get.toNamed(NavPage.jobCheckListScreen);
+  }
+}
+
 class JobDetailScreen extends StatelessWidget {
   final controller = Get.put(JobDetailController());
+  final ScheduleListController schedule = Get.find();
 
   final bool isNeedContainer;
-  JobDetailScreen({this.isNeedContainer = false});
+  JobDetailScreen({this.isNeedContainer = true});
 
   late PDFDocument document;
   AJobDetail get detail {
@@ -210,6 +236,7 @@ class JobDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        // this.bottomView,
                         isNeedContainer ? this.bottomView : Container(), //temp
                       ],
                     ),
@@ -678,14 +705,11 @@ extension JobDetailWidgets on JobDetailScreen {
                 ),
               ),
               child: TextButton(
-                onPressed: () async {
-                  showLoading();
-                  await AppController.to.localAuth();
-                  hideLoading();
-                  Get.toNamed(NavPage.jobCheckListScreen);
+                onPressed: () {
+                  this.onStartJob();
                 },
                 child: Text(
-                  'Save & Continue',
+                  'Start Job',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16.dynamic,

@@ -58,7 +58,7 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   advance_pdf_viewer: ^2.0.0
   colorize: any
-
+  toast: ^0.1.5
 
 dev_dependencies:
   flutter_test:

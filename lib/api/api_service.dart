@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/api/methods.dart';
+import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:http/http.dart' as http;
 import 'urls.dart';
@@ -186,6 +187,19 @@ class APIResponse<T> {
 extension StringStatus on String? {
   bool get isSuccess {
     if (this == 'success') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+bool isSuccess(dynamic? status) {
+  if (status == null) {
+    return false;
+  } else {
+    String stringValue = status.toString();
+    if (stringValue == K.success) {
       return true;
     } else {
       return false;

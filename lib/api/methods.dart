@@ -23,6 +23,9 @@ extension Method on EndPoint {
       case EndPoint.attendanceStatus:
       case EndPoint.jobdetail:
       case EndPoint.site:
+      case EndPoint.startJob:
+      case EndPoint.stopJob:
+      case EndPoint.completeJob:
         return HTTPMethod.post;
       default:
         return HTTPMethod.get;

@@ -1,7 +1,14 @@
+import 'dart:convert';
+
+import 'package:eagle_pixels/api/ParamModel.dart';
+import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
+import 'package:eagle_pixels/controller/job_detail_controller.dart';
+import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +16,7 @@ import 'package:flutter/material.dart';
 
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:intl/intl.dart';
@@ -19,10 +27,44 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:signature/signature.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+extension OnSubmitAction on ServiceReportScreen {
+  // ignore: non_constant_identifier_names
+  Future<Map> onSubmitJob(
+      // ignore: non_constant_identifier_names
+      {required String service_id,
+      required double rating,
+      var signature,
+      required String feedback}) async {
+    Position position = await AppController.to.determinePosition();
+    var param = await ParamSubmitJob(
+            service_id: service_id,
+            rating: rating,
+            signature: signature,
+            lat: position.latitude,
+            long: position.longitude,
+            feedback: feedback,
+            check_list: checkListController.selectedlist)
+        .toJson();
+    var response = await API.service.call(
+      endPoint: EndPoint.completeJob,
+      body: param,
+    );
+    return response.map;
+  }
+}
+
 class ServiceReportScreen extends StatelessWidget {
   final TimerController time = Get.find();
   final JobCheckListController checkListController = Get.find();
+  final ScheduleListController schedule = Get.find();
+  final controller = Get.put(JobDetailController());
+  AJobDetail get detail {
+    return controller.detail.value;
+  }
+
   final signatureController = SignatureController().obs;
+  final Rx<double> starRate = 0.toDouble().obs;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -167,8 +209,9 @@ class ServiceReportScreen extends StatelessWidget {
                                     Icons.star,
                                     color: Colors.amber,
                                   ),
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
+                                  onRatingUpdate: (rat) {
+                                    starRate.value = rat;
+                                    print(starRate.value);
                                   },
                                 ),
                               ],
@@ -215,9 +258,16 @@ class ServiceReportScreen extends StatelessWidget {
                             child: TextButton(
                               onPressed: () async {
                                 showLoading();
-                                await AppController.to.localAuth();
+                                var bytes = await signatureController.value
+                                    .toPngBytes();
+                                print('Image 64${bytes!}');
+                                await onSubmitJob(
+                                    service_id: detail.aServiceId ?? '0',
+                                    rating: starRate.value,
+                                    signature: base64Encode(bytes),
+                                    feedback: 'Hello');
+                                // await AppController.to.localAuth();
                                 hideLoading();
-                                Get.toNamed(NavPage.jobCompleted);
                               },
                               child: Text(
                                 'Submit',

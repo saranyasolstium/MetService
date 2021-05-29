@@ -1,6 +1,10 @@
+import 'package:eagle_pixels/api/ParamModel.dart';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/get_scheduled_job.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +14,7 @@ import '../constant.dart';
 
 class ScheduleListController extends GetxController {
   var scheduleList = <MScheduledJobItem>[].obs;
-  final selectedDate = DateTime(2021, 2, 9).obs; //temp
+  final selectedDate = DateTime.now().obs; //temp
   final viewState = ViewState.loading.obs;
 
   // var isLoading = true.obs;
@@ -35,37 +39,6 @@ class ScheduleListController extends GetxController {
   void dispose() {
     clearMemory();
     super.dispose();
-  }
-
-  void fetchScheduleList() async {
-    var resp = await API.service.call(
-      model: ScheduleResponse(),
-      endPoint: EndPoint.scheduled_job_list,
-      body: {'date': serviceDate(selectedDate.value)},
-    );
-    scheduleList.value = resp.model!.data!;
-    if (scheduleList.length > 0) {
-      viewState.value = ViewState.success;
-    } else {
-      viewState.value = ViewState.failed;
-    }
-    // List<MScheduledJobItem> sampleList = [];
-    //
-    // for (int i = 1; i <= 10; i++) {
-    //   MScheduledJobItem scheduleListdemo = MScheduledJobItem();
-    //
-    //   sampleList.add(scheduleListdemo);
-    // }
-    //
-    // scheduleList.value = sampleList;
-    // print(scheduleList);
-
-    // try {
-    //   showLoading();
-    //   scheduleList.value = await _fetchList();
-    // } finally {
-    //   hideLoading();
-    // }
   }
 
   @override
@@ -96,4 +69,63 @@ class ScheduleListController extends GetxController {
   //     return [];
   //   }
   // }
+}
+
+extension ScheduleListService on ScheduleListController {
+  void fetchScheduleList() async {
+    var resp = await API.service.call(
+      model: ScheduleResponse(),
+      endPoint: EndPoint.scheduled_job_list,
+      body: {'date': serviceDate(selectedDate.value)},
+    );
+
+    scheduleList.value = resp.model!.data!;
+    // scheduleList.value.add(MScheduledJobItem());
+    if (scheduleList.length > 0) {
+      viewState.value = ViewState.success;
+    } else {
+      viewState.value = ViewState.failed;
+    }
+    // List<MScheduledJobItem> sampleList = [];
+    //
+    // for (int i = 1; i <= 10; i++) {
+    //   MScheduledJobItem scheduleListdemo = MScheduledJobItem();
+    //
+    //   sampleList.add(scheduleListdemo);
+    // }
+    //
+    // scheduleList.value = sampleList;
+    // print(scheduleList);
+
+    // try {
+    //   showLoading();
+    //   scheduleList.value = await _fetchList();
+    // } finally {
+    //   hideLoading();
+    // }
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<Map> onStartJob({required String service_id}) async {
+    Position position = await AppController.to.determinePosition();
+    print('Allowed location permission');
+    var response = await API.service.call(
+      endPoint: EndPoint.startJob,
+      body: ParamStartJob(service_id, position.latitude, position.longitude)
+          .toJson(),
+    );
+    return response.map;
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<Map> onStopJob({required String service_id}) async {
+    Position position = await AppController.to.determinePosition();
+    print('Allowed location permission');
+    var response = await API.service.call(
+      endPoint: EndPoint.stopJob,
+      body: ParamStartJob(service_id, position.latitude, position.longitude)
+          .toJson(),
+    );
+    return response.map;
+  }
 }

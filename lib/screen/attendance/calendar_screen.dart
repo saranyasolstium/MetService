@@ -41,6 +41,7 @@ extension CalendarAction on CalendarScreen {
   startDay() async {
     if (AppController.to.isAttendanceEngineer) {
       if (attendance.selectedSite.value == null) {
+        print('invalid selected site');
         //temp toast
         return;
       }
@@ -591,9 +592,7 @@ extension CalendarWidgets on CalendarScreen {
                 ),
               ),
               child: TextButton(
-                onPressed: () {
-                  Get.toNamed(NavPage.jobCheckListScreen);
-                },
+                onPressed: this.startOrEndDay,
                 child: Text(
                   'Start the day',
                   style: TextStyle(
@@ -652,27 +651,29 @@ extension CalendarWidgets on CalendarScreen {
             ),
           ),
         ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(width: 1.5, color: Colour.appGreen),
-            borderRadius: BorderRadius.all(
-              Radius.circular(5.dynamic),
-            ),
-          ),
-          child: TextButton(
-            onPressed: this.showAttendance,
-            child: Text(
-              'Show Attendance',
-              style: TextStyle(
-                  color: Colour.appGreen,
-                  fontSize: 16.dynamic,
-                  fontWeight: FontWeight.w300),
-            ),
-          ),
-        ),
+        !AppController.to.isAttendanceEngineer
+            ? Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(width: 1.5, color: Colour.appGreen),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.dynamic),
+                  ),
+                ),
+                child: TextButton(
+                  onPressed: this.showAttendance,
+                  child: Text(
+                    'Show Attendance',
+                    style: TextStyle(
+                        color: Colour.appGreen,
+                        fontSize: 16.dynamic,
+                        fontWeight: FontWeight.w300),
+                  ),
+                ),
+              )
+            : Container(),
         SizedBox(
           height: 14.dynamic,
         ),

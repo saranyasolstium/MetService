@@ -4,7 +4,6 @@
 
 import 'dart:convert';
 import 'dart:core';
-import 'dart:core';
 
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
