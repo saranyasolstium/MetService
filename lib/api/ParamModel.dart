@@ -45,9 +45,9 @@ class ParamSubmitJob {
 
   Future<List<String>> fileToBase64(List<File> files) async {
     List<String> base64Images = [];
-
     for (var i in files) {
-      var base64Image = base64Encode(File(i.path).readAsBytesSync());
+      final byte = await File(i.path).readAsBytes();
+      var base64Image = base64Encode(byte);
       base64Images.add(base64Image);
     }
     return base64Images;
@@ -70,7 +70,7 @@ class ParamSubmitJob {
 
       paramCheckList.add(paramSubmitItem);
     }
-    json['check_list'] = paramCheckList.map((e) => e.toJson());
+    json['check_list'] = paramCheckList.map((e) => e.toJson()).toList();
 
     return json;
   }

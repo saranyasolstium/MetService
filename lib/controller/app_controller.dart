@@ -303,6 +303,7 @@ class AppController extends GetxController {
   // addOverLay() {}
 
   Widget defaultLoaderView() {
+    // if (AppController.to.showLoading.) {
     return Obx(() {
       if (showLoading.value > 0) {
         return ModalProgressHUD(inAsyncCall: true, child: Container());
@@ -310,5 +311,7 @@ class AppController extends GetxController {
         return Container();
       }
     });
+    // }
+    // return Container();
   }
 }

@@ -259,7 +259,7 @@ class ServiceView extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           Get.to(
-                            JobDetailScreen(
+                            () => JobDetailScreen(
                               isNeedContainer: true,
                             ),
                           );

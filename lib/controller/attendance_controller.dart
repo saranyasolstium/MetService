@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:eagle_pixels/api/urls.dart';
@@ -24,6 +25,14 @@ import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:local_auth/local_auth.dart';
 
 import '../constant.dart';
+import 'package:eagle_pixels/common/logger.dart';
+import 'package:eagle_pixels/model/active_service_model.dart';
+
+class VerificationData {
+  late bool isLocalAuthed;
+  late File selectedImage;
+  late Position location;
+}
 
 class AttendanceController extends GetxController {
   var selectedYear = "2021".obs;
@@ -40,7 +49,7 @@ class AttendanceController extends GetxController {
     return attendanceStatus.value?.startedDate?.toLocal();
   }
 
-  var arrService = <AServiceItem>[].obs;
+  var arrActiveService = <AActiveService>[].obs;
 
   final viewState = ViewState.loading.obs;
 
@@ -78,62 +87,65 @@ class AttendanceController extends GetxController {
     return (selectedDayAttendance != null && selectedDayAttendance.length > 0);
   }
 
-  List<int> presentedDays() {
-    var days = <int>[];
-    var attendanceInSelectedMonth =
-        attendance['${selectedYear.value}${selectedYear.value}'];
-    if (attendanceInSelectedMonth != null &&
-        attendanceInSelectedMonth.length > 0) {
-      attendanceInSelectedMonth.forEach((element) {
-        if (element.inTimeHour != null && element.outTimeHour != null) {
-          if (element.outTimeHour! - element.inTimeHour! > 4) {
-            var elementDate = DateFormat('yyyy-MM-dd HH:mm:ss')
-                .parse(element.attendenceDate!);
-            days.add(elementDate.day);
-          }
-        }
-      });
-    }
-    return days;
-  }
+  var presentedDayInSelectedMonth = <int>[];
 
-  List<int> absentDays() {
-    var days = <int>[];
-    var attendanceInSelectedMonth =
-        attendance['${selectedYear.value}${selectedYear.value}'];
-    if (attendanceInSelectedMonth != null &&
-        attendanceInSelectedMonth.length > 0) {
-      attendanceInSelectedMonth.forEach((element) {
-        if (element.inTimeHour != null && element.outTimeHour != null) {
-          if (element.outTimeHour! - element.inTimeHour! > 4) {
-            var elementDate = DateFormat('yyyy-MM-dd HH:mm:ss')
-                .parse(element.attendenceDate!);
-            days.add(elementDate.day);
-          }
-        }
-      });
-    }
-    return days;
-  }
+  // List<int> presentedDays() {
+  //   var days = <int>[];
+  //   var attendanceInSelectedMonth =
+  //       attendance['${selectedYear.value}${selectedYear.value}'];
+  //   Logger.log('PresentedDay', 'count ${10}');
+  //   if (attendanceInSelectedMonth != null &&
+  //       attendanceInSelectedMonth.length > 0) {
+  //     attendanceInSelectedMonth.forEach((element) {
+  //       // if (element.inTimeHour != null && element.outTimeHour != null) {
+  //       //   if (element.outTimeHour! - element.inTimeHour! > 4) {
+  //       var elementDate =
+  //           DateFormat('yyyy-MM-dd HH:mm:ss').parse(element.attendenceDate!);
+  //       days.add(elementDate.day);
+  //       // }
+  //       // }
+  //     });
+  //   }
+  //   return days;
+  // }
 
-  List<int> halfPresentedDays() {
-    var days = <int>[];
-    var attendanceInSelectedMonth =
-        attendance['${selectedYear.value}${selectedYear.value}'];
-    if (attendanceInSelectedMonth != null &&
-        attendanceInSelectedMonth.length > 0) {
-      attendanceInSelectedMonth.forEach((element) {
-        if (element.inTimeHour != null && element.outTimeHour != null) {
-          if (element.outTimeHour! - element.inTimeHour! < 4) {
-            var elementDate = DateFormat('yyyy-MM-dd HH:mm:ss')
-                .parse(element.attendenceDate!);
-            days.add(elementDate.day);
-          }
-        }
-      });
-    }
-    return days;
-  }
+  // List<int> absentDays() {
+  //   var days = <int>[];
+  //   var attendanceInSelectedMonth =
+  //       attendance['${selectedYear.value}${selectedYear.value}'];
+  //   if (attendanceInSelectedMonth != null &&
+  //       attendanceInSelectedMonth.length > 0) {
+  //     attendanceInSelectedMonth.forEach((element) {
+  //       if (element.inTimeHour != null && element.outTimeHour != null) {
+  //         if (element.outTimeHour! - element.inTimeHour! > 4) {
+  //           var elementDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+  //               .parse(element.attendenceDate!);
+  //           days.add(elementDate.day);
+  //         }
+  //       }
+  //     });
+  //   }
+  //   return days;
+  // }
+
+  // List<int> halfPresentedDays() {
+  //   var days = <int>[];
+  //   var attendanceInSelectedMonth =
+  //       attendance['${selectedYear.value}${selectedYear.value}'];
+  //   if (attendanceInSelectedMonth != null &&
+  //       attendanceInSelectedMonth.length > 0) {
+  //     attendanceInSelectedMonth.forEach((element) {
+  //       if (element.inTimeHour != null && element.outTimeHour != null) {
+  //         if (element.outTimeHour! - element.inTimeHour! < 4) {
+  //           var elementDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+  //               .parse(element.attendenceDate!);
+  //           days.add(elementDate.day);
+  //         }
+  //       }
+  //     });
+  //   }
+  //   return days;
+  // }
 
   var _localAuth = LocalAuthentication();
   var hasFingerPrintLock = false.obs;
@@ -176,6 +188,12 @@ class AttendanceController extends GetxController {
         snackPosition: SnackPosition.BOTTOM);
   }
 
+  String get attendanceStoreKey {
+    return '${selectedMonth.value}${selectedYear.value}';
+  }
+
+  // Future<VerificationData> onVerifyUser() {}
+
   Future<bool> authenticateUser() async {
     try {
       const androidMessage = const AndroidAuthMessages(
@@ -211,25 +229,45 @@ class AttendanceController extends GetxController {
       return false;
     }
   }
+
+  bool setCurrentPresentedDay() {
+    presentedDayInSelectedMonth.clear();
+    var monthData = attendance[attendanceStoreKey];
+    if (monthData != null) {
+      Logger.log('Attendance', 'Data count - ${monthData.length}');
+      monthData.forEach((day) {
+        var elementDate =
+            DateFormat('yyyy-MM-dd HH:mm:ss').parse(day.attendenceDate!);
+        presentedDayInSelectedMonth.add(elementDate.day);
+      });
+      update();
+      return true;
+    } else {
+      update();
+      return false;
+    }
+  }
 }
 
 extension AttendanceControllerService on AttendanceController {
   fetchAttendance({required bool isShowLoading}) async {
-    var month = this.selectedMonthInNumber;
-    var year = this.selectedYear.value;
-    var response = await API.service.call(
-      model: MAttendanceResponse(),
-      endPoint: EndPoint.attendance,
-      needLoader: isShowLoading,
-      body: {
-        'month': month,
-        'year': year,
-      },
-    );
-    if (response.isValidModel) {
-      attendance['$month$year'] = response.model!.data;
+    if (!setCurrentPresentedDay()) {
+      var month = this.selectedMonthInNumber;
+      var year = this.selectedYear.value;
+      var response = await API.service.call(
+        model: MAttendanceResponse(),
+        endPoint: EndPoint.attendance,
+        needLoader: isShowLoading,
+        body: {
+          'month': month,
+          'year': year,
+        },
+      );
+      if (response.isValidModel) {
+        attendance[attendanceStoreKey] = response.model!.data;
+        setCurrentPresentedDay();
+      }
     }
-    update();
   }
 
   Future<MClockInResponse?> onClockIn() async {
@@ -296,11 +334,14 @@ extension AttendanceControllerService on AttendanceController {
 
   fetchService() async {
     viewState.value = ViewState.loading;
-
-    Future.delayed(Duration(seconds: 2), () {
-      arrService.add(MScheduledJobItem());
+    var res = await API.service.call(
+      model: MActiveServiceResponse(),
+      endPoint: EndPoint.activeJob,
+    );
+    if (res.isValidModel) {
+      arrActiveService.value = res.model!.data;
       viewState.value = ViewState.success;
-    });
+    }
   }
 
   fetchSite() async {

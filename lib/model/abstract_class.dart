@@ -77,3 +77,13 @@ abstract class AJobDetail {
 
   List<ACheckListItem> get checkList;
 }
+
+abstract class AActiveService extends AServiceItem {
+  List<AJobTime>? aAttendanceEntry;
+  String? address;
+}
+
+abstract class AJobTime {
+  String? aStartTime;
+  String? aEndTime;
+}

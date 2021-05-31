@@ -5,5 +5,5 @@ class K {
   static const job_id = 'job_id';
   static const already_checkIn =
       'Please check Out properly for your previous Check In';
-  static const startJobSuccess = 'Service Request started Successfully.';
+  static const na = 'NA';
 }

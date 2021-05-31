@@ -26,6 +26,7 @@ import 'package:http/http.dart' as http;
 import 'package:eagle_pixels/api/api_service.dart';
 import '../../colors.dart';
 import 'package:colorize/colorize.dart';
+import 'package:toast/toast.dart';
 
 extension CalendarAction on CalendarScreen {
   startOrEndDay() async {
@@ -52,15 +53,15 @@ extension CalendarAction on CalendarScreen {
         var model = await attendance.onClockIn();
         // if model != null
         // print('Clock in model ${model!.data!.siteName}');
-        await getImage();
+        // await getImage();
         if (model?.status?.isSuccess ?? false) {
           var resp = MAttendanceStatusResponse();
           resp.startedDate = DateTime.now();
           attendance.attendanceStatus.value = resp;
           Get.toNamed(NavPage.clockOut);
         } else {
-          print('Enter in error');
-          //TODO: Clock in error
+          Toast.show(model?.message ?? 'Problem in clock in. please try again.',
+              Get.context);
         }
       } finally {}
     }
@@ -73,6 +74,8 @@ extension CalendarAction on CalendarScreen {
       if (pickedFile != null) {
         _image = pickedFile;
         print(_image.path);
+        Get.toNamed(NavPage.clockOut); //temp
+        return;
         var res = await uploadImage(_image.path,
             'https://pixel.solstium.net/api/v1/employee/upload_sign');
         if (res?.isSuccess ?? false) {
@@ -81,7 +84,6 @@ extension CalendarAction on CalendarScreen {
             var resp = MAttendanceStatusResponse();
             resp.startedDate = DateTime.now();
             attendance.attendanceStatus.value = resp;
-            Get.toNamed(NavPage.clockOut);
           } else {
             //TODO: Clock in error
           }
@@ -181,29 +183,27 @@ class CalendarScreen extends StatelessWidget {
       backgroundColor: HexColor.fromHex("F7F7F7"),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 27.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  this.yearMonth,
-                  SizedBox(
-                    height: 35.dynamic,
-                  ),
-                  Container(
-                    child: this.calendarSurround,
-                  ),
-                  SizedBox(
-                    height: 86.dynamic,
-                  ),
-                  (AppController.to.isAttendanceEngineer &&
-                          !attendance.isClockedIn)
-                      ? bottomView1
-                      : bottomView2,
-                ],
-              ),
+          SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 15.dynamic),
+                this.yearMonth,
+                SizedBox(
+                  height: 35.dynamic,
+                ),
+                Container(
+                  child: this.calendarSurround,
+                ),
+                SizedBox(
+                  height: 86.dynamic,
+                ),
+                (AppController.to.isAttendanceEngineer &&
+                        !attendance.isClockedIn)
+                    ? bottomView1
+                    : bottomView2,
+              ],
             ),
           ),
           AppController.to.defaultLoaderView(),
@@ -422,9 +422,11 @@ extension CalendarWidgets on CalendarScreen {
           isNextMonthDay,
           isThisMonthDay,
           now,
-          attendance.presentedDays(),
-          attendance.absentDays(),
-          attendance.halfPresentedDays(),
+          attendance.presentedDayInSelectedMonth,
+          // attendance.absentDays(),
+          // attendance.halfPresentedDays(),
+          [],
+          [],
         );
       },
       // onDayPressed: (date, events) {

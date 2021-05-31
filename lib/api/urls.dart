@@ -15,6 +15,7 @@ enum EndPoint {
   stopJob,
   submitJob,
   completeJob,
+  activeJob,
 }
 
 extension EndPointString on EndPoint {
@@ -52,6 +53,8 @@ extension EndPointString on EndPoint {
         return 'storelist';
       case EndPoint.completeJob:
         return 'complete_job';
+      case EndPoint.activeJob:
+        return 'get_active_job_list';
     }
   }
 }

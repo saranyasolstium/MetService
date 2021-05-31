@@ -9,10 +9,12 @@ import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:eagle_pixels/model/active_service_model.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/toast/photo_choose_screen.dart';
+import 'package:eagle_pixels/screen/views/service_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -23,6 +25,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
 import 'package:toast/toast.dart';
+import 'package:eagle_pixels/screen/attendance/attendance_service_list_screen.dart';
+import 'package:eagle_pixels/model/abstract_class.dart';
 
 extension CheckListItemAction on CheckListItem {
   onPickImage() async {
@@ -62,7 +66,8 @@ class JobCheckListScreen extends StatelessWidget {
     return controller.detail.value;
   }
 
-  final controller = Get.put(JobDetailController());
+  // final controller = Get.put(JobDetailController());
+  final controller = Get.find<JobDetailController>();
   final ScheduleListController schedule = Get.find();
 
   final TimerController time = Get.find();
@@ -127,11 +132,26 @@ class JobCheckListScreen extends StatelessWidget {
                   Expanded(
                     child: GetBuilder<JobCheckListController>(
                       builder: (_) {
-                        return ListView.builder(
-                          itemBuilder: (builder, index) {
-                            return CheckListItem(index: index);
-                          },
-                          itemCount: checkListController.checkList.length,
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    17.dynamic, 17.dynamic, 17.dynamic, 0),
+                                child: AttendenceDetail(
+                                    item: controller.detail.value
+                                        as AActiveService),
+                              ),
+                              ListView.builder(
+                                itemBuilder: (builder, index) {
+                                  return CheckListItem(index: index);
+                                },
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: checkListController.checkList.length,
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),

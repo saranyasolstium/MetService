@@ -37,6 +37,7 @@ class NavPage {
   static String scheduleJobDetailsScreen = '/scheduleJobDetailsScreen';
   static String root = '/';
   static String attendanceServiceList = 'AttendanceServiceList';
+  static String jobDetail = '/jobDetail';
   // static String confirmation = '/confirmation';
 }
 

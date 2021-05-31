@@ -12,9 +12,11 @@ class JobDetailController extends GetxController {
   late Rx<MSite?> selectedSite = Rx(null);
   @override
   void onInit() {
-    fetchDetail();
-    fetchSite();
+    // fetchSite();
     super.onInit();
+    Future.delayed(Duration(microseconds: 100), () {
+      fetchDetail();
+    });
   }
 
   fetchDetail() async {
@@ -23,7 +25,6 @@ class JobDetailController extends GetxController {
         endPoint: EndPoint.jobdetail,
         body: {K.job_id: '1'} //temp
         );
-
     if (response.isValidModel) {
       detail.value = response.model!.data!;
     }

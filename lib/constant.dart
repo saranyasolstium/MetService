@@ -2,6 +2,8 @@ import 'package:eagle_pixels/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 
+const kCameraPlaceholder = 'images/camera.png';
+
 String safeString(dynamic value, {String def = "NA"}) {
   if (value == null) {
     return def;

@@ -4,18 +4,22 @@ import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/jiffy.dart';
 
 import '../../colors.dart';
 import '../../constant.dart';
+import 'package:eagle_pixels/reuse/network_image_view.dart';
+import 'package:eagle_pixels/reuse/date_manager.dart';
 
 class AttendanceServiceListScreen extends StatelessWidget {
   final AttendanceController attendance = Get.find();
-
+  static String defaultText = 'NA';
   AShowAttendance get detail {
     return attendance.showAttendenceDetail.value;
   }
@@ -68,7 +72,8 @@ class AttendanceServiceListScreen extends StatelessWidget {
                             ),
                             Center(
                               child: Text(
-                                '21st September 2020',
+                                DateTime.now()
+                                    .string(AppDateFormat.ddStMMMMYYYY),
                                 style: TextStyle(
                                     color: Colour.appBlack,
                                     fontWeight: FontWeight.w600,
@@ -157,11 +162,21 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                     children: [
                                       AttendanceTitleDescriptionView(
                                         'Start Day At:',
-                                        '09 : 02 : 50 AM',
+                                        attendance.isClockedIn
+                                            ? attendance.jobStartedTime!
+                                                .string(AppDateFormat.hhmmssa)
+                                            : defaultText,
                                         color: Colour.appGreen,
                                       ),
                                       AttendanceTitleDescriptionView(
-                                          'End Day At:', 'NA',
+                                          'End Day At:',
+                                          attendance
+                                                  .arrActiveService
+                                                  .last
+                                                  .aAttendanceEntry
+                                                  ?.last
+                                                  .aEndTime ??
+                                              defaultText,
                                           color: Colour.appRed),
                                     ],
                                   ),
@@ -180,7 +195,6 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                   child: CircularProgressIndicator(),
                                 );
                               } else if (attendance.viewState.value.isSuccess) {
-                                print(attendance.arrService.length);
                                 return ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
@@ -189,11 +203,12 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.only(bottom: 15.0),
                                       child: AttendenceDetail(
-                                        item: attendance.arrService[index],
+                                        item:
+                                            attendance.arrActiveService[index],
                                       ),
                                     );
                                   },
-                                  itemCount: attendance.arrService.length,
+                                  itemCount: attendance.arrActiveService.length,
                                 );
                               } else {
                                 return Container();
@@ -215,7 +230,7 @@ class AttendanceServiceListScreen extends StatelessWidget {
 }
 
 class AttendenceDetail extends StatelessWidget {
-  final AServiceItem item;
+  final AActiveService item;
   AttendenceDetail({required this.item});
 
   @override
@@ -232,9 +247,11 @@ class AttendenceDetail extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                'images/camera.png',
-              ),
+              Container(
+                  width: 61.dynamic,
+                  height: 61.dynamic,
+                  child:
+                      NetworkImageView(item.aProductImage, kCameraPlaceholder)),
               SizedBox(
                 width: 13.dynamic,
               ),
@@ -244,7 +261,7 @@ class AttendenceDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hitech Security Camera',
+                      safeString(item.aProdouctName),
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w400,
@@ -254,7 +271,7 @@ class AttendenceDetail extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      'ID - CCTVCAM5698533',
+                      safeString(item.aCctvID),
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
@@ -272,9 +289,9 @@ class AttendenceDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AttendanceTitleDescriptionView(
-                  'Service Request No:', '58FSFD455'),
-              AttendanceTitleDescriptionImageView(
-                  'Customer Name:', 'Phillipe', 'hello'),
+                  'Service Request No:', safeString(item.aRequestNo)),
+              AttendanceTitleDescriptionImageView('Customer Name:',
+                  safeString(item.aCustomerName), item.aCustomerImage),
             ],
           ),
           SizedBox(
@@ -284,7 +301,7 @@ class AttendenceDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AttendanceTitleDescriptionView(
-                  'Address:', 'Dummy Address,State,Pin Code -502200 '),
+                  'Address:', safeString(item.address)),
               Container(
                 width: 120,
               ),
@@ -293,20 +310,34 @@ class AttendenceDetail extends StatelessWidget {
           SizedBox(
             height: 15.dynamic,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              AttendanceTitleDescriptionView(
-                'Start Day At:',
-                '09 : 02 : 50 AM',
-                color: Colour.appGreen,
-              ),
-              AttendanceTitleDescriptionView('End Day At:', '09 : 50 : 50 AM',
-                  color: Colour.appRed),
-            ],
-          ),
-          SizedBox(
-            height: 15.dynamic,
+          ListView.builder(
+            itemBuilder: (con, ind) {
+              var entry = item.aAttendanceEntry![ind];
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      AttendanceTitleDescriptionView(
+                        'Start Day At:',
+                        entry.aStartTime ?? K.na,
+                        color: Colour.appGreen,
+                      ),
+                      AttendanceTitleDescriptionView(
+                          'End Day At:', entry.aEndTime ?? K.na,
+                          color: Colour.appRed),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.dynamic,
+                  )
+                ],
+              );
+            },
+            itemCount: item.aAttendanceEntry?.length ?? 0,
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
           ),
           // Row(
           //   children: [
@@ -351,10 +382,10 @@ extension AttendanceDetailWidgets on AttendanceServiceListScreen {
       ),
     );
   }
-
-  Widget get detailsView {
-    return Text('');
-  }
+  //
+  // Widget get detailsView {
+  //   return Text('');
+  // }
 
   Widget get bottomView {
     return Text('');
@@ -422,27 +453,24 @@ class AttendanceTitleDescriptionImageView extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
-                width: 24.dynamic,
-                height: 24.dynamic,
-                alignment: Alignment.center,
-                child: CachedNetworkImage(
-                  fit: BoxFit.fill,
-                  imageUrl: image ?? "",
-                  placeholder: (_, url) => Image.asset(
-                    'images/user.png',
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.dynamic),
+                child: Container(
+                  width: 24.dynamic,
+                  height: 24.dynamic,
+                  alignment: Alignment.center,
+                  child: NetworkImageView(image, kCameraPlaceholder),
+                  decoration: BoxDecoration(
+                    // image: DecorationImage(
+                    //   fit: BoxFit.contain,
+                    //   image:
+                    //   AssetImage('images/user.png'),
+                    // ),
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
+                    borderRadius: BorderRadius.circular(37.5.dynamic),
                   ),
-                ),
-                decoration: BoxDecoration(
-                  // image: DecorationImage(
-                  //   fit: BoxFit.contain,
-                  //   image:
-                  //   AssetImage('images/user.png'),
-                  // ),
-                  border: Border.all(
-                    color: Colors.blue,
-                  ),
-                  borderRadius: BorderRadius.circular(37.5.dynamic),
                 ),
               ),
               SizedBox(

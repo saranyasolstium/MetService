@@ -70,7 +70,7 @@ class ScheduleScreen extends StatelessWidget {
                                   isNeedDetail: true,
                                   onJob: () {
                                     Get.to(
-                                      JobDetailScreen(
+                                      () => JobDetailScreen(
                                         isNeedContainer: true,
                                       ),
                                     );

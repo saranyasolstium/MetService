@@ -1,6 +1,6 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
-
+import 'package:eagle_pixels/model/attendance_entry_model.dart';
 // class MScheduleJobDetail implements Codable {
 //   String? status;
 //   String? message;
@@ -186,7 +186,9 @@ class MScheduleJobDetail implements Codable {
   bool get isValid => this.data != null;
 }
 
-class MJobDetail implements AJobDetail {
+// extension MJobDetailWithActiveService on MJobDetail extends AActiveService {}
+
+class MJobDetail implements AJobDetail, AActiveService {
   int? id;
   int? requesterId;
   int? siteId;
@@ -259,6 +261,19 @@ class MJobDetail implements AJobDetail {
     serviceAmount = json['service_amount'];
     engineerStatus = json['engineer_status'];
     warrantyCard = json['warranty_card'];
+
+    final attendance = json['attendance'];
+    aAttendanceEntry = [];
+
+    if (attendance != null && attendance is List<dynamic>) {
+      try {
+        (attendance).forEach((e) {
+          aAttendanceEntry!.add(MAttendanceEntry.fromJson(e));
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -300,7 +315,7 @@ class MJobDetail implements AJobDetail {
     return data;
   }
 
-  String? get aCameraID => productId.toString();
+  String? get aCameraID => sku;
 
   String? get aCameraImage => productImage;
 
@@ -347,4 +362,28 @@ class MJobDetail implements AJobDetail {
   List<ACheckListItem> get checkList => [];
 
   String? get aServiceId => id.toString();
+
+  List<AJobTime>? aAttendanceEntry;
+
+  String? address;
+
+  String? get aCctvID => id.toString();
+
+  String? get aEndDay => '';
+
+  double? get aLat => 0;
+
+  double? get aLong => 0;
+
+  String? get aProdouctName => productName;
+
+  String? get aProductImage => productImage;
+
+  String? get aPurchaseDate => purchaseDate;
+
+  String? get aRequestNo => requesterId.toString();
+
+  String? get aServiceType => serviceType;
+
+  String? get aStartDay => '';
 }

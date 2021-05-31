@@ -45,6 +45,8 @@ extension OnSubmitAction on ServiceReportScreen {
             feedback: feedback,
             check_list: checkListController.selectedlist)
         .toJson();
+
+    print(param);
     var response = await API.service.call(
       endPoint: EndPoint.completeJob,
       body: param,
@@ -57,7 +59,8 @@ class ServiceReportScreen extends StatelessWidget {
   final TimerController time = Get.find();
   final JobCheckListController checkListController = Get.find();
   final ScheduleListController schedule = Get.find();
-  final controller = Get.put(JobDetailController());
+  // final controller = Get.put(JobDetailController());
+  final controller = Get.find<JobDetailController>();
   AJobDetail get detail {
     return controller.detail.value;
   }

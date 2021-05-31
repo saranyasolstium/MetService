@@ -25,6 +25,7 @@ import '../../colors.dart';
 extension JobDetailAction on JobDetailScreen {
   onStartJob() async {
     showLoading();
+    await AppController.to.localAuth();
     var res = await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
     hideLoading();
     String status = res[K.status] ?? '';
@@ -34,23 +35,16 @@ extension JobDetailAction on JobDetailScreen {
     } else {
       Toast.show(error, Get.context);
     }
-
-    print('Reached onstart job');
-    // showLoading();
-    // await AppController.to.localAuth();
-    // hideLoading();
-    // Get.toNamed(NavPage.jobCheckListScreen);
   }
 }
 
 class JobDetailScreen extends StatelessWidget {
-  final controller = Get.put(JobDetailController());
+  final JobDetailController controller = Get.put(JobDetailController());
   final ScheduleListController schedule = Get.find();
-
   final bool isNeedContainer;
   JobDetailScreen({this.isNeedContainer = true});
 
-  late PDFDocument document;
+  late Rx<PDFDocument> document;
   AJobDetail get detail {
     return controller.detail.value;
   }
@@ -586,7 +580,7 @@ extension JobDetailWidgets on JobDetailScreen {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      document = await PDFDocument.fromURL(
+                      document = Rx(await PDFDocument.fromURL(
                         "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
                         /* cacheManager: CacheManager(
           Config(
@@ -595,12 +589,12 @@ extension JobDetailWidgets on JobDetailScreen {
             maxNrOfCacheObjects: 10,
           ),
         ), */
-                      );
+                      ));
                       Get.bottomSheet(
                         Center(
                           child: Container(
                             child: PDFViewer(
-                              document: document,
+                              document: document.value,
                             ),
                           ),
                         ),
