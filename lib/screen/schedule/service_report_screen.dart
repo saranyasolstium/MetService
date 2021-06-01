@@ -10,6 +10,7 @@ import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +27,11 @@ import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:signature/signature.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:toast/toast.dart';
 
 extension OnSubmitAction on ServiceReportScreen {
   // ignore: non_constant_identifier_names
-  Future<Map> onSubmitJob(
+  onSubmitJob(
       // ignore: non_constant_identifier_names
       {required String service_id,
       required double rating,
@@ -45,13 +47,16 @@ extension OnSubmitAction on ServiceReportScreen {
             feedback: feedback,
             check_list: checkListController.selectedlist)
         .toJson();
-
-    print(param);
     var response = await API.service.call(
       endPoint: EndPoint.completeJob,
       body: param,
     );
-    return response.map;
+    hideLoading();
+    // if (response.isSuccess) {
+    Get.toNamed(NavPage.jobCompleted);
+    // }
+
+    // return response.map;
   }
 }
 
@@ -260,17 +265,19 @@ class ServiceReportScreen extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () async {
-                                showLoading();
                                 var bytes = await signatureController.value
                                     .toPngBytes();
-                                print('Image 64${bytes!}');
-                                await onSubmitJob(
-                                    service_id: detail.aServiceId ?? '0',
-                                    rating: starRate.value,
-                                    signature: base64Encode(bytes),
-                                    feedback: 'Hello');
-                                // await AppController.to.localAuth();
-                                hideLoading();
+                                if (bytes != null) {
+                                  showLoading();
+                                  onSubmitJob(
+                                      service_id: detail.aServiceId ?? '0',
+                                      rating: starRate.value,
+                                      signature: base64Encode(bytes),
+                                      feedback: 'Hello');
+                                } else {
+                                  Toast.show(
+                                      'Please put your signature', Get.context);
+                                }
                               },
                               child: Text(
                                 'Submit',

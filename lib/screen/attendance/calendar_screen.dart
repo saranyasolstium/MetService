@@ -33,7 +33,11 @@ extension CalendarAction on CalendarScreen {
     if (attendance.isClockedIn) {
       Get.toNamed(NavPage.clockOut);
     } else {
-      startDay();
+      if (attendance.isAllowForClockIn) {
+        startDay();
+      } else {
+        Toast.show('Please clock out the service attendance', Get.context);
+      }
     }
     // var response = await attendance.onClockIn();
     // if (response!.isValid) {}

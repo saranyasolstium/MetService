@@ -169,14 +169,14 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                         color: Colour.appGreen,
                                       ),
                                       AttendanceTitleDescriptionView(
-                                          'End Day At:',
-                                          attendance
-                                                  .arrActiveService
-                                                  .last
-                                                  .aAttendanceEntry
-                                                  ?.last
-                                                  .aEndTime ??
-                                              defaultText,
+                                          // attendance
+                                          //     .arrActiveService
+                                          //     .last
+                                          //     .aAttendanceEntry
+                                          //     ?.last
+                                          //     .aEndTime
+                                          'End Day At:', //temp clockout time
+                                          defaultText,
                                           color: Colour.appRed),
                                     ],
                                   ),
@@ -208,7 +208,11 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  itemCount: attendance.arrActiveService.length,
+                                  itemCount:
+                                      attendance.arrActiveService.length > 0
+                                          ? 1
+                                          : 0, //temp
+                                  // itemCount: attendance.arrActiveService.length,
                                 );
                               } else {
                                 return Container();
@@ -335,7 +339,8 @@ class AttendenceDetail extends StatelessWidget {
                 ],
               );
             },
-            itemCount: item.aAttendanceEntry?.length ?? 0,
+            itemCount: (item.aAttendanceEntry?.length ?? 0) > 0 ? 1 : 0,
+            // itemCount: item.aAttendanceEntry?.length ?? 0,
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
           ),

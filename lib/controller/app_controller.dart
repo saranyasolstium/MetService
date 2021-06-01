@@ -38,7 +38,7 @@ class AppController extends GetxController {
   }
 
   bool get isAttendanceEngineer {
-    return false;
+    return _user.value.employeeDetails?.department == '3';
   }
 
   //Local Auth

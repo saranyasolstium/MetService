@@ -5,7 +5,7 @@ showLoading() {
   if (AppController.to.showLoading.value <= 0) {
     AppController.to.showLoading.value = 1;
   }
-  print('loader show ${AppController.to.showLoading.value}');
+  // print('loader show ${AppController.to.showLoading.value}');
   // AppController.to.updateLoaderView();
   AppController.to.update();
 }
@@ -15,7 +15,7 @@ hideLoading() {
   if (AppController.to.showLoading.value < 0) {
     AppController.to.showLoading.value = 0;
   }
-  print('loader hide ${AppController.to.showLoading.value}');
+  // print('loader hide ${AppController.to.showLoading.value}');
   // AppController.to.updateLoaderView();
   AppController.to.update();
 }

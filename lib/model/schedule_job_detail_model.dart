@@ -361,13 +361,13 @@ class MJobDetail implements AJobDetail, AActiveService {
 
   List<ACheckListItem> get checkList => [];
 
-  String? get aServiceId => id.toString();
+  String? get aServiceId => productId.toString();
 
   List<AJobTime>? aAttendanceEntry;
 
   String? address;
 
-  String? get aCctvID => id.toString();
+  String? get aCctvID => sku.toString();
 
   String? get aEndDay => '';
 
@@ -386,4 +386,6 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aServiceType => serviceType;
 
   String? get aStartDay => '';
+  String? get aServiceID => productId.toString();
+  String? get aSiteID => siteId.toString();
 }

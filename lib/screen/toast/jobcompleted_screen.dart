@@ -1,10 +1,58 @@
 import 'package:eagle_pixels/colors.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/model/clockin_model.dart';
+import 'package:eagle_pixels/model/schedule_job_detail_model.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:toast/toast.dart';
+import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/api/urls.dart';
+
+extension JobCompletedAction on JobCompletedScreen {
+  onComplete() async {
+    try {
+      var auth = await AppController.to.authenticateUser();
+      if (auth) {
+        Position position = await AppController.to.determinePosition();
+        var body = {
+          'SiteID': detail.siteId,
+          'latitude': '${position.latitude}',
+          'longitude': '${position.longitude}',
+          'serviceID': detail.aServiceId
+        };
+
+        var response = await API.service.call(
+          model: MClockInResponse(),
+          endPoint: EndPoint.clockOut,
+          body: body,
+        );
+        if (response.isSuccess) {
+          navigator!.popUntil((route) => route.settings.name == NavPage.root);
+        } else {
+          Toast.show(response.message ?? 'Failed to clock out', Get.context);
+          return;
+        }
+      } else {
+        Toast.show('Authentication failed', Get.context);
+        return;
+      }
+    } catch (e) {
+      Toast.show(e.toString(), Get.context);
+      return;
+    }
+  }
+}
 
 class JobCompletedScreen extends StatelessWidget {
+  final JobDetailController detailController = Get.find();
+  MJobDetail get detail {
+    return detailController.detail.value as MJobDetail;
+  }
+
   static Widget space() {
     return SizedBox(height: 10.dynamic);
   }
@@ -58,7 +106,7 @@ class JobCompletedScreen extends StatelessWidget {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                            text: ' 81 ',
+                            text: ' ${detailController.completedJobCount} ',
                             style: TextStyle(
                               fontSize: 20.dynamic,
                               fontWeight: FontWeight.w600,
@@ -87,11 +135,10 @@ class JobCompletedScreen extends StatelessWidget {
                       width: Get.width * 0.7,
                       child: TextButton(
                         onPressed: () {
-                          navigator!.popUntil(
-                              (route) => route.settings.name == NavPage.root);
+                          onComplete();
                         },
                         child: Text(
-                          'Back to Home',
+                          'Close attendance',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16.dynamic,

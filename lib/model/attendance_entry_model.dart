@@ -7,6 +7,7 @@ class MAttendanceEntry implements AJobTime {
   String? employeeCode;
   dynamic? empCode1;
   String? attendenceDate;
+  String? attendenceEndDate;
   int? inTimeHour;
   int? inTimeMinute;
   int? outTimeHour;
@@ -57,6 +58,13 @@ class MAttendanceEntry implements AJobTime {
     attendenceDate = json['AttendenceDate'];
     if (attendenceDate != null) {
       aStartTime = DateFormat(AppDateFormat.defaultF)
+          .parse(attendenceDate!)
+          .string(AppDateFormat.hhmmssa);
+    }
+
+    attendenceEndDate = json['AttendenceEndDate'];
+    if (attendenceEndDate != null) {
+      aEndTime = DateFormat(AppDateFormat.defaultF)
           .parse(attendenceDate!)
           .string(AppDateFormat.hhmmssa);
     }
@@ -117,6 +125,7 @@ class MAttendanceEntry implements AJobTime {
     data['EmployeeCode'] = this.employeeCode;
     data['EmpCode1'] = this.empCode1;
     data['AttendenceDate'] = this.attendenceDate;
+    data['AttendenceEndDate'] = this.attendenceEndDate;
     data['InTime_Hour'] = this.inTimeHour;
     data['InTime_Minute'] = this.inTimeMinute;
     data['OutTime_Hour'] = this.outTimeHour;

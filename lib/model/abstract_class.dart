@@ -16,6 +16,8 @@ abstract class AServiceItem {
   String? get aServiceType;
   double? get aLat;
   double? get aLong;
+  String? get aSiteID;
+  String? get aServiceID;
 }
 
 abstract class AShowAttendance {

@@ -1,4 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eagle_pixels/controller/attendance_controller.dart';
+import 'package:eagle_pixels/controller/schedule_list_controller.dart';
+import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
@@ -11,11 +15,20 @@ import 'package:latlong/latlong.dart';
 import '../../colors.dart';
 import '../../constant.dart';
 
-abstract class MService {
-  String? name;
+extension ServiceViewAction on ServiceView {
+  onStopJob() async {
+    showLoading();
+    await schedule.onStopJob(service_id: item.aServiceID ?? '0');
+    hideLoading();
+    await AttendanceController.to.fetchAttendanceStatus();
+    schedule.update();
+    navigator!
+        .popUntil((route) => route.settings.name == NavPage.scheduleScreen);
+  }
 }
 
 class ServiceView extends StatelessWidget {
+  final ScheduleListController schedule = Get.find();
   ServiceView({
     required this.item,
     this.buttonTitle,
@@ -23,6 +36,7 @@ class ServiceView extends StatelessWidget {
     required this.onJob,
     this.isNeedStatus = false,
     required this.onSeeDetail,
+    this.isNeedStartJob = false,
   });
   final bool isNeedStatus;
   final bool isNeedDetail;
@@ -30,6 +44,7 @@ class ServiceView extends StatelessWidget {
   final Function onSeeDetail;
   final Function onJob;
   final AServiceItem item;
+  final bool isNeedStartJob;
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +275,8 @@ class ServiceView extends StatelessWidget {
                         onTap: () {
                           Get.to(
                             () => JobDetailScreen(
-                              isNeedContainer: true,
+                              isNeedStartJob: this.isNeedStartJob,
+                              jobID: item.aServiceID!,
                             ),
                           );
                         },
@@ -276,6 +292,39 @@ class ServiceView extends StatelessWidget {
                   : Container(),
             ],
           ),
+          SizedBox(height: 15.dynamic),
+          AttendanceController.to.isShowStop(
+                  siteID: item.aSiteID ?? '0',
+                  serviceID: item.aServiceID ?? '0')
+              ? ExpanderOrContainer(
+                  isContainer: true,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 18.dynamic),
+                    child: Material(
+                      // elevation: 5.0,
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: Colour.appRed,
+                      child: MaterialButton(
+                        minWidth: 121.dynamic,
+                        height: 44.dynamic,
+                        padding: EdgeInsets.symmetric(horizontal: 40),
+                        onPressed: () {
+                          onStopJob();
+                        },
+                        child: Text(
+                          'Stop Job',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.dynamic,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

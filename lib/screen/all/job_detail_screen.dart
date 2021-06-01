@@ -41,8 +41,10 @@ extension JobDetailAction on JobDetailScreen {
 class JobDetailScreen extends StatelessWidget {
   final JobDetailController controller = Get.put(JobDetailController());
   final ScheduleListController schedule = Get.find();
-  final bool isNeedContainer;
-  JobDetailScreen({this.isNeedContainer = true});
+  // final bool isNeedContainer;
+  final bool isNeedStartJob;
+  final String jobID;
+  JobDetailScreen({this.isNeedStartJob = false, required this.jobID});
 
   late Rx<PDFDocument> document;
   AJobDetail get detail {
@@ -51,6 +53,12 @@ class JobDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!controller.isRequestedDetailService) {
+      Future.delayed(Duration(milliseconds: 100), () {
+        controller.isRequestedDetailService = true;
+        controller.fetchDetail(jobID: jobID);
+      });
+    }
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
@@ -231,7 +239,9 @@ class JobDetailScreen extends StatelessWidget {
                           ),
                         ),
                         // this.bottomView,
-                        isNeedContainer ? this.bottomView : Container(), //temp
+                        this.isNeedStartJob
+                            ? this.bottomView
+                            : Container(), //temp
                       ],
                     ),
                   ),

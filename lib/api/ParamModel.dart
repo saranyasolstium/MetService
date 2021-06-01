@@ -47,8 +47,12 @@ class ParamSubmitJob {
     List<String> base64Images = [];
     for (var i in files) {
       final byte = await File(i.path).readAsBytes();
+      // final byte = await File(i.path).readAsBytes();
+      print('i.path${i.path}');
+      print('i.path${File(i.path).readAsBytes().toString()}');
       var base64Image = base64Encode(byte);
       base64Images.add(base64Image);
+      print('images64 ${base64Images.toString()} hello');
     }
     return base64Images;
   }
@@ -71,7 +75,7 @@ class ParamSubmitJob {
       paramCheckList.add(paramSubmitItem);
     }
     json['check_list'] = paramCheckList.map((e) => e.toJson()).toList();
-
+    print(json.toString());
     return json;
   }
 }

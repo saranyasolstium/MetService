@@ -117,7 +117,7 @@ class MScheduledJobItem implements AServiceItem {
 
   String? get aProductImage => productImage;
   String? get aProdouctName => productName;
-  String? get aCctvID => productId.toString();
+  String? get aCctvID => sku.toString();
 
   String? get aServiceType => '';
   String? get aCustomerName => customerName;
@@ -130,4 +130,6 @@ class MScheduledJobItem implements AServiceItem {
   String? get aEndDay => '';
   String? get aRequestNo => '';
   String? get aStartDay => '';
+  String? get aServiceID => productId.toString();
+  String? get aSiteID => siteId.toString();
 }

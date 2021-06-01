@@ -35,6 +35,7 @@ class VerificationData {
 }
 
 class AttendanceController extends GetxController {
+  static AttendanceController get to => Get.find<AttendanceController>();
   var selectedYear = "2021".obs;
   var selectedMonth = "January".obs;
   String selectedMonthInNumber = '1';
@@ -78,7 +79,37 @@ class AttendanceController extends GetxController {
   }
 
   bool get isClockedIn {
-    return jobStartedTime != null;
+    var status = (attendanceStatus.value as MAttendanceStatusResponse).data;
+    if (status != null) {
+      return jobStartedTime != null &&
+          status.siteId == '0' &&
+          status.serviceId == 0;
+    } else {
+      return false;
+    }
+    // return jobStartedTime != null && attendanceStatus.value.startedDate;
+  }
+
+  bool get isAllowForClockIn {
+    var status = (attendanceStatus.value as MAttendanceStatusResponse).data;
+    if (status != null) {
+      return !(jobStartedTime != null &&
+          status.siteId != '0' &&
+          status.serviceId != 0);
+    } else {
+      return true;
+    }
+  }
+
+  bool isShowStop({required String siteID, required String serviceID}) {
+    var status = (attendanceStatus.value as MAttendanceStatusResponse).data;
+    if (status != null) {
+      return (jobStartedTime != null &&
+          status.siteId == siteID &&
+          status.serviceId.toString() == serviceID);
+    } else {
+      return false;
+    }
   }
 
   bool get isAttendanceHereForSelected {
@@ -315,22 +346,21 @@ extension AttendanceControllerService on AttendanceController {
     var response = await API.service.call(
         model: MAttendanceStatusResponse(),
         endPoint: EndPoint.attendanceStatus,
-        body: {K.service_id: '0'} //temp
-        );
+        body: {K.service_id: '0'});
     attendanceStatus.value = response.model;
   }
 
-  fetchShowAttendenceDetail() async {
-    var response = await API.service.call(
-        model: MShowAttendenceResponse(),
-        endPoint: EndPoint.jobdetail,
-        body: {K.job_id: '1'} //temp
-        );
-
-    if (response.isValidModel) {
-      showAttendenceDetail.value = response.model!.data! as AShowAttendance;
-    }
-  }
+  // fetchShowAttendenceDetail() async {
+  //   var response = await API.service.call(
+  //       model: MShowAttendenceResponse(),
+  //       endPoint: EndPoint.jobdetail,
+  //       body: {K.job_id: '1'} //temp
+  //       );
+  //
+  //   if (response.isValidModel) {
+  //     showAttendenceDetail.value = response.model!.data! as AShowAttendance;
+  //   }
+  // }
 
   fetchService() async {
     viewState.value = ViewState.loading;

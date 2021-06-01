@@ -1,9 +1,11 @@
+import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/model/job_history_item.dart';
 import 'package:get/get.dart';
+import 'package:eagle_pixels/model/job_history_item.dart';
 
 class MyPurchaseController extends GetxController {
   // ignore: deprecated_member_use
-  var jobList = <MJobHistoryItem>[].obs;
+  var jobList = <MScheduledJobItem>[].obs;
   final selectedDate = DateTime.now().obs;
   // var isLoading = true.obs;
 
@@ -14,10 +16,10 @@ class MyPurchaseController extends GetxController {
   }
 
   void fetchProducts() async {
-    List<MJobHistoryItem> sampleList = [];
+    List<MScheduledJobItem> sampleList = [];
     //temp service integration pull to refresh, pagination, pdf functionality.
     for (int i = 1; i <= 10; i++) {
-      sampleList.add(MJobHistoryItem());
+      sampleList.add(MScheduledJobItem());
     }
 
     jobList.value = sampleList;

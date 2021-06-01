@@ -91,7 +91,7 @@ class MShowAttendenceDetail implements AShowAttendance {
     return data;
   }
 
-  String? get aCctvID => '';
+  String? get aCctvID => sku;
 
   String? get aCustomerName => customerName;
 

@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
@@ -13,11 +14,13 @@ import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 
 import '../../main.dart';
+import 'package:toast/toast.dart';
 
 class ScheduleScreen extends StatelessWidget {
   final TextStyle style =
       TextStyle(fontSize: 14.dynamic, fontWeight: FontWeight.w300);
   final ScheduleListController schedule = Get.put(ScheduleListController());
+  final AttendanceController attendance = Get.find();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -68,12 +71,20 @@ class ScheduleScreen extends StatelessWidget {
                                   buttonTitle: 'Start Job',
                                   // isNeedStatus: ,
                                   isNeedDetail: true,
+                                  isNeedStartJob: true,
                                   onJob: () {
-                                    Get.to(
-                                      () => JobDetailScreen(
-                                        isNeedContainer: true,
-                                      ),
-                                    );
+                                    if (attendance.isClockedIn) {
+                                      Toast.show(
+                                          'Please clock out the attendance',
+                                          Get.context);
+                                    } else {
+                                      Get.to(
+                                        () => JobDetailScreen(
+                                          isNeedStartJob: true,
+                                          jobID: item.aServiceID!,
+                                        ),
+                                      );
+                                    }
 
                                     // Get.bottomSheet(
                                     //   JobDetailScreen(

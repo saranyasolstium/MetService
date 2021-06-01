@@ -4,6 +4,7 @@ import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
@@ -46,7 +47,15 @@ extension StopJobAction on JobCheckListScreen {
     showLoading();
     await schedule.onStopJob(service_id: detail.aServiceId ?? '0');
     hideLoading();
-    Get.toNamed(NavPage.scheduleScreen);
+    await AttendanceController.to.fetchAttendanceStatus();
+    schedule.update();
+    navigator!
+        .popUntil((route) => route.settings.name == NavPage.scheduleScreen);
+
+    // showLoading();
+    // await schedule.onStopJob(service_id: detail.aServiceId ?? '0');
+    // hideLoading();
+    // Get.toNamed(NavPage.scheduleScreen);
     // String status = res[K.status] ?? '';
     // String error = res['error'] ?? '';
     // if (isSuccess(K.success) || error == K.already_checkIn) {
@@ -148,6 +157,10 @@ class JobCheckListScreen extends StatelessWidget {
                                 },
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
+                                // itemCount:
+                                //     checkListController.checkList.length > 0
+                                //         ? 1
+                                //         : 0,
                                 itemCount: checkListController.checkList.length,
                               ),
                             ],
@@ -194,7 +207,7 @@ class JobCheckListScreen extends StatelessWidget {
                                 Get.toNamed(NavPage.jobServiceReportScreen);
                               },
                               child: Text(
-                                'Save & Continue',
+                                'Complete Job',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16.dynamic,
@@ -216,7 +229,7 @@ class JobCheckListScreen extends StatelessWidget {
                                 onStopJob();
                               },
                               child: Text(
-                                'Stop Job',
+                                'Pause Job',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16.dynamic,

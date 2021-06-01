@@ -1,5 +1,6 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:eagle_pixels/model/attendance_entry_model.dart';
 
 class MActiveServiceResponse extends Codable {
   String? status;
@@ -64,6 +65,19 @@ class MActiveService extends AActiveService {
     subject = json['subject'];
     description = json['description'];
     name = json['name'];
+
+    final attendance = json['attendance'];
+    aAttendanceEntry = [];
+
+    if (attendance != null && attendance is List<dynamic>) {
+      try {
+        (attendance).forEach((e) {
+          aAttendanceEntry!.add(MAttendanceEntry.fromJson(e));
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -87,7 +101,7 @@ class MActiveService extends AActiveService {
     return data;
   }
 
-  String? get aCctvID => id.toString();
+  String? get aCctvID => sku.toString();
   String? get aCustomerImage => customerImage;
   String? get aCustomerName => customerName;
   String? get aEndDay => '';
@@ -101,4 +115,6 @@ class MActiveService extends AActiveService {
   String? get aServiceType => '';
   String? get aStartDay => '';
   List<AJobTime>? aAttendanceEntry;
+  String? get aServiceID => productId.toString();
+  String? get aSiteID => siteId.toString();
 }

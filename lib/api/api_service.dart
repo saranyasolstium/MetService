@@ -120,13 +120,18 @@ class APIResponse<T> {
   List<dynamic> _maps = [];
   List<T> models = [];
   String? error;
-  // bool get isSuccess {
-  //   if (this == 'success') {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+
+  bool get isSuccess {
+    if (map[K.status] == 'success') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  String? get message {
+    return map['message'].toString();
+  }
 
   APIResponse(this._model,
       {required http.Response? response,
