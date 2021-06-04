@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:toast/toast.dart';
 
 import '../../colors.dart';
 import '../../constant.dart';
@@ -25,15 +26,20 @@ extension TimeOutAction on TimeOutScreen {
     ).then((value) async {
       if (value == true) {
         print('yes clicked');
-        bool isVerified = await attendance.authenticateUser();
-        if (isVerified) {
-          await getImage();
-          var model = await attendance.onClockOut();
-          if (model?.status?.isSuccess ?? false) {
-            navigator!.popUntil((route) => route.settings.name == NavPage.root);
-          } else {
-            //TODO: show error toast
+        try {
+          var authStatus = await AppController.to.verifyUser();
+          if (authStatus.isValid) {
+            await getImage();
+            var model = await attendance.onClockOut();
+            if (model?.status?.isSuccess ?? false) {
+              navigator!
+                  .popUntil((route) => route.settings.name == NavPage.root);
+            } else {
+              Toast.show(model?.message ?? kErrorMsg, Get.context);
+            }
           }
+        } catch (e) {
+          Toast.show('$e', Get.context);
         }
       } else {
         print('no clicked');

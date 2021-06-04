@@ -33,7 +33,8 @@ extension CalendarAction on CalendarScreen {
     if (attendance.isClockedIn) {
       Get.toNamed(NavPage.clockOut);
     } else {
-      if (attendance.isAllowForClockIn) {
+      if (!attendance.isAllowForClockIn) {
+        //temp inverse condition
         startDay();
       } else {
         Toast.show('Please clock out the service attendance', Get.context);
@@ -50,13 +51,11 @@ extension CalendarAction on CalendarScreen {
         return;
       }
     }
-    bool isVerified = await attendance.authenticateUser();
-    if (isVerified) {
-      try {
-        await getImage();
+    showLoading();
+    try {
+      var authStatus = await AppController.to.verifyUser();
+      if (authStatus.isValid) {
         var model = await attendance.onClockIn();
-        // if model != null
-        // print('Clock in model ${model!.data!.siteName}');
         if (model?.status?.isSuccess ?? false) {
           var resp = MAttendanceStatusResponse();
           resp.startedDate = DateTime.now();
@@ -66,7 +65,11 @@ extension CalendarAction on CalendarScreen {
           Toast.show(model?.message ?? 'Problem in clock in. please try again.',
               Get.context);
         }
-      } finally {}
+      }
+    } catch (e) {
+      Toast.show('$e', Get.context);
+    } finally {
+      hideLoading(value: 0);
     }
   }
 

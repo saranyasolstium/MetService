@@ -15,8 +15,8 @@ import 'package:eagle_pixels/api/urls.dart';
 extension JobCompletedAction on JobCompletedScreen {
   onComplete() async {
     try {
-      var auth = await AppController.to.authenticateUser();
-      if (auth) {
+      var authStatus = await AppController.to.verifyUser();
+      if (authStatus.isValid) {
         Position position = await AppController.to.determinePosition();
         var body = {
           'SiteID': detail.siteId,

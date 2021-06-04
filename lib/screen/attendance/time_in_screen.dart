@@ -24,19 +24,19 @@ import 'package:eagle_pixels/api/api_service.dart';
 
 extension TimeInAction on TimeInScreen {
   startDay() async {
-    bool isVerified = await attendance.authenticateUser();
-    if (isVerified) {
-      var model = await attendance.onClockIn();
-      // await getImage();
-      if (model?.status?.isSuccess ?? false) {
-        var resp = MAttendanceStatusResponse();
-        resp.startedDate = DateTime.now();
-        attendance.attendanceStatus.value = resp;
-        Get.toNamed(NavPage.clockOut);
-      } else {
-        //TODO: Clock in error
-      }
-    }
+    // bool isVerified = await attendance.authenticateUser();
+    // if (isVerified) {
+    //   var model = await attendance.onClockIn();
+    //   // await getImage();
+    //   if (model?.status?.isSuccess ?? false) {
+    //     var resp = MAttendanceStatusResponse();
+    //     resp.startedDate = DateTime.now();
+    //     attendance.attendanceStatus.value = resp;
+    //     Get.toNamed(NavPage.clockOut);
+    //   } else {
+    //     //TODO: Clock in error
+    //   }
+    // }
   }
 
   Future getImage() async {

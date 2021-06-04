@@ -27,17 +27,23 @@ import 'package:photo_view/photo_view.dart';
 // ignore: must_be_immutable
 extension JobDetailAction on JobDetailScreen {
   onStartJob() async {
-    showLoading();
-    await AppController.to.localAuth();
-    var res = await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
-    hideLoading();
-    String status = res[K.status] ?? '';
-    String error = res['error'] ?? '';
-    if (isSuccess(K.success) || error == K.already_checkIn) {
-      Get.to(JobCheckListScreen(detail.aServiceId ?? '0'));
-      // Get.toNamed(NavPage.jobCheckListScreen);
-    } else {
-      Toast.show(error, Get.context);
+    try {
+      var authStatus = await AppController.to.verifyUser();
+      if (authStatus.isValid) {
+        var res =
+            await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
+        hideLoading();
+        String status = res[K.status] ?? '';
+        String error = res['error'] ?? '';
+        if (isSuccess(K.success) || error == K.already_checkIn) {
+          Get.to(JobCheckListScreen(detail.aServiceId ?? '0'));
+          // Get.toNamed(NavPage.jobCheckListScreen);
+        } else {
+          Toast.show(error, Get.context);
+        }
+      }
+    } catch (e) {
+      Toast.show('$e', Get.context);
     }
   }
 }
