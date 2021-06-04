@@ -142,59 +142,59 @@
 //   }
 //
 //   Widget androidDropdown() {
-//     List<DropdownMenuItem<String>> dropdownItems = [];
-//     var siteList = detailController.arrSites;
-//     siteList.forEach((site) {
-//       dropdownItems.add(
-//         DropdownMenuItem(
-//           child: Text(site.displayText),
-//           value: site.displayText,
-//         ),
-//       );
-//     });
-//
-//     // for (String site in siteList.value) {
-//     //   var newItem = DropdownMenuItem(
-//     //     child: Text(site.),
-//     //     value: site,
-//     //   );
-//     //   dropdownItems.add(newItem);
-//     // }
-//
-//     return Container(
-//       margin: EdgeInsets.only(bottom: 19.dynamic),
-//       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-//       width: double.infinity,
-//       decoration: BoxDecoration(
-//         color: Colour.appLightGrey,
-//         borderRadius: BorderRadius.all(
-//           Radius.circular(5.dynamic),
-//         ),
-//       ),
-//       child: DropdownButton<String>(
-//         value: detailController.selectedSite.value?.displayText ?? '',
-//         items: dropdownItems,
-//         underline: Container(),
-//         icon: Expanded(
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.end,
-//             children: [
-//               Icon(
-//                 Icons.keyboard_arrow_down,
-//                 size: 30.dynamic,
-//                 color: Colour.appDarkGrey,
-//               ),
-//             ],
-//           ),
-//         ),
-//         onChanged: (value) {
-//           detailController.selectedSite.value = detailController.arrSites
-//               .where((element) => element.displayText == value)
-//               .first;
-//         },
+//   List<DropdownMenuItem<String>> dropdownItems = [];
+//   var siteList = detailController.arrSites;
+//   siteList.forEach((site) {
+//     dropdownItems.add(
+//       DropdownMenuItem(
+//         child: Text(site.displayText),
+//         value: site.displayText,
 //       ),
 //     );
-//   }
+//   });
+//
+//   // for (String site in siteList.value) {
+//   //   var newItem = DropdownMenuItem(
+//   //     child: Text(site.),
+//   //     value: site,
+//   //   );
+//   //   dropdownItems.add(newItem);
+//   // }
+//
+//   return Container(
+//     margin: EdgeInsets.only(bottom: 19.dynamic),
+//     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+//     width: double.infinity,
+//     decoration: BoxDecoration(
+//       color: Colour.appLightGrey,
+//       borderRadius: BorderRadius.all(
+//         Radius.circular(5.dynamic),
+//       ),
+//     ),
+//     child: DropdownButton<String>(
+//       value: detailController.selectedSite.value?.displayText ?? '',
+//       items: dropdownItems,
+//       underline: Container(),
+//       icon: Expanded(
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.end,
+//           children: [
+//             Icon(
+//               Icons.keyboard_arrow_down,
+//               size: 30.dynamic,
+//               color: Colour.appDarkGrey,
+//             ),
+//           ],
+//         ),
+//       ),
+//       onChanged: (value) {
+//         detailController.selectedSite.value = detailController.arrSites
+//             .where((element) => element.displayText == value)
+//             .first;
+//       },
+//     ),
+//   );
+// }
 //
 //   Widget get cameraInfoView {
 //     return Row(

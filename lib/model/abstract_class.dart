@@ -82,7 +82,7 @@ abstract class AJobDetail {
 
 abstract class AActiveService extends AServiceItem {
   List<AJobTime>? aAttendanceEntry;
-  String? address;
+  String? aAddress;
 }
 
 abstract class AJobTime {

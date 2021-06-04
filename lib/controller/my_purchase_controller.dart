@@ -17,7 +17,7 @@ class MyPurchaseController extends GetxController {
 
   void fetchProducts() async {
     List<MScheduledJobItem> sampleList = [];
-    //temp service integration pull to refresh, pagination, pdf functionality.
+    //temp service integration pull to refresh, pagination.
     for (int i = 1; i <= 10; i++) {
       sampleList.add(MScheduledJobItem());
     }

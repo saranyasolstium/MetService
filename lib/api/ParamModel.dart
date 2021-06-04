@@ -4,74 +4,43 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 import 'dart:io';
 
 class ParamStartJob {
-  var service_id, lat, long;
-  ParamStartJob(this.service_id, this.lat, this.long);
+  var serviceID, lat, long;
+  ParamStartJob(this.serviceID, this.lat, this.long);
 
   Map<String, dynamic> toJson() {
-    return {'service_id': service_id, 'latitude': lat, 'longitude': long};
-  }
-}
-
-class ParamCompleteJob {
-  // ignore: non_constant_identifier_names
-  var service_id, rating, signature, feedback;
-  ParamCompleteJob(this.service_id, this.rating, this.signature, this.feedback);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'service_id': service_id,
-      'rating': rating,
-      'signature': signature,
-      'feedback': feedback
-    };
+    return {'service_id': serviceID, 'latitude': lat, 'longitude': long};
   }
 }
 
 class ParamSubmitJob {
-  // ignore: non_constant_identifier_names
-  var service_id, rating, signature, feedback, lat, long;
-  // ignore: non_constant_identifier_names
-  List<ACheckListItem> check_list;
-  // ignore: non_constant_identifier_names
-  ParamSubmitJob(
-      {this.service_id,
-      this.rating,
-      this.signature,
-      this.feedback,
-      // ignore: non_constant_identifier_names
-      this.lat,
-      this.long,
-      required this.check_list});
+  var serviceID;
+  List<ACheckListItem> checkList;
+
+  ParamSubmitJob({this.serviceID, required this.checkList});
 
   Future<List<String>> fileToBase64(List<File> files) async {
     List<String> base64Images = [];
     for (var i in files) {
       final byte = await File(i.path).readAsBytes();
-      // final byte = await File(i.path).readAsBytes();
-      print('i.path${i.path}');
-      print('i.path${File(i.path).readAsBytes().toString()}');
       var base64Image = base64Encode(byte);
       base64Images.add(base64Image);
-      print('images64 ${base64Images.toString()} hello');
     }
     return base64Images;
   }
 
   Future<Map<String, dynamic>> toJson() async {
     Map<String, dynamic> json = {};
-    json['service_id'] = service_id;
-    json['rating'] = rating;
-    json['signature'] = signature;
-    json['feedback'] = feedback;
-    json['latitude'] = lat;
-    json['longitude'] = long;
+    json['service_id'] = serviceID;
     List<ParamSubmitItem> paramCheckList = [];
 
-    for (var i in check_list) {
-      var base64Images = await fileToBase64(i.selectedImages);
-      ParamSubmitItem paramSubmitItem =
-          ParamSubmitItem(i.remarks, i.selectedItem!.name, base64Images);
-
+    for (var item in checkList) {
+      var base64Images = await fileToBase64(item.selectedImages);
+      ParamSubmitItem paramSubmitItem = ParamSubmitItem(
+          remarks: item.remarks,
+          selectedValue: item.selectedItem!.name,
+          attachedImages: base64Images,
+          id: item.id,
+          checkList: item.title);
       paramCheckList.add(paramSubmitItem);
     }
     json['check_list'] = paramCheckList.map((e) => e.toJson()).toList();
@@ -80,24 +49,45 @@ class ParamSubmitJob {
   }
 }
 
-class ParamSubmitItem {
-  // ignore: non_constant_identifier_names
-  var remarks, selected_value;
-  // ignore: non_constant_identifier_names
-  List<String> attached_images;
-  ParamSubmitItem(this.remarks, this.selected_value, this.attached_images);
-  Map<String, dynamic> toJson() {
-    return {
-      'remarks': remarks,
-      'selected_value': selected_value,
-      'attached_images': attached_images,
-    };
+class ParamCompleteJob {
+  var serviceID, rating, signature, feedback, lat, long;
+  ParamCompleteJob({
+    this.serviceID,
+    this.rating,
+    this.signature,
+    this.feedback,
+    // this.lat,
+    // this.long,
+  });
+
+  Future<Map<String, dynamic>> toJson() async {
+    Map<String, dynamic> json = {};
+    json['service_id'] = serviceID;
+    json['rating'] = rating;
+    json['signature'] = signature;
+    json['feedback'] = feedback;
+    // json['latitude'] = lat;
+    // json['longitude'] = long;
+    return json;
   }
 }
 
-// "selfie": "img",
-// "check_list": [
-//
-// "remarks": "sample text",
-// "selected_value": "selected_value",
-// "attached_images": []
+class ParamSubmitItem {
+  var remarks, selectedValue, checkList, id;
+  List<String> attachedImages;
+  ParamSubmitItem(
+      {this.remarks,
+      this.selectedValue,
+      required this.attachedImages,
+      this.id,
+      this.checkList});
+  Map<String, dynamic> toJson() {
+    return {
+      'remarks': remarks,
+      'selected_value': selectedValue,
+      'checklist': checkList,
+      'id': id,
+      'attached_images': attachedImages,
+    };
+  }
+}

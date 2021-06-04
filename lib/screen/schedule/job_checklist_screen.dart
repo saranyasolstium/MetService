@@ -43,7 +43,31 @@ extension CheckListItemAction on CheckListItem {
 }
 
 extension StopJobAction on JobCheckListScreen {
+  Future<bool> _onSubmitWork() async {
+    if (checkListController.selectedlist.length == 0) {
+      return false;
+    }
+    showLoading();
+    final String? errorWhenSubmit = await checkListController.onSubmitJob(
+      service_id: detail.aServiceId ?? '0',
+    );
+    hideLoading();
+    if (errorWhenSubmit != null) {
+      Toast.show(errorWhenSubmit, Get.context);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   onStopJob() async {
+    bool isCompleted = true;
+    if (checkListController.selectedlist.length > 0) {
+      isCompleted = await _onSubmitWork();
+    }
+    if (!isCompleted) {
+      return;
+    }
     showLoading();
     await schedule.onStopJob(service_id: detail.aServiceId ?? '0');
     hideLoading();
@@ -51,22 +75,13 @@ extension StopJobAction on JobCheckListScreen {
     schedule.update();
     navigator!
         .popUntil((route) => route.settings.name == NavPage.scheduleScreen);
+  }
 
-    // showLoading();
-    // await schedule.onStopJob(service_id: detail.aServiceId ?? '0');
-    // hideLoading();
-    // Get.toNamed(NavPage.scheduleScreen);
-    // String status = res[K.status] ?? '';
-    // String error = res['error'] ?? '';
-    // if (isSuccess(K.success) || error == K.already_checkIn) {
-    //   Get.toNamed(NavPage.jobCheckListScreen);
-    // } else {
-    //   Toast.show(error, Get.context);
-    // }
-    // showLoading();
-    // await AppController.to.localAuth();
-    // hideLoading();
-    // Get.toNamed(NavPage.jobCheckListScreen);
+  onCompleteJob() async {
+    final isCompleted = await _onSubmitWork();
+    if (isCompleted) {
+      Get.toNamed(NavPage.jobServiceReportScreen);
+    }
   }
 }
 
@@ -75,6 +90,8 @@ class JobCheckListScreen extends StatelessWidget {
     return controller.detail.value;
   }
 
+  final String serviceID;
+  JobCheckListScreen(this.serviceID);
   // final controller = Get.put(JobDetailController());
   final controller = Get.find<JobDetailController>();
   final ScheduleListController schedule = Get.find();
@@ -84,6 +101,10 @@ class JobCheckListScreen extends StatelessWidget {
       Get.put(JobCheckListController());
   @override
   Widget build(BuildContext context) {
+    if (!checkListController.isOneTimeListRequested) {
+      checkListController.isOneTimeListRequested = true;
+      checkListController.fetchCheckList(serviceID);
+    }
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -204,7 +225,7 @@ class JobCheckListScreen extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () {
-                                Get.toNamed(NavPage.jobServiceReportScreen);
+                                this.onCompleteJob();
                               },
                               child: Text(
                                 'Complete Job',

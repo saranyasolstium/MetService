@@ -71,6 +71,7 @@ class MCheckList {
 }
 
 class MCheckListItem implements ACheckListItem {
+  int? itemID;
   String? name;
   int? type;
   int? noteRequired;
@@ -78,6 +79,7 @@ class MCheckListItem implements ACheckListItem {
 
   MCheckListItem.fromJson(Map<String, dynamic> json) {
     selectedImages = [];
+    itemID = json['id'];
     name = json['name'];
     type = json['type'];
     noteRequired = json['note_required'];
@@ -127,7 +129,7 @@ class MCheckListItem implements ACheckListItem {
   }
 
   String get id {
-    return name ?? '';
+    return itemID.toString();
   }
 
   String remarks = '';

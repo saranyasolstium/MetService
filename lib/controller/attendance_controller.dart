@@ -354,7 +354,7 @@ extension AttendanceControllerService on AttendanceController {
   //   var response = await API.service.call(
   //       model: MShowAttendenceResponse(),
   //       endPoint: EndPoint.jobdetail,
-  //       body: {K.job_id: '1'} //temp
+  //       body: {K.job_id: '1'}
   //       );
   //
   //   if (response.isValidModel) {

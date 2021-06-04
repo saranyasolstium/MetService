@@ -65,7 +65,7 @@ class MActiveService extends AActiveService {
     subject = json['subject'];
     description = json['description'];
     name = json['name'];
-
+    aAddress = json['site_address'];
     final attendance = json['attendance'];
     aAttendanceEntry = [];
 
@@ -115,6 +115,6 @@ class MActiveService extends AActiveService {
   String? get aServiceType => '';
   String? get aStartDay => '';
   List<AJobTime>? aAttendanceEntry;
-  String? get aServiceID => productId.toString();
+  String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
 }

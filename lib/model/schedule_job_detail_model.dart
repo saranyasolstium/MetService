@@ -104,9 +104,9 @@ import 'package:eagle_pixels/model/attendance_entry_model.dart';
 //     return data;
 //   }
 //
-//   String? get aCameraID => sku; //temp
+//   String? get aCameraID => sku;
 //
-//   String? get aCameraImage => ''; //temp
+//   String? get aCameraImage => '';
 //
 //   String? get aCameraName => name;
 //
@@ -114,19 +114,19 @@ import 'package:eagle_pixels/model/attendance_entry_model.dart';
 //
 //   String? get aCustomerName => customerName;
 //
-//   String? get aEndTime => ''; //temp
+//   String? get aEndTime => '';
 //
 //   String? get aPurchaseDate => purchaseDate;
 //
 //   String? get aPurchaseOrderNumber => poNumber;
 //
-//   String? get aScheduleDate => scheduledTime; //temp
+//   String? get aScheduleDate => scheduledTime;
 //
 //   String? get aScheduleTime => scheduledTime;
 //
 //   String? get aScheduledBy => scheduledBy;
 //
-//   String? get aStartTime => ''; //temp
+//   String? get aStartTime => '';
 //
 //   String? get aWarrantyCard => warrantyCard;
 //
@@ -158,7 +158,7 @@ import 'package:eagle_pixels/model/attendance_entry_model.dart';
 //
 //   String? get item => '';
 //
-//   String? get aItem => ''; //temp
+//   String? get aItem => '';
 // }
 
 class MScheduleJobDetail implements Codable {
@@ -223,7 +223,7 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? serviceAmount;
   int? engineerStatus;
   String? warrantyCard;
-
+  String? aAddress;
   MJobDetail();
 
   MJobDetail.fromJson(Map<String, dynamic> json) {
@@ -261,6 +261,7 @@ class MJobDetail implements AJobDetail, AActiveService {
     serviceAmount = json['service_amount'];
     engineerStatus = json['engineer_status'];
     warrantyCard = json['warranty_card'];
+    aAddress = json['site_address'];
 
     final attendance = json['attendance'];
     aAttendanceEntry = [];
@@ -361,7 +362,7 @@ class MJobDetail implements AJobDetail, AActiveService {
 
   List<ACheckListItem> get checkList => [];
 
-  String? get aServiceId => productId.toString();
+  String? get aServiceId => id.toString();
 
   List<AJobTime>? aAttendanceEntry;
 
@@ -386,6 +387,6 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aServiceType => serviceType;
 
   String? get aStartDay => '';
-  String? get aServiceID => productId.toString();
+  String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
 }

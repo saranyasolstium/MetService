@@ -209,9 +209,7 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                     );
                                   },
                                   itemCount:
-                                      attendance.arrActiveService.length > 0
-                                          ? 1
-                                          : 0, //temp
+                                      attendance.arrActiveService.length, //temp
                                   // itemCount: attendance.arrActiveService.length,
                                 );
                               } else {
@@ -305,7 +303,7 @@ class AttendenceDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AttendanceTitleDescriptionView(
-                  'Address:', safeString(item.address)),
+                  'Address:', safeString(item.aAddress)),
               Container(
                 width: 120,
               ),

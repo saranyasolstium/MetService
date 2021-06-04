@@ -9,6 +9,8 @@ import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:eagle_pixels/reuse/network_image_view.dart';
+import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -20,6 +22,7 @@ import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:toast/toast.dart';
 
 import '../../colors.dart';
+import 'package:photo_view/photo_view.dart';
 
 // ignore: must_be_immutable
 extension JobDetailAction on JobDetailScreen {
@@ -31,7 +34,8 @@ extension JobDetailAction on JobDetailScreen {
     String status = res[K.status] ?? '';
     String error = res['error'] ?? '';
     if (isSuccess(K.success) || error == K.already_checkIn) {
-      Get.toNamed(NavPage.jobCheckListScreen);
+      Get.to(JobCheckListScreen(detail.aServiceId ?? '0'));
+      // Get.toNamed(NavPage.jobCheckListScreen);
     } else {
       Toast.show(error, Get.context);
     }
@@ -46,7 +50,7 @@ class JobDetailScreen extends StatelessWidget {
   final String jobID;
   JobDetailScreen({this.isNeedStartJob = false, required this.jobID});
 
-  late Rx<PDFDocument> document;
+  // late Rx<PDFDocument> document;
   AJobDetail get detail {
     return controller.detail.value;
   }
@@ -232,16 +236,13 @@ class JobDetailScreen extends StatelessWidget {
                                   //         ),
                                   //       )
                                   //     : Container(), ///
-                                  //temp
                                 ],
                               ),
                             ),
                           ),
                         ),
                         // this.bottomView,
-                        this.isNeedStartJob
-                            ? this.bottomView
-                            : Container(), //temp
+                        this.isNeedStartJob ? this.bottomView : Container(),
                       ],
                     ),
                   ),
@@ -404,8 +405,8 @@ extension JobDetailWidgets on JobDetailScreen {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            JobDetailTitleDescriptionImageView(
-                'Customer:', detail.aCustomerName, 'image'),
+            JobDetailTitleDescriptionImageView('Customer:',
+                detail.aCustomerName, detail.aCustomerImage, kUserPlaceholder),
             JobDetailTitleDescriptionView('Item:', detail.aItem),
           ],
         ),
@@ -437,8 +438,8 @@ extension JobDetailWidgets on JobDetailScreen {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            JobDetailTitleDescriptionImageView(
-                'Customer:', detail.aCustomerName, detail.aCustomerImage),
+            JobDetailTitleDescriptionImageView('Customer:',
+                detail.aCustomerName, detail.aCustomerImage, kUserPlaceholder),
             JobDetailTitleDescriptionView('Item:', detail.aItem),
           ],
         ),
@@ -590,27 +591,37 @@ extension JobDetailWidgets on JobDetailScreen {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      document = Rx(await PDFDocument.fromURL(
-                        "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
-                        /* cacheManager: CacheManager(
-          Config(
-            "customCacheKey",
-            stalePeriod: const Duration(days: 2),
-            maxNrOfCacheObjects: 10,
-          ),
-        ), */
-                      ));
-                      Get.bottomSheet(
-                        Center(
-                          child: Container(
-                            child: PDFViewer(
-                              document: document.value,
+                      final floorText = detail.aFloorPlan;
+                      if (floorText != null && floorText.length > 3) {
+                        final isPDF =
+                            floorText.substring(floorText.length - 3) == 'pdf';
+                        if (isPDF) {
+                          Get.bottomSheet(
+                            Center(
+                              child: Container(
+                                child: PDFViewer(
+                                  document:
+                                      await PDFDocument.fromURL(floorText),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        isScrollControlled: true,
-                        ignoreSafeArea: false,
-                      );
+                            isScrollControlled: true,
+                            ignoreSafeArea: false,
+                          );
+                        } else {
+                          Get.bottomSheet(
+                            Center(
+                              child: PhotoView(
+                                imageProvider: NetworkImage(floorText),
+                              ),
+                            ),
+                            isScrollControlled: true,
+                            ignoreSafeArea: false,
+                          );
+                        }
+                      } else {
+                        Toast.show('Invalid Floor Plan', Get.context);
+                      }
                     },
                     child: Text(
                       detail.aFloorPlan ?? 'NA',
@@ -699,7 +710,6 @@ extension JobDetailWidgets on JobDetailScreen {
             SizedBox(
               height: 19.dynamic,
             ),
-            // androidDropdown(), //temp
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -767,7 +777,9 @@ class JobDetailTitleDescriptionImageView extends StatelessWidget {
   final String title;
   final String? description;
   final String? image;
-  JobDetailTitleDescriptionImageView(this.title, this.description, this.image);
+  final String placeholder;
+  JobDetailTitleDescriptionImageView(
+      this.title, this.description, this.image, this.placeholder);
 
   @override
   Widget build(BuildContext context) {
@@ -792,13 +804,7 @@ class JobDetailTitleDescriptionImageView extends StatelessWidget {
                 width: 24.dynamic,
                 height: 24.dynamic,
                 alignment: Alignment.center,
-                child: CachedNetworkImage(
-                  fit: BoxFit.fill,
-                  imageUrl: image ?? "",
-                  placeholder: (_, url) => Image.asset(
-                    'images/user.png',
-                  ),
-                ),
+                child: NetworkImageView(image, this.placeholder),
                 decoration: BoxDecoration(
                   // image: DecorationImage(
                   //   fit: BoxFit.contain,

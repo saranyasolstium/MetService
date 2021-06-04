@@ -29,37 +29,6 @@ import 'package:signature/signature.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:toast/toast.dart';
 
-extension OnSubmitAction on ServiceReportScreen {
-  // ignore: non_constant_identifier_names
-  onSubmitJob(
-      // ignore: non_constant_identifier_names
-      {required String service_id,
-      required double rating,
-      var signature,
-      required String feedback}) async {
-    Position position = await AppController.to.determinePosition();
-    var param = await ParamSubmitJob(
-            service_id: service_id,
-            rating: rating,
-            signature: signature,
-            lat: position.latitude,
-            long: position.longitude,
-            feedback: feedback,
-            check_list: checkListController.selectedlist)
-        .toJson();
-    var response = await API.service.call(
-      endPoint: EndPoint.completeJob,
-      body: param,
-    );
-    hideLoading();
-    // if (response.isSuccess) {
-    Get.toNamed(NavPage.jobCompleted);
-    // }
-
-    // return response.map;
-  }
-}
-
 class ServiceReportScreen extends StatelessWidget {
   final TimerController time = Get.find();
   final JobCheckListController checkListController = Get.find();
@@ -269,11 +238,16 @@ class ServiceReportScreen extends StatelessWidget {
                                     .toPngBytes();
                                 if (bytes != null) {
                                   showLoading();
-                                  onSubmitJob(
-                                      service_id: detail.aServiceId ?? '0',
-                                      rating: starRate.value,
-                                      signature: base64Encode(bytes),
-                                      feedback: 'Hello');
+                                  String? status =
+                                      await checkListController.onCompleteJob(
+                                    service_id: detail.aServiceId ?? '0',
+                                    rating: starRate.value,
+                                    signature: base64Encode(bytes),
+                                    feedback: 'Hello',
+                                  );
+                                  if (status != null) {
+                                    Toast.show(status, Get.context);
+                                  }
                                 } else {
                                   Toast.show(
                                       'Please put your signature', Get.context);

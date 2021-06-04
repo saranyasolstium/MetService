@@ -8,6 +8,8 @@ import 'package:eagle_pixels/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:eagle_pixels/screen/create_job/create_job_screen.dart';
+
 extension HomeAction on HomeScreen {
   onAttendance() {
     AttendanceController attendance = Get.find();
@@ -63,61 +65,111 @@ extension HomeWidgets on HomeScreen {
         minHeight: 75.dynamic,
       ),
       color: Color(0xFFFFFFFF),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Logged in as ',
-            style: TextStyle(
-                color: Colour.appDarkGrey,
-                fontSize: 12.dynamic,
-                fontWeight: FontWeight.w400),
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Container(
-            child: Row(
-              children: [
-                Container(
-                  width: 30.dynamic,
-                  height: 30.dynamic,
-                  alignment: Alignment.center,
-                  child: CachedNetworkImage(
-                    fit: BoxFit.fill,
-                    imageUrl:
-                        AppController.user.employeeDetails?.profileImage ?? "",
-                    placeholder: (_, url) => Image.asset(
-                      'images/user.png',
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Logged in as ',
+                style: TextStyle(
+                    color: Colour.appDarkGrey,
+                    fontSize: 12.dynamic,
+                    fontWeight: FontWeight.w400),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 30.dynamic,
+                      height: 30.dynamic,
+                      alignment: Alignment.center,
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fill,
+                        imageUrl:
+                            AppController.user.employeeDetails?.profileImage ??
+                                "",
+                        placeholder: (_, url) => Image.asset(
+                          'images/user.png',
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        // image: DecorationImage(
+                        //   fit: BoxFit.contain,
+                        //
+                        //   image: AssetImage('images/user.png'),
+                        // ),
+                        border: Border.all(
+                          color: Colors.blue,
+                        ),
+                        borderRadius: BorderRadius.circular(37.5.dynamic),
+                      ),
                     ),
-                  ),
-                  decoration: BoxDecoration(
-                    // image: DecorationImage(
-                    //   fit: BoxFit.contain,
-                    //
-                    //   image: AssetImage('images/user.png'),
-                    // ),
-                    border: Border.all(
-                      color: Colors.blue,
+                    Text(
+                      '   ${safeString(AppController.user.name)}',
+                      style: TextStyle(
+                          color: Colour.appText,
+                          fontSize: 16.dynamic,
+                          fontWeight: FontWeight.w400),
                     ),
-                    borderRadius: BorderRadius.circular(37.5.dynamic),
-                  ),
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colour.appBlue,
+                      size: 30.dynamic,
+                    ),
+                  ],
                 ),
-                Text(
-                  '   ${safeString(AppController.user.name)}',
-                  style: TextStyle(
-                      color: Colour.appText,
-                      fontSize: 16.dynamic,
-                      fontWeight: FontWeight.w400),
-                ),
-                Icon(
-                  Icons.keyboard_arrow_down,
-                  color: Colour.appBlue,
-                  size: 30.dynamic,
-                )
-              ],
-            ),
+              ),
+            ],
           ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 10),
+          //   child: Container(
+          //     width: Get.width * 0.4,
+          //     decoration: BoxDecoration(
+          //       color: Colour.appBlue,
+          //       borderRadius: BorderRadius.all(
+          //         Radius.circular(30.dynamic),
+          //       ),
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: Colour.appBlue.withOpacity(0.5),
+          //           blurRadius: 30,
+          //           offset: Offset(0.0, 5.0),
+          //           spreadRadius: 3,
+          //         )
+          //       ],
+          //     ),
+          //     child: Padding(
+          //       padding: EdgeInsets.only(left: 15, right: 10),
+          //       child: Row(
+          //         mainAxisAlignment: MainAxisAlignment.start,
+          //         children: [
+          //           Icon(
+          //             Icons.medical_services_outlined,
+          //             color: Colors.white,
+          //           ),
+          //           TextButton(
+          //             onPressed: () {
+          //               Get.to(() => CreateJobScreen());
+          //             },
+          //             child: Text(
+          //               'Create Job',
+          //               style: TextStyle(
+          //                   color: Colors.white,
+          //                   fontSize: 16.dynamic,
+          //                   fontWeight: FontWeight.w500),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

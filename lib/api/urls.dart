@@ -50,7 +50,7 @@ extension EndPointString on EndPoint {
       case EndPoint.stopJob:
         return 'stop_job';
       case EndPoint.submitJob:
-        return 'storelist';
+        return 'service_report';
       case EndPoint.completeJob:
         return 'complete_job';
       case EndPoint.activeJob:

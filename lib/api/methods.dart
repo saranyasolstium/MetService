@@ -25,6 +25,7 @@ extension Method on EndPoint {
       case EndPoint.site:
       case EndPoint.startJob:
       case EndPoint.stopJob:
+      case EndPoint.submitJob:
       case EndPoint.completeJob:
         return HTTPMethod.post;
       default:

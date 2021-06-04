@@ -38,7 +38,8 @@ class AppController extends GetxController {
   }
 
   bool get isAttendanceEngineer {
-    return _user.value.employeeDetails?.department == '3';
+    return false;
+    return _user.value.employeeDetails?.designation != '1';
   }
 
   //Local Auth
@@ -278,8 +279,6 @@ class AppController extends GetxController {
   }
 
   Widget rootView() {
-    // return FeedbackScreen();
-    //temp
     switch (loginStatus.value) {
       case LoginStatus.logged:
         return Nav();

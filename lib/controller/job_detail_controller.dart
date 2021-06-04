@@ -13,6 +13,7 @@ class JobDetailController extends GetxController {
   Rx<AJobDetail> detail = MJobDetail().obs;
   var arrSites = <MSite>[].obs;
   late Rx<MSite?> selectedSite = Rx(null);
+
   @override
   void onInit() {
     // fetchSite();
@@ -33,7 +34,7 @@ class JobDetailController extends GetxController {
   //   var response = await API.service.call(
   //       model: MSiteResponse(),
   //       endPoint: EndPoint.site,
-  //       body: {K.service_id: '2'} //temp
+  //       body: {K.service_id: '2'}
   //       );
   //
   //   if (response.isValidModel) {

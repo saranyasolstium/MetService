@@ -46,18 +46,17 @@ extension CalendarAction on CalendarScreen {
   startDay() async {
     if (AppController.to.isAttendanceEngineer) {
       if (attendance.selectedSite.value == null) {
-        print('invalid selected site');
-        //temp toast
+        Toast.show('invalid selected site', Get.context);
         return;
       }
     }
     bool isVerified = await attendance.authenticateUser();
     if (isVerified) {
       try {
+        await getImage();
         var model = await attendance.onClockIn();
         // if model != null
         // print('Clock in model ${model!.data!.siteName}');
-        // await getImage();
         if (model?.status?.isSuccess ?? false) {
           var resp = MAttendanceStatusResponse();
           resp.startedDate = DateTime.now();

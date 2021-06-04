@@ -106,9 +106,9 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 //
 //   String? get aCustomerImage => customerImage;
 //
-//   double? get aLat => 0; //temp
+//   double? get aLat => 0;
 //
-//   double? get aLong => 0; //temp
+//   double? get aLong => 0;
 //   String? get aServiceID => productId;
 //   String? get aSiteID => siteId.toString();
 // }

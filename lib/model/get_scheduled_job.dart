@@ -130,6 +130,6 @@ class MScheduledJobItem implements AServiceItem {
   String? get aEndDay => '';
   String? get aRequestNo => '';
   String? get aStartDay => '';
-  String? get aServiceID => productId.toString();
+  String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
 }
