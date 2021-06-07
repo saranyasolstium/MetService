@@ -296,6 +296,8 @@ extension AttendanceControllerService on AttendanceController {
       if (response.isValidModel) {
         attendance[attendanceStoreKey] = response.model!.data;
         setCurrentPresentedDay();
+      } else if (isSuccess(response.model!.status)) {
+        setCurrentPresentedDay();
       }
     }
   }
@@ -377,8 +379,7 @@ extension AttendanceControllerService on AttendanceController {
     var response = await API.service.call(
         model: MSiteResponse(),
         endPoint: EndPoint.site,
-        body: {K.service_id: '2'} //temp
-        );
+        body: {K.service_id: '0'});
 
     if (response.isValidModel) {
       arrSite.value = response.model!.data!;

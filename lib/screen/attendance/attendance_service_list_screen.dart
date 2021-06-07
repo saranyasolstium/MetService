@@ -208,8 +208,7 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  itemCount:
-                                      attendance.arrActiveService.length, //temp
+                                  itemCount: attendance.arrActiveService.length,
                                   // itemCount: attendance.arrActiveService.length,
                                 );
                               } else {
