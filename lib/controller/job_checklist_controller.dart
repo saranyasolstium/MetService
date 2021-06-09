@@ -13,6 +13,7 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:signature/signature.dart';
 
 import '../colors.dart';
+import 'job_detail_controller.dart';
 
 // class MCheckListItem {
 //   String id;
@@ -59,15 +60,24 @@ class JobCheckListController extends GetxController {
     return checklistData.value.data?.first.selectedItems ?? [];
   }
 
+  final detail = Get.find<JobDetailController>();
   bool isOneTimeListRequested = false;
 
   fetchCheckList(String serviceID) async {
     var response = await API.service.call(
       model: MCheckListResponse(),
       endPoint: EndPoint.checkList,
-      body: {'service_id': serviceID, 'message': 'test close via API'},
+      body: {'service_id': serviceID},
     );
     this.checklistData.value = response.model!;
+    print('${response.model!.data!.length} Response');
+    MCheckListItem tempData = MCheckListItem();
+    tempData.name = 'Option';
+    tempData.itemID = 10;
+    tempData.selectedImages = [];
+    tempData.noteRequired = 1;
+    tempData.options = null;
+    // checklistData.value.data!.first.list!.add(tempData);
     update();
   }
   // List<ACheckList> get selectedList {
@@ -91,8 +101,11 @@ class JobCheckListController extends GetxController {
   // }
 
   @override
-  void onInit() {
+  void onInit() async {
     // checkList.value = sampleData();
+
+    await fetchCheckList(detail.detail.value.aServiceId.toString());
+    // await fetchCheckList('41'); //temp
     // ever(checkList, some());
     // Future.delayed(Duration(seconds: 1), () => fetchCheckList());
     super.onInit();

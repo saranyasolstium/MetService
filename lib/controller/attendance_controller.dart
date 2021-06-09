@@ -114,7 +114,8 @@ class AttendanceController extends GetxController {
   bool get isAttendanceHereForSelected {
     var selectedDayAttendance =
         attendance['${selectedMonth.value}${selectedYear.value}'];
-    return (selectedDayAttendance != null && selectedDayAttendance.length > 0);
+    return (selectedDayAttendance !=
+        null); // && selectedDayAttendance.length > 0);
   }
 
   var presentedDayInSelectedMonth = <int>[];
@@ -297,6 +298,7 @@ extension AttendanceControllerService on AttendanceController {
         attendance[attendanceStoreKey] = response.model!.data;
         setCurrentPresentedDay();
       } else if (isSuccess(response.model!.status)) {
+        attendance[attendanceStoreKey] = [];
         setCurrentPresentedDay();
       }
     }
@@ -363,7 +365,7 @@ extension AttendanceControllerService on AttendanceController {
   //   }
   // }
 
-  fetchService() async {
+  fetchService(String day, String month, String year) async {
     viewState.value = ViewState.loading;
     var res = await API.service.call(
       model: MActiveServiceResponse(),

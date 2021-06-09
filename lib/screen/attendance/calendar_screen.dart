@@ -124,10 +124,11 @@ extension CalendarAction on CalendarScreen {
     }
   }
 
-  showAttendance() {
+  showAttendance(String selectedDay) {
     print('showAttendance');
     Get.toNamed(NavPage.attendanceServiceList);
-    attendance.fetchService();
+    attendance.fetchService(selectedDay, attendance.selectedMonthInNumber,
+        attendance.selectedYear.value);
   }
 
   selectMonth() {
@@ -436,10 +437,9 @@ extension CalendarWidgets on CalendarScreen {
           [],
         );
       },
-      // onDayPressed: (date, events) {
-      //   this.setState(() => _currentDate2 = date);
-      //   events.forEach((event) => print(event.title));
-      // },
+      onDayPressed: (date, events) {
+        this.showAttendance(DateFormat('dd').format(date));
+      },
       // weekdayTextStyle: TextStyle(
       //   color: Colors.green,
       // ),
@@ -672,7 +672,9 @@ extension CalendarWidgets on CalendarScreen {
                   ),
                 ),
                 child: TextButton(
-                  onPressed: this.showAttendance,
+                  onPressed: () {
+                    this.showAttendance('0');
+                  },
                   child: Text(
                     'Show Attendance',
                     style: TextStyle(

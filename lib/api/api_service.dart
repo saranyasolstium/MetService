@@ -41,13 +41,26 @@ class API {
       }
 
       if (endPoint.method == HTTPMethod.post) {
-        Map<String, String> convertedBody = {};
-        body?.forEach((key, value) {
-          convertedBody['$key'] = '$value';
-        });
-        response = await http
-            .post(Uri.parse(url), headers: safeHeader, body: convertedBody)
-            .timeout(Duration(seconds: 60));
+        if (endPoint.paramType == ParamType.raw) {
+          var convertedBody;
+          convertedBody = jsonEncode(body);
+          print('$convertedBody Json Encode');
+          response = await http
+              .post(
+                Uri.parse(url),
+                headers: safeHeader,
+                body: convertedBody,
+              )
+              .timeout(Duration(seconds: 60));
+        } else {
+          Map<String, String> convertedBody = {};
+          body?.forEach((key, value) {
+            convertedBody['$key'] = '$value';
+          });
+          response = await http
+              .post(Uri.parse(url), headers: safeHeader, body: convertedBody)
+              .timeout(Duration(seconds: 60));
+        }
       } else {
         final String getParam = queryParam(body);
         final Uri uri = Uri.parse('$url?$getParam');
@@ -65,6 +78,7 @@ class API {
       error = "Something went wrong. Please try again";
     } finally {
       print('url -> ${endPoint.method.string} $url');
+      print('Header -> ${endPoint.header}');
       print('body ->');
       printPrettyJson(body, indent: 2);
 

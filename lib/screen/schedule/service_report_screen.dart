@@ -245,8 +245,11 @@ class ServiceReportScreen extends StatelessWidget {
                                     signature: base64Encode(bytes),
                                     feedback: 'Hello',
                                   );
+
                                   if (status != null) {
                                     Toast.show(status, Get.context);
+                                  } else {
+                                    Get.toNamed(NavPage.jobCompleted);
                                   }
                                 } else {
                                   Toast.show(

@@ -36,11 +36,12 @@ class ParamSubmitJob {
     for (var item in checkList) {
       var base64Images = await fileToBase64(item.selectedImages);
       ParamSubmitItem paramSubmitItem = ParamSubmitItem(
-          remarks: item.remarks,
-          selectedValue: item.selectedItem!.name,
-          attachedImages: base64Images,
-          id: item.id,
-          checkList: item.title);
+        id: item.id,
+        checkList: item.title,
+        selectedValue: item.selectedItem!.name,
+        remarks: item.remarks,
+        attachedImages: base64Images,
+      );
       paramCheckList.add(paramSubmitItem);
     }
     json['check_list'] = paramCheckList.map((e) => e.toJson()).toList();
@@ -83,11 +84,12 @@ class ParamSubmitItem {
       this.checkList});
   Map<String, dynamic> toJson() {
     return {
-      'remarks': remarks,
-      'selected_value': selectedValue,
-      'checklist': checkList,
       'id': id,
-      'attached_images': attachedImages,
+      'checklist': checkList,
+      'selected_value': selectedValue,
+      'remarks': remarks,
+      'attached_images': [],
+      // 'attached_images': attachedImages,
     };
   }
 }

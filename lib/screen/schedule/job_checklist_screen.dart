@@ -44,12 +44,14 @@ extension CheckListItemAction on CheckListItem {
 
 extension StopJobAction on JobCheckListScreen {
   Future<bool> _onSubmitWork() async {
-    if (checkListController.selectedlist.length == 0) {
-      return false;
-    }
+    // if (checkListController.selectedlist.length == 0) {
+    //   print(checkListController.checkList.length);
+    //   return false;
+    // }
+
     showLoading();
     final String? errorWhenSubmit = await checkListController.onSubmitJob(
-      service_id: detail.aServiceId ?? '0',
+      service_id: detail.aServiceId ?? '',
     );
     hideLoading();
     if (errorWhenSubmit != null) {
@@ -78,9 +80,17 @@ extension StopJobAction on JobCheckListScreen {
   }
 
   onCompleteJob() async {
-    final isCompleted = await _onSubmitWork();
-    if (isCompleted) {
-      Get.toNamed(NavPage.jobServiceReportScreen);
+    if (checkListController.selectedlist.length ==
+        checkListController.checkList.length) {
+      final isCompleted = await _onSubmitWork();
+      if (isCompleted) {
+        Get.toNamed(NavPage.jobServiceReportScreen);
+      } else {
+        Toast.show('Must Choose Option', Get.context);
+      }
+    } else {
+      Toast.show('Must Choose Option', Get.context);
+      return;
     }
   }
 }
@@ -101,10 +111,15 @@ class JobCheckListScreen extends StatelessWidget {
       Get.put(JobCheckListController());
   @override
   Widget build(BuildContext context) {
-    if (!checkListController.isOneTimeListRequested) {
-      checkListController.isOneTimeListRequested = true;
-      checkListController.fetchCheckList(serviceID);
-    }
+    // if (!checkListController.isOneTimeListRequested) {
+    //   checkListController.isOneTimeListRequested = true;
+    //   checkListController
+    //       .fetchCheckList(controller.detail.value.aServiceId.toString());
+    //   // Future.delayed(Duration(milliseconds: 100), () {
+    //   //   checkListController.isOneTimeListRequested = true;
+    //   //   checkListController.fetchCheckList(serviceID);
+    //   // });
+    // }
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -284,7 +299,7 @@ class JobCheckListScreen extends StatelessWidget {
                 ],
               ),
             ),
-            AppController.to.defaultLoaderView(),
+            // AppController.to.defaultLoaderView(),
           ],
         ),
       ),

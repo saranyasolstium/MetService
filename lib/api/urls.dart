@@ -38,7 +38,7 @@ extension EndPointString on EndPoint {
       case EndPoint.clockOut:
         return 'clockout';
       case EndPoint.checkList:
-        return 'checklist';
+        return 'get_service_checklistinfo';
       case EndPoint.attendanceStatus:
         return 'timecard';
       case EndPoint.jobdetail:

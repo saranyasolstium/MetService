@@ -73,7 +73,8 @@ class ScheduleScreen extends StatelessWidget {
                                   isNeedDetail: true,
                                   isNeedStartJob: true,
                                   onJob: () {
-                                    if (attendance.isClockedIn) {
+                                    // if (attendance.isClockedIn) {
+                                    if (false) {
                                       Toast.show(
                                           'Please clock out the attendance',
                                           Get.context);

@@ -28,15 +28,16 @@ import 'package:photo_view/photo_view.dart';
 extension JobDetailAction on JobDetailScreen {
   onStartJob() async {
     try {
-      var authStatus = await AppController.to.verifyUser();
-      if (authStatus.isValid) {
+      // var authStatus = await AppController.to.verifyUser();
+      // if (authStatus.isValid) {
+      if (true) {
         var res =
             await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
         hideLoading();
         String status = res[K.status] ?? '';
         String error = res['error'] ?? '';
         if (isSuccess(K.success) || error == K.already_checkIn) {
-          Get.to(JobCheckListScreen(detail.aServiceId ?? '0'));
+          Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
           // Get.toNamed(NavPage.jobCheckListScreen);
         } else {
           Toast.show(error, Get.context);

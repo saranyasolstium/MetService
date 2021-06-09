@@ -3,6 +3,7 @@ import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/profile_model.dart';
+import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,9 +28,10 @@ extension TimeOutAction on TimeOutScreen {
       if (value == true) {
         print('yes clicked');
         try {
+          showLoading();
           var authStatus = await AppController.to.verifyUser();
           if (authStatus.isValid) {
-            await getImage();
+            // await getImage();
             var model = await attendance.onClockOut();
             if (model?.status?.isSuccess ?? false) {
               navigator!
@@ -40,6 +42,8 @@ extension TimeOutAction on TimeOutScreen {
           }
         } catch (e) {
           Toast.show('$e', Get.context);
+        } finally {
+          hideLoading(value: 0);
         }
       } else {
         print('no clicked');
