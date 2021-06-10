@@ -11,8 +11,8 @@ class JobDetailController extends GetxController {
   var completedJobCount = 1;
   var isRequestedDetailService = false;
   Rx<AJobDetail> detail = MJobDetail().obs;
-  var arrSites = <MSite>[].obs;
-  late Rx<MSite?> selectedSite = Rx(null);
+  // var arrSites = <MSite>[].obs;
+  // late Rx<MSite?> selectedSite = Rx(null);
 
   @override
   void onInit() {

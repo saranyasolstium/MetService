@@ -190,11 +190,13 @@ class AttendanceServiceListScreen extends StatelessWidget {
                               height: 21.dynamic,
                             ),
                             Obx(() {
-                              if (attendance.viewState.value.isLoading) {
+                              if (attendance
+                                  .activeJobViewState.value.isLoading) {
                                 return Center(
                                   child: CircularProgressIndicator(),
                                 );
-                              } else if (attendance.viewState.value.isSuccess) {
+                              } else if (attendance
+                                  .activeJobViewState.value.isSuccess) {
                                 return ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
@@ -210,6 +212,15 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                   },
                                   itemCount: attendance.arrActiveService.length,
                                   // itemCount: attendance.arrActiveService.length,
+                                );
+                              } else if (attendance
+                                  .activeJobViewState.value.isFailed) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 40),
+                                  child: Center(
+                                    child:
+                                        Text(attendance.activeJobErrorMessage),
+                                  ),
                                 );
                               } else {
                                 return Container();
