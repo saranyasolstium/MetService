@@ -30,6 +30,7 @@ extension Method on EndPoint {
       case EndPoint.completeJob:
       case EndPoint.checkList:
       case EndPoint.getCustomerProductItemList:
+      case EndPoint.createJob:
         return HTTPMethod.post;
       default:
         return HTTPMethod.get;

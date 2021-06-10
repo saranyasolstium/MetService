@@ -3,13 +3,41 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
+import '../../api/ParamModel.dart';
 import '../../colors.dart';
 import '../../constant.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/controller/createjob_controller.dart';
 
 import '../../model/abstract_class.dart';
+import '../../reuse/date_manager.dart';
+import 'package:toast/toast.dart';
+
+extension CreateJobAction on _CreateJobScreenState {
+  onCreateJob() async {
+    final param = ParamCreateJob(
+      customerID: selectedCustomer.value!.aId,
+      productItemID: selectedProduct.value!.aId,
+      serviceTypeID: selectedServiceType.value!.aId,
+      serviceDate: DateFormat(AppDateFormat.yyyy_MM_dd).format(DateTime.now()),
+      subject: _enterSub1.text,
+      description: _enterSub1.text,
+    );
+
+    try {
+      final isJobCreated = await createJob.scCreateJob(param);
+      if (isJobCreated) {
+        Get.back();
+      } else {
+        Toast.show(kErrorMsg, context);
+      }
+    } catch (e) {
+      Toast.show('$e', context);
+    }
+  }
+}
 
 class CreateJobScreen extends StatefulWidget {
   @override
@@ -19,14 +47,14 @@ class CreateJobScreen extends StatefulWidget {
 class _CreateJobScreenState extends State<CreateJobScreen> {
   final CreateJobController createJob = Get.put(CreateJobController());
 
-  ADropDown? selectedCustomer;
-
-  final Rx<ADropDown?> selectedCustomerProduct = Rx(null);
+  final Rx<ADropDown?> selectedCustomer = Rx(null);
+  final Rx<ADropDown?> selectedProduct = Rx(null);
+  final Rx<ADropDown?> selectedServiceType = Rx(null);
 
   final TextEditingController _enterSub1 = TextEditingController();
 
   final TextEditingController _enterSub2 = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -71,185 +99,193 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // Choose Customer DropDown
-                                    Container(
-                                      margin:
-                                          EdgeInsets.only(bottom: 19.dynamic),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 2, horizontal: 15),
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(5.dynamic),
+                                Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // Choose Customer DropDown
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
                                         ),
-                                      ),
-                                      child: DropdownSearch<String>(
-                                        showAsSuffixIcons: true,
+                                        child: DropdownSearch<String>(
+                                          showAsSuffixIcons: true,
 
-                                        validator: (item) {
-                                          if (item == null)
-                                            return 'Required Field';
-                                          else
-                                            return null;
-                                        },
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          border: InputBorder.none,
-                                        ),
-                                        mode: Mode.MENU,
-                                        // showSelectedItem: true,
-                                        items: createJob
-                                            .arrString(createJob.customerList),
-                                        // label: "Menu mode",
-                                        hint: "Choose Customer",
+                                          validator: (item) {
+                                            if (item == null)
+                                              return '* Required';
+                                            else
+                                              return null;
+                                          },
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          mode: Mode.MENU,
+                                          // showSelectedItem: true,
+                                          items: createJob.arrString(
+                                              createJob.customerList),
+                                          // label: "Menu mode",
+                                          hint: "Choose Customer",
 
-                                        onChanged: (val) async {
-                                          selectedCustomerProduct.value = null;
-                                          selectedCustomer = createJob.find(
-                                              val!, createJob.customerList);
-                                          await createJob
-                                              .fetchCustomerProductList(
-                                                  selectedCustomer!.aId);
-                                        },
+                                          onChanged: (val) async {
+                                            selectedCustomer.value =
+                                                createJob.find(val!,
+                                                    createJob.customerList);
+                                            await createJob
+                                                .fetchCustomerProductList(
+                                                    selectedCustomer
+                                                        .value!.aId);
+                                          },
 
-                                        // selectedItem: createJob.valueOfDrop.value,
-                                      ),
-                                    ),
-                                    // Select Product DropDown
-                                    Container(
-                                      margin:
-                                          EdgeInsets.only(bottom: 19.dynamic),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 2, horizontal: 15),
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(5.dynamic),
+                                          // selectedItem: createJob.valueOfDrop.value,
                                         ),
                                       ),
-                                      child: DropdownSearch<String>(
-                                        showAsSuffixIcons: true,
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          border: InputBorder.none,
+                                      // Select Product DropDown
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
                                         ),
-                                        mode: Mode.MENU,
-                                        // showSelectedItem: true,
-                                        items: createJob.arrString(
-                                            createJob.customerProductList),
-                                        selectedItem: selectedCustomerProduct
-                                                .value?.aName ??
-                                            'Select',
-                                        // label: "Menu mode",
-                                        hint: "Select Product",
-                                        popupItemDisabled: (String s) =>
-                                            s.startsWith('I'),
-                                        onChanged: (val) {},
-                                        validator: (item) {
-                                          if (item == null)
-                                            return 'Required Field';
-                                          else
-                                            return null;
-                                        },
-                                        // selectedItem: "Brazil",
-                                      ),
-                                    ),
-                                    // Choose Service Type DropDown
-                                    Container(
-                                      margin:
-                                          EdgeInsets.only(bottom: 19.dynamic),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 2, horizontal: 15),
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(5.dynamic),
-                                        ),
-                                      ),
-                                      child: DropdownSearch<String>(
-                                        showAsSuffixIcons: true,
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          border: InputBorder.none,
-                                        ),
-                                        mode: Mode.MENU,
-                                        // showSelectedItem: true,
-                                        items: [
-                                          "Brazil",
-                                          "Italia (Disabled)",
-                                          "Tunisia",
-                                          'Canada'
-                                        ],
-                                        // label: "Menu mode",
-                                        hint: "Choose Service Type",
-                                        popupItemDisabled: (String s) =>
-                                            s.startsWith('I'),
-                                        onChanged: (val) {},
-                                        validator: (item) {
-                                          if (item == null)
-                                            return 'Required Field';
-                                          else
-                                            return null;
-                                        },
-                                        // selectedItem: "Brazil",
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.only(bottom: 19.dynamic),
-                                      child: TextFormField(
-                                        validator: MultiValidator([
-                                          RequiredValidator(
-                                              errorText: "* Required"),
-                                        ]),
-                                        obscureText: false,
-                                        controller: _enterSub1,
-                                        keyboardType: TextInputType.multiline,
-                                        onChanged: (val) {},
-                                        style: TextStyle(
-                                            fontSize: 14.dynamic,
-                                            fontWeight: FontWeight.w300),
-                                        decoration: InputDecoration(
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          contentPadding: EdgeInsets.fromLTRB(
-                                              20.0, 15.0, 20.0, 15.0),
-                                          hintText: "Enter Subject",
-                                          border: InputBorder.none,
+                                        child: DropdownSearch<String>(
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          mode: Mode.MENU,
+                                          // showSelectedItem: true,
+                                          items: createJob.arrString(
+                                              createJob.customerProductList),
+                                          // selectedItem: selectedCustomerProduct
+                                          //         .value?.aName ??
+                                          //     'Select',
+                                          // label: "Menu mode",
+                                          hint: "Select Product",
+                                          popupItemDisabled: (String s) =>
+                                              s.startsWith('I'),
+                                          onChanged: (val) {
+                                            selectedProduct.value =
+                                                createJob.find(
+                                                    val!,
+                                                    createJob
+                                                        .customerProductList);
+                                          },
+                                          validator: (item) {
+                                            if (item == null)
+                                              return '* Required';
+                                            else
+                                              return null;
+                                          },
+                                          // selectedItem: "Brazil",
                                         ),
                                       ),
-                                    ),
-                                    Container(
-                                      child: TextFormField(
-                                        validator: MultiValidator([
-                                          RequiredValidator(
-                                              errorText: "* Required"),
-                                        ]),
-                                        obscureText: false,
-                                        maxLines: 4,
-                                        controller: _enterSub2,
-                                        keyboardType: TextInputType.multiline,
-                                        onChanged: (val) {},
-                                        style: TextStyle(
-                                            fontSize: 14.dynamic,
-                                            fontWeight: FontWeight.w300),
-                                        decoration: InputDecoration(
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          contentPadding: EdgeInsets.fromLTRB(
-                                              20.0, 15.0, 20.0, 15.0),
-                                          hintText: "Enter Subject",
-                                          border: InputBorder.none,
+                                      // Choose Service Type DropDown
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          mode: Mode.MENU,
+                                          // showSelectedItem: true,
+                                          items: createJob.arrString(
+                                              createJob.serviceTypeList),
+                                          // label: "Menu mode",
+                                          hint: "Choose Service Type",
+                                          onChanged: (val) {
+                                            selectedServiceType.value =
+                                                createJob.find(val!,
+                                                    createJob.serviceTypeList);
+                                          },
+                                          validator: (item) {
+                                            if (item == null)
+                                              return '* Required';
+                                            else
+                                              return null;
+                                          },
+                                          // selectedItem: "Brazil",
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        child: TextFormField(
+                                          validator: MultiValidator([
+                                            RequiredValidator(
+                                                errorText: "* Required"),
+                                          ]),
+                                          obscureText: false,
+                                          controller: _enterSub1,
+                                          keyboardType: TextInputType.multiline,
+                                          onChanged: (val) {},
+                                          style: TextStyle(
+                                              fontSize: 14.dynamic,
+                                              fontWeight: FontWeight.w300),
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            contentPadding: EdgeInsets.fromLTRB(
+                                                20.0, 15.0, 20.0, 15.0),
+                                            hintText: "Enter Subject",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        child: TextFormField(
+                                          validator: MultiValidator([
+                                            RequiredValidator(
+                                                errorText: "* Required"),
+                                          ]),
+                                          obscureText: false,
+                                          maxLines: 4,
+                                          controller: _enterSub2,
+                                          keyboardType: TextInputType.multiline,
+                                          onChanged: (val) {},
+                                          style: TextStyle(
+                                              fontSize: 14.dynamic,
+                                              fontWeight: FontWeight.w300),
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            contentPadding: EdgeInsets.fromLTRB(
+                                                20.0, 15.0, 20.0, 15.0),
+                                            hintText: "Description",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
@@ -291,10 +327,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                 ),
                                 child: TextButton(
                                   onPressed: () {
-                                    // if (_formkey.currentState!.validate()) {
-                                    //   _formkey.currentState!.save();
-                                    // }
-                                    // this.onCompleteJob();
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState!.save();
+                                      this.onCreateJob();
+                                    }
                                   },
                                   child: Text(
                                     'Create Job',
@@ -315,7 +351,9 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                   ),
                                 ),
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.back();
+                                  },
                                   child: Text(
                                     'Cancel',
                                     style: TextStyle(

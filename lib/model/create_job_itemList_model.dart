@@ -1,5 +1,6 @@
 import '../api/api_service.dart';
 import 'abstract_class.dart';
+import 'abstract_class.dart';
 
 class MCustomerProductList implements Codable {
   String? status;
@@ -33,68 +34,47 @@ class MCustomerProductList implements Codable {
   bool get isValid => data.length > 0;
 }
 
-class MCustomerProductItem implements ADropDown {
-  // int id;
+class MCustomerProductItem implements ADropDown, AServiceItem {
+  int? id;
   late int productId;
   late String productName;
-  // String productImage;
-  // String sku;
-  // String serialNumber;
-  // String companyName;
-  // String customerName;
-  // String customerImage;
-  // String siteName;
-  // String siteAddress;
-  // String siteAddress2;
-  // String siteCity;
-  // String siteState;
-  // String siteZipcode;
-  // String subsiteName;
-  // String siteMap;
-  // Null warrantyEnding;
-  // String warrentyPeriod;
-
-  // MCustomerProductItem(
-  //     {this.id,
-  //       this.productId,
-  //       this.productName,
-  //       this.productImage,
-  //       this.sku,
-  //       this.serialNumber,
-  //       this.companyName,
-  //       this.customerName,
-  //       this.customerImage,
-  //       this.siteName,
-  //       this.siteAddress,
-  //       this.siteAddress2,
-  //       this.siteCity,
-  //       this.siteState,
-  //       this.siteZipcode,
-  //       this.subsiteName,
-  //       this.siteMap,
-  //       this.warrantyEnding,
-  //       this.warrentyPeriod});
+  String? productImage;
+  String? sku;
+  String? serialNumber;
+  String? companyName;
+  String? customerName;
+  String? customerImage;
+  String? siteName;
+  String? siteAddress;
+  String? siteAddress2;
+  String? siteCity;
+  String? siteState;
+  String? siteZipcode;
+  String? subsiteName;
+  String? siteMap;
+  String? warrantyEnding;
+  String? warrentyPeriod;
 
   MCustomerProductItem.fromJson(Map<String, dynamic> json) {
-    // id = json['id'];
+    id = json['id'];
     productId = json['product_id'];
     productName = json['product_name'];
-    // productImage = json['product_image'];
-    // sku = json['sku'];
-    // serialNumber = json['serial_number'];
-    // companyName = json['company_name'];
-    // customerName = json['customer_name'];
-    // customerImage = json['customer_image'];
-    // siteName = json['site_name'];
-    // siteAddress = json['site_address'];
-    // siteAddress2 = json['site_address2'];
-    // siteCity = json['site_city'];
-    // siteState = json['site_state'];
-    // siteZipcode = json['site_zipcode'];
-    // subsiteName = json['subsite_name'];
-    // siteMap = json['site_map'];
-    // warrantyEnding = json['warranty_ending'];
-    // warrentyPeriod = json['warrenty_period'];
+    productImage = json['product_image'];
+    sku = json['sku'];
+    serialNumber = json['serial_number'];
+    companyName = json['company_name'];
+    customerName = json['customer_name'];
+    customerImage = json['customer_image'];
+    siteName = json['site_name'];
+    siteAddress = json['site_address'];
+    siteAddress2 = json['site_address2'];
+    siteCity = json['site_city'];
+    siteState = json['site_state'];
+    siteZipcode = json['site_zipcode'];
+    subsiteName = json['subsite_name'];
+    siteMap = json['site_map'];
+    warrantyEnding = json['warranty_ending'];
+    warrentyPeriod = json['warrenty_period'];
   }
 
   Map<String, dynamic> toJson() {
@@ -124,4 +104,18 @@ class MCustomerProductItem implements ADropDown {
   String get aId => productId.toString();
 
   String get aName => productName;
+  String? get aCctvID => sku;
+  String? get aCustomerImage => customerImage;
+  String? get aCustomerName => customerName;
+  String? get aEndDay => ''; //temp
+  double? get aLat => 0;
+  double? get aLong => 0;
+  String? get aProdouctName => productName;
+  String? get aProductImage => productImage;
+  String? get aPurchaseDate => ''; //temp
+  String? get aRequestNo => '';
+  String? get aServiceID => productId.toString();
+  String? get aServiceType => ''; //temp
+  String? get aSiteID => ''; //temp
+  String? get aStartDay => ''; //temp
 }

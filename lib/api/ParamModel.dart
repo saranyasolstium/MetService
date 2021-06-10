@@ -93,3 +93,31 @@ class ParamSubmitItem {
     };
   }
 }
+
+class ParamCreateJob {
+  var customerID,
+      productItemID,
+      serviceDate,
+      serviceTypeID,
+      subject,
+      description;
+
+  ParamCreateJob(
+      {required this.customerID,
+      required this.productItemID,
+      required this.serviceTypeID,
+      required this.serviceDate,
+      required this.subject,
+      required this.description});
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {};
+    json['customer_id'] = customerID;
+    json['product_item_id'] = productItemID;
+    json['service_date'] = serviceDate;
+    json['service_type_id'] = serviceTypeID;
+    json['subject'] = subject;
+    json['description'] = description;
+    return json;
+  }
+}

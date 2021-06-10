@@ -72,7 +72,7 @@ class AttendanceServiceListScreen extends StatelessWidget {
                             ),
                             Center(
                               child: Text(
-                                DateTime.now()
+                                attendance.selectedActiveJobDate
                                     .string(AppDateFormat.ddStMMMMYYYY),
                                 style: TextStyle(
                                     color: Colour.appBlack,

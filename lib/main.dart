@@ -26,6 +26,7 @@ import 'screen/Attendance/calendar_screen.dart';
 import 'screen/attendance/attendance_service_list_screen.dart';
 import 'screen/create_job/create_job_screen.dart';
 import 'screen/create_job/create_job_screen.dart';
+import 'screen/customer_information/customer_information_screen.dart';
 
 class NavPage {
   static String calendar = '/calendar';
@@ -41,6 +42,7 @@ class NavPage {
   static String root = '/';
   static String attendanceServiceList = 'AttendanceServiceList';
   static String jobDetail = '/jobDetail';
+  static String customerInformation = '/customerInformation';
   // static String confirmation = '/confirmation';
 }
 
@@ -94,6 +96,9 @@ class MyApp extends StatelessWidget {
             name: NavPage.jobServiceReportScreen,
             page: () => ServiceReportScreen()),
         // GetPage(name: NavPage.confirmation, page: () => ConfirmationScreen()),
+        GetPage(
+            name: NavPage.customerInformation,
+            page: () => CustomerInformationScreen()),
       ],
       initialBinding: AppBinding(),
 

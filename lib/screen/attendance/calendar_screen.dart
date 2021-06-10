@@ -438,6 +438,7 @@ extension CalendarWidgets on CalendarScreen {
         );
       },
       onDayPressed: (date, events) {
+        attendance.selectedActiveJobDate = date;
         this.showAttendance(DateFormat(AppDateFormat.yyyy_MM_dd).format(date));
       },
       // weekdayTextStyle: TextStyle(
@@ -673,6 +674,7 @@ extension CalendarWidgets on CalendarScreen {
                 ),
                 child: TextButton(
                   onPressed: () {
+                    attendance.selectedActiveJobDate = DateTime.now();
                     this.showAttendance(DateFormat(AppDateFormat.yyyy_MM_dd)
                         .format(DateTime.now()));
                   },

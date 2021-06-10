@@ -6,6 +6,8 @@ import 'package:eagle_pixels/screen/home/mypurchase_detail_screen.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/my_purchase_controller.dart';
 import '../../constant.dart';
+import '../../controller/app_controller.dart';
+import '../views/service_view.dart';
 
 class MyPurchaseScreen extends StatelessWidget {
   final MyPurchaseController purchase = Get.find();
@@ -42,202 +44,47 @@ class MyPurchaseScreen extends StatelessWidget {
               ChangeDateView(
                 date: purchase.selectedDate,
                 didEnd: () {
+                  purchase.viewState.value = ViewState.loading;
                   purchase.fetchProducts();
                 },
               ),
-              // Container(
-              //   padding: EdgeInsets.symmetric(
-              //     horizontal: 14.dynamic,
-              //     vertical: 13.dynamic,
-              //   ),
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(8.0),
-              //     color: Colors.white,
-              //   ),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.start,
-              //     children: [
-              //       Icon(
-              //         Icons.calendar_today,
-              //         size: 23.dynamic,
-              //         color: Colour.appBlue,
-              //       ),
-              //       SizedBox(
-              //         width: 5,
-              //       ),
-              //       Expanded(
-              //         child: Column(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           children: [
-              //             Text(
-              //               'Today',
-              //               style: TextStyle(
-              //                   color: Colour.appDarkGrey,
-              //                   fontWeight: FontWeight.w400,
-              //                   fontSize: 12.dynamic),
-              //             ),
-              //             SizedBox(
-              //               height: 1,
-              //             ),
-              //             Text(
-              //               '3rd March, 2021',
-              //               style: TextStyle(
-              //                   color: Colour.appBlack,
-              //                   fontWeight: FontWeight.w400,
-              //                   fontSize: 14.dynamic),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //       Text(
-              //         'Change',
-              //         style: TextStyle(
-              //             color: Colour.appBlue,
-              //             fontWeight: FontWeight.w400,
-              //             fontSize: 16.dynamic),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               SizedBox(
                 height: 17.dynamic,
               ),
-              Container(
-                padding: EdgeInsets.only(
-                  top: 16.dynamic,
-                  left: 16.dynamic,
-                  bottom: 13.dynamic,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'images/camera.png',
-                        ),
-                        SizedBox(
-                          width: 13.dynamic,
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Hitech Security Camera',
-                                style: TextStyle(
-                                    color: Colour.appBlack,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16.dynamic),
-                              ),
-                              SizedBox(
-                                height: 4.dynamic,
-                              ),
-                              Text(
-                                'ID - CCTVCAM5698533',
-                                style: TextStyle(
-                                    color: Colour.appDarkGrey,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.dynamic),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.dynamic,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Purchase Date:',
-                                style: TextStyle(
-                                    color: Colour.appDarkGrey,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.dynamic),
-                              ),
-                              SizedBox(
-                                height: 4.dynamic,
-                              ),
-                              Text(
-                                '12th May, 2020',
-                                style: TextStyle(
-                                    color: Colour.appBlack,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14.dynamic),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Order ID',
-                                style: TextStyle(
-                                    color: Colour.appDarkGrey,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.dynamic),
-                              ),
-                              SizedBox(
-                                height: 4.dynamic,
-                              ),
-                              Text(
-                                'PO6589OLK68',
-                                style: TextStyle(
-                                    color: Colour.appBlack,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14.dynamic),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15.dynamic,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom),
-                              child: MyPurchaseDetailsScreen(),
-                            ),
+              Stack(
+                children: [
+                  Expanded(
+                    child: Obx(() {
+                      if (purchase.viewState.value.isSuccess) {
+                        return ListView.builder(
+                          itemBuilder: (context, index) {
+                            var item = purchase.jobList[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15.0),
+                              child: ServiceView(
+                                  isNeedDetail: true,
+                                  item: item,
+                                  isNeedStartJob: false,
+                                  onJob: () {},
+                                  onSeeDetail: () {}),
+                            );
+                          },
+                          itemCount: purchase.jobList.length,
+                        );
+                      } else if (purchase.viewState.value.isFailed) {
+                        return Center(
+                          child: Text(
+                            'No Purchases on this day',
+                            style: TextStyle(fontSize: 15.dynamic),
                           ),
                         );
-                      },
-                      child: Text(
-                        'See Details',
-                        style: TextStyle(
-                            color: Colour.appBlue,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.dynamic),
-                      ),
-                    ),
-                  ],
-                ),
+                      } else {
+                        return Container();
+                      }
+                    }),
+                  ),
+                  AppController.to.defaultLoaderView(),
+                ],
               ),
             ],
           ),

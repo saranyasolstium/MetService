@@ -96,16 +96,16 @@ extension JobHistoryWidgets on JobHistoryScreen {
   }
 }
 
-class JobHistoryItem extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: Container(
-        width: double.infinity,
-        height: 100,
-        color: Colors.red,
-      ),
-    );
-  }
-}
+// class JobHistoryItem extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 15),
+//       child: Container(
+//         width: double.infinity,
+//         height: 100,
+//         color: Colors.red,
+//       ),
+//     );
+//   }
+// }

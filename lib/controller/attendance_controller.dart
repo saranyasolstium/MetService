@@ -51,6 +51,7 @@ class AttendanceController extends GetxController {
   }
 
   var arrActiveService = <AActiveService>[].obs;
+  var selectedActiveJobDate = DateTime.now();
 
   final activeJobViewState = ViewState.loading.obs;
   var activeJobErrorMessage = '';

@@ -32,6 +32,10 @@ extension HomeAction on HomeScreen {
     print('job history called');
     Get.toNamed(NavPage.jobHistory);
   }
+
+  onCustomerInformation() {
+    Get.toNamed(NavPage.customerInformation);
+  }
 }
 
 class HomeScreen extends StatelessWidget {
@@ -232,6 +236,16 @@ extension HomeWidgets on HomeScreen {
               name: 'Job History',
             ),
           ),
+          SizedBox(
+            height: 18.dynamic,
+          ),
+          GestureDetector(
+            onTap: this.onCustomerInformation,
+            child: HomeMainCard(
+              imageName: 'images/job_history.png',
+              name: 'Customer Information',
+            ),
+          ),
           SafeArea(
             child: Padding(
               padding: EdgeInsets.only(top: 26.0, bottom: 34.0),
@@ -281,10 +295,14 @@ class HomeMainCard extends StatelessWidget {
           ),
           Text(
             name!,
+            softWrap: false,
+            overflow: TextOverflow.visible,
+            textAlign: TextAlign.center,
             style: TextStyle(
-                color: Colour.appBlue,
-                fontSize: 16.dynamic,
-                fontWeight: FontWeight.w400),
+              color: Colour.appBlue,
+              fontSize: 16.dynamic,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ],
       ),
