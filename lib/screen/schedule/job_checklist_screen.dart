@@ -299,7 +299,7 @@ class JobCheckListScreen extends StatelessWidget {
                 ],
               ),
             ),
-            // AppController.to.defaultLoaderView(),
+            AppController.to.defaultLoaderView(),
           ],
         ),
       ),
