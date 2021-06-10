@@ -57,7 +57,7 @@ class MCustomerProductItem implements ADropDown, AServiceItem {
   String? siteMap;
   String? warrantyEnding;
   String? warrentyPeriod;
-
+  MCustomerProductItem();
   MCustomerProductItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     productId = json['product_id'];

@@ -1,8 +1,12 @@
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eagle_pixels/controller/customer_information_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:get/get.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:toast/toast.dart';
 
 import '../../colors.dart';
 import '../../constant.dart';
@@ -14,7 +18,144 @@ class CustomerInformationScreen extends StatelessWidget {
     if (customer.viewState.isSuccess) {
       return ListView.builder(
         itemBuilder: (con, index) {
-          return Text('fdsa');
+          var item;
+          return Container(
+            padding: EdgeInsets.only(
+              top: 16.dynamic,
+              left: 16.dynamic,
+              bottom: 13.dynamic,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: Colors.white,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: "",
+                      placeholder: (_, url) => Image.asset(
+                        'images/camera.png',
+                      ),
+                      width: 61.dynamic,
+                      height: 61.dynamic,
+                    ),
+                    SizedBox(
+                      width: 13.dynamic,
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            safeString('Product Name'),
+                            style: TextStyle(
+                                color: Colour.appDarkGrey,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12.dynamic),
+                          ),
+                          SizedBox(
+                            height: 4.dynamic,
+                          ),
+                          Text(
+                            '${safeString('Hitech Security Camera')}',
+                            style: TextStyle(
+                                color: Colour.appBlack,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16.dynamic),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15.dynamic,
+                ),
+                JobDetailTitleDescriptionView('Serial Number', 'CCTVCAM569853'),
+                SizedBox(
+                  height: 15.dynamic,
+                ),
+                JobDetailTitleDescriptionView('Warranty Date', '12.12.12'),
+                SizedBox(
+                  height: 15.dynamic,
+                ),
+                JobDetailTitleDescriptionView('Location',
+                    'Dummy flat, dummy road, dummy state, pincode - 11221'),
+                SizedBox(
+                  height: 15.dynamic,
+                ),
+                JobDetailTitleDescriptionView('Sub Location',
+                    'Dummy flat, dummy road, dummy state, pincode - 11221'),
+                SizedBox(
+                  height: 15.dynamic,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Floor Plan',
+                      style: TextStyle(
+                          color: Colour.appDarkGrey,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.dynamic),
+                    ),
+                    SizedBox(
+                      height: 4.dynamic,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        // final floorText = detail.aFloorPlan;
+                        // if (floorText != null && floorText.length > 3) {
+                        //   final isPDF =
+                        //       floorText.substring(floorText.length - 3) == 'pdf';
+                        //   if (isPDF) {
+                        //     Get.bottomSheet(
+                        //       Center(
+                        //         child: Container(
+                        //           child: PDFViewer(
+                        //             document:
+                        //             await PDFDocument.fromURL(floorText),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       isScrollControlled: true,
+                        //       ignoreSafeArea: false,
+                        //     );
+                        //   } else {
+                        //     Get.bottomSheet(
+                        //       Center(
+                        //         child: PhotoView(
+                        //           imageProvider: NetworkImage(floorText),
+                        //         ),
+                        //       ),
+                        //       isScrollControlled: true,
+                        //       ignoreSafeArea: false,
+                        //     );
+                        //   }
+                        // } else {
+                        //   Toast.show('Invalid Floor Plan', Get.context);
+                        // }
+                      },
+                      child: Text(
+                        'NA',
+                        style: TextStyle(
+                            color: Colour.appBlue,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14.dynamic),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
         },
         itemCount: customer.filteredProductList.length,
         shrinkWrap: true,
@@ -228,5 +369,39 @@ class CustomerProductView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();
+  }
+}
+
+class JobDetailTitleDescriptionView extends StatelessWidget {
+  final String title;
+  final String? description;
+  JobDetailTitleDescriptionView(this.title, this.description);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      // mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+              color: Colour.appDarkGrey,
+              fontWeight: FontWeight.normal,
+              fontSize: 12.dynamic),
+        ),
+        SizedBox(
+          height: 4.dynamic,
+        ),
+        Text(
+          safeString(description),
+          style: TextStyle(
+              color: Colour.appBlack,
+              fontWeight: FontWeight.w400,
+              fontSize: 14.dynamic),
+        ),
+      ],
+    );
   }
 }

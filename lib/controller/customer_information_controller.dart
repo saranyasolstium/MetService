@@ -24,6 +24,7 @@ class CustomerInformationController extends GetxController {
 
   @override
   void onInit() async {
+    filteredProductList.add(MCustomerProductItem());
     await fetchCustomerList();
     super.onInit();
   }
@@ -43,6 +44,7 @@ class CustomerInformationController extends GetxController {
     );
     if (response.isValidModel) {
       customerList.value = response.model!.data;
+      // filteredProductList.value = response.model!.data;
     }
   }
 
