@@ -79,7 +79,7 @@ extension ScheduleListService on ScheduleListController {
       body: {'date': serviceDate(selectedDate.value)},
     );
 
-    scheduleList.value = resp.model!.data!;
+    scheduleList.value = resp.model!.data;
     scheduleList.add(MScheduledJobItem(id: '41'));
     if (scheduleList.length > 0) {
       viewState.value = ViewState.success;

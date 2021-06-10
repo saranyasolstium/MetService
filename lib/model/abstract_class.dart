@@ -94,3 +94,8 @@ abstract class ADropDown {
   String get aId;
   String get aName;
 }
+
+abstract class AProduct {
+  String get aName;
+  String get aImage;
+}

@@ -1,8 +1,11 @@
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/create_job_itemList_model.dart';
 import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/model/job_history_item.dart';
+import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/model/job_history_item.dart';
+import 'package:intl/intl.dart';
 
 import '../api/api_service.dart';
 import '../api/urls.dart';
@@ -15,8 +18,6 @@ class MyPurchaseController extends GetxController {
   final selectedDate = DateTime.now().obs;
   final viewState = ViewState.loading.obs;
 
-  // var isLoading = true.obs;
-
   @override
   void onInit() {
     fetchProducts();
@@ -25,9 +26,13 @@ class MyPurchaseController extends GetxController {
 
   fetchProducts() async {
     var response = await API.service.call(
-      endPoint: EndPoint.getCustomerProductItemList,
-      model: MCustomerProductList(),
-    );
+        endPoint: EndPoint.getCustomerProductItemList,
+        model: MCustomerProductList.init(),
+        body: {
+          'customer_id': AppController.user.id,
+          'date':
+              DateFormat(AppDateFormat.yyyy_MM_dd).format(selectedDate.value),
+        });
     // body: {'customer_id': cusID});
     if (response.isValidModel) {
       jobList.value = response.model!.data;

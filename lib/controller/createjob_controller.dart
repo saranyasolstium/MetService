@@ -49,7 +49,7 @@ class CreateJobController extends GetxController {
   fetchCustomerProductList(String cusID) async {
     var response = await API.service.call(
         endPoint: EndPoint.getCustomerProductItemList,
-        model: MCustomerProductList(),
+        model: MCustomerProductList.init(),
         body: {'customer_id': cusID});
     if (response.isValidModel) {
       customerProductList.value = response.model!.data;

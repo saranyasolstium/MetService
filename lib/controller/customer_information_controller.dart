@@ -49,7 +49,7 @@ class CustomerInformationController extends GetxController {
   fetchCustomerProductList() async {
     var response = await API.service.call(
         endPoint: EndPoint.getCustomerProductItemList,
-        model: MCustomerProductList(),
+        model: MCustomerProductList.init(),
         body: {'customer_id': selectedCustomer.value?.aId ?? 0});
     if (response.isValidModel) {
       productList.value = response.model!.data;

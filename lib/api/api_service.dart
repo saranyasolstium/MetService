@@ -78,7 +78,7 @@ class API {
       error = "Something went wrong. Please try again";
     } finally {
       print('url -> ${endPoint.method.string} $url');
-      print('Header -> ${endPoint.header}');
+      // print('Header -> ${endPoint.header}');
       print('body ->');
       printPrettyJson(body, indent: 2);
 

@@ -3,6 +3,7 @@ import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
@@ -64,13 +65,13 @@ class ServiceView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CachedNetworkImage(
-                imageUrl: item.aProductImage ?? "",
-                placeholder: (_, url) => Image.asset(
-                  'images/camera.png',
-                ),
+              Container(
                 width: 61.dynamic,
                 height: 61.dynamic,
+                child: NetworkImageView(
+                  item.aProductImage,
+                  kCameraPlaceholder,
+                ),
               ),
               SizedBox(
                 width: 13.dynamic,

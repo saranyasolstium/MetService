@@ -33,7 +33,7 @@ class JobHistoryController extends GetxController {
       endPoint: EndPoint.job_history_list,
       body: {'date': selectedDate.value.changeDay},
     );
-    jobList.value = resp.model!.data ?? [];
+    jobList.value = resp.model!.data;
     if (jobList.length > 0) {
       viewState.value = ViewState.success;
     } else {

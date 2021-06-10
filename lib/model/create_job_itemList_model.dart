@@ -7,6 +7,9 @@ class MCustomerProductList implements Codable {
   String? message;
   late List<MCustomerProductItem> data;
 
+  MCustomerProductList.init() {
+    data = [];
+  }
   // MCustomerProductList({this.status, this.message, this.data});
 
   MCustomerProductList fromJson(Map<String, dynamic> json) {
@@ -102,7 +105,6 @@ class MCustomerProductItem implements ADropDown, AServiceItem {
   }
 
   String get aId => productId.toString();
-
   String get aName => productName;
   String? get aCctvID => sku;
   String? get aCustomerImage => customerImage;

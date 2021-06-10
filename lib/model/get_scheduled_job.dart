@@ -16,17 +16,18 @@ class ScheduleResponse implements Codable {
   ScheduleResponse({
     this.status,
     this.message,
-    this.data,
+    this.data = const [],
   });
 
   String? status;
   String? message;
-  List<MScheduledJobItem>? data;
+  late List<MScheduledJobItem> data;
 
   fromJson(Map<String, dynamic> json) {
     var model = ScheduleResponse();
     model.status = json["status"];
     model.message = json["message"];
+    model.data = [];
     model.data = List<MScheduledJobItem>.from(
         json["data"].map((x) => MScheduledJobItem.fromJson(x)));
     return model;
@@ -35,7 +36,7 @@ class ScheduleResponse implements Codable {
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
       };
 
   bool get isValid => true;
