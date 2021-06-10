@@ -14,6 +14,7 @@ import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
@@ -23,6 +24,8 @@ import 'controller/app_controller.dart';
 import 'dynamic_font.dart';
 import 'screen/Attendance/calendar_screen.dart';
 import 'screen/attendance/attendance_service_list_screen.dart';
+import 'screen/create_job/create_job_screen.dart';
+import 'screen/create_job/create_job_screen.dart';
 
 class NavPage {
   static String calendar = '/calendar';
@@ -99,7 +102,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
       initialRoute: NavPage.root,
-      // home: JobCheckListScreen(),
+      // home: CreateJobScreen(),
     );
   }
 }
@@ -176,11 +179,32 @@ class Demo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _enterSub1 = TextEditingController();
     return MaterialApp(
       theme: ThemeData(),
       home: SafeArea(
         child: Scaffold(
-          body: content(),
+          body: Padding(
+            padding: EdgeInsets.only(bottom: 19.dynamic),
+            child: TextFormField(
+              validator: MultiValidator([
+                RequiredValidator(errorText: "* Required"),
+              ]),
+              obscureText: false,
+              controller: _enterSub1,
+              keyboardType: TextInputType.multiline,
+              onChanged: (val) {},
+              style:
+                  TextStyle(fontSize: 14.dynamic, fontWeight: FontWeight.w300),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                hintText: "Enter Subject",
+                border: InputBorder.none,
+              ),
+            ),
+          ),
         ),
       ),
     );

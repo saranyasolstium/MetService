@@ -89,3 +89,8 @@ abstract class AJobTime {
   String? aStartTime;
   String? aEndTime;
 }
+
+abstract class ADropDown {
+  String get aId;
+  String get aName;
+}
