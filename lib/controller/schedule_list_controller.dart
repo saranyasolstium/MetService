@@ -105,7 +105,6 @@ extension ScheduleListService on ScheduleListController {
     // }
   }
 
-  // ignore: non_constant_identifier_names
   Future<Map> onStartJob({required String service_id}) async {
     Position position = await AppController.to.determinePosition();
     print('Allowed location permission');

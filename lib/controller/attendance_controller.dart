@@ -52,7 +52,8 @@ class AttendanceController extends GetxController {
 
   var arrActiveService = <AActiveService>[].obs;
 
-  final viewState = ViewState.loading.obs;
+  final activeJobViewState = ViewState.loading.obs;
+  var activeJobErrorMessage = '';
 
   //ShowAttendanceModel
   Rx<AShowAttendance> showAttendenceDetail = MShowAttendenceDetail().obs;
@@ -64,6 +65,7 @@ class AttendanceController extends GetxController {
   var attendance = Map<String, List<MAttendanceItem>?>();
   final Rx<AAttendanceStatus?> attendanceStatus =
       MAttendanceStatusResponse().obs;
+
   @override
   void onInit() {
     selectedMonth.value = DateFormat.MMMM().format(DateTime.now());
@@ -365,15 +367,19 @@ extension AttendanceControllerService on AttendanceController {
   //   }
   // }
 
-  fetchService(String day, String month, String year) async {
-    viewState.value = ViewState.loading;
+  fetchService(String date) async {
+    Logger.log('Active Job List', 'Request date - $date');
+    activeJobViewState.value = ViewState.loading;
     var res = await API.service.call(
-      model: MActiveServiceResponse(),
-      endPoint: EndPoint.activeJob,
-    );
+        model: MActiveServiceResponse(),
+        endPoint: EndPoint.activeJob,
+        body: {'date': date});
     if (res.isValidModel) {
       arrActiveService.value = res.model!.data;
-      viewState.value = ViewState.success;
+      activeJobViewState.value = ViewState.success;
+    } else {
+      activeJobErrorMessage = res.message ?? kErrorMsg;
+      activeJobViewState.value = ViewState.failed;
     }
   }
 

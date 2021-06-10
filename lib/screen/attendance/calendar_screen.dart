@@ -9,6 +9,7 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/attendece_status_model.dart';
 import 'package:eagle_pixels/model/profile_model.dart';
+import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,11 +125,10 @@ extension CalendarAction on CalendarScreen {
     }
   }
 
-  showAttendance(String selectedDay) {
+  showAttendance(String date) {
     print('showAttendance');
     Get.toNamed(NavPage.attendanceServiceList);
-    attendance.fetchService(selectedDay, attendance.selectedMonthInNumber,
-        attendance.selectedYear.value);
+    attendance.fetchService(date);
   }
 
   selectMonth() {
@@ -438,7 +438,7 @@ extension CalendarWidgets on CalendarScreen {
         );
       },
       onDayPressed: (date, events) {
-        this.showAttendance(DateFormat('dd').format(date));
+        this.showAttendance(DateFormat(AppDateFormat.yyyy_MM_dd).format(date));
       },
       // weekdayTextStyle: TextStyle(
       //   color: Colors.green,
@@ -673,7 +673,8 @@ extension CalendarWidgets on CalendarScreen {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    this.showAttendance('0');
+                    this.showAttendance(DateFormat(AppDateFormat.yyyy_MM_dd)
+                        .format(DateTime.now()));
                   },
                   child: Text(
                     'Show Attendance',
