@@ -96,6 +96,11 @@ abstract class ADropDown {
 }
 
 abstract class AProduct {
-  String get aName;
-  String get aImage;
+  String? get aName;
+  String? get aImage;
+  String? get aSerialNumber;
+  String? get aWarrantyDate;
+  String? get aLocation;
+  String? get aSubLocation;
+  String? get aFloorPlan;
 }

@@ -1,6 +1,6 @@
 import 'package:eagle_pixels/model/create_job_customerList_model.dart';
 import 'package:eagle_pixels/model/create_job_itemList_model.dart';
-import 'package:eagle_pixels/model/service_type_model.dart';
+import 'package:eagle_pixels/model/store_list_model.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 
@@ -8,11 +8,10 @@ import '../api/api_service.dart';
 import '../api/urls.dart';
 import '../constant.dart';
 import '../model/abstract_class.dart';
-import '../model/get_scheduled_job.dart';
 
 class CustomerInformationController extends GetxController {
   var customerList = <MCustomerItem>[].obs;
-  var locationList = <ADropDown>[].obs;
+  var locationList = <MCustomerSiteItem>[].obs;
   var productList = <MCustomerProductItem>[].obs;
   var filteredProductList = <MCustomerProductItem>[].obs;
 
@@ -24,7 +23,8 @@ class CustomerInformationController extends GetxController {
 
   @override
   void onInit() async {
-    filteredProductList.add(MCustomerProductItem());
+    // filteredProductList
+    //     .add(MCustomerProductItem(productId: 1, productName: 'Soona Paana'));
     await fetchCustomerList();
     super.onInit();
   }
@@ -43,20 +43,40 @@ class CustomerInformationController extends GetxController {
       model: MCustomerList(),
     );
     if (response.isValidModel) {
-      customerList.value = response.model!.data;
+      customerList.value = response.model!.data
+          .where((element) => element.aId.trim().length > 0)
+          .toList();
       // filteredProductList.value = response.model!.data;
     }
   }
 
-  fetchCustomerProductList() async {
+  fetchCustomerProductList(bool isDropDown) async {
+    Map<String, dynamic> param = {};
+    param['customer_id'] = selectedCustomer.value?.aId ?? 0;
+    param['site_id'] = selectedLocation.value?.aId ?? '';
+    param['id'] = isDropDown ? '' : selectedProduct.value?.aId ?? '';
+    param['date'] = '';
     var response = await API.service.call(
-        endPoint: EndPoint.getCustomerProductItemList,
-        model: MCustomerProductList.init(),
-        body: {'customer_id': selectedCustomer.value?.aId ?? 0});
-    if (response.isValidModel) {
+      endPoint: EndPoint.getCustomerProductItemList,
+      model: MCustomerProductList.init(),
+      body: param,
+    );
+    if (isDropDown) {
       productList.value = response.model!.data;
     } else {
-      productList.value = [];
+      filteredProductList.value = response.model!.data;
+    }
+  }
+
+  fetchCustomerStoreList() async {
+    var response = await API.service.call(
+        endPoint: EndPoint.getCustomerStoreList,
+        model: MCustomerSite.init(),
+        body: {'customer_id': selectedCustomer.value?.aId ?? 0});
+    if (response.isValidModel) {
+      locationList.value = response.model!.data;
+    } else {
+      locationList.value = [];
     }
   }
 }

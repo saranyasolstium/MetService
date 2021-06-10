@@ -5,6 +5,9 @@ class MCustomerSite implements Codable {
   String? status;
   String? message;
   late List<MCustomerSiteItem> data;
+  MCustomerSite.init() {
+    data = [];
+  }
 
   MCustomerSite fromJson(Map<String, dynamic> json) {
     status = json['status'];
