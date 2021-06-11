@@ -1,14 +1,12 @@
+import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 
-class MyPurchaseDetailsScreen extends StatefulWidget {
-  @override
-  _MyPurchaseDetailsScreenState createState() =>
-      _MyPurchaseDetailsScreenState();
-}
+class MyPurchaseDetailsScreen extends StatelessWidget {
+  final AProduct product;
+  MyPurchaseDetailsScreen(this.product);
 
-class _MyPurchaseDetailsScreenState extends State<MyPurchaseDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(

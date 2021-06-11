@@ -34,6 +34,7 @@ class ServiceView extends StatelessWidget {
     required this.item,
     this.buttonTitle,
     this.isNeedDetail = true,
+    this.detailCustomAction,
     required this.onJob,
     this.isNeedStatus = false,
     required this.onSeeDetail,
@@ -46,6 +47,7 @@ class ServiceView extends StatelessWidget {
   final Function onJob;
   final AServiceItem item;
   final bool isNeedStartJob;
+  final Function? detailCustomAction;
 
   @override
   Widget build(BuildContext context) {
@@ -274,12 +276,16 @@ class ServiceView extends StatelessWidget {
                   ? Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(
-                            () => JobDetailScreen(
-                              isNeedStartJob: this.isNeedStartJob,
-                              jobID: item.aServiceID!,
-                            ),
-                          );
+                          if (detailCustomAction != null) {
+                            detailCustomAction!();
+                          } else {
+                            Get.to(
+                              () => JobDetailScreen(
+                                isNeedStartJob: this.isNeedStartJob,
+                                jobID: item.aServiceID!,
+                              ),
+                            );
+                          }
                         },
                         child: Text(
                           'View Details',

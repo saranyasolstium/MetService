@@ -19,6 +19,9 @@ class MyPurchaseScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 15.0),
             child: ServiceView(
                 isNeedDetail: true,
+                detailCustomAction: () {
+                  Get.to(MyPurchaseDetailsScreen(item));
+                },
                 item: item,
                 isNeedStartJob: false,
                 onJob: () {},
@@ -29,13 +32,18 @@ class MyPurchaseScreen extends StatelessWidget {
       );
     } else if (purchase.viewState.value.isFailed) {
       return Center(
-        child: Text(
-          'No Purchases on this day',
-          style: TextStyle(fontSize: 15.dynamic),
+        child: Padding(
+          padding: EdgeInsets.only(top: 30.dynamic),
+          child: Text(
+            'No Purchases on this day',
+            style: TextStyle(fontSize: 15.dynamic),
+          ),
         ),
       );
     } else {
-      return Container();
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
   }
 

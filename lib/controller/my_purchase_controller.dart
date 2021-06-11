@@ -14,7 +14,7 @@ import '../model/abstract_class.dart';
 
 class MyPurchaseController extends GetxController {
   // ignore: deprecated_member_use
-  var jobList = <AServiceItem>[].obs;
+  var jobList = <AProduct>[].obs;
   final selectedDate = DateTime.now().obs;
   final viewState = ViewState.loading.obs;
 
@@ -25,13 +25,14 @@ class MyPurchaseController extends GetxController {
   }
 
   fetchProducts() async {
+    viewState.value = ViewState.loading;
     var response = await API.service.call(
         endPoint: EndPoint.getCustomerProductItemList,
         model: MCustomerProductList.init(),
         body: {
           'customer_id': AppController.user.id,
-          'date':
-              DateFormat(AppDateFormat.yyyy_MM_dd).format(selectedDate.value),
+          // 'date':
+          //     DateFormat(AppDateFormat.yyyy_MM_dd).format(selectedDate.value),
         });
     // body: {'customer_id': cusID});
     if (response.isValidModel) {
