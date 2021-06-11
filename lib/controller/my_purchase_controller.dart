@@ -36,7 +36,7 @@ class MyPurchaseController extends GetxController {
         });
     // body: {'customer_id': cusID});
     if (response.isValidModel) {
-      jobList.value = response.model!.data;
+      // jobList.value = response.model!.data;
     } else {
       jobList.value = [];
     }

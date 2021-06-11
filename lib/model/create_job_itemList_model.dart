@@ -37,7 +37,7 @@ class MCustomerProductList implements Codable {
   bool get isValid => data.length > 0;
 }
 
-class MCustomerProductItem implements ADropDown, AServiceItem {
+class MCustomerProductItem implements ADropDown, AProduct {
   int? id;
   late int productId;
   late String productName;
@@ -57,11 +57,11 @@ class MCustomerProductItem implements ADropDown, AServiceItem {
   String? siteMap;
   String? warrantyEnding;
   String? warrentyPeriod;
-  MCustomerProductItem();
+  MCustomerProductItem({required this.productId, required this.productName});
   MCustomerProductItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     productId = json['product_id'];
-    productName = json['product_name'];
+    productName = json['product_name'] ?? '';
     productImage = json['product_image'];
     sku = json['sku'];
     serialNumber = json['serial_number'];
@@ -104,20 +104,29 @@ class MCustomerProductItem implements ADropDown, AServiceItem {
     return data;
   }
 
+  // String get aId => productId.toString();
+  // String get aName => productName;
+  // String? get aCctvID => sku;
+  // String? get aCustomerImage => customerImage;
+  // String? get aCustomerName => customerName;
+  // String? get aEndDay => ''; //temp
+  // double? get aLat => 0;
+  // double? get aLong => 0;
+  // String? get aProdouctName => productName;
+  // String? get aProductImage => productImage;
+  // String? get aPurchaseDate => ''; //temp
+  // String? get aRequestNo => '';
+  // String? get aServiceID => productId.toString();
+  // String? get aServiceType => ''; //temp
+  // String? get aSiteID => ''; //temp
+  // String? get aStartDay => '';
+
+  String? get aImage => productImage;
   String get aId => productId.toString();
   String get aName => productName;
-  String? get aCctvID => sku;
-  String? get aCustomerImage => customerImage;
-  String? get aCustomerName => customerName;
-  String? get aEndDay => ''; //temp
-  double? get aLat => 0;
-  double? get aLong => 0;
-  String? get aProdouctName => productName;
-  String? get aProductImage => productImage;
-  String? get aPurchaseDate => ''; //temp
-  String? get aRequestNo => '';
-  String? get aServiceID => productId.toString();
-  String? get aServiceType => ''; //temp
-  String? get aSiteID => ''; //temp
-  String? get aStartDay => ''; //temp
+  String? get aFloorPlan => siteMap;
+  String? get aLocation => siteAddress;
+  String? get aSerialNumber => serialNumber;
+  String? get aSubLocation => siteAddress2;
+  String? get aWarrantyDate => warrantyEnding;
 }

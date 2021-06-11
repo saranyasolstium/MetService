@@ -1,7 +1,9 @@
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/customer_information_controller.dart';
+import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:get/get.dart';
@@ -18,7 +20,7 @@ class CustomerInformationScreen extends StatelessWidget {
     if (customer.viewState.isSuccess) {
       return ListView.builder(
         itemBuilder: (con, index) {
-          var item;
+          var item = customer.filteredProductList[index];
           return Container(
             padding: EdgeInsets.only(
               top: 16.dynamic,
@@ -36,14 +38,11 @@ class CustomerInformationScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CachedNetworkImage(
-                      imageUrl: "",
-                      placeholder: (_, url) => Image.asset(
-                        'images/camera.png',
-                      ),
-                      width: 61.dynamic,
-                      height: 61.dynamic,
-                    ),
+                    Container(
+                        height: 60.dynamic,
+                        width: 60.dynamic,
+                        child:
+                            NetworkImageView(item.aImage, kCameraPlaceholder)),
                     SizedBox(
                       width: 13.dynamic,
                     ),
@@ -63,7 +62,7 @@ class CustomerInformationScreen extends StatelessWidget {
                             height: 4.dynamic,
                           ),
                           Text(
-                            '${safeString('Hitech Security Camera')}',
+                            '${safeString(item.aName)}',
                             style: TextStyle(
                                 color: Colour.appBlack,
                                 fontWeight: FontWeight.w400,
@@ -77,21 +76,22 @@ class CustomerInformationScreen extends StatelessWidget {
                 SizedBox(
                   height: 15.dynamic,
                 ),
-                JobDetailTitleDescriptionView('Serial Number', 'CCTVCAM569853'),
+                JobDetailTitleDescriptionView(
+                    'Serial Number', item.aSerialNumber),
                 SizedBox(
                   height: 15.dynamic,
                 ),
-                JobDetailTitleDescriptionView('Warranty Date', '12.12.12'),
+                JobDetailTitleDescriptionView(
+                    'Warranty Date', item.warrantyEnding),
                 SizedBox(
                   height: 15.dynamic,
                 ),
-                JobDetailTitleDescriptionView('Location',
-                    'Dummy flat, dummy road, dummy state, pincode - 11221'),
+                JobDetailTitleDescriptionView('Location', item.aLocation),
                 SizedBox(
                   height: 15.dynamic,
                 ),
-                JobDetailTitleDescriptionView('Sub Location',
-                    'Dummy flat, dummy road, dummy state, pincode - 11221'),
+                JobDetailTitleDescriptionView(
+                    'Sub Location', item.aSubLocation),
                 SizedBox(
                   height: 15.dynamic,
                 ),
@@ -111,40 +111,41 @@ class CustomerInformationScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        // final floorText = detail.aFloorPlan;
-                        // if (floorText != null && floorText.length > 3) {
-                        //   final isPDF =
-                        //       floorText.substring(floorText.length - 3) == 'pdf';
-                        //   if (isPDF) {
-                        //     Get.bottomSheet(
-                        //       Center(
-                        //         child: Container(
-                        //           child: PDFViewer(
-                        //             document:
-                        //             await PDFDocument.fromURL(floorText),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       isScrollControlled: true,
-                        //       ignoreSafeArea: false,
-                        //     );
-                        //   } else {
-                        //     Get.bottomSheet(
-                        //       Center(
-                        //         child: PhotoView(
-                        //           imageProvider: NetworkImage(floorText),
-                        //         ),
-                        //       ),
-                        //       isScrollControlled: true,
-                        //       ignoreSafeArea: false,
-                        //     );
-                        //   }
-                        // } else {
-                        //   Toast.show('Invalid Floor Plan', Get.context);
-                        // }
+                        final floorText = item.aFloorPlan;
+                        if (floorText != null && floorText.length > 3) {
+                          final isPDF =
+                              floorText.substring(floorText.length - 3) ==
+                                  'pdf';
+                          if (isPDF) {
+                            Get.bottomSheet(
+                              Center(
+                                child: Container(
+                                  child: PDFViewer(
+                                    document:
+                                        await PDFDocument.fromURL(floorText),
+                                  ),
+                                ),
+                              ),
+                              isScrollControlled: true,
+                              ignoreSafeArea: false,
+                            );
+                          } else {
+                            Get.bottomSheet(
+                              Center(
+                                child: PhotoView(
+                                  imageProvider: NetworkImage(floorText),
+                                ),
+                              ),
+                              isScrollControlled: true,
+                              ignoreSafeArea: false,
+                            );
+                          }
+                        } else {
+                          Toast.show('Invalid Floor Plan', Get.context);
+                        }
                       },
                       child: Text(
-                        'NA',
+                        safeString(item.aFloorPlan),
                         style: TextStyle(
                             color: Colour.appBlue,
                             fontWeight: FontWeight.w600,
@@ -173,7 +174,6 @@ class CustomerInformationScreen extends StatelessWidget {
     return Container();
   }
 
-  // final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -204,157 +204,181 @@ class CustomerInformationScreen extends StatelessWidget {
           ),
           body: Obx(() {
             return Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
                 children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: EdgeInsets.all(17.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Form(
-                              // key: _formKey,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Choose Customer DropDown
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 19.dynamic),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 15),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5.dynamic),
-                                      ),
-                                    ),
-                                    child: DropdownSearch<String>(
-                                      showAsSuffixIcons: true,
-                                      // validator: (item) {
-                                      //   if (item == null)
-                                      //     return '* Required';
-                                      //   else
-                                      //     return null;
-                                      // },
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
-                                      ),
-                                      mode: Mode.MENU,
-                                      // showSelectedItem: true,
-                                      items: customer
-                                          .arrString(customer.customerList),
-                                      // label: "Menu mode",
-                                      hint: "Select Customer",
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: EdgeInsets.all(17.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Form(
+                                  // key: _formKey,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // Choose Customer DropDown
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          showAsSuffixIcons: true,
+                                          // validator: (item) {
+                                          //   if (item == null)
+                                          //     return '* Required';
+                                          //   else
+                                          //     return null;
+                                          // },
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          mode: Mode.MENU,
+                                          // showSelectedItem: true,
+                                          items: customer
+                                              .arrString(customer.customerList),
+                                          // label: "Menu mode",
+                                          hint: "Select Customer",
 
-                                      onChanged: (val) async {
-                                        customer.selectedCustomer.value =
-                                            customer.find(
-                                                val!, customer.customerList);
-                                        customer.fetchCustomerProductList();
-                                        // await createJob
-                                        //     .fetchCustomerProductList(
-                                        //         selectedCustomer
-                                        //             .value!.aId);
-                                      },
+                                          onChanged: (val) async {
+                                            customer.selectedCustomer.value =
+                                                customer.find(val!,
+                                                    customer.customerList);
+                                            customer.selectedLocation.value =
+                                                null;
+                                            await customer
+                                                .fetchCustomerStoreList();
+                                            customer.selectedProduct.value =
+                                                null;
+                                            await customer
+                                                .fetchCustomerProductList(true);
+                                            await customer
+                                                .fetchCustomerProductList(
+                                                    false);
+                                          },
 
-                                      // selectedItem: createJob.valueOfDrop.value,
-                                    ),
+                                          // selectedItem: createJob.valueOfDrop.value,
+                                        ),
+                                      ),
+                                      // Select Product DropDown
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          mode: Mode.MENU,
+                                          // showSelectedItem: true,
+                                          items: customer
+                                              .arrString(customer.locationList),
+                                          // selectedItem: selectedCustomerProduct
+                                          //         .value?.aName ??
+                                          //     'Select',
+                                          // label: "Menu mode",
+                                          hint: "Select Location",
+
+                                          onChanged: (val) async {
+                                            customer.selectedLocation.value =
+                                                customer.find(val!,
+                                                    customer.locationList);
+                                            customer.selectedProduct.value =
+                                                null;
+                                            await customer
+                                                .fetchCustomerProductList(true);
+                                            await customer
+                                                .fetchCustomerProductList(
+                                                    false);
+                                          },
+                                          // validator: (item) {
+                                          //   if (item == null)
+                                          //     return '* Required';
+                                          //   else
+                                          //     return null;
+                                          // },
+                                          // selectedItem: "Brazil",
+                                        ),
+                                      ),
+                                      // Choose Service Type DropDown
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          mode: Mode.MENU,
+                                          // showSelectedItem: true,
+                                          items: customer
+                                              .arrString(customer.productList),
+                                          // label: "Menu mode",
+                                          hint: 'Select Product',
+                                          onChanged: (val) async {
+                                            customer.selectedProduct.value =
+                                                customer.find(
+                                                    val!, customer.productList);
+                                            await customer
+                                                .fetchCustomerProductList(
+                                                    false);
+                                          },
+                                          // validator: (item) {
+                                          //   if (item == null)
+                                          //     return '* Required';
+                                          //   else
+                                          //     return null;
+                                          // },
+                                          // selectedItem: "Brazil",
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  // Select Product DropDown
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 19.dynamic),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 15),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5.dynamic),
-                                      ),
-                                    ),
-                                    child: DropdownSearch<String>(
-                                      showAsSuffixIcons: true,
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
-                                      ),
-                                      mode: Mode.MENU,
-                                      // showSelectedItem: true,
-                                      items: customer
-                                          .arrString(customer.locationList),
-                                      // selectedItem: selectedCustomerProduct
-                                      //         .value?.aName ??
-                                      //     'Select',
-                                      // label: "Menu mode",
-                                      hint: "Select Location",
-                                      popupItemDisabled: (String s) =>
-                                          s.startsWith('I'),
-                                      onChanged: (val) {
-                                        customer.selectedLocation.value =
-                                            customer.find(
-                                                val!, customer.locationList);
-                                        customer.fetchCustomerProductList();
-                                      },
-                                      // validator: (item) {
-                                      //   if (item == null)
-                                      //     return '* Required';
-                                      //   else
-                                      //     return null;
-                                      // },
-                                      // selectedItem: "Brazil",
-                                    ),
-                                  ),
-                                  // Choose Service Type DropDown
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 19.dynamic),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 15),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5.dynamic),
-                                      ),
-                                    ),
-                                    child: DropdownSearch<String>(
-                                      showAsSuffixIcons: true,
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
-                                      ),
-                                      mode: Mode.MENU,
-                                      // showSelectedItem: true,
-                                      items: customer
-                                          .arrString(customer.productList),
-                                      // label: "Menu mode",
-                                      hint: 'Select Product',
-                                      onChanged: (val) {
-                                        customer.selectedProduct.value =
-                                            customer.find(
-                                                val!, customer.productList);
-                                        customer.fetchCustomerProductList();
-                                      },
-                                      // validator: (item) {
-                                      //   if (item == null)
-                                      //     return '* Required';
-                                      //   else
-                                      //     return null;
-                                      // },
-                                      // selectedItem: "Brazil",
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                                this.contentView,
+                              ],
                             ),
-                            this.contentView,
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
+                  AppController.to.defaultLoaderView()
                 ],
               ),
             );
