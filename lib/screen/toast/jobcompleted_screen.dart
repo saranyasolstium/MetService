@@ -98,7 +98,7 @@ class JobCompletedScreen extends StatelessWidget {
                     space(),
                     RichText(
                       text: TextSpan(
-                        text: 'You have Completed',
+                        text: '',
                         style: TextStyle(
                           fontSize: 14.dynamic,
                           fontWeight: FontWeight.normal,
@@ -106,7 +106,7 @@ class JobCompletedScreen extends StatelessWidget {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                            text: ' ${detailController.completedJobCount} ',
+                            text: ' ${detailController.completedMessage} ',
                             style: TextStyle(
                               fontSize: 20.dynamic,
                               fontWeight: FontWeight.w600,
@@ -114,7 +114,7 @@ class JobCompletedScreen extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: 'Job',
+                            text: '',
                             style: TextStyle(
                               fontSize: 14.dynamic,
                               fontWeight: FontWeight.normal,

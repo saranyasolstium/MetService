@@ -163,8 +163,8 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                       AttendanceTitleDescriptionView(
                                         'Start Day At:',
                                         attendance.isClockedIn
-                                            ? attendance.jobStartedTime!
-                                                .string(AppDateFormat.hhmmssa)
+                                            ? attendance.jobStartedTime!.string(
+                                                AppDateFormat.attendanceDate)
                                             : defaultText,
                                         color: Colour.appGreen,
                                       ),
@@ -336,6 +336,9 @@ class AttendenceDetail extends StatelessWidget {
                         entry.aStartTime ?? K.na,
                         color: Colour.appGreen,
                       ),
+                      SizedBox(
+                        width: 10.dynamic,
+                      ),
                       AttendanceTitleDescriptionView(
                           'End Day At:', entry.aEndTime ?? K.na,
                           color: Colour.appRed),
@@ -347,7 +350,7 @@ class AttendenceDetail extends StatelessWidget {
                 ],
               );
             },
-            itemCount: (item.aAttendanceEntry?.length ?? 0) > 0 ? 1 : 0,
+            itemCount: (item.aAttendanceEntry?.length ?? 0),
             // itemCount: item.aAttendanceEntry?.length ?? 0,
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,

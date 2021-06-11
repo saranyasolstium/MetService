@@ -117,4 +117,7 @@ class MActiveService extends AActiveService {
   List<AJobTime>? aAttendanceEntry;
   String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
+  String? get aCombinedAddress => aAddress;
+
+  // String? get aCombinedAddress => '$siteAddress $siteCity $siteState $siteZipCode';
 }

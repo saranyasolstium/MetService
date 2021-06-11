@@ -16,7 +16,9 @@ class ScheduleListController extends GetxController {
   var scheduleList = <MScheduledJobItem>[].obs;
   final selectedDate = DateTime.now().obs;
   final viewState = ViewState.loading.obs;
-
+  reloadList() {
+    fetchScheduleList();
+  }
   // var isLoading = true.obs;
 
   @override

@@ -51,13 +51,19 @@ import 'job_detail_controller.dart';
 // }
 
 class JobCheckListController extends GetxController {
-  var checklistData = MCheckListResponse().obs;
+  var checklistData = MCheckListResponse.init().obs;
   List<MCheckListItem> get checkList {
-    return checklistData.value.data?.first.list ?? [];
+    if (checklistData.value.data.length > 0) {
+      return checklistData.value.data.first.list ?? [];
+    } else
+      return [];
   }
 
   List<MCheckListItem> get selectedlist {
-    return checklistData.value.data?.first.selectedItems ?? [];
+    if (checklistData.value.data.length > 0) {
+      return checklistData.value.data.first.selectedItems;
+    } else
+      return [];
   }
 
   final detail = Get.find<JobDetailController>();
@@ -65,19 +71,22 @@ class JobCheckListController extends GetxController {
 
   fetchCheckList(String serviceID) async {
     var response = await API.service.call(
-      model: MCheckListResponse(),
+      needLoader: false,
+      model: MCheckListResponse.init(),
       endPoint: EndPoint.checkList,
       body: {'service_id': serviceID},
     );
     this.checklistData.value = response.model!;
-    print('${response.model!.data!.length} Response');
+    print('${response.model!.data.length} Response');
     MCheckListItem tempData = MCheckListItem();
     tempData.name = 'Option';
     tempData.itemID = 10;
     tempData.selectedImages = [];
     tempData.noteRequired = 1;
     tempData.options = null;
-    // checklistData.value.data!.first.list!.add(tempData);
+    // checklistData.value.data.add(MCheckList.fromJson({}));
+    // checklistData.value.data.first.list = [];
+    // checklistData.value.data.first.list?.add(tempData);
     update();
   }
   // List<ACheckList> get selectedList {
@@ -104,10 +113,14 @@ class JobCheckListController extends GetxController {
   void onInit() async {
     // checkList.value = sampleData();
 
-    await fetchCheckList(detail.detail.value.aServiceId.toString());
+    // Future.delayed(
+    //     Duration(seconds: 2),
+    //     () async =>
+    //         await fetchCheckList(detail.detail.value.aServiceId.toString()));
     // await fetchCheckList('41'); //temp
     // ever(checkList, some());
     // Future.delayed(Duration(seconds: 1), () => fetchCheckList());
+    fetchCheckList(detail.detail.value.aServiceId.toString());
     super.onInit();
   }
 
@@ -156,6 +169,7 @@ class JobCheckListController extends GetxController {
     );
     hideLoading();
     if (response.isSuccess) {
+      detail.completedMessage = response.message ?? 'Job Completed';
       return null;
     } else {
       return response.message ?? kErrorMsg;

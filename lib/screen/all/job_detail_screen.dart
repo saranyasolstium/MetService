@@ -20,27 +20,41 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../colors.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:eagle_pixels/common/logger.dart';
 
 // ignore: must_be_immutable
 extension JobDetailAction on JobDetailScreen {
   onStartJob() async {
     try {
-      // var authStatus = await AppController.to.verifyUser();
-      // if (authStatus.isValid) {
-      if (true) {
+      var authStatus = await AppController.to.verifyUser();
+      if (authStatus.isValid) {
+        // if (true) {
         var res =
             await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
         hideLoading();
         String status = res[K.status] ?? '';
         String error = res['error'] ?? '';
-        if (isSuccess(K.success) || error == K.already_checkIn) {
+        String message = res['message'] ?? res['error'] ?? kErrorMsg;
+
+        if (isSuccess(status) || error == K.already_checkIn) {
+          // final index = schedule.scheduleList.indexWhere((element) {
+          //   Logger.log('Service id',
+          //       '${element.aServiceID ?? ''} - ${detail.aServiceId}');
+          //   return ((element.aServiceID ?? '') == detail.aServiceId);
+          // });
+
+          // schedule.scheduleList[index].engineerStatus = 1;
+
+          // schedule.update();
+          schedule.reloadList();
           Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
           // Get.toNamed(NavPage.jobCheckListScreen);
         } else {
-          Toast.show(error, Get.context);
+          Toast.show(message, Get.context);
         }
       }
     } catch (e) {
@@ -155,56 +169,42 @@ class JobDetailScreen extends StatelessWidget {
                                             top: 20.dynamic,
                                             bottom: 10.dynamic),
                                         child: Text(
-                                          'Site MAP:',
+                                          'Site Address:',
                                           style: TextStyle(
                                               color: Colour.appDarkGrey,
                                               fontWeight: FontWeight.normal,
                                               fontSize: 12.dynamic),
                                         ),
                                       ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          String query = Uri.encodeComponent(
+                                              detail.aCombinedAddress ?? '');
+                                          String googleUrl =
+                                              "https://www.google.com/maps/search/?api=1&query=$query";
+                                          if (await canLaunch(googleUrl)) {
+                                            await launch(googleUrl);
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 20.dynamic,
+                                              bottom: 10.dynamic),
+                                          child: Icon(
+                                            Icons.location_on,
+                                            size: 25,
+                                            color: Colour.appDarkGrey,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                  Container(
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(8.dynamic),
-                                    ),
-                                    height: 112.dynamic,
-                                    child: IgnorePointer(
-                                      child: FlutterMap(
-                                        options: MapOptions(
-                                          center: LatLng(12.22532035463426,
-                                              79.68630931341535),
-                                          zoom: 11.0,
-                                          boundsOptions: FitBoundsOptions(
-                                              padding: EdgeInsets.all(8.0)),
-                                        ),
-                                        layers: [
-                                          TileLayerOptions(
-                                              urlTemplate:
-                                                  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                              subdomains: ['a', 'b', 'c']),
-                                          MarkerLayerOptions(
-                                            markers: [
-                                              Marker(
-                                                width: 80.0,
-                                                height: 80.0,
-                                                point: LatLng(
-                                                    12.226456173312162,
-                                                    79.65054512543048),
-                                                builder: (ctx) => Container(
-                                                  child: Icon(
-                                                    Icons.location_on,
-                                                    color: Colors.green,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                  Text(
+                                    safeString(detail.aCombinedAddress),
+                                    style: TextStyle(
+                                        color: Colour.appBlack,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14.dynamic),
                                   ),
                                   // this.warrantyInfo,
                                   SizedBox(height: 30.dynamic),

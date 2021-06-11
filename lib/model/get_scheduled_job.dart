@@ -5,6 +5,7 @@
 import 'dart:ffi';
 
 import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/constant.dart';
 import 'abstract_class.dart';
 // ScheduleResponse getScheduledListFromJson(String str) =>
 //     ScheduleResponse.fromJson(json.decode(str));
@@ -59,6 +60,11 @@ class MScheduledJobItem implements AServiceItem {
     this.subject,
     this.description,
     this.name,
+    this.siteAddress,
+    this.siteZipCode,
+    this.siteState,
+    this.siteCity,
+    this.engineerStatus,
   });
 
   dynamic? productImage;
@@ -78,7 +84,11 @@ class MScheduledJobItem implements AServiceItem {
   dynamic? name;
   dynamic? lat;
   dynamic? long;
-
+  dynamic? siteAddress;
+  dynamic? siteCity;
+  dynamic? siteState;
+  dynamic? siteZipCode;
+  int? engineerStatus;
   factory MScheduledJobItem.fromJson(Map<String, dynamic> json) =>
       MScheduledJobItem(
         id: json["id"],
@@ -96,6 +106,11 @@ class MScheduledJobItem implements AServiceItem {
         subject: json["subject"],
         description: json["description"],
         name: json["name"],
+        siteAddress: json["site_address"],
+        siteCity: json["site_city"],
+        siteState: json["site_state"],
+        siteZipCode: json["site_zipcode"],
+        engineerStatus: json["engineer_status"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -132,5 +147,9 @@ class MScheduledJobItem implements AServiceItem {
   String? get aRequestNo => '';
   String? get aStartDay => '';
   String? get aServiceID => id.toString();
+
+  String? get aCombinedAddress =>
+      constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
+
   String? get aSiteID => siteId.toString();
 }

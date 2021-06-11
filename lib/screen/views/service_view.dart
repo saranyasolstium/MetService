@@ -13,6 +13,7 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../colors.dart';
 import '../../constant.dart';
 
@@ -191,52 +192,78 @@ class ServiceView extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
                 child: Text(
-                  'Site MAP:',
+                  'Site Address:',
                   style: TextStyle(
                       color: Colour.appDarkGrey,
                       fontWeight: FontWeight.normal,
                       fontSize: 12.dynamic),
                 ),
               ),
+              GestureDetector(
+                onTap: () async {
+                  String query =
+                      Uri.encodeComponent(item.aCombinedAddress ?? '');
+                  String googleUrl =
+                      "https://www.google.com/maps/search/?api=1&query=$query";
+                  if (await canLaunch(googleUrl)) {
+                    await launch(googleUrl);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
+                  child: Icon(
+                    Icons.location_on,
+                    size: 25,
+                    color: Colour.appDarkGrey,
+                  ),
+                ),
+              ),
             ],
           ),
-          Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.dynamic),
-            ),
-            height: 112.dynamic,
-            child: IgnorePointer(
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(12.22532035463426, 79.68630931341535),
-                  zoom: 11.0,
-                  boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(8.0)),
-                ),
-                layers: [
-                  TileLayerOptions(
-                      urlTemplate:
-                          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                      subdomains: ['a', 'b', 'c']),
-                  MarkerLayerOptions(
-                    markers: [
-                      Marker(
-                        width: 80.0,
-                        height: 80.0,
-                        point: LatLng(12.226456173312162, 79.65054512543048),
-                        builder: (ctx) => Container(
-                          child: Icon(
-                            Icons.location_on,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+          Text(
+            safeString(item.aCombinedAddress),
+            style: TextStyle(
+                color: Colour.appBlack,
+                fontWeight: FontWeight.w600,
+                fontSize: 14.dynamic),
           ),
+          // Container(
+          //   clipBehavior: Clip.hardEdge,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(8.dynamic),
+          //   ),
+          //   height: 112.dynamic,
+          //   child: IgnorePointer(
+          //     child: FlutterMap(
+          //       options: MapOptions(
+          //         center: LatLng(12.22532035463426, 79.68630931341535),
+          //         zoom: 11.0,
+          //         boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(8.0)),
+          //       ),
+          //       layers: [
+          //         TileLayerOptions(
+          //             urlTemplate:
+          //                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          //             subdomains: ['a', 'b', 'c']),
+          //         MarkerLayerOptions(
+          //           markers: [
+          //             Marker(
+          //               width: 80.0,
+          //               height: 80.0,
+          //               point: LatLng(12.226456173312162, 79.65054512543048),
+          //               builder: (ctx) => Container(
+          //                 child: Icon(
+          //                   Icons.location_on,
+          //                   color: Colors.green,
+          //                 ),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           SizedBox(
             height: 15.dynamic,
           ),
@@ -300,38 +327,38 @@ class ServiceView extends StatelessWidget {
             ],
           ),
           SizedBox(height: 15.dynamic),
-          AttendanceController.to.isShowStop(
-                  siteID: item.aSiteID ?? '0',
-                  serviceID: item.aServiceID ?? '0')
-              ? ExpanderOrContainer(
-                  isContainer: true,
-                  child: Container(
-                    margin: EdgeInsets.only(right: 18.dynamic),
-                    child: Material(
-                      // elevation: 5.0,
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: Colour.appRed,
-                      child: MaterialButton(
-                        minWidth: 121.dynamic,
-                        height: 44.dynamic,
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        onPressed: () {
-                          onStopJob();
-                        },
-                        child: Text(
-                          'Stop Job',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.dynamic,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              : Container(),
+          // AttendanceController.to.isShowStop(
+          //         siteID: item.aSiteID ?? '0',
+          //         serviceID: item.aServiceID ?? '0')
+          //     ? ExpanderOrContainer(
+          //         isContainer: true,
+          //         child: Container(
+          //           margin: EdgeInsets.only(right: 18.dynamic),
+          //           child: Material(
+          //             // elevation: 5.0,
+          //             borderRadius: BorderRadius.circular(5.0),
+          //             color: Colour.appRed,
+          //             child: MaterialButton(
+          //               minWidth: 121.dynamic,
+          //               height: 44.dynamic,
+          //               padding: EdgeInsets.symmetric(horizontal: 40),
+          //               onPressed: () {
+          //                 onStopJob();
+          //               },
+          //               child: Text(
+          //                 'Stop Job',
+          //                 textAlign: TextAlign.center,
+          //                 style: TextStyle(
+          //                   color: Colors.white,
+          //                   fontSize: 16.dynamic,
+          //                   fontWeight: FontWeight.w400,
+          //                 ),
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       )
+          //     : Container(),
         ],
       ),
     );

@@ -88,8 +88,8 @@ class ParamSubmitItem {
       'checklist': checkList,
       'selected_value': selectedValue,
       'remarks': remarks,
-      'attached_images': [],
-      // 'attached_images': attachedImages,
+      // 'attached_images': [],
+      'attached_images': attachedImages,
     };
   }
 }

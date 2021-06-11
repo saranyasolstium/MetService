@@ -42,3 +42,17 @@ extension ViewStateExtension on ViewState {
     return this == ViewState.failed;
   }
 }
+
+String constructAddress(List<String?> units) {
+  var address = '';
+  units.forEach((element) {
+    if (element != null && element != '') {
+      address += '$element, ';
+    }
+  });
+  if (address.length < 2) {
+    return '';
+  } else {
+    return address.substring(0, address.length - 2);
+  }
+}

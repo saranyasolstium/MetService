@@ -68,7 +68,9 @@ class ScheduleScreen extends StatelessWidget {
                               padding: const EdgeInsets.only(bottom: 15.0),
                               child: ServiceView(
                                   item: item,
-                                  buttonTitle: 'Start Job',
+                                  buttonTitle: ((item.engineerStatus ?? 0) == 1)
+                                      ? 'Resume Job'
+                                      : 'Start Job',
                                   // isNeedStatus: ,
                                   isNeedDetail: true,
                                   isNeedStartJob: true,

@@ -1,6 +1,8 @@
 import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/attendance_entry_model.dart';
+import 'package:eagle_pixels/common/logger.dart';
 // class MScheduleJobDetail implements Codable {
 //   String? status;
 //   String? message;
@@ -224,6 +226,10 @@ class MJobDetail implements AJobDetail, AActiveService {
   int? engineerStatus;
   String? warrantyCard;
   String? aAddress;
+  dynamic? siteAddress;
+  dynamic? siteCity;
+  dynamic? siteState;
+  dynamic? siteZipCode;
   MJobDetail();
 
   MJobDetail.fromJson(Map<String, dynamic> json) {
@@ -263,10 +269,14 @@ class MJobDetail implements AJobDetail, AActiveService {
     warrantyCard = json['warranty_card'];
     aAddress = json['site_address'];
 
+    siteAddress = json["site_address"];
+    siteCity = json["site_city"];
+    siteState = json["site_state"];
+    siteZipCode = json["site_zipcode"];
     final attendance = json['attendance'];
     aAttendanceEntry = [];
 
-    if (attendance != null && attendance is List<dynamic>) {
+    if (attendance != null) {
       try {
         (attendance).forEach((e) {
           aAttendanceEntry!.add(MAttendanceEntry.fromJson(e));
@@ -275,6 +285,7 @@ class MJobDetail implements AJobDetail, AActiveService {
         print(e);
       }
     }
+    Logger.log('Attendance Entry Count', '${aAttendanceEntry!.length}');
   }
 
   Map<String, dynamic> toJson() {
@@ -389,4 +400,6 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aStartDay => '';
   String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
+  String? get aCombinedAddress =>
+      constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
 }

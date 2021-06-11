@@ -74,14 +74,16 @@ extension StopJobAction on JobCheckListScreen {
     await schedule.onStopJob(service_id: detail.aServiceId ?? '0');
     hideLoading();
     await AttendanceController.to.fetchAttendanceStatus();
-    schedule.update();
+
+    schedule.reloadList();
     navigator!
         .popUntil((route) => route.settings.name == NavPage.scheduleScreen);
   }
 
   onCompleteJob() async {
-    if (checkListController.selectedlist.length ==
-        checkListController.checkList.length) {
+    // if (checkListController.selectedlist.length ==
+    //     checkListController.checkList.length)
+    if (true) {
       final isCompleted = await _onSubmitWork();
       if (isCompleted) {
         Get.toNamed(NavPage.jobServiceReportScreen);
@@ -299,7 +301,7 @@ class JobCheckListScreen extends StatelessWidget {
                 ],
               ),
             ),
-            AppController.to.defaultLoaderView(),
+            // AppController.to.defaultLoaderView(),
           ],
         ),
       ),

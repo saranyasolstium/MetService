@@ -1,3 +1,5 @@
+import 'package:eagle_pixels/constant.dart';
+
 import '../api/api_service.dart';
 import 'abstract_class.dart';
 import 'abstract_class.dart';
@@ -129,4 +131,7 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? get aSerialNumber => serialNumber;
   String? get aSubLocation => siteAddress2;
   String? get aWarrantyDate => warrantyEnding;
+  // String? get aCombinedAddress => throw UnimplementedError();
+  String? get aCombinedAddress =>
+      constructAddress([siteAddress, siteCity, siteState, siteZipcode]);
 }

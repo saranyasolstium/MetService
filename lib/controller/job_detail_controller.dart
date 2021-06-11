@@ -8,7 +8,7 @@ import 'package:eagle_pixels/model/schedule_job_detail_model.dart';
 import 'package:eagle_pixels/model/site_model.dart';
 
 class JobDetailController extends GetxController {
-  var completedJobCount = 1;
+  String completedMessage = '';
   var isRequestedDetailService = false;
   Rx<AJobDetail> detail = MJobDetail().obs;
   // var arrSites = <MSite>[].obs;

@@ -10,7 +10,10 @@ class MCheckListResponse implements Codable {
   String? status;
   // String? name;
   String? message;
-  List<MCheckList>? data;
+  late List<MCheckList> data;
+  MCheckListResponse.init() {
+    data = [];
+  }
 
   fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +21,7 @@ class MCheckListResponse implements Codable {
     final object = json['data'];
     data = <MCheckList>[];
     if (object != null) {
-      data?.add(MCheckList.fromJson(object));
+      data.add(MCheckList.fromJson(object));
       // name = object['name'];
       // if (object['list'] != null) {
       //   object['list'].forEach((v) {
@@ -35,14 +38,14 @@ class MCheckListResponse implements Codable {
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data?.map((v) => v.toJson()).toList();
+      data['data'] = this.data.map((v) => v.toJson()).toList();
     }
     return data;
   }
 
   @override
   // TODO: implement isValid
-  bool get isValid => (data?.length ?? 0) > 0;
+  bool get isValid => (data.length) > 0;
 }
 
 class MCheckList {

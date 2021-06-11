@@ -18,6 +18,7 @@ abstract class AServiceItem {
   double? get aLong;
   String? get aSiteID;
   String? get aServiceID;
+  String? get aCombinedAddress;
 }
 
 abstract class AShowAttendance {
@@ -66,6 +67,7 @@ abstract class AJobDetail {
   String? get aItem;
   String? get aSerialNumber;
   String? get aSite;
+  String? get aSiteID;
   String? get aSubSite;
   String? get aSaleOrder;
   String? get aSiteMapLat;
@@ -76,6 +78,7 @@ abstract class AJobDetail {
   String? get aServiceAmount;
   String? get aService;
   String? get aFloorPlan;
+  String? get aCombinedAddress;
 
   List<ACheckListItem> get checkList;
 }

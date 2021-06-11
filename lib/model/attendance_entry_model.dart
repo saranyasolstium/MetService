@@ -59,14 +59,14 @@ class MAttendanceEntry implements AJobTime {
     if (attendenceDate != null) {
       aStartTime = DateFormat(AppDateFormat.defaultF)
           .parse(attendenceDate!)
-          .string(AppDateFormat.hhmmssa);
+          .string(AppDateFormat.attendanceDate);
     }
 
     attendenceEndDate = json['AttendenceEndDate'];
     if (attendenceEndDate != null) {
       aEndTime = DateFormat(AppDateFormat.defaultF)
           .parse(attendenceDate!)
-          .string(AppDateFormat.hhmmssa);
+          .string(AppDateFormat.attendanceDate);
     }
 
     iD = json['ID'];
