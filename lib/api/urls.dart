@@ -59,7 +59,7 @@ extension EndPointString on EndPoint {
       case EndPoint.completeJob:
         return 'complete_job';
       case EndPoint.activeJob:
-        return 'get_active_job_list';
+        return 'get_date_job_list';
       case EndPoint.getCustomerList:
         return 'customer_list';
       case EndPoint.getCustomerProductItemList:

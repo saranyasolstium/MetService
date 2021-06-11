@@ -37,7 +37,7 @@ class MCustomerProductList implements Codable {
   bool get isValid => data.length > 0;
 }
 
-class MCustomerProductItem implements ADropDown, AProduct {
+class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   int? id;
   late int productId;
   late String productName;
@@ -104,26 +104,26 @@ class MCustomerProductItem implements ADropDown, AProduct {
     return data;
   }
 
-  // String get aId => productId.toString();
-  // String get aName => productName;
-  // String? get aCctvID => sku;
-  // String? get aCustomerImage => customerImage;
-  // String? get aCustomerName => customerName;
-  // String? get aEndDay => ''; //temp
-  // double? get aLat => 0;
-  // double? get aLong => 0;
-  // String? get aProdouctName => productName;
-  // String? get aProductImage => productImage;
-  // String? get aPurchaseDate => ''; //temp
-  // String? get aRequestNo => '';
-  // String? get aServiceID => productId.toString();
-  // String? get aServiceType => ''; //temp
-  // String? get aSiteID => ''; //temp
-  // String? get aStartDay => '';
-
-  String? get aImage => productImage;
   String get aId => productId.toString();
   String get aName => productName;
+  String? get aCctvID => sku;
+  String? get aCustomerImage => customerImage;
+  String? get aCustomerName => customerName;
+  String? get aEndDay => ''; //temp
+  double? get aLat => 0;
+  double? get aLong => 0;
+  String? get aProdouctName => productName;
+  String? get aProductImage => productImage;
+  String? get aPurchaseDate => ''; //temp
+  String? get aRequestNo => '';
+  String? get aServiceID => productId.toString();
+  String? get aServiceType => ''; //temp
+  String? get aSiteID => ''; //temp
+  String? get aStartDay => '';
+
+  String? get aImage => productImage;
+  // String get aId => productId.toString();
+  // String get aName => productName;
   String? get aFloorPlan => siteMap;
   String? get aLocation => siteAddress;
   String? get aSerialNumber => serialNumber;

@@ -14,7 +14,7 @@ import '../model/abstract_class.dart';
 
 class MyPurchaseController extends GetxController {
   // ignore: deprecated_member_use
-  var jobList = <AProduct>[].obs;
+  var jobList = <MCustomerProductItem>[].obs;
   final selectedDate = DateTime.now().obs;
   final viewState = ViewState.loading.obs;
 
