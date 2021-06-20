@@ -56,3 +56,17 @@ String constructAddress(List<String?> units) {
     return address.substring(0, address.length - 2);
   }
 }
+
+String constructNames(List<String?> units) {
+  var address = '';
+  units.forEach((element) {
+    if (element != null && element != '') {
+      address += '$element ';
+    }
+  });
+  if (address.length < 1) {
+    return '';
+  } else {
+    return address.substring(0, address.length - 1);
+  }
+}

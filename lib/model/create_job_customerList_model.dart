@@ -1,3 +1,5 @@
+import 'package:eagle_pixels/constant.dart';
+
 import '../api/api_service.dart';
 import 'abstract_class.dart';
 
@@ -36,8 +38,8 @@ class MCustomerItem implements ADropDown {
   late String customerId;
   late String name;
   // String? companyName;
-  // String? firstName;
-  // String? lastName;
+  String? firstName;
+  String? lastName;
   // String? userName;
   // String? email;
   // String? phoneNumber;
@@ -51,8 +53,8 @@ class MCustomerItem implements ADropDown {
     customerId = json['customer_id'].toString();
     name = json['name'];
     // companyName = json['company_name'];
-    // firstName = json['first_name'];
-    // lastName = json['last_name'];
+    firstName = json['first_name'];
+    lastName = json['last_name'];
     // userName = json['user_name'];
     // email = json['email'];
     // phoneNumber = json['phone_number'];
@@ -82,5 +84,5 @@ class MCustomerItem implements ADropDown {
 
   String get aId => customerId.toString();
 
-  String get aName => name;
+  String get aName => constructNames([firstName, lastName]);
 }

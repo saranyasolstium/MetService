@@ -138,6 +138,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           hint: "Choose Customer",
 
                                           onChanged: (val) async {
+                                            selectedProduct.value = null;
                                             selectedCustomer.value =
                                                 createJob.find(val!,
                                                     createJob.customerList);
@@ -188,12 +189,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                                         .customerProductList);
                                           },
                                           validator: (item) {
-                                            if (item == null)
+                                            if (selectedProduct.value == null)
                                               return '* Required';
                                             else
                                               return null;
                                           },
-                                          // selectedItem: "Brazil",
+                                          selectedItem:
+                                              selectedProduct.value?.aName ??
+                                                  'Select Product',
                                         ),
                                       ),
                                       // Choose Service Type DropDown

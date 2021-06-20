@@ -8,153 +8,168 @@ import 'package:flutter/material.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:toast/toast.dart';
 
 import '../../colors.dart';
 import '../../constant.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 
-class CustomerInformationScreen extends StatelessWidget {
+class CustomerInformationScreen extends StatefulWidget {
+  @override
+  _CustomerInformationScreenState createState() =>
+      _CustomerInformationScreenState();
+}
+
+class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
   final customer = Get.put(CustomerInformationController());
+
+  String? _selectedRegion;
+  String? _selectedSecond;
+
   Widget get contentView {
     if (customer.viewState.isSuccess) {
       return ListView.builder(
         itemBuilder: (con, index) {
           var item = customer.filteredProductList[index];
-          return Container(
-            padding: EdgeInsets.only(
-              top: 16.dynamic,
-              left: 16.dynamic,
-              bottom: 13.dynamic,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.white,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                        height: 60.dynamic,
-                        width: 60.dynamic,
-                        child:
-                            NetworkImageView(item.aImage, kCameraPlaceholder)),
-                    SizedBox(
-                      width: 13.dynamic,
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            safeString('Product Name'),
-                            style: TextStyle(
-                                color: Colour.appDarkGrey,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.dynamic),
-                          ),
-                          SizedBox(
-                            height: 4.dynamic,
-                          ),
-                          Text(
-                            '${safeString(item.aName)}',
-                            style: TextStyle(
-                                color: Colour.appBlack,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16.dynamic),
-                          ),
-                        ],
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 15.0),
+            child: Container(
+              padding: EdgeInsets.only(
+                top: 16.dynamic,
+                left: 16.dynamic,
+                bottom: 13.dynamic,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.white,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                          height: 60.dynamic,
+                          width: 60.dynamic,
+                          child: NetworkImageView(
+                              item.aImage, kCameraPlaceholder)),
+                      SizedBox(
+                        width: 13.dynamic,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15.dynamic,
-                ),
-                JobDetailTitleDescriptionView(
-                    'Serial Number', item.aSerialNumber),
-                SizedBox(
-                  height: 15.dynamic,
-                ),
-                JobDetailTitleDescriptionView(
-                    'Warranty Date', item.warrantyEnding),
-                SizedBox(
-                  height: 15.dynamic,
-                ),
-                JobDetailTitleDescriptionView('Location', item.aLocation),
-                SizedBox(
-                  height: 15.dynamic,
-                ),
-                JobDetailTitleDescriptionView(
-                    'Sub Location', item.aSubLocation),
-                SizedBox(
-                  height: 15.dynamic,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Floor Plan',
-                      style: TextStyle(
-                          color: Colour.appDarkGrey,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.dynamic),
-                    ),
-                    SizedBox(
-                      height: 4.dynamic,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        final floorText = item.aFloorPlan;
-                        if (floorText != null && floorText.length > 3) {
-                          final isPDF =
-                              floorText.substring(floorText.length - 3) ==
-                                  'pdf';
-                          if (isPDF) {
-                            Get.bottomSheet(
-                              Center(
-                                child: Container(
-                                  child: PDFViewer(
-                                    document:
-                                        await PDFDocument.fromURL(floorText),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              safeString('Product Name'),
+                              style: TextStyle(
+                                  color: Colour.appDarkGrey,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12.dynamic),
+                            ),
+                            SizedBox(
+                              height: 4.dynamic,
+                            ),
+                            Text(
+                              '${safeString(item.aName)}',
+                              style: TextStyle(
+                                  color: Colour.appBlack,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16.dynamic),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15.dynamic,
+                  ),
+                  JobDetailTitleDescriptionView(
+                      'Serial Number', item.aSerialNumber),
+                  SizedBox(
+                    height: 15.dynamic,
+                  ),
+                  JobDetailTitleDescriptionView(
+                      'Warranty Date', item.warrantyEnding),
+                  SizedBox(
+                    height: 15.dynamic,
+                  ),
+                  JobDetailTitleDescriptionView('Location', item.aLocation),
+                  SizedBox(
+                    height: 15.dynamic,
+                  ),
+                  JobDetailTitleDescriptionView(
+                      'Sub Location', item.aSubLocation),
+                  SizedBox(
+                    height: 15.dynamic,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Floor Plan',
+                        style: TextStyle(
+                            color: Colour.appDarkGrey,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.dynamic),
+                      ),
+                      SizedBox(
+                        height: 4.dynamic,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          final floorText = item.aFloorPlan;
+                          if (floorText != null && floorText.length > 3) {
+                            final isPDF =
+                                floorText.substring(floorText.length - 3) ==
+                                    'pdf';
+                            if (isPDF) {
+                              Get.bottomSheet(
+                                Center(
+                                  child: Container(
+                                    child: PDFViewer(
+                                      document:
+                                          await PDFDocument.fromURL(floorText),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              isScrollControlled: true,
-                              ignoreSafeArea: false,
-                            );
-                          } else {
-                            Get.bottomSheet(
-                              Center(
-                                child: PhotoView(
-                                  imageProvider: NetworkImage(floorText),
+                                isScrollControlled: true,
+                                ignoreSafeArea: false,
+                              );
+                            } else {
+                              Get.bottomSheet(
+                                Center(
+                                  child: PhotoView(
+                                    imageProvider: NetworkImage(floorText),
+                                  ),
                                 ),
-                              ),
-                              isScrollControlled: true,
-                              ignoreSafeArea: false,
-                            );
+                                isScrollControlled: true,
+                                ignoreSafeArea: false,
+                              );
+                            }
+                          } else {
+                            Toast.show('Invalid Floor Plan', Get.context);
                           }
-                        } else {
-                          Toast.show('Invalid Floor Plan', Get.context);
-                        }
-                      },
-                      child: Text(
-                        safeString(item.aFloorPlan),
-                        style: TextStyle(
-                            color: Colour.appBlue,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14.dynamic),
+                        },
+                        child: Text(
+                          safeString(item.aFloorPlan),
+                          style: TextStyle(
+                              color: Colour.appBlue,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14.dynamic),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -254,13 +269,15 @@ class CustomerInformationScreen extends StatelessWidget {
                                               .arrString(customer.customerList),
                                           // label: "Menu mode",
                                           hint: "Select Customer",
-
                                           onChanged: (val) async {
                                             customer.selectedCustomer.value =
                                                 customer.find(val!,
                                                     customer.customerList);
+
                                             customer.selectedLocation.value =
                                                 null;
+                                            customer.locationList.value = [];
+
                                             await customer
                                                 .fetchCustomerStoreList();
                                             customer.selectedProduct.value =
@@ -298,9 +315,11 @@ class CustomerInformationScreen extends StatelessWidget {
                                           // showSelectedItem: true,
                                           items: customer
                                               .arrString(customer.locationList),
-                                          // selectedItem: selectedCustomerProduct
-                                          //         .value?.aName ??
-                                          //     'Select',
+                                          selectedItem: customer
+                                                  .selectedLocation
+                                                  .value
+                                                  ?.aName ??
+                                              'Select Location',
                                           // label: "Menu mode",
                                           hint: "Select Location",
 
@@ -364,7 +383,9 @@ class CustomerInformationScreen extends StatelessWidget {
                                           //   else
                                           //     return null;
                                           // },
-                                          // selectedItem: "Brazil",
+                                          selectedItem: customer.selectedProduct
+                                                  .value?.aName ??
+                                              'Select Product',
                                         ),
                                       ),
                                     ],
