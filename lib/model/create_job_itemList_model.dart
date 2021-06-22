@@ -111,16 +111,16 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? get aCctvID => sku;
   String? get aCustomerImage => customerImage;
   String? get aCustomerName => customerName;
-  String? get aEndDay => ''; //temp
+  String? get aEndDay => '';
   double? get aLat => 0;
   double? get aLong => 0;
   String? get aProdouctName => productName;
   String? get aProductImage => productImage;
-  String? get aPurchaseDate => ''; //temp
+  String? get aPurchaseDate => '';
   String? get aRequestNo => '';
   String? get aServiceID => productId.toString();
-  String? get aServiceType => ''; //temp
-  String? get aSiteID => ''; //temp
+  String? get aServiceType => '';
+  String? get aSiteID => '';
   String? get aStartDay => '';
 
   String? get aImage => productImage;

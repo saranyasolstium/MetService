@@ -36,7 +36,6 @@ import 'job_detail_controller.dart';
 //   bool get isValid => true;
 //
 //   toJson() {
-//     // TODO: implement toJson
 //     throw UnimplementedError();
 //   }
 //
@@ -117,7 +116,7 @@ class JobCheckListController extends GetxController {
     //     Duration(seconds: 2),
     //     () async =>
     //         await fetchCheckList(detail.detail.value.aServiceId.toString()));
-    // await fetchCheckList('41'); //temp
+    // await fetchCheckList('41');
     // ever(checkList, some());
     // Future.delayed(Duration(seconds: 1), () => fetchCheckList());
     fetchCheckList(detail.detail.value.aServiceId.toString());

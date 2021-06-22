@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/model/create_job_itemList_model.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
@@ -55,6 +56,15 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
 
   final TextEditingController _enterSub2 = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  String get dSelectedProduct {
+    final selected = selectedProduct.value as MCustomerProductItem?;
+    if (selected == null) {
+      return 'Select Product';
+    }
+    return '${selected.aName} - ${selected.serialNumber}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -172,15 +182,15 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                           mode: Mode.MENU,
                                           // showSelectedItem: true,
-                                          items: createJob.arrString(
-                                              createJob.customerProductList),
+                                          items: createJob
+                                              .arrStringForProductList(),
                                           // selectedItem: selectedCustomerProduct
                                           //         .value?.aName ??
                                           //     'Select',
                                           // label: "Menu mode",
                                           hint: "Select Product",
-                                          popupItemDisabled: (String s) =>
-                                              s.startsWith('I'),
+                                          // popupItemDisabled: (String s) =>
+                                          //     s.startsWith('I'),
                                           onChanged: (val) {
                                             selectedProduct.value =
                                                 createJob.find(
@@ -194,9 +204,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                             else
                                               return null;
                                           },
-                                          selectedItem:
-                                              selectedProduct.value?.aName ??
-                                                  'Select Product',
+                                          selectedItem: dSelectedProduct,
                                         ),
                                       ),
                                       // Choose Service Type DropDown

@@ -21,6 +21,7 @@ import 'package:intl/intl.dart';
 import '../../colors.dart';
 import '../../constant.dart';
 import 'package:eagle_pixels/api/api_service.dart';
+import 'package:toast/toast.dart';
 
 extension TimeInAction on TimeInScreen {
   startDay() async {
@@ -34,7 +35,6 @@ extension TimeInAction on TimeInScreen {
     //     attendance.attendanceStatus.value = resp;
     //     Get.toNamed(NavPage.clockOut);
     //   } else {
-    //     //TODO: Clock in error
     //   }
     // }
   }
@@ -55,10 +55,10 @@ extension TimeInAction on TimeInScreen {
             attendance.attendanceStatus.value = resp;
             Get.toNamed(NavPage.clockOut);
           } else {
-            //TODO: Clock in error
+            Toast.show(model?.message ?? kErrorMsg, Get.context);
           }
         } else {
-          //TODO: Failed to upload
+          Toast.show('Upload failed. please try again', Get.context);
         }
       } else {
         print('No image selected.');

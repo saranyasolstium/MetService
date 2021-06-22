@@ -139,8 +139,8 @@ class MScheduledJobItem implements AServiceItem {
   String? get aCustomerName => customerName;
   String? get aCustomerImage => customerImage;
 
-  double? get aLat => lat; //temp
-  double? get aLong => long; //temp
+  double? get aLat => lat;
+  double? get aLong => long;
 
   String? get aPurchaseDate => purchaseDate;
   String? get aEndDay => '';

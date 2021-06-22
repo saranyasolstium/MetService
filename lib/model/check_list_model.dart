@@ -44,7 +44,6 @@ class MCheckListResponse implements Codable {
   }
 
   @override
-  // TODO: implement isValid
   bool get isValid => (data.length) > 0;
 }
 
@@ -200,7 +199,6 @@ class MCheckListOption {
 //   }
 //
 //   @override
-//   // TODO: implement isValid
 //   bool get isValid => (data?.length ?? 0) > 0;
 // }
 //

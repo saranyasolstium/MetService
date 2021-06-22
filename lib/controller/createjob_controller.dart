@@ -32,6 +32,12 @@ class CreateJobController extends GetxController {
     return list.map((e) => e.aName).toList();
   }
 
+  List<String> arrStringForProductList() {
+    return customerProductList.map((e) {
+      return '${e.aName} - ${e.serialNumber}';
+    }).toList();
+  }
+
   ADropDown find(String selected, List<ADropDown> list) {
     return list.firstWhere((element) => element.aName == selected);
   }

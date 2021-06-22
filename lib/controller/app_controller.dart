@@ -31,6 +31,7 @@ import 'package:eagle_pixels/screen/toast/feedback_screen.dart';
 import 'package:toast/toast.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:toast/toast.dart';
 
 enum LoginStatus { logged, logout, loading }
 
@@ -298,8 +299,7 @@ class AppController extends GetxController {
         Get.find<AttendanceController>().fetchAttendanceStatus();
       } else {
         loginStatus.value = LoginStatus.logout;
-        print('Account not active');
-        // TODO: Show account inactive toast
+        Toast.show('Account not active', Get.context);
       }
     } else {
       // loginStatus.value = LoginStatus.logout;

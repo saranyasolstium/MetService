@@ -68,10 +68,10 @@ extension TimeOutAction on TimeOutScreen {
         //     attendance.attendanceStatus.value = resp;
         //     Get.toNamed(NavPage.clockOut);
         //   } else {
-        //     //TODO: Clock in error
+
         //   }
         // } else {
-        //   //TODO: Failed to upload
+
         // }
       } else {
         print('No image selected.');

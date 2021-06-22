@@ -92,12 +92,8 @@ extension CalendarAction on CalendarScreen {
             var resp = MAttendanceStatusResponse();
             resp.startedDate = DateTime.now();
             attendance.attendanceStatus.value = resp;
-          } else {
-            //TODO: Clock in error
-          }
-        } else {
-          //TODO: Failed to upload
-        }
+          } else {}
+        } else {}
       } else {
         print('No image selected.');
       }
