@@ -631,7 +631,7 @@ extension JobDetailWidgets on JobDetailScreen {
                       }
                     },
                     child: Text(
-                      detail.aFloorPlan ?? 'NA',
+                      detail.aFloorPlanName ?? 'NA',
                       style: TextStyle(
                           color: Colour.appBlue,
                           fontWeight: FontWeight.w600,

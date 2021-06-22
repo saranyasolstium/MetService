@@ -37,7 +37,7 @@ class MCheckListResponse implements Codable {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
     data['message'] = this.message;
-    if (this.data != null) {
+    if (this.data.isNotEmpty) {
       data['data'] = this.data.map((v) => v.toJson()).toList();
     }
     return data;
@@ -63,10 +63,10 @@ class MCheckList {
 
   MCheckList.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    list = [];
     if (json['list'] != null) {
-      list = <MCheckListItem>[];
       json['list'].forEach((v) {
-        list?.add(MCheckListItem.fromJson(v));
+        list!.add(MCheckListItem.fromJson(v));
       });
     }
   }
@@ -114,11 +114,13 @@ class MCheckListItem implements ACheckListItem {
       ];
       // options = [];
 
-      for (var i = 0; i < (opts.length ?? 0); i++) {
-        var strValue = opts[i];
-        options!.add(MCheckListOption(strValue, colors[i % 5]));
-        // options!.add(MCheckListOption('some1', Colors.blue));
-        // options!.add(MCheckListOption('some2', Colors.yellow));
+      if (opts is List<dynamic>) {
+        for (var i = 0; i < (opts.length); i++) {
+          var strValue = opts[i];
+          options!.add(MCheckListOption(strValue, colors[i % 5]));
+          // options!.add(MCheckListOption('some1', Colors.blue));
+          // options!.add(MCheckListOption('some2', Colors.yellow));
+        }
       }
     }
 

@@ -99,7 +99,7 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
     // data['site_city'] = this.siteCity;
     // data['site_state'] = this.siteState;
     // data['site_zipcode'] = this.siteZipcode;
-    // data['subsite_name'] = this.subsiteName;
+    data['subsite_name'] = this.subsiteName;
     // data['site_map'] = this.siteMap;
     // data['warranty_ending'] = this.warrantyEnding;
     // data['warrenty_period'] = this.warrentyPeriod;
@@ -134,4 +134,6 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   // String? get aCombinedAddress => throw UnimplementedError();
   String? get aCombinedAddress =>
       constructAddress([siteAddress, siteCity, siteState, siteZipcode]);
+
+  String? get aFloorPlanName => subsiteName;
 }

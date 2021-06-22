@@ -159,7 +159,8 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                           }
                         },
                         child: Text(
-                          safeString(item.aFloorPlan),
+                          safeString(
+                              '${item.aFloorPlan == '' ? 'Empty' : item.aFloorPlanName}'),
                           style: TextStyle(
                               color: Colour.appBlue,
                               fontWeight: FontWeight.w600,

@@ -78,6 +78,7 @@ abstract class AJobDetail {
   String? get aServiceAmount;
   String? get aService;
   String? get aFloorPlan;
+  String? get aFloorPlanName;
   String? get aCombinedAddress;
 
   List<ACheckListItem> get checkList;
@@ -106,4 +107,5 @@ abstract class AProduct {
   String? get aLocation;
   String? get aSubLocation;
   String? get aFloorPlan;
+  String? get aFloorPlanName;
 }

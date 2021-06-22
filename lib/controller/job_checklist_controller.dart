@@ -76,13 +76,13 @@ class JobCheckListController extends GetxController {
       body: {'service_id': serviceID},
     );
     this.checklistData.value = response.model!;
-    print('${response.model!.data.length} Response');
-    MCheckListItem tempData = MCheckListItem();
-    tempData.name = 'Option';
-    tempData.itemID = 10;
-    tempData.selectedImages = [];
-    tempData.noteRequired = 1;
-    tempData.options = null;
+    // print('${response.model!.data.length} Response');
+    // MCheckListItem tempData = MCheckListItem();
+    // tempData.name = 'Option';
+    // tempData.itemID = 10;
+    // tempData.selectedImages = [];
+    // tempData.noteRequired = 1;
+    // tempData.options = null;
     // checklistData.value.data.add(MCheckList.fromJson({}));
     // checklistData.value.data.first.list = [];
     // checklistData.value.data.first.list?.add(tempData);

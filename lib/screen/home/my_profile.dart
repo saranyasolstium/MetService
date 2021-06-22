@@ -11,6 +11,7 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/colors.dart';
 
 class MyProfileScreen extends StatelessWidget {
+  bool get isEngineer => AppController.to.isEngineer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,85 +39,91 @@ class MyProfileScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Container(
-                                child: Column(
+                              if (!isEngineer)
+                                Column(
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            'Bronze',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14.dynamic,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  'Bronze',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14.dynamic,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                '350 Points  ',
+                                                style: TextStyle(
+                                                  color: Colour.appDarkGrey,
+                                                  fontSize: 14.dynamic,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons
+                                                    .arrow_forward_ios_outlined,
+                                                color: Colors.grey,
+                                                size: 13.dynamic,
+                                              )
+                                            ],
                                           ),
-                                        ),
-                                        Text(
-                                          '350 Points  ',
-                                          style: TextStyle(
+                                          SizedBox(
+                                            height: 18.dynamic,
+                                          ),
+                                          Divider(
                                             color: Colour.appDarkGrey,
-                                            fontSize: 14.dynamic,
-                                            fontWeight: FontWeight.w400,
                                           ),
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios_outlined,
-                                          color: Colors.grey,
-                                          size: 13.dynamic,
-                                        )
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 18.dynamic,
                                     ),
-                                    Divider(
-                                      color: Colour.appDarkGrey,
+                                    RawMaterialButton(
+                                      onPressed: () {
+                                        Get.toNamed(NavPage.myReward);
+                                      },
+                                      child: ListOptions(
+                                        listName: 'Rewards',
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 18.dynamic,
+                                    ),
+                                    ListOptions(
+                                      listName: 'View Points History',
+                                    ),
+                                    SizedBox(
+                                      height: 18.dynamic,
+                                    ),
+                                    ListOptions(
+                                      listName: 'My Purchases',
+                                    ),
+                                    SizedBox(
+                                      height: 18.dynamic,
+                                    ),
+                                    ListOptions(
+                                      listName: 'Settings',
+                                    ),
+                                    SizedBox(
+                                      height: 18.dynamic,
+                                    ),
+                                    ListOptions(
+                                      listName: 'Help Centre',
+                                    ),
+                                    SizedBox(
+                                      height: 18.dynamic,
                                     ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 18.dynamic,
-                              ),
-                              RawMaterialButton(
-                                onPressed: () {
-                                  Get.toNamed(NavPage.myReward);
-                                },
-                                child: ListOptions(
-                                  listName: 'Rewards',
-                                ),
-                              ),
-                              SizedBox(
-                                height: 18.dynamic,
-                              ),
-                              ListOptions(
-                                listName: 'View Points History',
-                              ),
-                              SizedBox(
-                                height: 18.dynamic,
-                              ),
-                              ListOptions(
-                                listName: 'My Purchases',
-                              ),
-                              SizedBox(
-                                height: 18.dynamic,
-                              ),
-                              ListOptions(
-                                listName: 'Settings',
-                              ),
-                              SizedBox(
-                                height: 18.dynamic,
-                              ),
-                              ListOptions(
-                                listName: 'Help Centre',
-                              ),
-                              SizedBox(
-                                height: 18.dynamic,
-                              ),
                               RawMaterialButton(
                                 onPressed: () {
                                   showCupertinoDialog(

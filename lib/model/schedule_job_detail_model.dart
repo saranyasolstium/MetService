@@ -402,4 +402,6 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aSiteID => siteId.toString();
   String? get aCombinedAddress =>
       constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
+
+  String? get aFloorPlanName => subsiteName;
 }
