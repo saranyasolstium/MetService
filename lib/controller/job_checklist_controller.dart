@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:eagle_pixels/api/ParamModel.dart';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
+import 'package:eagle_pixels/common/logger.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
@@ -119,7 +122,7 @@ class JobCheckListController extends GetxController {
     // await fetchCheckList('41');
     // ever(checkList, some());
     // Future.delayed(Duration(seconds: 1), () => fetchCheckList());
-    fetchCheckList(detail.detail.value.aServiceId.toString());
+    await fetchCheckList(detail.detail.value.aServiceId.toString());
     super.onInit();
   }
 
@@ -162,6 +165,7 @@ class JobCheckListController extends GetxController {
       signature: signature,
       feedback: feedback,
     ).toJson();
+    Logger.log('Complete Job', feedback);
     var response = await API.service.call(
       endPoint: EndPoint.completeJob,
       body: param,

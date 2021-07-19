@@ -30,6 +30,7 @@ import 'package:eagle_pixels/common/logger.dart';
 extension JobDetailAction on JobDetailScreen {
   onStartJob() async {
     try {
+      showLoading();
       var authStatus = await AppController.to.verifyUser();
       if (authStatus.isValid) {
         // if (true) {

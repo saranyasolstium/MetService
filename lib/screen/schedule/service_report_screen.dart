@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:eagle_pixels/api/ParamModel.dart';
 import 'package:eagle_pixels/api/api_service.dart';
@@ -39,9 +40,6 @@ class ServiceReportScreen extends StatelessWidget {
     return controller.detail.value;
   }
 
-  final signatureController = SignatureController().obs;
-  final Rx<double> starRate = 0.toDouble().obs;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -52,7 +50,7 @@ class ServiceReportScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colour.appLightGrey,
         appBar: AppBar(
           toolbarHeight: 66.dynamic,
@@ -128,13 +126,33 @@ class ServiceReportScreen extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Customer E-Sign',
-                                  style: TextStyle(
-                                    fontSize: 12.dynamic,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colour.appText,
-                                  ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Customer E-Sign',
+                                      style: TextStyle(
+                                        fontSize: 12.dynamic,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colour.appText,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.signatureController.value
+                                            .clear();
+                                      },
+                                      child: Text(
+                                        'Clear',
+                                        style: TextStyle(
+                                          fontSize: 12.dynamic,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colour.appBlue,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(height: 12.dynamic),
                                 DottedBorder(
@@ -144,7 +162,8 @@ class ServiceReportScreen extends StatelessWidget {
                                   child: Signature(
                                     height: 67.dynamic,
                                     width: Get.width - 60.dynamic,
-                                    controller: signatureController.value,
+                                    controller:
+                                        controller.signatureController.value,
                                     backgroundColor: Colors.white,
                                   ),
                                 ),
@@ -173,6 +192,31 @@ class ServiceReportScreen extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(height: 12.dynamic),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colour.appLightGrey,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: TextFormField(
+                                    onChanged: (txt) {
+                                      controller.feedback.value = txt;
+                                    },
+                                    obscureText: false,
+                                    // controller: _remarkController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 4,
+                                    style: TextStyle(
+                                        fontSize: 14.dynamic,
+                                        fontWeight: FontWeight.w300),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(
+                                          20.0, 15.0, 20.0, 15.0),
+                                      hintText: "Write your feedback",
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 10.dynamic),
                                 RatingBar.builder(
                                   unratedColor: HexColor.fromHex('B1D7DD'),
                                   initialRating: 0,
@@ -187,8 +231,8 @@ class ServiceReportScreen extends StatelessWidget {
                                     color: Colors.amber,
                                   ),
                                   onRatingUpdate: (rat) {
-                                    starRate.value = rat;
-                                    print(starRate.value);
+                                    controller.starRate.value = rat;
+                                    print(controller.starRate.value);
                                   },
                                 ),
                               ],
@@ -234,16 +278,17 @@ class ServiceReportScreen extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () async {
-                                var bytes = await signatureController.value
+                                var bytes = await controller
+                                    .signatureController.value
                                     .toPngBytes();
                                 if (bytes != null) {
                                   showLoading();
                                   String? status =
                                       await checkListController.onCompleteJob(
                                     service_id: detail.aServiceId ?? '0',
-                                    rating: starRate.value,
+                                    rating: controller.starRate.value,
                                     signature: base64Encode(bytes),
-                                    feedback: 'Hello',
+                                    feedback: controller.feedback.value,
                                   );
 
                                   if (status != null) {
@@ -344,7 +389,7 @@ class ReportItem extends StatelessWidget {
           ),
           border: Border.all(
             width: 1.5,
-            color: item.selectedItem?.color ?? Colors.grey,
+            color: item.lastItem?.color ?? Colors.grey,
           ),
         ),
         child: Column(
@@ -368,8 +413,7 @@ class ReportItem extends StatelessWidget {
                 // Expanded(child: Container()),
                 SizedBox(width: 5.dynamic),
                 ReportCheckbox(
-                    item:
-                        item.selectedItem ?? MCheckListOption('', Colors.grey)),
+                    item: item.lastItem ?? MCheckListOption('', Colors.grey)),
               ],
             ),
             Divider(
@@ -460,13 +504,21 @@ class ReportItem extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5.0),
                           clipBehavior: Clip.hardEdge,
-                          child: Image.file(
-                            item.selectedImages[row],
-                            height: 43.dynamic,
-                            width: 43.dynamic,
-                            fit: BoxFit.fill,
-                            isAntiAlias: false,
-                          ),
+                          child: (item.selectedImages[row] is Uint8List)
+                              ? Image.memory(
+                                  item.selectedImages[row],
+                                  height: 43.dynamic,
+                                  width: 43.dynamic,
+                                  fit: BoxFit.fill,
+                                  isAntiAlias: false,
+                                )
+                              : Image.network(
+                                  item.selectedImages[row],
+                                  height: 43.dynamic,
+                                  width: 43.dynamic,
+                                  fit: BoxFit.fill,
+                                  isAntiAlias: false,
+                                ),
                         ),
                       ),
                       SizedBox(

@@ -42,6 +42,11 @@ class CreateJobController extends GetxController {
     return list.firstWhere((element) => element.aName == selected);
   }
 
+  ADropDown findProduct(String selected, List<MCustomerProductItem> list) {
+    return list.firstWhere(
+        (element) => '${element.aName} - ${element.serialNumber}' == selected);
+  }
+
   fetchCustomerList() async {
     var response = await API.service.call(
       endPoint: EndPoint.getCustomerList,

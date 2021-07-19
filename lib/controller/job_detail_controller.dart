@@ -6,6 +6,7 @@ import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/model/schedule_job_detail_model.dart';
 import 'package:eagle_pixels/model/site_model.dart';
+import 'package:signature/signature.dart';
 
 class JobDetailController extends GetxController {
   String completedMessage = '';
@@ -13,6 +14,10 @@ class JobDetailController extends GetxController {
   Rx<AJobDetail> detail = MJobDetail().obs;
   // var arrSites = <MSite>[].obs;
   // late Rx<MSite?> selectedSite = Rx(null);
+
+  final signatureController = SignatureController().obs;
+  final Rx<double> starRate = 0.toDouble().obs;
+  final RxString feedback = ''.obs;
 
   @override
   void onInit() {

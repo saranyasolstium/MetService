@@ -106,7 +106,7 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
     return data;
   }
 
-  String get aId => productId.toString();
+  String get aId => id.toString();
   String get aName => productName;
   String? get aCctvID => sku;
   String? get aCustomerImage => customerImage;

@@ -12,6 +12,7 @@ import 'package:eagle_pixels/model/show_attendence_model.dart';
 import 'package:eagle_pixels/model/clockin_model.dart';
 import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/model/site_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -64,7 +65,7 @@ class AttendanceController extends GetxController {
   late Rx<MSite?> selectedSite = Rx(null);
 
   var attendance = Map<String, List<MAttendanceItem>?>();
-  final Rx<AAttendanceStatus?> attendanceStatus =
+  final Rx<MAttendanceStatusResponse?> attendanceStatus =
       MAttendanceStatusResponse().obs;
 
   @override
@@ -81,14 +82,21 @@ class AttendanceController extends GetxController {
   }
 
   bool get isClockedIn {
-    var status = (attendanceStatus.value as MAttendanceStatusResponse).data;
-    if (status != null) {
-      return jobStartedTime != null &&
-          status.siteId == '0' &&
-          status.serviceId == 0;
+    if (attendanceStatus.value != null) {
+      return attendanceStatus.value!.isAttendanceStarted;
     } else {
       return false;
     }
+    // var status = (attendanceStatus.value as MAttendanceStatusResponse).data;
+
+    // if (status != null) {
+    //   return jobStartedTime != null;
+    //   // &&
+    //   // status.siteId == '0' &&
+    //   // status.serviceId == 0;
+    // } else {
+    //   return false;
+    // }
     // return jobStartedTime != null && attendanceStatus.value.startedDate;
   }
 
@@ -354,6 +362,7 @@ extension AttendanceControllerService on AttendanceController {
         endPoint: EndPoint.attendanceStatus,
         body: {K.service_id: '0'});
     attendanceStatus.value = response.model;
+    update();
   }
 
   // fetchShowAttendenceDetail() async {

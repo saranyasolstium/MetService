@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
@@ -85,26 +86,26 @@ class MCheckListItem implements ACheckListItem {
   int? type;
   int? noteRequired;
   List<MCheckListOption>? options;
+  List<dynamic>? selectedOption;
+  // List<dynamic>? attachedImages;
+  String remarks = '';
+
   MCheckListItem();
 
   MCheckListItem.fromJson(Map<String, dynamic> json) {
     selectedImages = [];
     options = [];
+    selectedOption = [];
+    // attachedImages = [];
     itemID = json['id'];
     name = json['name'];
     type = json['type'];
+    remarks = json['note'] ?? '';
     noteRequired = json['note_required'];
+    selectedOption = json['selected_options'] ?? [];
+    selectedImages = json['attached_images'] ?? [];
     if (json['options'] != null) {
       var opts = json['options'] ?? [];
-      // for (var i = 0; i < 20; i++) {
-      //   opts.add('Some $i ${Iterable.generate(i, (index) {
-      //     return '$i';
-      //   }).toString()}');
-      // }
-      // if (opts is List<String>) {
-      // 1,2,3,4,5,6,7,8,9,10
-      // 1,2,3,4,5,1,2,3,4,5
-
       var colors = [
         Colour.appBlue,
         Colour.appRed,
@@ -112,24 +113,18 @@ class MCheckListItem implements ACheckListItem {
         Colors.green,
         Colors.orange,
       ];
-      // options = [];
 
       if (opts is List<dynamic>) {
         for (var i = 0; i < (opts.length); i++) {
           var strValue = opts[i];
-          options!.add(MCheckListOption(strValue, colors[i % 5]));
-          // options!.add(MCheckListOption('some1', Colors.blue));
-          // options!.add(MCheckListOption('some2', Colors.yellow));
+          final value = MCheckListOption(strValue, colors[i % 5]);
+          options!.add(value);
+          if (selectedOption!.contains(value.name)) {
+            selectedItem.add(value);
+          }
         }
       }
     }
-
-    // options!.add(MCheckListOption('some1', Colors.red));
-    // options!.add(MCheckListOption('some2', Colors.red));
-    // options!.add(MCheckListOption('some3', Colors.red));
-    // options = (opts.map((e) => MCheckListOption(e, Colors.red)).toList());
-    // print('some');
-    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -138,6 +133,8 @@ class MCheckListItem implements ACheckListItem {
     data['type'] = this.type;
     data['note_required'] = this.noteRequired;
     data['options'] = this.options;
+    data['selected_options'] = this.selectedOption;
+    // data['attached_images'] = this.attachedImages;
     return data;
   }
 
@@ -145,15 +142,25 @@ class MCheckListItem implements ACheckListItem {
     return itemID.toString();
   }
 
-  String remarks = '';
-
-  MCheckListOption? selectedItem;
+  List<MCheckListOption> selectedItem = [];
 
   String get title {
     return name ?? '';
   }
 
-  late List<File> selectedImages;
+  String get optionType {
+    return type.toString();
+  }
+
+  late List<dynamic> selectedImages;
+
+  MCheckListOption? get lastItem {
+    if (selectedItem.length > 0) {
+      return selectedItem.last;
+    } else {
+      return null;
+    }
+  }
 }
 
 class MCheckListOption {

@@ -65,6 +65,8 @@ class MScheduledJobItem implements AServiceItem {
     this.siteState,
     this.siteCity,
     this.engineerStatus,
+    this.seviceType,
+    this.serviceDate,
   });
 
   dynamic? productImage;
@@ -88,7 +90,9 @@ class MScheduledJobItem implements AServiceItem {
   dynamic? siteCity;
   dynamic? siteState;
   dynamic? siteZipCode;
+  dynamic? seviceType;
   int? engineerStatus;
+  String? serviceDate;
   factory MScheduledJobItem.fromJson(Map<String, dynamic> json) =>
       MScheduledJobItem(
         id: json["id"],
@@ -111,6 +115,8 @@ class MScheduledJobItem implements AServiceItem {
         siteState: json["site_state"],
         siteZipCode: json["site_zipcode"],
         engineerStatus: json["engineer_status"],
+        seviceType: json["service_type"],
+        serviceDate: json["service_date"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -129,13 +135,14 @@ class MScheduledJobItem implements AServiceItem {
         "subject": subject,
         "description": description,
         "name": name,
+        "service_type": seviceType,
       };
 
   String? get aProductImage => productImage;
   String? get aProdouctName => productName;
   String? get aCctvID => sku.toString();
 
-  String? get aServiceType => '';
+  String? get aServiceType => seviceType;
   String? get aCustomerName => customerName;
   String? get aCustomerImage => customerImage;
 

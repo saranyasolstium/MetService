@@ -20,9 +20,13 @@ import 'package:intl/intl.dart';
 class MAttendanceStatusResponse implements Codable, AAttendanceStatus {
   String? status;
   MAttendanceStatusItem? data;
+  var isServiceStarted = false;
+  var isAttendanceStarted = false;
 
   MAttendanceStatusResponse fromJson(Map<String, dynamic> json) {
     status = json["status"];
+    isServiceStarted = json['service_status'] == 1 ? true : false;
+    isAttendanceStarted = json['attendence_status'] == 1 ? true : false;
     data = MAttendanceStatusItem.fromJson(json["data"]);
     startedDate = data?.attendenceDate;
     return this;

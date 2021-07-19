@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:eagle_pixels/model/check_list_model.dart';
 
@@ -38,11 +39,14 @@ abstract class AAttendanceStatus {
 
 abstract class ACheckListItem {
   String get id;
-  MCheckListOption? selectedItem;
+  late List<MCheckListOption> selectedItem;
+  MCheckListOption? get lastItem;
+
   List<MCheckListOption>? options;
   String get title;
+  String get optionType;
   late String remarks;
-  late List<File> selectedImages;
+  late List<dynamic> selectedImages;
 }
 
 abstract class AJobDetail {

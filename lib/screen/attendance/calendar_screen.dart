@@ -31,6 +31,13 @@ import 'package:toast/toast.dart';
 
 extension CalendarAction on CalendarScreen {
   startOrEndDay() async {
+    final status = attendance.attendanceStatus.value;
+    if (status != null) {
+      if (status.isServiceStarted && !status.isAttendanceStarted) {
+        Toast.show('You already in service attendance', Get.context);
+        return;
+      }
+    }
     if (attendance.isClockedIn) {
       Get.toNamed(NavPage.clockOut);
     } else {
@@ -62,6 +69,15 @@ extension CalendarAction on CalendarScreen {
           var resp = MAttendanceStatusResponse();
           resp.startedDate = DateTime.now();
           attendance.attendanceStatus.value = resp;
+          final status = attendance.attendanceStatus.value;
+          if (status != null) {
+            status.isAttendanceStarted = !status.isAttendanceStarted;
+            attendance.update();
+          } else {
+            attendance.attendanceStatus.value = MAttendanceStatusResponse();
+            attendance.attendanceStatus.value!.isAttendanceStarted = true;
+            attendance.update();
+          }
           Get.toNamed(NavPage.clockOut);
         } else {
           Toast.show(model?.message ?? 'Problem in clock in. please try again.',
@@ -646,13 +662,17 @@ extension CalendarWidgets on CalendarScreen {
               onPressed: () {},
               child: TextButton(
                 onPressed: this.startOrEndDay,
-                child: Obx(() => Text(
+                child: GetBuilder<AttendanceController>(
+                  builder: (_) {
+                    return Text(
                       attendance.isClockedIn ? 'End the day' : 'Start the day',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.dynamic,
                           fontWeight: FontWeight.w300),
-                    )),
+                    );
+                  },
+                ),
               ),
             ),
           ),

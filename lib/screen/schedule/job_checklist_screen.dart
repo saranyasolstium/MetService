@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/colors.dart';
@@ -36,7 +37,8 @@ extension CheckListItemAction on CheckListItem {
         await Get.dialog(PhotoChooseScreen(), barrierDismissible: false);
     print('picked image path - ${selectedImage?.path ?? 'null'}');
     if (selectedImage != null) {
-      checkListController.checkList[index].selectedImages.add(selectedImage);
+      checkListController.checkList[index].selectedImages
+          .add(await selectedImage.readAsBytes());
       checkListController.update();
     }
   }
@@ -81,18 +83,17 @@ extension StopJobAction on JobCheckListScreen {
   }
 
   onCompleteJob() async {
-    // if (checkListController.selectedlist.length ==
-    //     checkListController.checkList.length)
-    if (true) {
-      final isCompleted = await _onSubmitWork();
-      if (isCompleted) {
-        Get.toNamed(NavPage.jobServiceReportScreen);
-      } else {
-        Toast.show('Must Choose Option', Get.context);
+    for (var element in checkListController.checkList) {
+      if (element.selectedItem.length == 0 &&
+          (element.options?.length ?? 0) > 0) {
+        Toast.show('Please Complete CheckList', Get.context);
+        return;
       }
-    } else {
-      Toast.show('Must Choose Option', Get.context);
-      return;
+    }
+
+    final isCompleted = await _onSubmitWork();
+    if (isCompleted) {
+      Get.toNamed(NavPage.jobServiceReportScreen);
     }
   }
 }
@@ -284,7 +285,12 @@ class JobCheckListScreen extends StatelessWidget {
                               ),
                             ),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                schedule.reloadList();
+                                navigator!.popUntil((route) =>
+                                    route.settings.name ==
+                                    NavPage.scheduleScreen);
+                              },
                               child: Text(
                                 'Cancel',
                                 style: TextStyle(
@@ -301,7 +307,7 @@ class JobCheckListScreen extends StatelessWidget {
                 ],
               ),
             ),
-            // AppController.to.defaultLoaderView(),
+            AppController.to.defaultLoaderView(),
           ],
         ),
       ),
@@ -340,7 +346,7 @@ class CheckListItem extends StatelessWidget {
             8.0,
           ),
           border: Border.all(
-              width: 1.5, color: item.selectedItem?.color ?? Colors.grey),
+              width: 1.5, color: item.lastItem?.color ?? Colors.grey),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -369,36 +375,7 @@ class CheckListItem extends StatelessWidget {
                 (row) => CheckListSelectionView(section: index, row: row),
               ),
             ),
-            // checkListController.checkList
-            //     .map((e) =>
-            //CheckListSelectionView(section: index, row: e))
-            //.toList(),
-            // ),
-            // return GridView.builder(
-            //     itemCount: item.options?.length ?? 0,
-            //     physics: NeverScrollableScrollPhysics(),
-            //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //         crossAxisCount: 2, childAspectRatio: 3),
-            //     shrinkWrap: true,
-            //     itemBuilder: (con, ind) {
-            //       return Padding(
-            //         padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-            //         child: Expanded(
-            //             child:
-            //                 CheckListSelectionView(section: index, row: ind)),
-            //       );
-            //     });
-            // }),
-            // Row(
-            //   mainAxisSize: MainAxisSize.max,
-            //   children: [
-            //     CheckListSelectionView(section: index, row: 0),
-            //     SizedBox(
-            //       width: 20.dynamic,
-            //     ),
-            //     CheckListSelectionView(section: index, row: 1),
-            //   ],
-            // ),
+
             Padding(
               padding: EdgeInsets.only(
                 top: 13.dynamic,
@@ -430,6 +407,7 @@ class CheckListItem extends StatelessWidget {
                 obscureText: false,
                 // controller: _remarkController,
                 keyboardType: TextInputType.multiline,
+                initialValue: item.remarks,
                 maxLines: 4,
                 style: TextStyle(
                     fontSize: 14.dynamic, fontWeight: FontWeight.w300),
@@ -460,13 +438,21 @@ class CheckListItem extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5.0),
                           clipBehavior: Clip.hardEdge,
-                          child: Image.file(
-                            item.selectedImages[row],
-                            height: 43.dynamic,
-                            width: 43.dynamic,
-                            fit: BoxFit.fill,
-                            isAntiAlias: false,
-                          ),
+                          child: item.selectedImages[row] is Uint8List
+                              ? Image.memory(
+                                  item.selectedImages[row],
+                                  height: 43.dynamic,
+                                  width: 43.dynamic,
+                                  fit: BoxFit.fill,
+                                  isAntiAlias: false,
+                                )
+                              : Image.network(
+                                  item.selectedImages[row],
+                                  height: 43.dynamic,
+                                  width: 43.dynamic,
+                                  fit: BoxFit.fill,
+                                  isAntiAlias: false,
+                                ),
                         ),
                       ),
                       SizedBox(
@@ -523,8 +509,10 @@ class CheckListSelectionView extends StatelessWidget {
   // }
 
   bool get isSelected {
-    return checklistController.checkList[section].selectedItem != null &&
-        checklistController.checkList[section].selectedItem!.id == item.id;
+    return checklistController.selectedlist[section].selectedItem
+            .where((element) => element.id == item.id)
+            .length >
+        0;
   }
 
   CheckListSelectionView({required this.section, required this.row});
@@ -555,15 +543,34 @@ class CheckListSelectionView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             CustomCheckbox(
+              isRadio: checklistController.checkList[section].type == 2
+                  ? true
+                  : false,
               isChecked: isSelected,
               size: 24.dynamic,
               selectedColor: isSelected ? item.color : Colors.grey,
               selectedIconColor: Colors.white,
-              didSelect: (checkbox) {
-                if (checkbox) {
-                  checklistController.checkList[section].selectedItem = item;
+              didSelect: (isSelectedCheck) {
+                if (checklistController.checkList[section].type == 2) {
+                  if (isSelectedCheck) {
+                    checklistController.checkList[section].selectedItem = [
+                      item
+                    ];
+                  } else {
+                    checklistController.checkList[section].selectedItem = [];
+                  }
                 } else {
-                  checklistController.checkList[section].selectedItem = null;
+                  if (isSelectedCheck) {
+                    checklistController.checkList[section].selectedItem
+                        .add(item);
+                    print(
+                        'Count ${checklistController.checkList[section].selectedItem.length}');
+                  } else {
+                    checklistController.checkList[section].selectedItem
+                        .removeWhere((element) => element.name == item.name);
+                    print(
+                        'Count ${checklistController.checkList[section].selectedItem.length}');
+                  }
                 }
 
                 checklistController.update();

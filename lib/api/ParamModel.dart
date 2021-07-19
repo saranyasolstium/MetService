@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:eagle_pixels/model/abstract_class.dart';
-import 'dart:io';
 
 class ParamStartJob {
   var serviceID, lat, long;
@@ -18,12 +18,14 @@ class ParamSubmitJob {
 
   ParamSubmitJob({this.serviceID, required this.checkList});
 
-  Future<List<String>> fileToBase64(List<File> files) async {
+  Future<List<String>> fileToBase64(List<dynamic> files) async {
     List<String> base64Images = [];
     for (var i in files) {
-      final byte = await File(i.path).readAsBytes();
-      var base64Image = base64Encode(byte);
-      base64Images.add(base64Image);
+      // final byte = await File(i.path).readAsBytes();
+      if (i is Uint8List) {
+        var base64Image = base64Encode(i);
+        base64Images.add(base64Image);
+      }
     }
     return base64Images;
   }
@@ -38,7 +40,7 @@ class ParamSubmitJob {
       ParamSubmitItem paramSubmitItem = ParamSubmitItem(
         id: item.id,
         checkList: item.title,
-        selectedValue: item.selectedItem!.name,
+        selectedValue: item.selectedItem.map((e) => e.name).toList(),
         remarks: item.remarks,
         attachedImages: base64Images,
       );
@@ -74,11 +76,12 @@ class ParamCompleteJob {
 }
 
 class ParamSubmitItem {
-  var remarks, selectedValue, checkList, id;
+  var remarks, checkList, id;
   List<String> attachedImages;
+  List<String> selectedValue;
   ParamSubmitItem(
       {this.remarks,
-      this.selectedValue,
+      required this.selectedValue,
       required this.attachedImages,
       this.id,
       this.checkList});

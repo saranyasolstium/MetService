@@ -8,6 +8,7 @@ class AppDateFormat {
   static const String ddStMMMMYYYY = "do MMMM yyyy";
   static const String hhmmssa = "hh : mm : ss a";
   static const String attendanceDate = "hh : mm : ss a MMM yyyy";
+  static const String scheduledTime = "hh.mm a MMM do  yyyy";
 
   // static const String registerationFor = "yyyy-MM-dd HH:mm:ss.SSSSSS";
 }

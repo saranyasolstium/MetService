@@ -242,7 +242,7 @@ extension HomeWidgets on HomeScreen {
           GestureDetector(
             onTap: this.onCustomerInformation,
             child: HomeMainCard(
-              imageName: 'images/job_history.png',
+              imageName: 'images/customer_info.png',
               name: 'Customer Information',
             ),
           ),

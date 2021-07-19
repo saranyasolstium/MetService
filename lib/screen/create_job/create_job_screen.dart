@@ -31,6 +31,7 @@ extension CreateJobAction on _CreateJobScreenState {
       final isJobCreated = await createJob.scCreateJob(param);
       if (isJobCreated) {
         Get.back();
+        Toast.show('New Job created successfully', context, duration: 2);
       } else {
         Toast.show(kErrorMsg, context);
       }
@@ -193,13 +194,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           //     s.startsWith('I'),
                                           onChanged: (val) {
                                             selectedProduct.value =
-                                                createJob.find(
+                                                createJob.findProduct(
                                                     val!,
                                                     createJob
                                                         .customerProductList);
+                                            print(selectedProduct.value!.aId);
                                           },
                                           validator: (item) {
-                                            if (selectedProduct.value == null)
+                                            if (dSelectedProduct == '')
                                               return '* Required';
                                             else
                                               return null;

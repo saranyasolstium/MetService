@@ -11,6 +11,7 @@ import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
 import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
+import 'package:eagle_pixels/screen/toast/feedback_screen.dart';
 import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -107,7 +108,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins'),
       initialRoute: NavPage.root,
-      // home: CreateJobScreen(),
+      // home: FeedbackScreen(),
     );
   }
 }

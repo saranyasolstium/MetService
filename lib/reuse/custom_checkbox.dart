@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomCheckbox extends StatelessWidget {
   final bool? isChecked;
+  final bool? isRadio;
   final double? size;
   final double? iconSize;
   final Color? selectedColor;
@@ -10,6 +11,7 @@ class CustomCheckbox extends StatelessWidget {
 
   CustomCheckbox(
       {this.isChecked,
+      this.isRadio = false,
       this.size,
       this.iconSize,
       this.selectedColor,
@@ -28,7 +30,7 @@ class CustomCheckbox extends StatelessWidget {
             color: this.isChecked!
                 ? selectedColor ?? Colors.blue
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(isRadio! ? 15.0 : 5),
             border: this.isChecked!
                 ? null
                 : Border.all(
@@ -39,7 +41,7 @@ class CustomCheckbox extends StatelessWidget {
         height: size ?? 30,
         child: this.isChecked!
             ? Icon(
-                Icons.check,
+                isRadio! ? Icons.radio_button_checked : Icons.check,
                 color: selectedIconColor ?? Colors.white,
                 size: iconSize ?? 20,
               )

@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/model/get_scheduled_job.dart';
+import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
@@ -12,6 +14,8 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:latlong/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../colors.dart';
@@ -40,9 +44,11 @@ class ServiceView extends StatelessWidget {
     this.isNeedStatus = false,
     required this.onSeeDetail,
     this.isNeedStartJob = false,
+    this.isNeedScheduledTime = false,
   });
   final bool isNeedStatus;
   final bool isNeedDetail;
+  final bool isNeedScheduledTime;
   final String? buttonTitle;
   final Function onSeeDetail;
   final Function onJob;
@@ -109,6 +115,7 @@ class ServiceView extends StatelessWidget {
           SizedBox(
             height: 20.dynamic,
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -118,7 +125,7 @@ class ServiceView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Type of Servive',
+                      'Type of Service',
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
@@ -186,6 +193,32 @@ class ServiceView extends StatelessWidget {
               ),
             ],
           ),
+          if (isNeedScheduledTime)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
+                  child: Text(
+                    'Scheduled Time:',
+                    style: TextStyle(
+                        color: Colour.appDarkGrey,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 12.dynamic),
+                  ),
+                ),
+              ],
+            ),
+          if (isNeedScheduledTime)
+            Text(
+              safeString(Jiffy(DateFormat(AppDateFormat.defaultF)
+                      .parse((item as MScheduledJobItem).serviceDate!))
+                  .format(AppDateFormat.scheduledTime)),
+              style: TextStyle(
+                  color: Colour.appBlack,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.dynamic),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -227,6 +260,7 @@ class ServiceView extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: 14.dynamic),
           ),
+
           // Container(
           //   clipBehavior: Clip.hardEdge,
           //   decoration: BoxDecoration(
