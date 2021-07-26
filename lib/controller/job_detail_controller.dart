@@ -18,6 +18,7 @@ class JobDetailController extends GetxController {
   final signatureController = SignatureController().obs;
   final Rx<double> starRate = 0.toDouble().obs;
   final RxString feedback = ''.obs;
+  final RxString engineerFeedback = ''.obs;
 
   @override
   void onInit() {

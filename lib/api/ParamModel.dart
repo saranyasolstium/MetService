@@ -53,12 +53,13 @@ class ParamSubmitJob {
 }
 
 class ParamCompleteJob {
-  var serviceID, rating, signature, feedback, lat, long;
+  var serviceID, rating, signature, feedback, lat, long, technicalComment;
   ParamCompleteJob({
     this.serviceID,
     this.rating,
     this.signature,
     this.feedback,
+    this.technicalComment,
     // this.lat,
     // this.long,
   });
@@ -69,6 +70,7 @@ class ParamCompleteJob {
     json['rating'] = rating;
     json['signature'] = signature;
     json['feedback'] = feedback;
+    json['technical_comment'] = technicalComment;
     // json['latitude'] = lat;
     // json['longitude'] = long;
     return json;

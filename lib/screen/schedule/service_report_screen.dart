@@ -184,7 +184,56 @@ class ServiceReportScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Feedback',
+                                  'Engineer Feedback',
+                                  style: TextStyle(
+                                    fontSize: 12.dynamic,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colour.appText,
+                                  ),
+                                ),
+                                SizedBox(height: 12.dynamic),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colour.appLightGrey,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: TextFormField(
+                                    onChanged: (txt) {
+                                      controller.engineerFeedback.value = txt;
+                                    },
+                                    obscureText: false,
+                                    // controller: _remarkController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 4,
+                                    style: TextStyle(
+                                        fontSize: 14.dynamic,
+                                        fontWeight: FontWeight.w300),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(
+                                          20.0, 15.0, 20.0, 15.0),
+                                      hintText: "Write your feedback",
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 12.dynamic),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Customer Feedback',
                                   style: TextStyle(
                                     fontSize: 12.dynamic,
                                     fontWeight: FontWeight.w400,
@@ -289,6 +338,8 @@ class ServiceReportScreen extends StatelessWidget {
                                     rating: controller.starRate.value,
                                     signature: base64Encode(bytes),
                                     feedback: controller.feedback.value,
+                                    technicalComment:
+                                        controller.engineerFeedback.value,
                                   );
 
                                   if (status != null) {

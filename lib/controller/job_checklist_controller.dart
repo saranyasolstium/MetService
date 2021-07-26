@@ -154,17 +154,21 @@ class JobCheckListController extends GetxController {
 
   Future<String?> onCompleteJob(
       // ignore: non_constant_identifier_names
-      {required String service_id,
-      required double rating,
-      required signature,
-      required String feedback}) async {
+      {
+    required String service_id,
+    required double rating,
+    required signature,
+    required String feedback,
+    required String technicalComment,
+  }) async {
     // Position position = await AppController.to.determinePosition();
     var param = await ParamCompleteJob(
-      serviceID: service_id,
-      rating: rating,
-      signature: signature,
-      feedback: feedback,
-    ).toJson();
+            serviceID: service_id,
+            rating: rating,
+            signature: signature,
+            feedback: feedback,
+            technicalComment: technicalComment)
+        .toJson();
     Logger.log('Complete Job', feedback);
     var response = await API.service.call(
       endPoint: EndPoint.completeJob,
