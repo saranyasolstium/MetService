@@ -47,8 +47,8 @@ class LoginRequestModel {
       'username': email!.trim(),
       'password': password!.trim(),
       'grant_type': 'password',
-      'client_id': '6',
-      'client_secret': 'XHZgV3oFMGAZOzYEG9e9EqWE7OTWECS2MICTjoGX',
+      'client_id': '11',
+      'client_secret': 'i44TZ2OZLUTHpOqvwHsjnnR2v9uJmLTLzeHknXrw',
       'scope': ''
     };
     return map;
