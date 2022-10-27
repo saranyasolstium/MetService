@@ -40,8 +40,8 @@ class NavPage {
   // static String jobCheckListScreen = '/joCheckList';
   static String jobServiceReportScreen = '/jobServiceReport';
   static String scheduleJobDetailsScreen = '/scheduleJobDetailsScreen';
-  static String root = '/';
-  static String attendanceServiceList = 'AttendanceServiceList';
+  static String root = "/";
+  static String attendanceServiceList = '/AttendanceServiceList';
   static String jobDetail = '/jobDetail';
   static String customerInformation = '/customerInformation';
   // static String confirmation = '/confirmation';
@@ -68,7 +68,6 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       // title: 'Flutter Demo',
       getPages: [
-        GetPage(name: '/login', page: () => LoginScreen()),
         GetPage(
             name: '/',
             page: () {
@@ -76,6 +75,7 @@ class MyApp extends StatelessWidget {
                 return AppController.to.rootView();
               });
             }),
+        GetPage(name: '/login', page: () => LoginScreen()),
         GetPage(name: NavPage.calendar, page: () => CalendarScreen()),
         GetPage(name: NavPage.clockIn, page: () => TimeInScreen()),
         GetPage(name: NavPage.clockOut, page: () => TimeOutScreen()),
