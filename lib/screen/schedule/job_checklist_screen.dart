@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
@@ -11,24 +10,17 @@ import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
-import 'package:eagle_pixels/model/active_service_model.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
-import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/toast/photo_choose_screen.dart';
-import 'package:eagle_pixels/screen/views/service_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
 import 'package:toast/toast.dart';
 import 'package:eagle_pixels/screen/attendance/attendance_service_list_screen.dart';
-import 'package:eagle_pixels/model/abstract_class.dart';
 
 extension CheckListItemAction on CheckListItem {
   onPickImage() async {
@@ -57,7 +49,7 @@ extension StopJobAction on JobCheckListScreen {
     );
     hideLoading();
     if (errorWhenSubmit != null) {
-      Toast.show(errorWhenSubmit, Get.context);
+      Toast.show(errorWhenSubmit, textStyle: Get.context);
       return false;
     } else {
       return true;
@@ -86,7 +78,7 @@ extension StopJobAction on JobCheckListScreen {
     for (var element in checkListController.checkList) {
       if (element.selectedItem.length == 0 &&
           (element.options?.length ?? 0) > 0) {
-        Toast.show('Please Complete CheckList', Get.context);
+        Toast.show('Please Complete CheckList', textStyle: Get.context);
         return;
       }
     }

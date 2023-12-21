@@ -1,9 +1,7 @@
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
-import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
-import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:eagle_pixels/screen/views/service_view.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +11,6 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 
-import '../../main.dart';
 import 'package:toast/toast.dart';
 
 class ScheduleScreen extends StatelessWidget {
@@ -82,7 +79,7 @@ class ScheduleScreen extends StatelessWidget {
                                     if (false) {
                                       Toast.show(
                                           'Please clock out the attendance',
-                                          Get.context);
+                                          textStyle: Get.context);
                                     } else {
                                       Get.to(
                                         () => JobDetailScreen(

@@ -97,9 +97,9 @@ extension HomeWidgets on HomeScreen {
                         imageUrl:
                             AppController.user.employeeDetails?.profileImage ??
                                 "",
-                        placeholder: (_, url) => Image.asset(
-                          'images/user.png',
-                        ),
+                        placeholder: (_, url) => Image.asset('images/user.png'),
+                        errorWidget: (_, __, ___) =>
+                            Image.asset('images/user.png'),
                       ),
                       decoration: BoxDecoration(
                         // image: DecorationImage(
@@ -114,7 +114,7 @@ extension HomeWidgets on HomeScreen {
                       ),
                     ),
                     Text(
-                      '   ${safeString(AppController.user.name)}',
+                      '   ${AppController.user.name}',
                       style: TextStyle(
                           color: Colour.appText,
                           fontSize: 16.dynamic,

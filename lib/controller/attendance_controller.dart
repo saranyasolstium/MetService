@@ -1,6 +1,5 @@
 import 'dart:core';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
@@ -10,14 +9,11 @@ import 'package:eagle_pixels/model/attendance_model.dart';
 import 'package:eagle_pixels/model/attendece_status_model.dart';
 import 'package:eagle_pixels/model/show_attendence_model.dart';
 import 'package:eagle_pixels/model/clockin_model.dart';
-import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/model/site_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:local_auth/auth_strings.dart';
 
 import '../colors.dart';
 import 'package:eagle_pixels/api/api_service.dart';

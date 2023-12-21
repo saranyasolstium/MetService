@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:eagle_pixels/api/ParamModel.dart';
-import 'package:eagle_pixels/api/api_service.dart';
-import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
@@ -11,14 +8,10 @@ import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
-import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:flutter/widgets.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:intl/intl.dart';
@@ -343,13 +336,13 @@ class ServiceReportScreen extends StatelessWidget {
                                   );
 
                                   if (status != null) {
-                                    Toast.show(status, Get.context);
+                                    Toast.show(status, textStyle: Get.context);
                                   } else {
                                     Get.toNamed(NavPage.jobCompleted);
                                   }
                                 } else {
                                   Toast.show(
-                                      'Please put your signature', Get.context);
+                                      'Please put your signature', textStyle: Get.context);
                                 }
                               },
                               child: Text(

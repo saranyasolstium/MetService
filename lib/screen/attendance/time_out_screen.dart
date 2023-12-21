@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:toast/toast.dart';
 
 import '../../colors.dart';
@@ -37,11 +36,11 @@ extension TimeOutAction on TimeOutScreen {
               navigator!
                   .popUntil((route) => route.settings.name == NavPage.root);
             } else {
-              Toast.show(model?.message ?? kErrorMsg, Get.context);
+              Toast.show(model?.message ?? kErrorMsg, textStyle: Get.context);
             }
           }
         } catch (e) {
-          Toast.show('$e', Get.context);
+          Toast.show('$e', textStyle: Get.context);
         } finally {
           hideLoading(value: 0);
         }
@@ -53,11 +52,11 @@ extension TimeOutAction on TimeOutScreen {
 
   Future getImage() async {
     try {
-      final pickedFile = await picker.getImage(source: ImageSource.camera);
+          final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+
       print('image picked');
       if (pickedFile != null) {
-        _image = pickedFile;
-        print(_image.path);
+        print(pickedFile.path);
         // var res = await uploadImage(_image.path,
         //     'https://pixel.solstium.net/api/v1/employee/upload_sign');
         // if (res?.isSuccess ?? false) {
@@ -151,8 +150,10 @@ class TimeOutScreen extends StatelessWidget {
                       children: [
                         Text(
                           attendance.isClockedIn
-                              ? Jiffy(attendance.jobStartedTime)
-                                  .format('do MMMM yyyy')
+                              ?  DateFormat('do MMMM yyyy').format(attendance.jobStartedTime!)
+
+                              // Jiffy(attendance.jobStartedTime)
+                              //     .format('do MMMM yyyy')
                               : '00:00:00',
                           style: TextStyle(
                             fontSize: 12.dynamic,
@@ -274,8 +275,11 @@ class TimeOutScreen extends StatelessWidget {
                             ),
                             TimeInOutDetailItem(
                               title: 'Today:',
-                              description: Jiffy(timer.currentDate.value)
-                                  .format('do MMMM yyyy'),
+                              description: DateFormat('do MMMM yyyy').format(timer.currentDate.value)
+
+                              
+                              // Jiffy(timer.currentDate.value)
+                              //     .format('do MMMM yyyy'),
                             ),
                           ],
                         ),
@@ -284,8 +288,10 @@ class TimeOutScreen extends StatelessWidget {
                             TimeInOutDetailItem(
                                 title: 'Time in:',
                                 description: attendance.isClockedIn
-                                    ? Jiffy(attendance.jobStartedTime)
-                                        .format('hh:mm:ss a')
+                                    ? DateFormat('hh:mm:ss a').format(attendance.jobStartedTime!)
+
+                                    // Jiffy(attendance.jobStartedTime)
+                                    //     .format('hh:mm:ss a')
                                     : '00:00:00'),
                             Obx(
                               () => TimeInOutDetailItem(

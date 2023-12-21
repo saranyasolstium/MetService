@@ -4,7 +4,6 @@ import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:jiffy/jiffy.dart';
 
 class ChangeDateView extends StatelessWidget {
   String get todayOrDay {
@@ -27,17 +26,16 @@ class ChangeDateView extends StatelessWidget {
       initialEntryMode: DatePickerEntryMode.calendar,
     ).then((value) {
       print(value);
-      // var year = DateFormat.y().format(value);
       if (value != null) {
         date.value = value;
         didEnd();
       }
-      // schedule.fetchProducts();
     });
   }
 
   final Rx<DateTime> date;
   final Function() didEnd;
+  
   const ChangeDateView({required this.date, required this.didEnd});
 
   @override
@@ -71,9 +69,10 @@ class ChangeDateView extends StatelessWidget {
                   () => Text(
                     todayOrDay,
                     style: TextStyle(
-                        color: Colour.appDarkGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.dynamic),
+                      color: Colour.appDarkGrey,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12.0,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -81,12 +80,12 @@ class ChangeDateView extends StatelessWidget {
                 ),
                 Obx(
                   () => Text(
-                    // '3rd March, 2021',
-                    Jiffy(date.value).format('do MMMM yyyy'),
+                    DateFormat('dd MMMM yyyy').format(date.value),
                     style: TextStyle(
-                        color: Colour.appBlack,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14.dynamic),
+                      color: Colour.appBlack,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14.0,
+                    ),
                   ),
                 ),
               ],
@@ -97,9 +96,10 @@ class ChangeDateView extends StatelessWidget {
             child: Text(
               'Change',
               style: TextStyle(
-                  color: Colour.appBlue,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16.dynamic),
+                color: Colour.appBlue,
+                fontWeight: FontWeight.w400,
+                fontSize: 16.0,
+              ),
             ),
           ),
         ],
@@ -107,3 +107,5 @@ class ChangeDateView extends StatelessWidget {
     );
   }
 }
+
+

@@ -28,9 +28,19 @@ class CreateJobController extends GetxController {
     super.onInit();
   }
 
+  // List<String> arrString(List<ADropDown> list) {
+
+  //  //print(list.length);
+  //   return list.map((e) => e.aName).toList();
+  // }
+
   List<String> arrString(List<ADropDown> list) {
-    return list.map((e) => e.aName).toList();
-  }
+  print('List Length: ${list.length}');
+  list.forEach((element) {
+    print('Value: ${element.aName}');
+  });
+  return list.map((e) => e.aName).toList();
+}
 
   List<String> arrStringForProductList() {
     return customerProductList.map((e) {
@@ -38,9 +48,23 @@ class CreateJobController extends GetxController {
     }).toList();
   }
 
+  
+
+  // ADropDown find(String selected, List<ADropDown> list) {
+  //   return list.firstWhere((element) => element.aName == selected);
+  // }
+
   ADropDown find(String selected, List<ADropDown> list) {
-    return list.firstWhere((element) => element.aName == selected);
+  try {
+    ADropDown result = list.firstWhere((element) => element.aName == selected);
+    print("ID for $selected: ${result.aId}");
+    return result;
+  } catch (e) {
+    print("ID not found for $selected");
+    return list.first; // Provide a default value or handle it accordingly
   }
+}
+
 
   ADropDown findProduct(String selected, List<MCustomerProductItem> list) {
     return list.firstWhere(

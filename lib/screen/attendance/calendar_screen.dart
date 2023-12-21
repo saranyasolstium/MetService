@@ -20,7 +20,6 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart' show DateFormat;
-import 'package:jiffy/jiffy.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 import 'package:http/http.dart' as http;
@@ -34,7 +33,7 @@ extension CalendarAction on CalendarScreen {
     final status = attendance.attendanceStatus.value;
     if (status != null) {
       if (status.isServiceStarted && !status.isAttendanceStarted) {
-        Toast.show('You already in service attendance', Get.context);
+        Toast.show('You already in service attendance', textStyle: Get.context);
         return;
       }
     }
@@ -56,7 +55,7 @@ extension CalendarAction on CalendarScreen {
   startDay() async {
     if (AppController.to.isAttendanceEngineer) {
       if (attendance.selectedSite.value == null) {
-        Toast.show('invalid selected site', Get.context);
+        Toast.show('invalid selected site', textStyle: Get.context);
         return;
       }
     }
@@ -81,42 +80,44 @@ extension CalendarAction on CalendarScreen {
           Get.toNamed(NavPage.clockOut);
         } else {
           Toast.show(model?.message ?? 'Problem in clock in. please try again.',
-              Get.context);
+              textStyle: Get.context);
         }
       }
     } catch (e) {
-      Toast.show('$e', Get.context);
+      Toast.show('$e', textStyle: Get.context);
     } finally {
       hideLoading(value: 0);
     }
   }
 
   Future getImage() async {
-    try {
-      final pickedFile = await picker.getImage(source: ImageSource.camera);
-      print('image picked');
-      if (pickedFile != null) {
-        _image = pickedFile;
-        print(_image.path);
-        Get.toNamed(NavPage.clockOut); //temp
-        return;
-        var res = await uploadImage(_image.path,
-            'https://pixel.solstium.net/api/v1/employee/upload_sign');
-        if (res?.isSuccess ?? false) {
-          var model = await attendance.onClockIn();
-          if (model?.status?.isSuccess ?? false) {
-            var resp = MAttendanceStatusResponse();
-            resp.startedDate = DateTime.now();
-            attendance.attendanceStatus.value = resp;
-          } else {}
-        } else {}
+  try {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    print('Image picked');
+    if (pickedFile != null) {
+      // Your existing code for handling the picked image
+
+      var res = await uploadImage(pickedFile.path, 'https://pixel.solstium.net/api/v1/employee/upload_sign');
+      if (res?.isSuccess ?? false) {
+        var model = await attendance.onClockIn();
+        if (model?.status?.isSuccess ?? false) {
+          var resp = MAttendanceStatusResponse();
+          resp.startedDate = DateTime.now();
+          attendance.attendanceStatus.value = resp;
+          Get.toNamed(NavPage.clockOut);
+        } else {
+          // Handle the case where onClockIn is not successful
+        }
       } else {
-        print('No image selected.');
+        // Handle the case where uploadImage is not successful
       }
-    } catch (error) {
-      print('Error $error');
+    } else {
+      print('No image selected.');
     }
+  } catch (error) {
+    print('Error $error');
   }
+}
 
   Future<String?> uploadImage(filepath, url) async {
     try {
@@ -450,6 +451,7 @@ extension CalendarWidgets on CalendarScreen {
         );
       },
       onDayPressed: (date, events) {
+        print(date);
         attendance.selectedActiveJobDate = date;
         this.showAttendance(DateFormat(AppDateFormat.yyyy_MM_dd).format(date));
       },
@@ -589,11 +591,12 @@ extension CalendarWidgets on CalendarScreen {
           children: [
             Obx(
               () => Text(
-                // var time = DateFormat('hh:mm a').format(DateTime.now());
-                Jiffy(TimerController.to.currentDate.value)
-                    .format('hh:mm a  |  do MMMM yyyy'),
-                // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
-                // '09:10 AM  |  21st September 2021',
+                DateFormat('hh:mm a  |  dd MMMM yyyy').format(TimerController.to.currentDate.value),
+
+
+                // Jiffy(TimerController.to.currentDate.value)
+                //     .format('hh:mm a  |  do MMMM yyyy'),
+
                 style: TextStyle(
                   fontSize: 14.dynamic,
                   fontWeight: FontWeight.w600,
@@ -635,11 +638,8 @@ extension CalendarWidgets on CalendarScreen {
       children: [
         Obx(
           () => Text(
-            // var time = DateFormat('hh:mm a').format(DateTime.now());
-            Jiffy(TimerController.to.currentDate.value)
-                .format('hh:mm a  |  do MMMM yyyy'),
-            // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
-            // '09:10 AM  |  21st September 2021',
+            DateFormat('hh:mm a  |  dd MMMM yyyy').format(TimerController.to.currentDate.value),
+            
             style: TextStyle(
               fontSize: 14.dynamic,
               fontWeight: FontWeight.w600,

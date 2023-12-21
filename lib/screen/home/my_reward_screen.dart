@@ -142,7 +142,7 @@ class _MyRewardScreenState extends State<MyRewardScreen> {
                           right: 16.dynamic,
                         ),
                         child: Container(
-                          height: 170.dynamic,
+                          height: 180.dynamic,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,

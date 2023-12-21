@@ -31,12 +31,12 @@ extension CreateJobAction on _CreateJobScreenState {
       final isJobCreated = await createJob.scCreateJob(param);
       if (isJobCreated) {
         Get.back();
-        Toast.show('New Job created successfully', context, duration: 2);
+        Toast.show('New Job created successfully', duration: 2);
       } else {
-        Toast.show(kErrorMsg, context);
+        Toast.show(kErrorMsg);
       }
     } catch (e) {
-      Toast.show('$e', context);
+      Toast.show('$e');
     }
   }
 }
@@ -60,6 +60,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
 
   String get dSelectedProduct {
     final selected = selectedProduct.value as MCustomerProductItem?;
+    print(selected);
     if (selected == null) {
       return 'Select Product';
     }
@@ -142,17 +143,20 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                             border: InputBorder.none,
                                           ),
                                           mode: Mode.MENU,
-                                          // showSelectedItem: true,
-                                          items: createJob.arrString(
-                                              createJob.customerList),
-                                          // label: "Menu mode",
+                                           showSelectedItem: true,
+                                           items: createJob.arrString(createJob.customerList),
+
+                                           //label: "Menu mode",
                                           hint: "Choose Customer",
 
                                           onChanged: (val) async {
+
                                             selectedProduct.value = null;
                                             selectedCustomer.value =
                                                 createJob.find(val!,
                                                     createJob.customerList);
+                                                    print("choose value"+selectedCustomer
+                                                        .value!.aId);
                                             await createJob
                                                 .fetchCustomerProductList(
                                                     selectedCustomer

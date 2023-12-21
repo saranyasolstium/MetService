@@ -209,14 +209,38 @@ extension MyProfileScreenWidgets on MyProfileScreen {
                   color: Colors.blue,
                 ),
                 borderRadius: BorderRadius.circular(37.5.dynamic)),
+            // child: Stack(
+            //   children: [
+            //     CachedNetworkImage(
+            //       fit: BoxFit.fill,
+            //       imageUrl:
+            //           AppController.user.employeeDetails?.profileImage ?? "",
+            //       placeholder: (_, url) => Image.asset('images/user.png'),
+            //       errorWidget: (_, __, ___) => Image.asset(
+            //           'images/user.png'), // Provide a default image for errors
+            //     ),
+            //     Container(
+            //       width: 37.5.dynamic,
+            //       height: 37.5.dynamic,
+            //       margin: EdgeInsets.only(left: 40.dynamic, top: 40.dynamic),
+            //       decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           borderRadius: BorderRadius.circular(37.5.dynamic)),
+            //       child: Image.asset('images/platinum_crown.png'),
+            //     ),
+            //   ],
+            // ),
             child: Stack(
               children: [
-                CachedNetworkImage(
-                  fit: BoxFit.fill,
-                  imageUrl:
-                      AppController.user.employeeDetails?.profileImage ?? "",
-                  placeholder: (_, url) => Image.asset(
-                    'images/user.png',
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.fill,
+                    imageUrl:
+                        AppController.user.employeeDetails?.profileImage ?? "",
+                    placeholder: (_, url) => Image.asset('images/user.png'),
+                    errorWidget: (_, __, ___) => Image.asset('images/user.png'),
                   ),
                 ),
                 Container(
@@ -224,13 +248,10 @@ extension MyProfileScreenWidgets on MyProfileScreen {
                   height: 37.5.dynamic,
                   margin: EdgeInsets.only(left: 40.dynamic, top: 40.dynamic),
                   decoration: BoxDecoration(
-                      color: Colors.white,
-// border: Border.all(
-//   color: Colors.blue,
-// ),
-                      borderRadius: BorderRadius.circular(37.5.dynamic)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(37.5.dynamic),
+                  ),
                   child: Image.asset('images/platinum_crown.png'),
-// color: Colors.red,
                 ),
               ],
             ),

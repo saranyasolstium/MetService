@@ -1,11 +1,9 @@
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/customer_information_controller.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:flutter/material.dart';
-import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -155,7 +153,8 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                               );
                             }
                           } else {
-                            Toast.show('Invalid Floor Plan', Get.context);
+                            Toast.show('Invalid Floor Plan',
+                                textStyle: Get.context);
                           }
                         },
                         child: Text(

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter/gestures.dart';
@@ -36,60 +36,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _confirmPassword;
   String? _countryCode;
   String? _phoneNumber;
-  // register(BuildContext context) async {
-  //   //   RegisterRequestModel registerRequestModel = RegisterRequestModel(
-  //   //       firstName: 'demo',
-  //   //       lastName: 'acc',
-  //   //       password: '123456',
-  //   //       email: 'demo@yopmail.com',
-  //   //       confirmPassword: '123456',
-  //   //       countryCode: '+91',
-  //   //       dob: '01-01-1999',
-  //   //       mobileNumber: '7410075100',
-  //   //       userName: 'demouser');
-  //   //
-  //   RegisterRequestModel registerRequestModel = RegisterRequestModel(
-  //       firstName: _firstName,
-  //       lastName: _lastName,
-  //       password: _password,
-  //       email: _email,
-  //       confirmPassword: _confirmPassword,
-  //       countryCode: _countryCode,
-  //       dob: txt.text,
-  //       mobileNumber: _phoneNumber,
-  //       userName: _userName);
-  //   RegisterResponseModel model;
-  //
-  //   try {
-  //     setState(() {
-  //       isApiCallService = true;
-  //     });
-  //     var response = await API.service.call(
-  //         endPoint: EndPoint.register, body: registerRequestModel.toJson());
-  //     model = RegisterResponseModel.fromJson(jsonDecode(response.body));
-  //     if (model.status.isSuccess) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text('Register Successful'),
-  //           duration: Duration(seconds: 1),
-  //         ),
-  //       );
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text('${model.message} Hello Welcome'),
-  //           duration: Duration(seconds: 1),
-  //         ),
-  //       );
-  //     }
-  //     print('ERROR${model.status}');
-  //   } catch (err) {
-  //     print(err);
-  //   }
-  //   setState(() {
-  //     isApiCallService = false;
-  //   });
-  // }
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -110,8 +56,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       TextStyle(fontSize: 14.dynamic, fontWeight: FontWeight.w300);
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      inAsyncCall: isApiCallService,
+    return ProgressHUD(
+      //inAsyncCall: isApiCallService,
       child: MaterialApp(
         home: GestureDetector(
           onTap: () {
@@ -218,26 +164,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 21.dynamic,
                                 ),
                                 Container(
-                                  height: 48.0.dynamic,
+                                 height: 60.0.dynamic,
                                   decoration: BoxDecoration(
                                     color: Colour.appLightGrey,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: TextFormField(
-                                    validator: MultiValidator([
-                                      RequiredValidator(
-                                          errorText: "* Required"),
-                                      MinLengthValidator(6,
-                                          errorText:
-                                              "userName should be atleast 6 characters"),
-                                    ]) as String? Function(String?)?,
+                                    validator: (value) {
+                                      // Using MultiValidator to validate the input
+                                      final multiValidator = MultiValidator([
+                                        RequiredValidator(
+                                            errorText: "* Required"),
+                                        MinLengthValidator(6,
+                                            errorText:
+                                                "User Name should be at least 6 characters"),
+                                      ]);
+
+                                      return multiValidator(value);
+                                    },
                                     obscureText: false,
                                     onChanged: (userName) =>
                                         _userName = userName,
                                     keyboardType: TextInputType.text,
                                     style: style,
                                     decoration: InputDecoration(
-                                      // prefixIcon: Icon(Icons.email),
                                       contentPadding: EdgeInsets.fromLTRB(
                                           20.0, 15.0, 20.0, 15.0),
                                       hintText: "User Name",
@@ -249,23 +199,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 13.dynamic,
                                 ),
                                 Container(
-                                  height: 48.0.dynamic,
+                                 height: 60.0.dynamic,
                                   decoration: BoxDecoration(
                                     color: Colour.appLightGrey,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: TextFormField(
-                                    validator: MultiValidator([
-                                      RequiredValidator(
-                                          errorText: "* Required"),
-                                    ]) as String? Function(String?)?,
+                                    validator: (value) {
+                                      final multiValidator = MultiValidator([
+                                        RequiredValidator(
+                                            errorText: "* Required"),
+                                      ]);
+
+                                      return multiValidator(value);
+                                    },
                                     obscureText: false,
                                     onChanged: (firstName) =>
                                         _firstName = firstName,
                                     keyboardType: TextInputType.text,
                                     style: style,
                                     decoration: InputDecoration(
-                                      // prefixIcon: Icon(Icons.email),
                                       contentPadding: EdgeInsets.fromLTRB(
                                           20.0, 15.0, 20.0, 15.0),
                                       hintText: "First Name",
@@ -277,23 +230,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 13.dynamic,
                                 ),
                                 Container(
-                                  height: 48.0.dynamic,
+                                 height: 60.0.dynamic,
                                   decoration: BoxDecoration(
                                     color: Colour.appLightGrey,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: TextFormField(
-                                    validator: MultiValidator([
-                                      RequiredValidator(
-                                          errorText: "* Required"),
-                                    ]) as String? Function(String?)?,
+                                    validator: (value) {
+                                      final multiValidator = MultiValidator([
+                                        RequiredValidator(
+                                            errorText: "* Required"),
+                                      ]);
+
+                                      return multiValidator(value);
+                                    },
                                     obscureText: false,
                                     onChanged: (lastName) =>
                                         _lastName = lastName,
                                     keyboardType: TextInputType.text,
                                     style: style,
                                     decoration: InputDecoration(
-                                      // prefixIcon: Icon(Icons.email),
                                       contentPadding: EdgeInsets.fromLTRB(
                                           20.0, 15.0, 20.0, 15.0),
                                       hintText: "Last Name",
@@ -305,7 +261,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 13.dynamic,
                                 ),
                                 Container(
-                                  height: 48.0.dynamic,
+                                 height: 60.0.dynamic,
                                   decoration: BoxDecoration(
                                     color: Colour.appLightGrey,
                                     borderRadius: BorderRadius.circular(10.0),
@@ -314,10 +270,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     onTap: () => _selectDate(context),
                                     child: TextFormField(
                                       controller: txt,
-                                      validator: MultiValidator([
-                                        RequiredValidator(
-                                            errorText: "* Required"),
-                                      ]) as String? Function(String?)?,
+                                      validator: (value) {
+                                        final multiValidator = MultiValidator([
+                                          RequiredValidator(
+                                              errorText: "* Required"),
+                                        ]);
+                                        return multiValidator(value);
+                                      },
+
                                       obscureText: false,
                                       readOnly: true,
 
@@ -341,16 +301,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 13.dynamic,
                                 ),
                                 Container(
-                                  height: 48.0.dynamic,
+                                 height: 60.0.dynamic,
                                   decoration: BoxDecoration(
                                     color: Colour.appLightGrey,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: TextFormField(
-                                    validator: MultiValidator([
-                                      RequiredValidator(
-                                          errorText: "* Required"),
-                                    ]) as String? Function(String?)?,
+                                    validator: (value) {
+                                      final multiValidator = MultiValidator([
+                                        RequiredValidator(
+                                            errorText: "* Required"),
+                                      ]);
+                                      return multiValidator(value);
+                                    },
                                     obscureText: false,
                                     onChanged: (email) => _email = email,
                                     keyboardType: TextInputType.text,
@@ -369,29 +332,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 13.dynamic,
                                 ),
                                 Container(
-                                  height: 48.0.dynamic,
+                                 height: 60.0.dynamic,
                                   decoration: BoxDecoration(
                                     color: Colour.appLightGrey,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: TextFormField(
-                                    validator: MultiValidator([
-                                      RequiredValidator(
-                                          errorText: "* Required"),
-                                      MinLengthValidator(6,
-                                          errorText:
-                                              "Password should be atleast 6 characters"),
-                                      MaxLengthValidator(15,
-                                          errorText:
-                                              "Password should not be greater than 15 characters")
-                                    ]) as String? Function(String?)?,
-                                    obscureText: false,
+                                    validator: (value) {
+                                      // Using MultiValidator to validate the input
+                                      final multiValidator = MultiValidator([
+                                        RequiredValidator(
+                                            errorText: "* Required"),
+                                        MinLengthValidator(6,
+                                            errorText:
+                                                "Password should be at least 6 characters"),
+                                        MaxLengthValidator(15,
+                                            errorText:
+                                                "Password should not be greater than 15 characters"),
+                                      ]);
+
+                                      return multiValidator(value);
+                                    },
+                                    obscureText: true,
                                     onChanged: (password) =>
                                         _password = password,
                                     keyboardType: TextInputType.text,
                                     style: style,
                                     decoration: InputDecoration(
-                                      // prefixIcon: Icon(Icons.email),
                                       contentPadding: EdgeInsets.fromLTRB(
                                           20.0, 15.0, 20.0, 15.0),
                                       hintText: "Enter password*",
@@ -403,33 +370,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 13.dynamic,
                                 ),
                                 Container(
-                                  height: 48.0.dynamic,
+                                  height: 60.0.dynamic,
                                   decoration: BoxDecoration(
                                     color: Colour.appLightGrey,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: TextFormField(
-                                    validator: MultiValidator([
-                                      RequiredValidator(
-                                          errorText: "* Required"),
-                                      MinLengthValidator(6,
-                                          errorText:
-                                              "Password should be atleast 6 characters"),
-                                      MaxLengthValidator(15,
-                                          errorText:
-                                              "Password should not be greater than 15 characters")
-                                    ]) as String? Function(String?)?,
-                                    obscureText: false,
+                                    validator: (value) {
+                                      // Using MultiValidator to validate the input
+                                      final multiValidator = MultiValidator([
+                                        RequiredValidator(
+                                            errorText: "* Required"),
+                                        MinLengthValidator(6,
+                                            errorText:
+                                                "Password should be at least 6 characters"),
+                                        MaxLengthValidator(15,
+                                            errorText:
+                                                "Password should not be greater than 15 characters"),
+                                      ]);
+
+                                      // Applying the validation and returning the error message if any
+                                      return multiValidator(value);
+                                    },
+                                    obscureText:
+                                        true, // Set to true if this is a password field
                                     onChanged: (confirmPassword) =>
                                         _confirmPassword = confirmPassword,
                                     keyboardType: TextInputType.text,
                                     style: style,
                                     decoration: InputDecoration(
-                                      // prefixIcon: Icon(Icons.email),
                                       contentPadding: EdgeInsets.fromLTRB(
                                           20.0, 15.0, 20.0, 15.0),
-                                      hintText: "Confirm password *",
-
+                                      hintText: "Confirm password*",
                                       border: InputBorder.none,
                                     ),
                                   ),
@@ -438,17 +410,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 13.dynamic,
                                 ),
                                 Container(
-                                  height: 48.0.dynamic,
+                                 height: 60.0.dynamic,
                                   decoration: BoxDecoration(
                                     color: Colour.appLightGrey,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: IntlPhoneField(
+                                  child:Padding(
+                                    padding: EdgeInsets.only(top: 10),
+                                     child: IntlPhoneField(
+                                  
                                     decoration: InputDecoration(
                                       // labelText: 'Phone Number',
                                       hintText: 'Phone Number',
                                       suffixIcon: Icon(Icons.phone),
+                                      contentPadding: EdgeInsets.only(top: 20),
+                                          
                                       border: InputBorder.none,
+                                      isDense: true, 
+                                            hintStyle: TextStyle(height: 1.5),
+
                                     ),
                                     initialCountryCode: 'IN',
                                     onChanged: (phone) {
@@ -456,7 +436,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       _phoneNumber = phone.number;
                                     },
                                   ),
-                                ),
+                               
+                                  ),
+                                  ),
+
+                                // Container(
+                                //  height: 60.0.dynamic,
+                                //   decoration: BoxDecoration(
+                                //     color: Colour.appLightGrey,
+                                //     borderRadius: BorderRadius.circular(10.0),
+                                //   ),
+                                //   child: IntlPhoneField(
+                                //     decoration: InputDecoration(
+                                //       // labelText: 'Phone Number',
+                                //       hintText: 'Phone Number',
+                                //       suffixIcon: Icon(Icons.phone),
+                                //       border: InputBorder.none,
+                                //     ),
+                                //     initialCountryCode: 'IN',
+                                //     onChanged: (phone) {
+                                //       _countryCode = phone.countryCode;
+                                //       _phoneNumber = phone.number;
+                                //     },
+                                //   ),
+                                // ),
                                 FormField<bool>(
                                   builder: (state) {
                                     return Column(

@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:image_picker/image_picker.dart';
 
 extension PhotoChooseAction on PhotoChooseScreen {
   onPickFromGallery(BuildContext context) async {
@@ -21,17 +20,17 @@ extension PhotoChooseAction on PhotoChooseScreen {
 extension PhotoChooseExtension on PhotoChooseScreen {
   Future<File?> getImage(ImageSource source) async {
     try {
-      PickedFile pickedFile = (await imagePicker.getImage(source: source))!;
-      print('image picked');
+      XFile? pickedFile = await imagePicker.pickImage(source: source);
+      print('Image picked');
       if (pickedFile != null) {
         return File(pickedFile.path);
-        // _image = pickedFile;
-        // print(_image.path);
       } else {
         print('No image selected.');
+        return null;
       }
     } catch (error) {
       print('Error $error');
+      return null;
     }
   }
 }

@@ -33,15 +33,15 @@ extension JobCompletedAction on JobCompletedScreen {
         if (response.isSuccess) {
           navigator!.popUntil((route) => route.settings.name == NavPage.root);
         } else {
-          Toast.show(response.message ?? 'Failed to clock out', Get.context);
+          Toast.show(response.message ?? 'Failed to clock out', textStyle: Get.context);
           return;
         }
       } else {
-        Toast.show('Authentication failed', Get.context);
+        Toast.show('Authentication failed', textStyle: Get.context);
         return;
       }
     } catch (e) {
-      Toast.show(e.toString(), Get.context);
+      Toast.show(e.toString(), textStyle: Get.context);
       return;
     }
   }

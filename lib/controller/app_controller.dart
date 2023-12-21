@@ -3,35 +3,24 @@ import 'dart:convert';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/api/urls.dart';
-import 'package:eagle_pixels/controller/app_binder.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:eagle_pixels/model/site_model.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/storage.dart';
-import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:eagle_pixels/screen/nav_bottom.dart';
-import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
-import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
-import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:eagle_pixels/model/profile_model.dart';
-import 'package:eagle_pixels/screen/toast/feedback_screen.dart';
 import 'package:toast/toast.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:toast/toast.dart';
 
 enum LoginStatus { logged, logout, loading }
 
@@ -77,39 +66,43 @@ class AppController extends GetxController {
   // double? longitude;
 
   Future<MAuthenticationStatus> verifyUser() async {
-    var result = MAuthenticationStatus();
-    final position = await determinePosition();
-    result.position = position;
-    final isLocalAuthenticated = await onLocalAuthenticate();
-    result.isLocalAuthenticated = isLocalAuthenticated;
-    hideLoading();
-    final pickedImageFile =
-        await ImagePicker().getImage(source: ImageSource.camera);
-    if (pickedImageFile != null) {
-      result.image = pickedImageFile;
-    } else {
-      Future.error('Not able to get image');
-    }
-    return result;
+  var result = MAuthenticationStatus();
+  final position = await determinePosition();
+  result.position = position;
+  final isLocalAuthenticated = await onLocalAuthenticate();
+  result.isLocalAuthenticated = isLocalAuthenticated;
+  hideLoading();
+  
+  final pickedImageFile = await ImagePicker().pickImage(source: ImageSource.camera);
+  
+  if (pickedImageFile != null) {
+    result.image = pickedImageFile as PickedFile?;
+  } else {
+    throw Exception('Not able to get image');
   }
+  return result;
+}
+
 
   Future<bool> onLocalAuthenticate() async {
-    var isAvailable = await _localAuth.isDeviceSupported();
-    if (isAvailable) {
-      var availableBio = await _localAuth.getAvailableBiometrics();
-      hideLoading(value: 0);
-      var isAuthenticated = await _localAuth.authenticate(
-        localizedReason: 'Authentication for attendance',
-        useErrorDialogs: false,
-      );
-      if (isAuthenticated == false) {
-        return Future.error('Cancelled');
-      }
-      return isAuthenticated;
-    } else {
-      return Future.error('Please setup password for your device');
+  var isAvailable = await _localAuth.isDeviceSupported();
+  if (isAvailable) {
+    var availableBio = await _localAuth.getAvailableBiometrics();
+    hideLoading(value: 0);
+    var isAuthenticated = await _localAuth.authenticate(
+      localizedReason: 'Authentication for attendance',
+      // Adjust the code based on the latest documentation
+      // For example, removing the 'useErrorDialogs' parameter
+    );
+    if (isAuthenticated == false) {
+      return Future.error('Cancelled');
     }
+    return isAuthenticated;
+  } else {
+    return Future.error('Please set up a password for your device');
   }
+}
+
 
   // void _getAllBiometrics() async {
   //
@@ -299,7 +292,7 @@ class AppController extends GetxController {
         Get.find<AttendanceController>().fetchAttendanceStatus();
       } else {
         loginStatus.value = LoginStatus.logout;
-        Toast.show('Account not active', Get.context);
+        Toast.show('Account not active', textStyle: Get.context);
       }
     } else {
       // loginStatus.value = LoginStatus.logout;
@@ -343,7 +336,7 @@ class AppController extends GetxController {
     // return Container();
     return Obx(() {
       if (showLoading.value > 0) {
-        return ModalProgressHUD(inAsyncCall: true, child: Container());
+        return ProgressHUD( child: Container());
       } else {
         return Container();
       }

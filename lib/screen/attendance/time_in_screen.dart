@@ -41,11 +41,11 @@ extension TimeInAction on TimeInScreen {
 
   Future getImage() async {
     try {
-      final pickedFile = await picker.getImage(source: ImageSource.camera);
+          final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+
       print('image picked');
       if (pickedFile != null) {
-        _image = pickedFile;
-        var res = await uploadImage(_image.path,
+        var res = await uploadImage(pickedFile.path,
             'https://pixel.solstium.net/api/v1/employee/upload_sign');
         if (res?.isSuccess ?? false) {
           var model = await attendance.onClockIn();
@@ -55,10 +55,10 @@ extension TimeInAction on TimeInScreen {
             attendance.attendanceStatus.value = resp;
             Get.toNamed(NavPage.clockOut);
           } else {
-            Toast.show(model?.message ?? kErrorMsg, Get.context);
+            Toast.show(model?.message ?? kErrorMsg, textStyle: Get.context);
           }
         } else {
-          Toast.show('Upload failed. please try again', Get.context);
+          Toast.show('Upload failed. please try again', textStyle: Get.context);
         }
       } else {
         print('No image selected.');

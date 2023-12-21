@@ -1,16 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
-import 'package:eagle_pixels/controller/job_checklist_controller.dart';
-import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
-import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
 
 import '../../colors.dart';
 import '../../constant.dart';
@@ -110,6 +105,8 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                           placeholder: (_, url) => Image.asset(
                                             'images/user.png',
                                           ),
+                                          errorWidget: (_, __, ___) =>
+                                              Image.asset('images/user.png'),
                                         ),
                                         decoration: BoxDecoration(
                                           // image: DecorationImage(
@@ -143,7 +140,7 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                               height: 4.dynamic,
                                             ),
                                             Text(
-                                              '${safeString(AppController.user.name)}',
+                                              '${AppController.user.name}',
                                               style: TextStyle(
                                                   color: Colour.appBlack,
                                                   fontWeight: FontWeight.w600,

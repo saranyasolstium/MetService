@@ -47,9 +47,9 @@ class LoginRequestModel {
       'username': email!.trim(),
       'password': password!.trim(),
       'grant_type': 'password',
-      'client_id': '11',
-      'client_secret': 'i44TZ2OZLUTHpOqvwHsjnnR2v9uJmLTLzeHknXrw',
-      'scope': ''
+      'client_id': '22',
+      'client_secret': 'XxYwnq03sDonxUXKzq5sYQQE1i9ukbxInOePXY9H',
+      'scope': '*'
     };
     return map;
   }

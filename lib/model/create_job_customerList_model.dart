@@ -84,5 +84,5 @@ class MCustomerItem implements ADropDown {
 
   String get aId => customerId.toString();
 
-  String get aName => constructNames([firstName, lastName]);
+  String get aName =>name.toString();
 }

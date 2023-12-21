@@ -27,8 +27,13 @@ class MAttendanceStatusResponse implements Codable, AAttendanceStatus {
     status = json["status"];
     isServiceStarted = json['service_status'] == 1 ? true : false;
     isAttendanceStarted = json['attendence_status'] == 1 ? true : false;
-    data = MAttendanceStatusItem.fromJson(json["data"]);
-    startedDate = data?.attendenceDate;
+    if (json.containsKey("data") && json["data"] != null) {
+      data = MAttendanceStatusItem.fromJson(json["data"]);
+      startedDate = data?.attendenceDate;
+    }
+
+    // data = MAttendanceStatusItem.fromJson(json["data"]);
+    // startedDate = data?.attendenceDate;
     return this;
   }
 

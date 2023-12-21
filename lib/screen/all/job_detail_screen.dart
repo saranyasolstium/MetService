@@ -1,3 +1,4 @@
+import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/constant.dart';
@@ -14,11 +15,8 @@ import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
-import 'package:jiffy/jiffy.dart';
+import 'package:intl/intl.dart';
 
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -55,11 +53,11 @@ extension JobDetailAction on JobDetailScreen {
           Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
           // Get.toNamed(NavPage.jobCheckListScreen);
         } else {
-          Toast.show(message, Get.context);
+          Toast.show(message, textStyle: Get.context);
         }
       }
     } catch (e) {
-      Toast.show('$e', Get.context);
+      Toast.show('$e', textStyle: Get.context);
     }
   }
 }
@@ -628,7 +626,8 @@ extension JobDetailWidgets on JobDetailScreen {
                           );
                         }
                       } else {
-                        Toast.show('Invalid Floor Plan', Get.context);
+                        Toast.show('Invalid Floor Plan',
+                            textStyle: Get.context);
                       }
                     },
                     child: Text(
@@ -647,33 +646,6 @@ extension JobDetailWidgets on JobDetailScreen {
       ],
     );
   }
-
-  // Widget get warrantyInfo {
-  //   return Column(
-  //     children: [
-  //       SizedBox(
-  //         height: 20.dynamic,
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView(
-  //               'Customer Warranty Information', detail.aPurchaseDate),
-  //         ],
-  //       ),
-  //       SizedBox(
-  //         height: 20.dynamic,
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView(
-  //               'Vendor Warranty Information', detail.aPurchaseDate),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget get bottomView {
     return Container(
@@ -703,11 +675,12 @@ extension JobDetailWidgets on JobDetailScreen {
           children: [
             Obx(
               () => Text(
-                // var time = DateFormat('hh:mm a').format(DateTime.now());
-                Jiffy(TimerController.to.currentDate.value)
-                    .format('hh:mm a  |  do MMMM yyyy'),
-                // DateFormat('hh:mm a | MMst MMMM yyyy').format(DateTime.now()),
-                // '09:10 AM  |  21st September 2021',
+                DateFormat('hh:mm a  |  do MMMM yyyy')
+                    .format(TimerController.to.currentDate.value),
+
+                // Jiffy(TimerController.to.currentDate.value)
+                //     .format(pattern: 'hh:mm a  |  do MMMM yyyy'),
+
                 style: TextStyle(
                   fontSize: 14.dynamic,
                   fontWeight: FontWeight.w600,

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
@@ -8,15 +7,11 @@ import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 
-import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
-import 'package:latlong/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../colors.dart';
 import '../../constant.dart';
@@ -211,9 +206,11 @@ class ServiceView extends StatelessWidget {
             ),
           if (isNeedScheduledTime)
             Text(
-              safeString(Jiffy(DateFormat(AppDateFormat.defaultF)
-                      .parse((item as MScheduledJobItem).serviceDate!))
-                  .format(AppDateFormat.scheduledTime)),
+              // safeString(Jiffy(DateFormat(AppDateFormat.defaultF)
+              //         .parse((item as MScheduledJobItem).serviceDate!))
+              //     .format(pattern: AppDateFormat.scheduledTime)),
+              safeString(item as MScheduledJobItem),
+
               style: TextStyle(
                   color: Colour.appBlack,
                   fontWeight: FontWeight.w600,
