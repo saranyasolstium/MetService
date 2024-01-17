@@ -8,6 +8,11 @@ class MCustomerList implements Codable {
   String? message;
   late List<MCustomerItem> data;
 
+  int? employeeId; // Add employeeId field
+
+  MCustomerList({this.employeeId = 0}); // Add a constructor
+
+
   fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];

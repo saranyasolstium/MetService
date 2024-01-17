@@ -44,12 +44,12 @@ class LoginRequestModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'username': email!.trim(),
+      'email': email!.trim(),
       'password': password!.trim(),
-      'grant_type': 'password',
-      'client_id': '22',
-      'client_secret': 'XxYwnq03sDonxUXKzq5sYQQE1i9ukbxInOePXY9H',
-      'scope': '*'
+      // 'grant_type': 'password',
+      // 'client_id': '22',
+      // 'client_secret': 'XxYwnq03sDonxUXKzq5sYQQE1i9ukbxInOePXY9H',
+      // 'scope': '*'
     };
     return map;
   }

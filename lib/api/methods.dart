@@ -1,6 +1,7 @@
 import 'package:eagle_pixels/api/urls.dart';
 
 enum HTTPMethod { get, post }
+
 enum ParamType { formData, raw }
 
 extension HTTPMethodString on HTTPMethod {
@@ -30,8 +31,11 @@ extension Method on EndPoint {
       case EndPoint.completeJob:
       case EndPoint.checkList:
       case EndPoint.getCustomerProductItemList:
+        return HTTPMethod.post;
       case EndPoint.getCustomerStoreList:
       case EndPoint.createJob:
+        return HTTPMethod.post;
+      case EndPoint.getCustomerList:
         return HTTPMethod.post;
       default:
         return HTTPMethod.get;

@@ -149,7 +149,7 @@ extension HomeWidgets on HomeScreen {
                 ],
               ),
               child: Padding(
-                padding: EdgeInsets.only(left: 15, right: 10),
+                padding: EdgeInsets.only(left: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

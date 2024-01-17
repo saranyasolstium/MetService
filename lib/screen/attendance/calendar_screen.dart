@@ -31,9 +31,11 @@ import 'package:toast/toast.dart';
 extension CalendarAction on CalendarScreen {
   startOrEndDay() async {
     final status = attendance.attendanceStatus.value;
+    print(status);
     if (status != null) {
       if (status.isServiceStarted && !status.isAttendanceStarted) {
-        Toast.show('You already in service attendance', textStyle: Get.context);
+       Toast.show('You already in service attendance', textStyle: Get.context);
+      //print('You already in service attendance');
         return;
       }
     }
