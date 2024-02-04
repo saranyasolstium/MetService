@@ -84,25 +84,25 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    // data['id'] = this.id;
+     data['id'] = this.id;
     data['product_id'] = this.productId;
     data['product_name'] = this.productName;
-    // data['product_image'] = this.productImage;
-    // data['sku'] = this.sku;
-    // data['serial_number'] = this.serialNumber;
-    // data['company_name'] = this.companyName;
-    // data['customer_name'] = this.customerName;
-    // data['customer_image'] = this.customerImage;
-    // data['site_name'] = this.siteName;
-    // data['site_address'] = this.siteAddress;
-    // data['site_address2'] = this.siteAddress2;
-    // data['site_city'] = this.siteCity;
-    // data['site_state'] = this.siteState;
-    // data['site_zipcode'] = this.siteZipcode;
+    data['product_image'] = this.productImage;
+    data['sku'] = this.sku;
+    data['serial_number'] = this.serialNumber;
+    data['company_name'] = this.companyName;
+    data['customer_name'] = this.customerName;
+    data['customer_image'] = this.customerImage;
+    data['site_name'] = this.siteName;
+    data['site_address'] = this.siteAddress;
+    data['site_address2'] = this.siteAddress2;
+    data['site_city'] = this.siteCity;
+    data['site_state'] = this.siteState;
+    data['site_zipcode'] = this.siteZipcode;
     data['subsite_name'] = this.subsiteName;
-    // data['site_map'] = this.siteMap;
-    // data['warranty_ending'] = this.warrantyEnding;
-    // data['warrenty_period'] = this.warrentyPeriod;
+    data['site_map'] = this.siteMap;
+    data['warranty_ending'] = this.warrantyEnding;
+    data['warrenty_period'] = this.warrentyPeriod;
     return data;
   }
 

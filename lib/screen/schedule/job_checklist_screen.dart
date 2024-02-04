@@ -344,7 +344,7 @@ class CheckListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              safeString(item.title),
+              item.title,
               style: TextStyle(
                 color: Colour.appBlack,
                 fontSize: 16.0,
@@ -572,7 +572,7 @@ class CheckListSelectionView extends StatelessWidget {
               width: 8.dynamic,
             ),
             Text(
-              safeString(item.name),
+              item.name,
               style: TextStyle(
                 color: Colour.appBlack,
                 fontSize: 14.0,

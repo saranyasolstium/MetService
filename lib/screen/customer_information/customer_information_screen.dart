@@ -4,6 +4,7 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/customer_information_controller.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -30,7 +31,6 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
       return ListView.builder(
         itemBuilder: (con, index) {
           var item = customer.filteredProductList[index];
-
           return Padding(
             padding: const EdgeInsets.only(bottom: 15.0),
             child: Container(
@@ -51,10 +51,17 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                          height: 60.dynamic,
-                          width: 60.dynamic,
-                          child: NetworkImageView(
-                              item.aImage, kCameraPlaceholder)),
+                        height: 60.dynamic,
+                        width: 60.dynamic,
+                        child: SvgPicture.network(
+                          'https://met.solstium.net/admin/images/user-profile.svg',
+                          placeholderBuilder: (BuildContext context) =>
+                              Image.network(kCameraPlaceholder),
+                        ),
+
+                        // child: NetworkImageView(
+                        //     item.aCustomerImage, kCameraPlaceholder)
+                      ),
                       SizedBox(
                         width: 13.dynamic,
                       ),
@@ -64,7 +71,7 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              safeString('Product Name'),
+                              'Product Name',
                               style: TextStyle(
                                   color: Colour.appDarkGrey,
                                   fontWeight: FontWeight.w400,
@@ -74,7 +81,7 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                               height: 4.dynamic,
                             ),
                             Text(
-                              '${safeString(item.aName)}',
+                              '${item.aName}',
                               style: TextStyle(
                                   color: Colour.appBlack,
                                   fontWeight: FontWeight.w400,
@@ -158,8 +165,7 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                           }
                         },
                         child: Text(
-                          safeString(
-                              '${item.aFloorPlan == '' ? 'Empty' : item.aFloorPlanName}'),
+                          '${item.aFloorPlan == '' ? 'Empty' : item.aFloorPlanName}',
                           style: TextStyle(
                               color: Colour.appBlue,
                               fontWeight: FontWeight.w600,
@@ -440,7 +446,7 @@ class JobDetailTitleDescriptionView extends StatelessWidget {
           height: 4.dynamic,
         ),
         Text(
-          safeString(description),
+          description ?? 'NA',
           style: TextStyle(
               color: Colour.appBlack,
               fontWeight: FontWeight.w400,

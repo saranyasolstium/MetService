@@ -86,7 +86,7 @@ class ServiceView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      safeString(item.aProdouctName),
+                      item.aProdouctName ?? 'NA',
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w400,
@@ -96,7 +96,7 @@ class ServiceView extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      'ID - ${safeString(item.aCctvID)}',
+                      'ID - ${item.aCctvID}',
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
@@ -130,7 +130,7 @@ class ServiceView extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      safeString(item.aServiceType),
+                      item.aServiceType ?? 'NA',
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w600,
@@ -175,7 +175,7 @@ class ServiceView extends StatelessWidget {
                           width: 7.dynamic,
                         ),
                         Text(
-                          safeString(item.aCustomerName),
+                          item.aCustomerName ?? 'NA',
                           style: TextStyle(
                               color: Colour.appBlack,
                               fontWeight: FontWeight.w600,
@@ -206,11 +206,8 @@ class ServiceView extends StatelessWidget {
             ),
           if (isNeedScheduledTime)
             Text(
-              // safeString(Jiffy(DateFormat(AppDateFormat.defaultF)
-              //         .parse((item as MScheduledJobItem).serviceDate!))
-              //     .format(pattern: AppDateFormat.scheduledTime)),
-              safeString(item as MScheduledJobItem),
-
+              "",
+             // (item as MScheduledJobItem).serviceDate!,
               style: TextStyle(
                   color: Colour.appBlack,
                   fontWeight: FontWeight.w600,
@@ -251,7 +248,7 @@ class ServiceView extends StatelessWidget {
             ],
           ),
           Text(
-            safeString(item.aCombinedAddress),
+            item.aCombinedAddress ?? 'NA',
             style: TextStyle(
                 color: Colour.appBlack,
                 fontWeight: FontWeight.w600,

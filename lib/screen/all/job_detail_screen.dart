@@ -13,6 +13,7 @@ import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:intl/intl.dart';
@@ -29,9 +30,8 @@ extension JobDetailAction on JobDetailScreen {
   onStartJob() async {
     try {
       showLoading();
-      var authStatus = await AppController.to.verifyUser();
-      if (authStatus.isValid) {
-        // if (true) {
+
+      AppController().verifyUser().then((result) async {
         var res =
             await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
         hideLoading();
@@ -40,24 +40,46 @@ extension JobDetailAction on JobDetailScreen {
         String message = res['message'] ?? res['error'] ?? kErrorMsg;
 
         if (isSuccess(status) || error == K.already_checkIn) {
-          // final index = schedule.scheduleList.indexWhere((element) {
-          //   Logger.log('Service id',
-          //       '${element.aServiceID ?? ''} - ${detail.aServiceId}');
-          //   return ((element.aServiceID ?? '') == detail.aServiceId);
-          // });
-
-          // schedule.scheduleList[index].engineerStatus = 1;
-
-          // schedule.update();
+          
           schedule.reloadList();
           Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
-          // Get.toNamed(NavPage.jobCheckListScreen);
         } else {
           Toast.show(message, textStyle: Get.context);
         }
+      }).catchError((error) {
+        print('Error during verification: $error');
+      });
+
+      var authStatus = await AppController.to.verifyUser();
+      if (authStatus.isValid) {
+        // if (true) {
+        // var res =
+        //     await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
+        // hideLoading();
+        // String status = res[K.status] ?? '';
+        // String error = res['error'] ?? '';
+        // String message = res['message'] ?? res['error'] ?? kErrorMsg;
+
+        // if (isSuccess(status) || error == K.already_checkIn) {
+        //   // final index = schedule.scheduleList.indexWhere((element) {
+        //   //   Logger.log('Service id',
+        //   //       '${element.aServiceID ?? ''} - ${detail.aServiceId}');
+        //   //   return ((element.aServiceID ?? '') == detail.aServiceId);
+        //   // });
+
+        //   // schedule.scheduleList[index].engineerStatus = 1;
+
+        //   // schedule.update();
+        //   schedule.reloadList();
+        //   Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
+        //   // Get.toNamed(NavPage.jobCheckListScreen);
+        // } else {
+        //   Toast.show(message, textStyle: Get.context);
+        // }
       }
     } catch (e) {
-      Toast.show('$e', textStyle: Get.context);
+      Toast.show('$e',
+          textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
     }
   }
 }
@@ -199,7 +221,7 @@ class JobDetailScreen extends StatelessWidget {
                                     ],
                                   ),
                                   Text(
-                                    safeString(detail.aCombinedAddress),
+                                    detail.aCombinedAddress ?? 'NA',
                                     style: TextStyle(
                                         color: Colour.appBlack,
                                         fontWeight: FontWeight.w600,
@@ -351,7 +373,7 @@ extension JobDetailWidgets on JobDetailScreen {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                safeString(detail.aCameraName),
+                detail.aCameraName ?? 'NA',
                 style: TextStyle(
                     color: Colour.appBlack,
                     fontWeight: FontWeight.w400,
@@ -361,7 +383,7 @@ extension JobDetailWidgets on JobDetailScreen {
                 height: 4.dynamic,
               ),
               Text(
-                safeString(detail.aCameraID),
+                detail.aCameraID ?? 'NA',
                 style: TextStyle(
                     color: Colour.appDarkGrey,
                     fontWeight: FontWeight.w400,
@@ -675,7 +697,7 @@ extension JobDetailWidgets on JobDetailScreen {
           children: [
             Obx(
               () => Text(
-                DateFormat('hh:mm a  |  do MMMM yyyy')
+                DateFormat('hh:mm a  |  dd MMMM yyyy')
                     .format(TimerController.to.currentDate.value),
 
                 // Jiffy(TimerController.to.currentDate.value)
@@ -742,7 +764,7 @@ class JobDetailTitleDescriptionView extends StatelessWidget {
             height: 4.dynamic,
           ),
           Text(
-            safeString(description),
+            description ?? 'NA',
             style: TextStyle(
                 color: Colour.appBlack,
                 fontWeight: FontWeight.w600,
@@ -764,6 +786,7 @@ class JobDetailTitleDescriptionImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(image);
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -785,24 +808,41 @@ class JobDetailTitleDescriptionImageView extends StatelessWidget {
                 width: 24.dynamic,
                 height: 24.dynamic,
                 alignment: Alignment.center,
-                child: NetworkImageView(image, this.placeholder),
+                child: SvgPicture.network(
+                  image!,
+                  placeholderBuilder: (BuildContext context) =>
+                      Image.asset('images/user.png'),
+                ),
                 decoration: BoxDecoration(
-                  // image: DecorationImage(
-                  //   fit: BoxFit.contain,
-                  //   image:
-                  //   AssetImage('images/user.png'),
-                  // ),
                   border: Border.all(
                     color: Colors.blue,
                   ),
                   borderRadius: BorderRadius.circular(37.5.dynamic),
                 ),
               ),
+
+              // Container(
+              //   width: 24.dynamic,
+              //   height: 24.dynamic,
+              //   alignment: Alignment.center,
+              //   child: NetworkImageView(image, this.placeholder),
+              //   decoration: BoxDecoration(
+              //     // image: DecorationImage(
+              //     //   fit: BoxFit.contain,
+              //     //   image:
+              //     //   AssetImage('images/user.png'),
+              //     // ),
+              //     border: Border.all(
+              //       color: Colors.blue,
+              //     ),
+              //     borderRadius: BorderRadius.circular(37.5.dynamic),
+              //   ),
+              // ),
               SizedBox(
                 width: 7.dynamic,
               ),
               Text(
-                safeString(description),
+                description ?? 'NA',
                 style: TextStyle(
                     color: Colour.appBlack,
                     fontWeight: FontWeight.w600,

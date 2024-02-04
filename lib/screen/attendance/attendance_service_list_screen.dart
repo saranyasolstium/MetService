@@ -5,6 +5,7 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../colors.dart';
@@ -270,7 +271,7 @@ class AttendenceDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      safeString(item.aProdouctName),
+                      item.aProdouctName ?? 'NA',
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w400,
@@ -280,7 +281,7 @@ class AttendenceDetail extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      safeString(item.aCctvID),
+                      item.aCctvID ?? 'NA',
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
@@ -298,9 +299,9 @@ class AttendenceDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AttendanceTitleDescriptionView(
-                  'Service Request No:', safeString(item.aRequestNo)),
-              AttendanceTitleDescriptionImageView('Customer Name:',
-                  safeString(item.aCustomerName), item.aCustomerImage),
+                  'Service Request No:', item.aRequestNo ?? 'NA',),
+              AttendanceTitleDescriptionImageView(
+                  'Customer Name:', item.aCustomerName, item.aCustomerImage),
             ],
           ),
           SizedBox(
@@ -309,8 +310,7 @@ class AttendenceDetail extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              AttendanceTitleDescriptionView(
-                  'Address:', safeString(item.aAddress)),
+              AttendanceTitleDescriptionView('Address:', item.aAddress ?? 'NA'),
               Container(
                 width: 120,
               ),
@@ -429,7 +429,7 @@ class AttendanceTitleDescriptionView extends StatelessWidget {
             height: 4.dynamic,
           ),
           Text(
-            safeString(description),
+            description!,
             style: TextStyle(
                 color: color ?? Colour.appBlack,
                 fontWeight: FontWeight.w600,
@@ -472,13 +472,12 @@ class AttendanceTitleDescriptionImageView extends StatelessWidget {
                   width: 24.dynamic,
                   height: 24.dynamic,
                   alignment: Alignment.center,
-                  child: NetworkImageView(image, kCameraPlaceholder),
+                  child: SvgPicture.network(
+                    image!,
+                    placeholderBuilder: (BuildContext context) =>
+                        Image.asset('images/user.png'),
+                  ),
                   decoration: BoxDecoration(
-                    // image: DecorationImage(
-                    //   fit: BoxFit.contain,
-                    //   image:
-                    //   AssetImage('images/user.png'),
-                    // ),
                     border: Border.all(
                       color: Colors.blue,
                     ),
@@ -490,7 +489,8 @@ class AttendanceTitleDescriptionImageView extends StatelessWidget {
                 width: 7.dynamic,
               ),
               Text(
-                safeString(description),
+                description ?? 'NA',
+                
                 style: TextStyle(
                     color: Colour.appBlack,
                     fontWeight: FontWeight.w600,

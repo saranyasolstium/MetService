@@ -29,8 +29,7 @@ extension EndPointString on EndPoint {
       case EndPoint.profile:
         return "profile";
       case EndPoint.login:
-       // return "token";
-       return "login";
+        return "login";
       case EndPoint.scheduled_job_list:
         return "get_scheduled_job_list";
       case EndPoint.register:
@@ -62,10 +61,9 @@ extension EndPointString on EndPoint {
       case EndPoint.activeJob:
         return 'get_date_job_list';
       case EndPoint.getCustomerList:
-        return 'customer_request_list';
+        return 'customer_list';
       case EndPoint.getCustomerProductItemList:
         return 'customer_item_list';
-        //  return 'customer_list';
       case EndPoint.serviceTypeList:
         return 'get_servicetype_list';
       case EndPoint.createJob:
@@ -97,8 +95,7 @@ extension BaseURLString on EBaseURL {
   String withExtend(String endPoint) {
     var extend = "";
     if (endPoint == EndPoint.login.string) {
-      //extend = 'oauth';
-      extend ="api/v1";
+      extend = 'api/v1';
     } else if (endPoint == EndPoint.register.string) {
       extend = 'api/v1';
     } else if (endPoint == EndPoint.profile.string) {

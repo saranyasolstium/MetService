@@ -341,8 +341,8 @@ class ServiceReportScreen extends StatelessWidget {
                                     Get.toNamed(NavPage.jobCompleted);
                                   }
                                 } else {
-                                  Toast.show(
-                                      'Please put your signature', textStyle: Get.context);
+                                  Toast.show('Please put your signature',
+                                      textStyle: Get.context);
                                 }
                               },
                               child: Text(
@@ -446,7 +446,7 @@ class ReportItem extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    safeString(item.title),
+                    item.title,
                     style: TextStyle(
                       color: Colour.appBlack,
                       fontSize: 16.0.dynamic,
@@ -501,7 +501,7 @@ class ReportItem extends StatelessWidget {
                 color: Colors.white,
               ),
               child: Text(
-                safeString(item.remarks),
+                item.remarks,
                 style: TextStyle(
                   fontSize: 14.dynamic,
                   color: Colour.appDarkGrey,
@@ -600,7 +600,7 @@ class ReportCheckbox extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            safeString(item.name),
+            item.name,
             style: TextStyle(
               color: Colour.appBlack,
               fontSize: 14.0,

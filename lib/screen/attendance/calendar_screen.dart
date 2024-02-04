@@ -31,11 +31,12 @@ import 'package:toast/toast.dart';
 extension CalendarAction on CalendarScreen {
   startOrEndDay() async {
     final status = attendance.attendanceStatus.value;
-    print(status);
+
+    print(attendance.isClockedIn);
     if (status != null) {
       if (status.isServiceStarted && !status.isAttendanceStarted) {
-       Toast.show('You already in service attendance', textStyle: Get.context);
-      //print('You already in service attendance');
+        Toast.show('You already in service attendance', textStyle: Get.context);
+        //print('You already in service attendance');
         return;
       }
     }
@@ -55,6 +56,7 @@ extension CalendarAction on CalendarScreen {
   }
 
   startDay() async {
+    //comment by saranya
     if (AppController.to.isAttendanceEngineer) {
       if (attendance.selectedSite.value == null) {
         Toast.show('invalid selected site', textStyle: Get.context);
@@ -63,8 +65,7 @@ extension CalendarAction on CalendarScreen {
     }
     showLoading();
     try {
-      var authStatus = await AppController.to.verifyUser();
-      if (authStatus.isValid) {
+      AppController().verifyUser().then((result) async {
         var model = await attendance.onClockIn();
         if (model?.status?.isSuccess ?? false) {
           var resp = MAttendanceStatusResponse();
@@ -81,45 +82,81 @@ extension CalendarAction on CalendarScreen {
           }
           Get.toNamed(NavPage.clockOut);
         } else {
-          Toast.show(model?.message ?? 'Problem in clock in. please try again.',
-              textStyle: Get.context);
+          Toast.show(
+            model?.message ?? 'Problem in clock in. please try again.',
+            textStyle: TextStyle(color: Colors.black, fontSize: 16.0),
+          );
         }
-      }
+      }).catchError((error) {
+        // Handle errors during verification
+        print('Error during verification: $error');
+      });
+
+      //   var authStatus = await AppController.to.verifyUser();
+      //   print(authStatus.isValid);
+      //  if (authStatus.isValid) {
+      //     var model = await attendance.onClockIn();
+      //     if (model?.status?.isSuccess ?? false) {
+      //       var resp = MAttendanceStatusResponse();
+      //       resp.startedDate = DateTime.now();
+      //       attendance.attendanceStatus.value = resp;
+      //       final status = attendance.attendanceStatus.value;
+      //       if (status != null) {
+      //         status.isAttendanceStarted = !status.isAttendanceStarted;
+      //         attendance.update();
+      //       } else {
+      //         attendance.attendanceStatus.value = MAttendanceStatusResponse();
+      //         attendance.attendanceStatus.value!.isAttendanceStarted = true;
+      //         attendance.update();
+      //       }
+      //       Get.toNamed(NavPage.clockOut);
+      //     } else {
+      //       Toast.show(
+      //         model?.message ?? 'Problem in clock in. please try again.',
+      //         textStyle: TextStyle(color: Colors.black, fontSize: 16.0),
+      //       );
+      //     }
+      //   }
     } catch (e) {
-      Toast.show('$e', textStyle: Get.context);
+      Toast.show(
+        '$e',
+        textStyle: TextStyle(color: Colors.black, fontSize: 16.0),
+      );
     } finally {
       hideLoading(value: 0);
     }
   }
 
   Future getImage() async {
-  try {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
-    print('Image picked');
-    if (pickedFile != null) {
-      // Your existing code for handling the picked image
+    try {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      print('Image picked');
+      if (pickedFile != null) {
+        // Your existing code for handling the picked image
 
-      var res = await uploadImage(pickedFile.path, 'https://pixel.solstium.net/api/v1/employee/upload_sign');
-      if (res?.isSuccess ?? false) {
-        var model = await attendance.onClockIn();
-        if (model?.status?.isSuccess ?? false) {
-          var resp = MAttendanceStatusResponse();
-          resp.startedDate = DateTime.now();
-          attendance.attendanceStatus.value = resp;
-          Get.toNamed(NavPage.clockOut);
+        var res = await uploadImage(pickedFile.path,
+            'https://pixel.solstium.net/api/v1/employee/upload_sign');
+        if (res?.isSuccess ?? false) {
+          var model = await attendance.onClockIn();
+          if (model?.status?.isSuccess ?? false) {
+            var resp = MAttendanceStatusResponse();
+            resp.startedDate = DateTime.now();
+            attendance.attendanceStatus.value = resp;
+            Get.toNamed(NavPage.clockOut);
+          } else {
+            // Handle the case where onClockIn is not successful
+          }
         } else {
-          // Handle the case where onClockIn is not successful
+          // Handle the case where uploadImage is not successful
         }
       } else {
-        // Handle the case where uploadImage is not successful
+        print('No image selected.');
       }
-    } else {
-      print('No image selected.');
+    } catch (error) {
+      print('Error $error');
     }
-  } catch (error) {
-    print('Error $error');
   }
-}
 
   Future<String?> uploadImage(filepath, url) async {
     try {
@@ -453,15 +490,16 @@ extension CalendarWidgets on CalendarScreen {
         );
       },
       onDayPressed: (date, events) {
-        print(date);
+        print("saranya $date");
         attendance.selectedActiveJobDate = date;
         this.showAttendance(DateFormat(AppDateFormat.yyyy_MM_dd).format(date));
       },
+      
       // weekdayTextStyle: TextStyle(
       //   color: Colors.green,
       // ),
       daysHaveCircularBorder: false,
-      showOnlyCurrentMonthDate: false,
+      showOnlyCurrentMonthDate: true,
       // w      thisMonthDayBorderColor: Colors.transparent,
       height: 320.dynamic,
       // selectedDateTime: _currentDate2,
@@ -593,8 +631,8 @@ extension CalendarWidgets on CalendarScreen {
           children: [
             Obx(
               () => Text(
-                DateFormat('hh:mm a  |  dd MMMM yyyy').format(TimerController.to.currentDate.value),
-
+                DateFormat('hh:mm a  |  dd MMMM yyyy')
+                    .format(TimerController.to.currentDate.value),
 
                 // Jiffy(TimerController.to.currentDate.value)
                 //     .format('hh:mm a  |  do MMMM yyyy'),
@@ -619,7 +657,7 @@ extension CalendarWidgets on CalendarScreen {
                 ),
               ),
               child: TextButton(
-                onPressed: this.startOrEndDay,
+                onPressed: this.startDay,
                 child: Text(
                   'Start the day',
                   style: TextStyle(
@@ -640,8 +678,8 @@ extension CalendarWidgets on CalendarScreen {
       children: [
         Obx(
           () => Text(
-            DateFormat('hh:mm a  |  dd MMMM yyyy').format(TimerController.to.currentDate.value),
-            
+            DateFormat('hh:mm a  |  dd MMMM yyyy')
+                .format(TimerController.to.currentDate.value),
             style: TextStyle(
               fontSize: 14.dynamic,
               fontWeight: FontWeight.w600,

@@ -35,7 +35,7 @@ class AttendanceController extends GetxController {
   static AttendanceController get to => Get.find<AttendanceController>();
   var selectedYear = "2021".obs;
   var selectedMonth = "January".obs;
-  String selectedMonthInNumber = '1';
+  String selectedMonthInNumber = '2';
 
   DateTime get selectedDate {
     return DateTime(
@@ -318,10 +318,10 @@ extension AttendanceControllerService on AttendanceController {
           : "0";
       Position position = await AppController.to.determinePosition();
       var body = {
-        'SiteID': siteID,
+        //'SiteID': siteID,
         'latitude': '${position.latitude}',
         'longitude': '${position.longitude}',
-        'serviceID': '0'
+        //'serviceID': '0'
       };
 
       var response = await API.service.call(
@@ -338,10 +338,10 @@ extension AttendanceControllerService on AttendanceController {
   Future<MClockInResponse?> onClockOut() async {
     Position position = await AppController.to.determinePosition();
     var body = {
-      'SiteID': '0',
+     // 'SiteID': '0',
       'latitude': '${position.latitude}',
       'longitude': '${position.longitude}',
-      'serviceID': '0'
+      //'serviceID': '0'
     };
 
     var response = await API.service.call(

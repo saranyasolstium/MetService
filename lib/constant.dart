@@ -9,32 +9,31 @@ const kCameraPlaceholder = 'images/camera.png';
 const kUserPlaceholder = 'images/user.png';
 const kErrorMsg = 'something went wrong please try again';
 
+String safeString(String dateString) {
+  try {
+    DateTime originalDate = DateFormat(AppDateFormat.defaultF).parse(dateString);
+    return DateFormat(AppDateFormat.scheduledTime).format(originalDate);
+  } catch (e) {
+    // Handle the case where the date string is invalid
+    print('Error parsing date: $e');
+    return ''; // or return the original string or a default value
+  }
+}
+
+
 // String safeString(dynamic value, {String def = "NA"}) {
 //   if (value == null) {
 //     return def;
 //   } else {
-//     String stringValue = value.toString();
-//     if (stringValue.length > 0) {
-//       return stringValue;
-//     } else {
+//     try {
+//       DateTime dateTime = DateFormat(AppDateFormat.defaultF).parse((value as MScheduledJobItem).serviceDate!);
+//       String formattedString = DateFormat('your_pattern_here').format(dateTime);
+//       return formattedString.isNotEmpty ? formattedString : def;
+//     } catch (e) {
 //       return def;
 //     }
 //   }
 // }
-
-String safeString(dynamic value, {String def = "NA"}) {
-  if (value == null) {
-    return def;
-  } else {
-    try {
-      DateTime dateTime = DateFormat(AppDateFormat.defaultF).parse((value as MScheduledJobItem).serviceDate!);
-      String formattedString = DateFormat('your_pattern_here').format(dateTime);
-      return formattedString.isNotEmpty ? formattedString : def;
-    } catch (e) {
-      return def;
-    }
-  }
-}
 
 Widget titleText(String title) => Text(
       title,

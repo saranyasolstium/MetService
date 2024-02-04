@@ -39,9 +39,10 @@ class CustomerInformationController extends GetxController {
 
   fetchCustomerList() async {
     var response = await API.service.call(
-      endPoint: EndPoint.getCustomerList,
-      model: MCustomerList(),
-    );
+        endPoint: EndPoint.getCustomerList,
+        model: MCustomerList(),
+        );
+
     if (response.isValidModel) {
       customerList.value = response.model!.data
           .where((element) => element.aId.trim().length > 0)

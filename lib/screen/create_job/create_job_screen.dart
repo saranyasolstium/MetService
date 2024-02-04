@@ -32,11 +32,13 @@ extension CreateJobAction on _CreateJobScreenState {
       if (isJobCreated) {
         Get.back();
         Toast.show('New Job created successfully', duration: 2);
+        print('New Job created successfully');
       } else {
         Toast.show(kErrorMsg);
       }
     } catch (e) {
       Toast.show('$e');
+      print(e);
     }
   }
 }

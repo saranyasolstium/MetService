@@ -28,9 +28,7 @@ extension TimeOutAction on TimeOutScreen {
         print('yes clicked');
         try {
           showLoading();
-          var authStatus = await AppController.to.verifyUser();
-          if (authStatus.isValid) {
-            // await getImage();
+          AppController().verifyUser().then((result) async {
             var model = await attendance.onClockOut();
             if (model?.status?.isSuccess ?? false) {
               navigator!
@@ -38,10 +36,26 @@ extension TimeOutAction on TimeOutScreen {
             } else {
               Toast.show(model?.message ?? kErrorMsg, textStyle: Get.context);
             }
-          }
-        } catch (e) {
-          Toast.show('$e', textStyle: Get.context);
-        } finally {
+          }).catchError((error) {
+            // Handle errors during verification
+            print('Error during verification: $error');
+          });
+
+          // var authStatus = await AppController.to.verifyUser();
+          // if (authStatus.isValid) {
+          // await getImage();
+          //   var model = await attendance.onClockOut();
+          //   if (model?.status?.isSuccess ?? false) {
+          //     navigator!
+          //         .popUntil((route) => route.settings.name == NavPage.root);
+          //   } else {
+          //     Toast.show(model?.message ?? kErrorMsg, textStyle: Get.context);
+          //   }
+        }
+        // } catch (e) {
+        //   Toast.show('$e', textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
+        // }
+        finally {
           hideLoading(value: 0);
         }
       } else {
@@ -52,7 +66,8 @@ extension TimeOutAction on TimeOutScreen {
 
   Future getImage() async {
     try {
-          final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.camera);
 
       print('image picked');
       if (pickedFile != null) {
@@ -150,7 +165,8 @@ class TimeOutScreen extends StatelessWidget {
                       children: [
                         Text(
                           attendance.isClockedIn
-                              ?  DateFormat('do MMMM yyyy').format(attendance.jobStartedTime!)
+                              ? DateFormat('dd MMMM yyyy')
+                                  .format(attendance.jobStartedTime!)
 
                               // Jiffy(attendance.jobStartedTime)
                               //     .format('do MMMM yyyy')
@@ -274,13 +290,13 @@ class TimeOutScreen extends StatelessWidget {
                                   : 'NA',
                             ),
                             TimeInOutDetailItem(
-                              title: 'Today:',
-                              description: DateFormat('do MMMM yyyy').format(timer.currentDate.value)
+                                title: 'Today:',
+                                description: DateFormat('dd MMMM yyyy')
+                                    .format(timer.currentDate.value)
 
-                              
-                              // Jiffy(timer.currentDate.value)
-                              //     .format('do MMMM yyyy'),
-                            ),
+                                // Jiffy(timer.currentDate.value)
+                                //     .format('do MMMM yyyy'),
+                                ),
                           ],
                         ),
                         Row(
@@ -288,7 +304,8 @@ class TimeOutScreen extends StatelessWidget {
                             TimeInOutDetailItem(
                                 title: 'Time in:',
                                 description: attendance.isClockedIn
-                                    ? DateFormat('hh:mm:ss a').format(attendance.jobStartedTime!)
+                                    ? DateFormat('hh:mm:ss a')
+                                        .format(attendance.jobStartedTime!)
 
                                     // Jiffy(attendance.jobStartedTime)
                                     //     .format('hh:mm:ss a')

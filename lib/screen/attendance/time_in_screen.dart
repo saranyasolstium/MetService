@@ -337,7 +337,7 @@ class TimeInOutDetailItem extends StatelessWidget {
               ),
             ),
             Text(
-              safeString(description),
+              description!,
               style: TextStyle(
                 fontSize: 14.dynamic,
                 fontWeight: FontWeight.w600,

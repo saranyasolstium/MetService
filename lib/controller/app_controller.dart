@@ -65,122 +65,95 @@ class AppController extends GetxController {
   // double? latitude;
   // double? longitude;
 
-  Future<MAuthenticationStatus> verifyUser() async {
-  var result = MAuthenticationStatus();
-  final position = await determinePosition();
-  result.position = position;
-  final isLocalAuthenticated = await onLocalAuthenticate();
-  result.isLocalAuthenticated = isLocalAuthenticated;
-  hideLoading();
-  
-  final pickedImageFile = await ImagePicker().pickImage(source: ImageSource.camera);
-  
-  if (pickedImageFile != null) {
-    result.image = pickedImageFile as PickedFile?;
-  } else {
-    throw Exception('Not able to get image');
-  }
-  return result;
-}
+    Future<MAuthenticationStatus> verifyUser() async {
+    var result = MAuthenticationStatus();
+    try {
+      final position = await determinePosition();
+      result.position = position;
 
+      final isLocalAuthenticated = await onLocalAuthenticate();
+      result.isLocalAuthenticated = isLocalAuthenticated;
+      hideLoading();
 
-  Future<bool> onLocalAuthenticate() async {
-  var isAvailable = await _localAuth.isDeviceSupported();
-  if (isAvailable) {
-    var availableBio = await _localAuth.getAvailableBiometrics();
-    hideLoading(value: 0);
-    var isAuthenticated = await _localAuth.authenticate(
-      localizedReason: 'Authentication for attendance',
-      // Adjust the code based on the latest documentation
-      // For example, removing the 'useErrorDialogs' parameter
-    );
-    if (isAuthenticated == false) {
-      return Future.error('Cancelled');
+      final pickedImageFile = await ImagePicker().pickImage(source: ImageSource.camera);
+
+      if (pickedImageFile != null) {
+        // Handle the conversion from XFile to PickedFile
+        result.image = PickedFile(pickedImageFile.path);
+      } else {
+        throw Exception('Not able to get image');
+      }
+
+      print('Verification Result: $result');
+      return result;
+    } catch (e) {
+      print('Error during user verification: $e');
+      throw e;
     }
-    return isAuthenticated;
-  } else {
-    return Future.error('Please set up a password for your device');
   }
-}
 
 
-  // void _getAllBiometrics() async {
-  //
-  //   final isAvailable = await _localAuth.canCheckBiometrics;
-  //   final isDeviceSupported = await _localAuth.isDeviceSupported();
-  //   bool hasLocalAuthentication = await _localAuth.canCheckBiometrics;
-  //   if (isAvailable && isDeviceSupported) {
-  //     if (hasLocalAuthentication) {
-  //       List<BiometricType> availableBiometrics =
-  //           await _localAuth.getAvailableBiometrics();
-  //       hasFaceLock.value = availableBiometrics.contains(BiometricType.face);
-  //       hasFingerPrintLock.value =
-  //           availableBiometrics.contains(BiometricType.fingerprint);
-  //     } else {
-  //       showSnackBar(
-  //           title: "Error",
-  //           message: 'Local Authentication not available',
-  //           backgroundColor: Colors.red);
-  //     }
-  //   } else {
-  //     showSnackBar(
-  //         title: "Error",
-  //         message: 'Local Authentication not available',
-  //         backgroundColor: Colors.red);
-  //   }
-  // }
+   Future<bool> onLocalAuthenticate() async {
+    try {
+      var isAvailable = await _localAuth.isDeviceSupported();
 
-  // Future<bool> authenticateUser() async {
-  //   try {
-  //     const androidMessage = const AndroidAuthMessages(
-  //       cancelButton: 'Cancel',
-  //       goToSettingsButton: 'settings',
-  //       goToSettingsDescription: 'Please set up your Fingerprint/Face.',
-  //       biometricHint: 'Verify your identity',
-  //     );
-  //     isUserAuthenticated.value = await _localAuth.authenticate(
-  //       localizedReason: 'Authenticate Yourself',
-  //       biometricOnly: false,
-  //       useErrorDialogs: true,
-  //       stickyAuth: true,
-  //       androidAuthStrings: androidMessage,
-  //     );
-  //     if (isUserAuthenticated.value) {
-  //       return true;
-  //       // showSnackBar(
-  //       //     title: "Success",
-  //       //     message: "You are authenticated",
-  //       //     backgroundColor: Colors.green);
-  //     } else {
-  //       showSnackBar(
-  //           title: "Error",
-  //           message: "Authentication Cancelled",
-  //           backgroundColor: Colors.red);
-  //       return false;
-  //     }
-  //   } on Exception catch (e) {
-  //     print(e);
-  //     showSnackBar(
-  //         title: "Error", message: e.toString(), backgroundColor: Colors.red);
-  //     return false;
-  //   }
-  // }
+      if (isAvailable) {
+        var availableBio = await _localAuth.getAvailableBiometrics();
+        print('Available Biometrics: $availableBio');
+        hideLoading(value: 0);
 
-  // Future localAuth() async {
-  //   showLoading();
-  //   position = await determinePosition();
-  //   hideLoading();
-  //   latitude = position?.latitude;
-  //   longitude = position?.longitude;
-  //   showLoading();
-  //   bool isVerified = await authenticateUser();
-  //   hideLoading();
-  //   if (isVerified) {
-  //     showLoading();
-  //     await getImage();
-  //     hideLoading();
-  //   }
-  // }
+        var isAuthenticated = await _localAuth.authenticate(
+          localizedReason: 'Authentication for attendance',
+        );
+
+        print('Authentication Result: $isAuthenticated');
+
+        if (isAuthenticated) {
+          // Returning true indicates successful authentication
+          return true;
+        } else {
+          // Returning false indicates authentication failure
+          return false;
+        }
+      } else {
+        // Returning false indicates that the device does not support local authentication
+        print('Device does not support local authentication');
+        return false;
+      }
+    } catch (e) {
+      print('Error during local authentication: $e');
+      throw e;
+    }
+  }
+
+  Future<Position> determinePosition() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permissions are denied');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permissions are permanently denied, we cannot request permissions.');
+      }
+
+      return await Geolocator.getCurrentPosition();
+    } catch (e) {
+      print('Error during position determination: $e');
+      throw e;
+    }
+  }
+
 
   void showSnackBar(
       {required String title,
@@ -192,50 +165,7 @@ class AppController extends GetxController {
         snackPosition: SnackPosition.BOTTOM);
   }
 
-  Future<Position> determinePosition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
-  // Future getImage() async {
-  //   try {
-  //     final pickedFile = await picker.getImage(source: ImageSource.camera);
-  //     print('image picked');
-  //     if (pickedFile != null) {
-  //       _image = pickedFile;
-  //       print(_image.path);
-  //       var res = await uploadImage(_image.path,
-  //           'https://pixel.solstium.net/api/v1/employee/upload_sign');
-  //       if (res?.isSuccess ?? false) {
-  //         print('Image Uploaded');
-  //       }
-  //     } else {
-  //       print('No image selected.');
-  //     }
-  //   } catch (error) {
-  //     print('Error $error');
-  //   }
-  // }
-
+  
   Future<String?> uploadImage(filepath, url) async {
     try {
       showLoading();
@@ -336,7 +266,7 @@ class AppController extends GetxController {
     // return Container();
     return Obx(() {
       if (showLoading.value > 0) {
-        return ProgressHUD( child: Container());
+        return ProgressHUD(child: Container());
       } else {
         return Container();
       }

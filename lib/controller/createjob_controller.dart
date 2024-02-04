@@ -1,3 +1,4 @@
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:get/get.dart';
 import '../api/ParamModel.dart';
 import '../api/api_service.dart';
@@ -73,7 +74,7 @@ class CreateJobController extends GetxController {
     var response = await API.service.call(
         endPoint: EndPoint.getCustomerList,
         model: MCustomerList(),
-        body: {'employee_id': 362});
+        body: {'employee_id': AppController.user.employeeDetails!.id});
     if (response.isValidModel) {
       customerList.value = response.model!.data;
     }

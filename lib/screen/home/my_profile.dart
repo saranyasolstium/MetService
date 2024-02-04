@@ -261,7 +261,7 @@ extension MyProfileScreenWidgets on MyProfileScreen {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '   ${safeString(AppController.user.name)}',
+                  '   ${AppController.user.name}',
                   style: TextStyle(
                       color: Colour.appText,
                       fontSize: 16.dynamic,

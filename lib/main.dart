@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:toast/toast.dart';
 
 import 'colors.dart';
 import 'controller/app_binder.dart';
@@ -65,6 +66,10 @@ class MyApp extends StatelessWidget {
     double minimum = min(query.size.width, query.size.height);
     double defaultSize = 360;
     scale = minimum / defaultSize;
+    // Initialize ToastContext here before runApp
+    ToastContext toastContext = ToastContext();
+    toastContext.init(context);
+
     return GetMaterialApp(
       // title: 'Flutter Demo',
       getPages: [
