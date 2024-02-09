@@ -53,6 +53,7 @@ class ServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(item.aServiceType);
     return Container(
       padding: EdgeInsets.only(
         top: 16.dynamic,
@@ -96,7 +97,7 @@ class ServiceView extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      'ID - ${item.aCctvID}',
+                      'ID - ${item.aServiceID}',
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
@@ -192,22 +193,65 @@ class ServiceView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
-                  child: Text(
-                    'Scheduled Time:',
-                    style: TextStyle(
-                        color: Colour.appDarkGrey,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12.dynamic),
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
+                      child: Text(
+                        'Scheduled Time:',
+                        style: TextStyle(
+                          color: Colour.appDarkGrey,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 12.dynamic,
+                        ),
+                      ),
+                    ),
+                   
+                    Text(
+                      item.aPurchaseDate ?? 'NA',
+                      style: TextStyle(
+                        color: Colour.appBlack,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.dynamic,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
+
+          //  Expanded(
+          //     child: Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         Text(
+          //           'Scheduled Time',
+          //           style: TextStyle(
+          //               color: Colour.appDarkGrey,
+          //               fontWeight: FontWeight.w400,
+          //               fontSize: 12.dynamic),
+          //         ),
+          //         SizedBox(
+          //           height: 4.dynamic,
+          //         ),
+          //         Text(
+          //           item.aPurchaseDate ?? 'NA',
+          //           style: TextStyle(
+          //               color: Colour.appBlack,
+          //               fontWeight: FontWeight.w600,
+          //               fontSize: 14.dynamic),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+
           if (isNeedScheduledTime)
             Text(
               "",
-             // (item as MScheduledJobItem).serviceDate!,
+              // (item as MScheduledJobItem).serviceDate!,
               style: TextStyle(
                   color: Colour.appBlack,
                   fontWeight: FontWeight.w600,

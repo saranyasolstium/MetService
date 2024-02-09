@@ -36,8 +36,10 @@ class JobHistoryController extends GetxController {
     jobList.value = resp.model!.data;
     if (jobList.length > 0) {
       viewState.value = ViewState.success;
-    } else {
+    } else if (jobList.length == 0) {
       viewState.value = ViewState.failed;
+    } else {//logout
+      viewState.value = ViewState.message;
     }
   }
 }

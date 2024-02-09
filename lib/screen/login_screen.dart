@@ -182,16 +182,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                             fontSize: 45.0.dynamic),
                                       ),
                                       Image.asset(
-                                        'images/pixellogo.png',
+                                        'images/met.png',
                                         fit: BoxFit.fill,
-                                        width: 60.dynamic,
+                                        width: 120.dynamic,
                                         height: 60.dynamic,
                                       ),
                                     ],
                                   ),
                                 ),
                                 Text(
-                                  'Welcome to Pixels Connect.',
+                                  'Welcome to Met.',
                                   style: TextStyle(
                                       color: Colour.appBlack,
                                       fontWeight: FontWeight.w400,
@@ -269,20 +269,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                   //     ),
                                   //   ),
                                   // ),
-                                  SafeArea(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 85.0, bottom: 34.0),
-                                      child: Center(
-                                        child: Image.asset(
-                                          'images/poweredby.png',
-                                          fit: BoxFit.fill,
-                                          // width: 60.dynamic,
-                                          // height: 60.dynamic,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  //commnet by saranya
+                                  // SafeArea(
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.only(
+                                  //         top: 85.0, bottom: 34.0),
+                                  //     child: Center(
+                                  //       child: Image.asset(
+                                  //         'images/poweredby.png',
+                                  //         fit: BoxFit.fill,
+                                  //         // width: 60.dynamic,
+                                  //         // height: 60.dynamic,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),

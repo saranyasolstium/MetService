@@ -5,17 +5,17 @@ import 'package:intl/intl.dart';
 class MAttendanceEntry implements AJobTime {
   int? iD;
   String? employeeCode;
-  dynamic? empCode1;
+  dynamic empCode1;
   String? attendenceDate;
   String? attendenceEndDate;
   int? inTimeHour;
   int? inTimeMinute;
   int? outTimeHour;
   int? outTimeMinute;
-  dynamic? nWorkUnit;
-  dynamic? jobType;
+  dynamic nWorkUnit;
+  dynamic jobType;
   String? employeeName;
-  dynamic? eMPStatus;
+  dynamic eMPStatus;
   String? siteID;
   int? serviceID;
   String? siteName;
@@ -23,36 +23,36 @@ class MAttendanceEntry implements AJobTime {
   double? longIn;
   double? latOut;
   double? longOut;
-  dynamic? imageIn;
-  dynamic? imageOut;
-  dynamic? isactive;
-  dynamic? attId;
+  dynamic imageIn;
+  dynamic imageOut;
+  dynamic isactive;
+  dynamic attId;
   int? id;
   // String? employeeCode;
   String? firstName;
-  dynamic? joiningDate;
+  dynamic joiningDate;
   String? lastName;
   String? userName;
   String? email;
   String? designation;
-  dynamic? networkUserId;
+  dynamic networkUserId;
   String? countryCode;
   int? mobileNumber;
   String? registerationDate;
-  dynamic? dob;
+  dynamic dob;
   String? department;
-  dynamic? employeeType;
-  dynamic? finNumber;
+  dynamic employeeType;
+  dynamic finNumber;
   String? finStartDate;
   String? finEndDate;
-  dynamic? passportNumber;
-  dynamic? passportStartDate;
-  dynamic? passportEndDate;
+  dynamic passportNumber;
+  dynamic passportStartDate;
+  dynamic passportEndDate;
   String? finCertificate;
   String? passportCertificate;
   String? profileImage;
-  dynamic? status;
-  dynamic? deletedAt;
+  dynamic status;
+  dynamic deletedAt;
 
   MAttendanceEntry.fromJson(Map<String, dynamic> json) {
     attendenceDate = json['AttendenceDate'];
@@ -60,22 +60,41 @@ class MAttendanceEntry implements AJobTime {
       aStartTime = DateFormat(AppDateFormat.defaultF)
           .parse(attendenceDate!)
           .string(AppDateFormat.attendanceDate);
+      print(aStartTime);
     }
 
-    attendenceEndDate = json['AttendenceEndDate'];
-    if (attendenceEndDate != null) {
+    outTimeHour = json['OutTime_Hour'];
+    outTimeMinute = json['OutTime_Minute'];
+
+    // Update attendenceEndDate using OutTime_Hour and OutTime_Minute
+    if (outTimeHour != null && outTimeMinute != null) {
+      DateTime outTime = DateTime(
+        int.parse(attendenceDate!.substring(0, 4)),
+        int.parse(attendenceDate!.substring(5, 7)),
+        int.parse(attendenceDate!.substring(8, 10)),
+        outTimeHour!,
+        outTimeMinute!,
+      );
+
       aEndTime = DateFormat(AppDateFormat.defaultF)
-          .parse(attendenceDate!)
+          .parse(outTime!.toString())
           .string(AppDateFormat.attendanceDate);
+      print(aEndTime);
     }
+
+    // attendenceEndDate = json['AttendenceEndDate'];
+    // if (attendenceEndDate != null) {
+    //   aEndTime = DateFormat(AppDateFormat.defaultF)
+    //       .parse(attendenceDate!)
+    //       .string(AppDateFormat.attendanceDate);
+    // }
 
     iD = json['ID'];
     employeeCode = json['EmployeeCode'];
     empCode1 = json['EmpCode1'];
     inTimeHour = json['InTime_Hour'];
     inTimeMinute = json['InTime_Minute'];
-    outTimeHour = json['OutTime_Hour'];
-    outTimeMinute = json['OutTime_Minute'];
+
     nWorkUnit = json['nWorkUnit'];
     jobType = json['JobType'];
     employeeName = json['EmployeeName'];
@@ -176,4 +195,5 @@ class MAttendanceEntry implements AJobTime {
 
   String? aEndTime;
   String? aStartTime;
+  String? aSiteID;
 }

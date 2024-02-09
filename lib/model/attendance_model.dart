@@ -1,4 +1,9 @@
 import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/screen/login_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MAttendanceResponse implements Codable {
   String? status;
@@ -14,6 +19,8 @@ class MAttendanceResponse implements Codable {
         data!.add(MAttendanceItem.fromJson(v));
       });
     }
+
+    
     return this;
   }
 

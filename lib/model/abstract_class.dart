@@ -20,6 +20,13 @@ abstract class AServiceItem {
   String? get aSiteID;
   String? get aServiceID;
   String? get aCombinedAddress;
+  String? get aEmail;
+  String? get aPhoneNo;
+  String? get aServiceName;
+  String? get aSubServiceName;
+  String? get aEmployeeName;
+  double? get aLatIn;
+  double? get aLatOut;
 }
 
 abstract class AShowAttendance {
@@ -68,14 +75,18 @@ abstract class AJobDetail {
   //Customer Information
   String? get aCustomerName;
   String? get aCustomerImage;
-  String? get aItem;
-  String? get aSerialNumber;
-  String? get aSite;
-  String? get aSiteID;
-  String? get aSubSite;
-  String? get aSaleOrder;
-  String? get aSiteMapLat;
-  String? get aSiteMapLang;
+  String? get aEmail;
+  String? get aPhoneNo;
+  String? get aServiceName;
+  String? get aSubServiceName;
+  // String? get aItem;
+  // String? get aSerialNumber;
+  // String? get aSite;
+  // String? get aSiteID;
+  // String? get aSubSite;
+  // String? get aSaleOrder;
+  // String? get aSiteMapLat;
+  // String? get aSiteMapLang;
 
   // Service Information
   String? get aTypeOfService;
@@ -84,6 +95,13 @@ abstract class AJobDetail {
   String? get aFloorPlan;
   String? get aFloorPlanName;
   String? get aCombinedAddress;
+
+  // Booking Information
+  String? get aTeamName;
+  String? get aBookingAmount;
+  String? get aBookingDate;
+  String? get aBookingTime;
+  
 
   List<ACheckListItem> get checkList;
 }

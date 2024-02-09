@@ -378,7 +378,7 @@ extension AttendanceControllerService on AttendanceController {
     activeJobViewState.value = ViewState.loading;
     var res = await API.service.call(
         model: MActiveServiceResponse(),
-        endPoint: EndPoint.activeJob,
+        endPoint: EndPoint.attendanceStatus,
         body: {'date': date});
     if (res.isValidModel) {
       arrActiveService.value = res.model!.data;

@@ -114,67 +114,67 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                   SizedBox(
                     height: 15.dynamic,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Floor Plan',
-                        style: TextStyle(
-                            color: Colour.appDarkGrey,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12.dynamic),
-                      ),
-                      SizedBox(
-                        height: 4.dynamic,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          final floorText = item.aFloorPlan;
-                          if (floorText != null && floorText.length > 3) {
-                            final isPDF =
-                                floorText.substring(floorText.length - 3) ==
-                                    'pdf';
-                            if (isPDF) {
-                              Get.bottomSheet(
-                                Center(
-                                  child: Container(
-                                    child: PDFViewer(
-                                      document:
-                                          await PDFDocument.fromURL(floorText),
-                                    ),
-                                  ),
-                                ),
-                                isScrollControlled: true,
-                                ignoreSafeArea: false,
-                              );
-                            } else {
-                              Get.bottomSheet(
-                                Center(
-                                  child: PhotoView(
-                                    imageProvider: NetworkImage(floorText),
-                                  ),
-                                ),
-                                isScrollControlled: true,
-                                ignoreSafeArea: false,
-                              );
-                            }
-                          } else {
-                            Toast.show('Invalid Floor Plan',
-                                textStyle: Get.context);
-                          }
-                        },
-                        child: Text(
-                          '${item.aFloorPlan == '' ? 'Empty' : item.aFloorPlanName}',
-                          style: TextStyle(
-                              color: Colour.appBlue,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14.dynamic),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                //   Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         'Floor Plan',
+                //         style: TextStyle(
+                //             color: Colour.appDarkGrey,
+                //             fontWeight: FontWeight.w400,
+                //             fontSize: 12.dynamic),
+                //       ),
+                //       SizedBox(
+                //         height: 4.dynamic,
+                //       ),
+                //       GestureDetector(
+                //         onTap: () async {
+                //           final floorText = item.aFloorPlan;
+                //           if (floorText != null && floorText.length > 3) {
+                //             final isPDF =
+                //                 floorText.substring(floorText.length - 3) ==
+                //                     'pdf';
+                //             if (isPDF) {
+                //               Get.bottomSheet(
+                //                 Center(
+                //                   child: Container(
+                //                     child: PDFViewer(
+                //                       document:
+                //                           await PDFDocument.fromURL(floorText),
+                //                     ),
+                //                   ),
+                //                 ),
+                //                 isScrollControlled: true,
+                //                 ignoreSafeArea: false,
+                //               );
+                //             } else {
+                //               Get.bottomSheet(
+                //                 Center(
+                //                   child: PhotoView(
+                //                     imageProvider: NetworkImage(floorText),
+                //                   ),
+                //                 ),
+                //                 isScrollControlled: true,
+                //                 ignoreSafeArea: false,
+                //               );
+                //             }
+                //           } else {
+                //             Toast.show('Invalid Floor Plan',
+                //                 textStyle: Get.context);
+                //           }
+                //         },
+                //         child: Text(
+                //           '${item.aFloorPlan == '' ? 'Empty' : item.aFloorPlanName}',
+                //           style: TextStyle(
+                //               color: Colour.appBlue,
+                //               fontWeight: FontWeight.w600,
+                //               fontSize: 14.dynamic),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                 ],
               ),
             ),
           );

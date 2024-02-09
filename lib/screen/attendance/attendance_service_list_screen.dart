@@ -16,6 +16,7 @@ import 'package:eagle_pixels/reuse/date_manager.dart';
 class AttendanceServiceListScreen extends StatelessWidget {
   final AttendanceController attendance = Get.find();
   static String defaultText = 'NA';
+
   AShowAttendance get detail {
     return attendance.showAttendenceDetail.value;
   }
@@ -158,26 +159,30 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      AttendanceTitleDescriptionView(
-                                        'Start Day At:',
-                                        attendance.isClockedIn
-                                            ? attendance.jobStartedTime!.string(
-                                                AppDateFormat.attendanceDate)
-                                            : defaultText,
+                                      AttendanceTitleView(
+                                        'Employee Code:',
+                                        AppController.user.employeeCode,
                                         color: Colour.appGreen,
                                       ),
-                                      AttendanceTitleDescriptionView(
-                                          // attendance
-                                          //     .arrActiveService
-                                          //     .last
-                                          //     .aAttendanceEntry
-                                          //     ?.last
-                                          //     .aEndTime
-                                          'End Day At:', //temp clockout time
-                                          defaultText,
-                                          color: Colour.appRed),
+                                      // AttendanceTitleView(
+                                      //     'Phone No:', //temp clockout time
+                                      //     AppController.user.email,
+                                      //     color: Colour.appRed),
                                     ],
                                   ),
+                                  SizedBox(
+                                    height: 20.dynamic,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      AttendanceTitleView(
+                                          'Email:', 
+                                          AppController.user.email,
+                                          color: Colour.appBlack),
+                                    ],
+                                  ),
+                                  
                                   SizedBox(
                                     height: 15.dynamic,
                                   ),
@@ -217,7 +222,7 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                   padding: const EdgeInsets.only(top: 40),
                                   child: Center(
                                     child:
-                                        Text(attendance.activeJobErrorMessage),
+                                        Text("Get Active Job list Successfully."),
                                   ),
                                 );
                               } else {
@@ -271,9 +276,9 @@ class AttendenceDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.aProdouctName ?? 'NA',
+                      'Employee Name',
                       style: TextStyle(
-                          color: Colour.appBlack,
+                          color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
                           fontSize: 16.dynamic),
                     ),
@@ -281,11 +286,11 @@ class AttendenceDetail extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      item.aCctvID ?? 'NA',
+                      item.aEmployeeName ?? 'NA',
                       style: TextStyle(
-                          color: Colour.appDarkGrey,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.dynamic),
+                          color: Colour.appBlack,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.dynamic),
                     ),
                   ],
                 ),
@@ -299,29 +304,68 @@ class AttendenceDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AttendanceTitleDescriptionView(
-                  'Service Request No:', item.aRequestNo ?? 'NA',),
-              AttendanceTitleDescriptionImageView(
-                  'Customer Name:', item.aCustomerName, item.aCustomerImage),
+                'Start Day At:',
+                item.aStartDay ?? K.na,
+                color: Colour.appGreen,
+              ),
+              SizedBox(
+                width: 10.dynamic,
+              ),
+              AttendanceTitleDescriptionView(
+                  'End Day At:', item.aEndDay ?? K.na,
+                  color: Colour.appRed),
             ],
           ),
           SizedBox(
-            height: 20.dynamic,
+            height: 15.dynamic,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              AttendanceTitleDescriptionView('Address:', item.aAddress ?? 'NA'),
-              Container(
-                width: 120,
+              AttendanceTitleDescriptionView(
+                'LatIn:',
+                item.aLatIn.toString(),
+                color: Colour.appGreen,
               ),
+              SizedBox(
+                width: 10.dynamic,
+              ),
+              AttendanceTitleDescriptionView('LatOut:', item.aLatOut.toString(),
+                  color: Colour.appRed),
             ],
           ),
+
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   children: [
+          //     AttendanceTitleDescriptionView(
+          //       'Service Request No:',
+          //       item.aServiceID ?? 'NA',
+          //     ),
+          //     AttendanceTitleDescriptionImageView(
+          //         'Customer Name:', item.aCustomerName, item.aCustomerImage),
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: 20.dynamic,
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   children: [
+          //     AttendanceTitleDescriptionView('Address:', item.aAddress ?? 'NA'),
+          //     Container(
+          //       width: 120,
+          //     ),
+          //   ],
+          // ),
           SizedBox(
             height: 15.dynamic,
           ),
           ListView.builder(
             itemBuilder: (con, ind) {
               var entry = item.aAttendanceEntry![ind];
+
+              print(entry.aEndTime);
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -441,6 +485,41 @@ class AttendanceTitleDescriptionView extends StatelessWidget {
   }
 }
 
+class AttendanceTitleView extends StatelessWidget {
+  final String title;
+  final String? description;
+  final Color? color;
+  AttendanceTitleView(this.title, this.description, {this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Colour.appDarkGrey,
+                fontWeight: FontWeight.w400,
+                fontSize: 12.dynamic),
+          ),
+          SizedBox(
+            width: 8.dynamic, // Add spacing between title and description
+          ),
+          Text(
+            description!,
+            style: TextStyle(
+                color: color ?? Colour.appBlack,
+                fontWeight: FontWeight.w600,
+                fontSize: 14.dynamic),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class AttendanceTitleDescriptionImageView extends StatelessWidget {
   final String title;
   final String? description;
@@ -490,7 +569,6 @@ class AttendanceTitleDescriptionImageView extends StatelessWidget {
               ),
               Text(
                 description ?? 'NA',
-                
                 style: TextStyle(
                     color: Colour.appBlack,
                     fontWeight: FontWeight.w600,

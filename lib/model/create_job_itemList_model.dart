@@ -59,6 +59,12 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? siteMap;
   String? warrantyEnding;
   String? warrentyPeriod;
+  String? attendenceDate;
+
+  String? attendenceEndDate;
+  String? employeeName;
+  double? latIn;
+  double? latOut;
   MCustomerProductItem({required this.productId, required this.productName});
   MCustomerProductItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -80,11 +86,17 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
     siteMap = json['site_map'];
     warrantyEnding = json['warranty_ending'];
     warrentyPeriod = json['warrenty_period'];
+    //Attendance entry
+    attendenceDate = json['AttendenceDate'];
+    attendenceEndDate = json['AttendenceEndDate'];
+    employeeName = json['EmployeeName'];
+    latIn = json['LatIn'];
+    latOut = json['LatOut'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-     data['id'] = this.id;
+    data['id'] = this.id;
     data['product_id'] = this.productId;
     data['product_name'] = this.productName;
     data['product_image'] = this.productImage;
@@ -103,6 +115,13 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
     data['site_map'] = this.siteMap;
     data['warranty_ending'] = this.warrantyEnding;
     data['warrenty_period'] = this.warrentyPeriod;
+
+    //AttendanceEntry
+    data['AttendenceDate'] = this.attendenceDate;
+    data['AttendenceEndDate'] = this.attendenceEndDate;
+    data['EmployeeName'] = this.employeeName;
+    data['LatIn'] = this.latIn;
+    data['LatOut'] = this.latOut;
     return data;
   }
 
@@ -111,6 +130,14 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? get aCctvID => sku;
   String? get aCustomerImage => customerImage;
   String? get aCustomerName => customerName;
+
+  String? get aEmail => "";
+
+  String? get aPhoneNo => "";
+
+  String? get aServiceName => "";
+
+  String? get aSubServiceName => "";
   String? get aEndDay => '';
   double? get aLat => 0;
   double? get aLong => 0;
@@ -136,4 +163,9 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
       constructAddress([siteAddress, siteCity, siteState, siteZipcode]);
 
   String? get aFloorPlanName => subsiteName;
+  String? get aEmployeeName => employeeName.toString();
+
+  double? get aLatIn => latIn;
+
+  double? get aLatOut => latOut;
 }

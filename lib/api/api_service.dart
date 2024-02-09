@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/api/methods.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:http/http.dart' as http;
@@ -159,7 +160,6 @@ class APIResponse<T> {
     try {
       if (error != null) {
         print('response - Empty');
-        throw Exception(error!);
       }
       responseObj = response;
       var decoded = jsonDecode(responseObj!.body);

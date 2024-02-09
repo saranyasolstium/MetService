@@ -5,7 +5,6 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/model/schedule_job_detail_model.dart';
-import 'package:eagle_pixels/model/site_model.dart';
 import 'package:signature/signature.dart';
 
 class JobDetailController extends GetxController {

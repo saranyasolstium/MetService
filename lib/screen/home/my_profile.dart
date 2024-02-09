@@ -22,6 +22,17 @@ class MyProfileScreen extends StatelessWidget {
           // height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
+              SizedBox(
+                height: 18.dynamic,
+              ),
+              Text(
+                "My Profile",
+                style: TextStyle(
+                  color: Colour.appBlue,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.dynamic,
+                ),
+              ),
               this.profileView,
               this.qrScannerView,
               Expanded(
@@ -201,35 +212,10 @@ extension MyProfileScreenWidgets on MyProfileScreen {
             height: 75.dynamic,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                // image: DecorationImage(
-                //   fit: BoxFit.contain,
-                //   image: AssetImage('images/user.png'),
-                // ),
                 border: Border.all(
                   color: Colors.blue,
                 ),
                 borderRadius: BorderRadius.circular(37.5.dynamic)),
-            // child: Stack(
-            //   children: [
-            //     CachedNetworkImage(
-            //       fit: BoxFit.fill,
-            //       imageUrl:
-            //           AppController.user.employeeDetails?.profileImage ?? "",
-            //       placeholder: (_, url) => Image.asset('images/user.png'),
-            //       errorWidget: (_, __, ___) => Image.asset(
-            //           'images/user.png'), // Provide a default image for errors
-            //     ),
-            //     Container(
-            //       width: 37.5.dynamic,
-            //       height: 37.5.dynamic,
-            //       margin: EdgeInsets.only(left: 40.dynamic, top: 40.dynamic),
-            //       decoration: BoxDecoration(
-            //           color: Colors.white,
-            //           borderRadius: BorderRadius.circular(37.5.dynamic)),
-            //       child: Image.asset('images/platinum_crown.png'),
-            //     ),
-            //   ],
-            // ),
             child: Stack(
               children: [
                 Container(
@@ -267,28 +253,38 @@ extension MyProfileScreenWidgets on MyProfileScreen {
                       fontSize: 16.dynamic,
                       fontWeight: FontWeight.w400),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      '   Edit Profile  ',
-                      style: TextStyle(
-                          color: Colour.appBlue,
-                          fontSize: 16.dynamic,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_outlined,
-                      color: Colour.appBlue,
-                      size: 14.dynamic,
-                    )
-                  ],
-                ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget builProfileRow(String title, String description, {Color? color}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: Colour.appBlack,
+            fontWeight: FontWeight.w400,
+            fontSize: 14.dynamic,
+          ),
+        ),
+        SizedBox(
+          width: 8.dynamic,
+        ),
+        Text(
+          description,
+          style: TextStyle(
+            color: color ?? Colour.appBlack,
+            fontWeight: FontWeight.w600,
+            fontSize: 14.dynamic,
+          ),
+        ),
+      ],
     );
   }
 
@@ -317,23 +313,38 @@ extension MyProfileScreenWidgets on MyProfileScreen {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Center(
-                        child: PrettyQr(
-                            typeNumber: 3,
-                            size: 162.95.dynamic,
-                            data: 'https://www.google.ru',
-                            errorCorrectLevel: QrErrorCorrectLevel.M,
-                            roundEdges: true),
-                      ),
+                      builProfileRow(
+                          "Employee Code : ",
+                          AppController.user.employeeDetails!.employeeCode
+                              .toString(),
+                          color: Colour.appGreen),
                       SizedBox(
-                        height: 14.6.dynamic,
+                        height: 14.dynamic,
                       ),
-                      Text(
-                        '    Scan QR Code ',
-                        style: TextStyle(
-                            color: Colour.appBlue,
-                            fontSize: 16.dynamic,
-                            fontWeight: FontWeight.w400),
+                      builProfileRow(
+                          "Email : ", AppController.user.email.toString(),
+                          color: Colour.appBlue),
+                      SizedBox(
+                        height: 14.dynamic,
+                      ),
+                      builProfileRow(
+                          "Designation : ",
+                          AppController.user.employeeDetails!.designation
+                              .toString(),
+                          color: Colour.appBlack),
+                      SizedBox(
+                        height: 14.dynamic,
+                      ),
+                      builProfileRow(
+                          "Mobile No : ",
+                          AppController.user.employeeDetails!.countryCode
+                                  .toString() +
+                              " " +
+                              AppController.user.employeeDetails!.mobileNumber
+                                  .toString(),
+                          color: Colour.appBlack),
+                      SizedBox(
+                        height: 14.dynamic,
                       ),
                     ],
                   ),

@@ -7,17 +7,13 @@ import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
 import 'package:eagle_pixels/screen/job_history/job_history_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
-import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
-import 'package:eagle_pixels/screen/schedule/schedule_job_details.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
 import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
-import 'package:eagle_pixels/screen/toast/feedback_screen.dart';
 import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:toast/toast.dart';
 
 import 'colors.dart';
@@ -26,8 +22,6 @@ import 'controller/app_controller.dart';
 import 'dynamic_font.dart';
 import 'screen/Attendance/calendar_screen.dart';
 import 'screen/attendance/attendance_service_list_screen.dart';
-import 'screen/create_job/create_job_screen.dart';
-import 'screen/create_job/create_job_screen.dart';
 import 'screen/customer_information/customer_information_screen.dart';
 
 class NavPage {

@@ -7,8 +7,11 @@ import 'dart:core';
 
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
+import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/date_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 // AttendanceStatus attendanceStatusFromJson(String str) =>
@@ -19,12 +22,16 @@ import 'package:intl/intl.dart';
 
 class MAttendanceStatusResponse implements Codable, AAttendanceStatus {
   String? status;
+  String? message;
+
   MAttendanceStatusItem? data;
   var isServiceStarted = false;
   var isAttendanceStarted = false;
 
   MAttendanceStatusResponse fromJson(Map<String, dynamic> json) {
     status = json["status"];
+    message = json['message'];
+
     isServiceStarted = json['service_status'] == 1 ? true : false;
     isAttendanceStarted = json['attendence_status'] == 1 ? true : false;
     if (json.containsKey("data") && json["data"] != null) {
@@ -32,13 +39,21 @@ class MAttendanceStatusResponse implements Codable, AAttendanceStatus {
       startedDate = data?.attendenceDate;
     }
 
-    // data = MAttendanceStatusItem.fromJson(json["data"]);
-    // startedDate = data?.attendenceDate;
+    // Check if the message is "Unauthenticated."
+    if (message == "Unauthenticated.") {
+      // Log out the user
+      AppController.to.storage.remove('token');
+      AppController.to.loginStatus.value = LoginStatus.logout;
+      //Navigator.of(Get.context, rootNavigator: true).pop();
+      print("saranya logout");
+    }
+
     return this;
   }
 
   Map<String, dynamic> toJson() => {
         "status": status,
+        'message': message,
         "data": data?.toJson(),
       };
 

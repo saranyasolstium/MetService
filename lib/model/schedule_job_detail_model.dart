@@ -3,6 +3,7 @@ import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/attendance_entry_model.dart';
 import 'package:eagle_pixels/common/logger.dart';
+import 'package:intl/intl.dart';
 // class MScheduleJobDetail implements Codable {
 //   String? status;
 //   String? message;
@@ -212,6 +213,10 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? companyName;
   String? customerName;
   String? customerImage;
+  String? email;
+  String? phone;
+  String? serviceName;
+  String? subserviceName;
   String? siteName;
   String? subsiteName;
   String? saleOrder;
@@ -230,6 +235,19 @@ class MJobDetail implements AJobDetail, AActiveService {
   dynamic? siteCity;
   dynamic? siteState;
   dynamic? siteZipCode;
+
+  dynamic? teamName;
+  dynamic? bookingDate;
+  dynamic? bookingTime;
+  dynamic? amount;
+  dynamic formattedBookingDate;
+
+  String? attendenceDate;
+  String? attendenceEndDate;
+  String? employeeName;
+  double? latIn;
+  double? latOut;
+
   MJobDetail();
 
   MJobDetail.fromJson(Map<String, dynamic> json) {
@@ -252,8 +270,29 @@ class MJobDetail implements AJobDetail, AActiveService {
     poNumber = json['po_number'];
     serviceDate = json['service_date'];
     companyName = json['company_name'];
+    //customer infomation
     customerName = json['customer_name'];
     customerImage = json['customer_image'];
+    email = json['email'];
+    phone = json['phone'];
+    serviceName = json['service_name'];
+    subserviceName = json['subservice_name'];
+
+    //Booking Information
+    teamName = json['team_name'];
+    bookingDate = json['bookingdate'];
+    DateTime bookingDateTime = DateTime.tryParse(bookingDate) ?? DateTime.now();
+    formattedBookingDate = DateFormat('dd MMMM yyyy').format(bookingDateTime);
+    bookingTime = json['bookingtime'];
+    amount = json['amount'];
+
+    //Attendance entry
+    attendenceDate = json['AttendenceDate'];
+    attendenceEndDate = json['AttendenceEndDate'];
+    employeeName = json['EmployeeName'];
+    latIn = json['LatIn'];
+    latOut = json['LatOut'];
+
     siteName = json['site_name'];
     subsiteName = json['subsite_name'];
     saleOrder = json['sale_order'];
@@ -311,6 +350,24 @@ class MJobDetail implements AJobDetail, AActiveService {
     data['company_name'] = this.companyName;
     data['customer_name'] = this.customerName;
     data['customer_image'] = this.customerImage;
+    data['email'] = this.email;
+    data['phone'] = this.phone;
+    data['service_name'] = this.serviceName;
+    data['subservice_name'] = this.subserviceName;
+
+    //Booking Information
+    data['team_name'] = this.teamName;
+    data['bookingdate'] = this.bookingDate;
+    data['bookingtime'] = this.bookingTime;
+    data['amount'] = this.amount;
+
+    //AttendanceEntry
+    data['AttendenceDate'] = this.attendenceDate;
+    data['AttendenceEndDate'] = this.attendenceEndDate;
+    data['EmployeeName'] = this.employeeName;
+    data['LatIn'] = this.latIn;
+    data['LatOut'] = this.latOut;
+
     data['site_name'] = this.siteName;
     data['subsite_name'] = this.subsiteName;
     data['sale_order'] = this.saleOrder;
@@ -336,6 +393,22 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aCustomerImage => customerImage;
 
   String? get aCustomerName => customerName;
+
+  String? get aEmail => email;
+
+  String? get aPhoneNo => phone;
+
+  String? get aServiceName => serviceName;
+
+  String? get aSubServiceName => subserviceName;
+
+  String? get aTeamName => teamName;
+
+  String? get aBookingDate => formattedBookingDate;
+
+  String? get aBookingTime => bookingTime;
+
+  String? get aBookingAmount => amount;
 
   String? get aDescription => description;
 
@@ -397,11 +470,17 @@ class MJobDetail implements AJobDetail, AActiveService {
 
   String? get aServiceType => serviceType;
 
-  String? get aStartDay => '';
+  String? get aStartDay => attendenceDate;
   String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
   String? get aCombinedAddress =>
       constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
 
   String? get aFloorPlanName => subsiteName;
+
+   String? get aEmployeeName => employeeName.toString();
+
+  double? get aLatIn => latIn;
+
+  double? get aLatOut => latOut;
 }

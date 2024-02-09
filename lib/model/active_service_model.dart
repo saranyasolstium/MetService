@@ -1,6 +1,8 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/attendance_entry_model.dart';
+import 'package:eagle_pixels/reuse/date_manager.dart';
+import 'package:intl/intl.dart';
 
 class MActiveServiceResponse extends Codable {
   String? status;
@@ -44,9 +46,18 @@ class MActiveService extends AActiveService {
   String? companyName;
   String? customerName;
   String? customerImage;
+  String? email;
+  String? phone;
+  String? serviceName;
+  String? subserviceName;
   String? subject;
   String? description;
   String? name;
+  String? attendenceDate;
+  String? attendenceEndDate;
+  String? employeeName;
+  double? latIn;
+  double? latOut;
 
   MActiveService.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -60,13 +71,41 @@ class MActiveService extends AActiveService {
     serialNumber = json['serial_number'];
     purchaseDate = json['purchase_date'];
     companyName = json['company_name'];
+    //customer infomation
     customerName = json['customer_name'];
     customerImage = json['customer_image'];
+    email = json['email'];
+    phone = json['phone'];
+    serviceName = json['service_name'];
+    subserviceName = json['subservice_name'];
+
     subject = json['subject'];
     description = json['description'];
     name = json['name'];
     aAddress = json['site_address'];
     final attendance = json['attendance'];
+    //Attendance entry
+    // attendenceDate = json['AttendenceDate'];
+    print(json['AttendenceDate']);
+    DateTime attendanceDateTime =
+        DateTime.tryParse(json['AttendenceDate']) ?? DateTime.now();
+    attendenceDate =
+        DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
+
+    print(json['AttendenceEndDate']);
+
+    if (json['AttendenceEndDate'] != null) {
+      DateTime attendanceEndDateTime =
+          DateTime.tryParse(json['AttendenceEndDate']) ?? DateTime.now();
+      attendenceEndDate =
+          DateFormat(AppDateFormat.scheduledTime).format(attendanceEndDateTime);
+    } else {
+      attendenceEndDate = "N/A";
+    }
+
+    employeeName = json['EmployeeName'];
+    latIn = json['LatIn'];
+    latOut = json['LatOut'];
     aAttendanceEntry = [];
 
     if (attendance != null && attendance is List<dynamic>) {
@@ -95,16 +134,37 @@ class MActiveService extends AActiveService {
     data['company_name'] = this.companyName;
     data['customer_name'] = this.customerName;
     data['customer_image'] = this.customerImage;
+    data['email'] = this.email;
+    data['phone'] = this.phone;
+    data['service_name'] = this.serviceName;
+    data['subservice_name'] = this.subserviceName;
     data['subject'] = this.subject;
     data['description'] = this.description;
     data['name'] = this.name;
+    //AttendanceEntry
+    data['AttendenceDate'] = this.attendenceDate;
+    data['AttendenceEndDate'] = this.attendenceEndDate;
+    data['EmployeeName'] = this.employeeName;
+    data['LatIn'] = this.latIn;
+    data['LatOut'] = this.latOut;
     return data;
   }
 
   String? get aCctvID => sku.toString();
+
   String? get aCustomerImage => customerImage;
+
   String? get aCustomerName => customerName;
-  String? get aEndDay => '';
+
+  String? get aEmail => email;
+
+  String? get aPhoneNo => phone;
+
+  String? get aServiceName => serviceName;
+
+  String? get aSubServiceName => subserviceName;
+
+  String? get aEndDay => attendenceEndDate.toString();
 
   double? get aLat => 0;
   double? get aLong => 0;
@@ -113,11 +173,16 @@ class MActiveService extends AActiveService {
   String? get aPurchaseDate => purchaseDate;
   String? get aRequestNo => requesterId.toString();
   String? get aServiceType => '';
-  String? get aStartDay => '';
+  String? get aStartDay => attendenceDate.toString();
   List<AJobTime>? aAttendanceEntry;
   String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
   String? get aCombinedAddress => aAddress;
+  String? get aEmployeeName => employeeName.toString();
+
+  double? get aLatIn => latIn ?? 0;
+
+  double? get aLatOut => latOut ?? 0;
 
   // String? get aCombinedAddress => '$siteAddress $siteCity $siteState $siteZipCode';
 }

@@ -62,8 +62,12 @@ class JobHistoryScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 15.dynamic),
                         ),
                       );
-                    } else {
+                    }
+                
+                    
+                     else {
                       return Container();
+                      
                     }
                   }),
                 ),

@@ -43,7 +43,7 @@ Widget titleText(String title) => Text(
           fontSize: 16.dynamic),
     );
 
-enum ViewState { loading, updating, refreshing, failed, success }
+enum ViewState { loading, updating, refreshing, failed, success,message }
 
 extension ViewStateExtension on ViewState {
   bool get isSuccess {
@@ -56,6 +56,10 @@ extension ViewStateExtension on ViewState {
 
   bool get isFailed {
     return this == ViewState.failed;
+  }
+
+  bool get isMessage{
+    return this == ViewState.message;
   }
 }
 

@@ -28,6 +28,7 @@ class ScheduleResponse implements Codable {
     var model = ScheduleResponse();
     model.status = json["status"];
     model.message = json["message"];
+
     model.data = [];
     model.data = List<MScheduledJobItem>.from(
         json["data"].map((x) => MScheduledJobItem.fromJson(x)));
@@ -44,30 +45,36 @@ class ScheduleResponse implements Codable {
 }
 
 class MScheduledJobItem implements AServiceItem {
-  MScheduledJobItem({
-    this.id,
-    this.requesterId,
-    this.siteId,
-    this.ticketId,
-    this.productId,
-    this.productName,
-    this.productImage,
-    this.sku,
-    this.serialNumber,
-    this.purchaseDate,
-    this.customerName,
-    this.customerImage,
-    this.subject,
-    this.description,
-    this.name,
-    this.siteAddress,
-    this.siteZipCode,
-    this.siteState,
-    this.siteCity,
-    this.engineerStatus,
-    this.seviceType,
-    this.serviceDate,
-  });
+  MScheduledJobItem(
+      {this.id,
+      this.requesterId,
+      this.siteId,
+      this.ticketId,
+      this.productId,
+      this.productName,
+      this.productImage,
+      this.sku,
+      this.serialNumber,
+      this.purchaseDate,
+      this.customerName,
+      this.customerImage,
+      this.subject,
+      this.description,
+      this.name,
+      this.bookingTime,
+      this.bookingDate,
+      this.siteAddress,
+      this.siteZipCode,
+      this.siteState,
+      this.siteCity,
+      this.engineerStatus,
+      this.seviceType,
+      this.serviceDate,
+      this.attendenceDate,
+      this.attendenceEndDate,
+      this.employeeName,
+      this.latIn,
+      this.latOut});
 
   dynamic? productImage;
   dynamic? productName;
@@ -93,6 +100,14 @@ class MScheduledJobItem implements AServiceItem {
   dynamic? seviceType;
   int? engineerStatus;
   String? serviceDate;
+  dynamic bookingTime;
+  dynamic bookingDate;
+  dynamic? attendenceDate;
+  dynamic? attendenceEndDate;
+  dynamic? employeeName;
+  dynamic? latIn;
+  dynamic? latOut;
+
   factory MScheduledJobItem.fromJson(Map<String, dynamic> json) =>
       MScheduledJobItem(
         id: json["id"],
@@ -100,11 +115,13 @@ class MScheduledJobItem implements AServiceItem {
         siteId: json["site_id"],
         ticketId: json["ticket_id"],
         productId: json["product_id"],
-        productName: json["product_name"],
+        productName: json["service_name"],
         productImage: json["product_image"],
         sku: json["sku"],
+        bookingDate: json['bookingdate'],
+        bookingTime: json['bookingtime'],
         serialNumber: json["serial_number"],
-        purchaseDate: json["purchase_date"],
+        purchaseDate: json["bookingtime"],
         customerName: json["customer_name"],
         customerImage: json["customer_image"],
         subject: json["subject"],
@@ -115,8 +132,14 @@ class MScheduledJobItem implements AServiceItem {
         siteState: json["site_state"],
         siteZipCode: json["site_zipcode"],
         engineerStatus: json["engineer_status"],
-        seviceType: json["service_type"],
+        seviceType: json["service"],
         serviceDate: json["service_date"],
+        //Attendance entry
+        attendenceDate: json['AttendenceDate'],
+        attendenceEndDate: json['AttendenceEndDate'],
+        employeeName: json['EmployeeName'],
+        latIn: json['LatIn'],
+        latOut: json['LatOut'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -125,9 +148,11 @@ class MScheduledJobItem implements AServiceItem {
         "site_id": siteId,
         "ticket_id": ticketId,
         "product_id": productId,
-        "product_name": productName,
+        "service_name": productName,
         "product_image": productImage,
         "sku": sku,
+        "bookingtime": bookingTime,
+        "bookingdate": bookingDate,
         "serial_number": serialNumber,
         "purchase_date": purchaseDate,
         "customer_name": customerName,
@@ -135,7 +160,13 @@ class MScheduledJobItem implements AServiceItem {
         "subject": subject,
         "description": description,
         "name": name,
-        "service_type": seviceType,
+        "service": seviceType,
+        //AttendanceEntry
+        'AttendenceDate': attendenceDate,
+        'AttendenceEndDate': attendenceEndDate,
+        'EmployeeName': employeeName,
+        'LatIn': latIn,
+        'LatOut': latOut,
       };
 
   String? get aProductImage => productImage;
@@ -145,6 +176,10 @@ class MScheduledJobItem implements AServiceItem {
   String? get aServiceType => seviceType;
   String? get aCustomerName => customerName;
   String? get aCustomerImage => customerImage;
+  String? get aEmail => "";
+  String? get aPhoneNo => "";
+  String? get aServiceName => "";
+  String? get aSubServiceName => "";
 
   double? get aLat => lat;
   double? get aLong => long;
@@ -154,9 +189,16 @@ class MScheduledJobItem implements AServiceItem {
   String? get aRequestNo => '';
   String? get aStartDay => '';
   String? get aServiceID => id.toString();
+  String? get aScheduleTime => bookingDate.toString();
 
   String? get aCombinedAddress =>
       constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
 
   String? get aSiteID => siteId.toString();
+
+  String? get aEmployeeName => siteId.toString();
+
+  double? get aLatIn => 0;
+
+  double? get aLatOut => 0;
 }

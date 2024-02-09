@@ -48,6 +48,12 @@ class MShowAttendenceDetail implements AShowAttendance {
   String? subject;
   String? description;
   String? name;
+  // String? attendenceDate;
+  // String? attendenceEndDate;
+
+  // String? employeeName;
+  // String? latIn;
+  // String? latOut;
 
   MShowAttendenceDetail();
 
@@ -68,6 +74,11 @@ class MShowAttendenceDetail implements AShowAttendance {
     subject = json['subject'];
     description = json['description'];
     name = json['name'];
+    // attendenceDate = json['AttendenceDate'];
+    // attendenceEndDate = json['AttendenceEndDate'];
+    // employeeName = json['EmployeeName'];
+    // latIn = json['LatIn'];
+    // latOut = json['LatOut'];
   }
 
   Map<String, dynamic> toJson() {
@@ -88,6 +99,11 @@ class MShowAttendenceDetail implements AShowAttendance {
     data['subject'] = this.subject;
     data['description'] = this.description;
     data['name'] = this.name;
+    // data['AttendenceDate'] = this.attendenceDate;
+    // data['AttendenceEndDate'] = this.attendenceEndDate;
+    // data['EmployeeName'] = this.employeeName;
+    // data['LatIn'] = this.latIn;
+    // data['LatOut'] = this.latOut;
     return data;
   }
 
@@ -103,7 +119,15 @@ class MShowAttendenceDetail implements AShowAttendance {
 
   String? get aServiceReqNo => '';
 
-  String? get aStartDay => '';
+  String? get aStartDay => "";
 
   String? get aCustomerImage => customerImage;
+
+  // String? get aEmployeeName => employeeName.toString();
+
+  // String? get aLatIn => latIn.toString();
+
+  // String? get aLatOut => latOut.toString();
+
+  
 }
