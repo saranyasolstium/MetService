@@ -49,7 +49,8 @@ extension StopJobAction on JobCheckListScreen {
     );
     hideLoading();
     if (errorWhenSubmit != null) {
-      Toast.show(errorWhenSubmit, textStyle: Get.context);
+      Toast.show(errorWhenSubmit,
+          textStyle: TextStyle(color: Colors.white, fontSize: 16.0));
       return false;
     } else {
       return true;
@@ -74,19 +75,29 @@ extension StopJobAction on JobCheckListScreen {
         .popUntil((route) => route.settings.name == NavPage.scheduleScreen);
   }
 
-  onCompleteJob() async {
-    for (var element in checkListController.checkList) {
-      if (element.selectedItem.length == 0 &&
-          (element.options?.length ?? 0) > 0) {
-        Toast.show('Please Complete CheckList', textStyle: Get.context);
-        return;
-      }
-    }
+  onCompleteJob(BuildContext context) async {
+      // for (var element in checkListController.checkList) {
+      //   if (element.selectedItem.length == 0 &&
+      //       (element.options?.length ?? 0) > 0) {
+      //     Toast.show('Please Complete CheckList', textStyle: Get.context);
+      //     return;
+      //   }
+      // }
 
-    final isCompleted = await _onSubmitWork();
-    if (isCompleted) {
-      Get.toNamed(NavPage.jobServiceReportScreen);
-    }
+      // final isCompleted = await _onSubmitWork();
+      // if (isCompleted) {
+      //   Get.toNamed(NavPage.jobServiceReportScreen);
+      // }
+
+       Get.toNamed(NavPage.jobServiceReportScreen);
+
+
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return CompleteJobPopupScreen();
+    //   },
+    // );
   }
 }
 
@@ -180,20 +191,21 @@ class JobCheckListScreen extends StatelessWidget {
                                     17.dynamic, 17.dynamic, 17.dynamic, 0),
                                 child: AttendenceDetail(
                                     item: controller.detail.value
-                                        as AActiveService),
+                                        as AActiveService,
+                                    attendanceStatus: false),
                               ),
-                              ListView.builder(
-                                itemBuilder: (builder, index) {
-                                  return CheckListItem(index: index);
-                                },
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                // itemCount:
-                                //     checkListController.checkList.length > 0
-                                //         ? 1
-                                //         : 0,
-                                itemCount: checkListController.checkList.length,
-                              ),
+                              // ListView.builder(
+                              //   itemBuilder: (builder, index) {
+                              //     return CheckListItem(index: index);
+                              //   },
+                              //   physics: NeverScrollableScrollPhysics(),
+                              //   shrinkWrap: true,
+                              //   // itemCount:
+                              //   //     checkListController.checkList.length > 0
+                              //   //         ? 1
+                              //   //         : 0,
+                              //   itemCount: checkListController.checkList.length,
+                              // ),
                             ],
                           ),
                         );
@@ -235,7 +247,7 @@ class JobCheckListScreen extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () {
-                                this.onCompleteJob();
+                                this.onCompleteJob(context);
                               },
                               child: Text(
                                 'Complete Job',

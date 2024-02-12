@@ -454,7 +454,7 @@ class MJobDetail implements AJobDetail, AActiveService {
 
   String? get aCctvID => sku.toString();
 
-  String? get aEndDay => '';
+  String? get aEndDay => attendenceEndDate;
 
   double? get aLat => 0;
 
@@ -468,9 +468,9 @@ class MJobDetail implements AJobDetail, AActiveService {
 
   String? get aRequestNo => requesterId.toString();
 
-  String? get aServiceType => serviceType;
+  //String? get aServiceType => serviceType;
 
-  String? get aStartDay => attendenceDate;
+  String? get aStartDay => attendenceDate.toString();
   String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
   String? get aCombinedAddress =>
@@ -480,7 +480,7 @@ class MJobDetail implements AJobDetail, AActiveService {
 
    String? get aEmployeeName => employeeName.toString();
 
-  double? get aLatIn => latIn;
+ double? get aLatIn => latIn ?? 0;
 
-  double? get aLatOut => latOut;
+  double? get aLatOut => latOut ?? 0;
 }

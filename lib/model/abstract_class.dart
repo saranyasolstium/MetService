@@ -14,7 +14,6 @@ abstract class AServiceItem {
   String? get aRequestNo;
   String? get aStartDay;
   String? get aEndDay;
-  String? get aServiceType;
   double? get aLat;
   double? get aLong;
   String? get aSiteID;
@@ -114,6 +113,7 @@ abstract class AActiveService extends AServiceItem {
 abstract class AJobTime {
   String? aStartTime;
   String? aEndTime;
+  String? aEmployeeName;
 }
 
 abstract class ADropDown {

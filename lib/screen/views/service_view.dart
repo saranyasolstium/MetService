@@ -53,7 +53,6 @@ class ServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(item.aServiceType);
     return Container(
       padding: EdgeInsets.only(
         top: 16.dynamic,
@@ -131,7 +130,7 @@ class ServiceView extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      item.aServiceType ?? 'NA',
+                      'NA',
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w600,

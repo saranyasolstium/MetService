@@ -88,6 +88,8 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
     warrentyPeriod = json['warrenty_period'];
     //Attendance entry
     attendenceDate = json['AttendenceDate'];
+        print("create_job"+json['AttendenceEndDate']);
+
     attendenceEndDate = json['AttendenceEndDate'];
     employeeName = json['EmployeeName'];
     latIn = json['LatIn'];
@@ -138,7 +140,7 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? get aServiceName => "";
 
   String? get aSubServiceName => "";
-  String? get aEndDay => '';
+  String? get aEndDay => attendenceEndDate;
   double? get aLat => 0;
   double? get aLong => 0;
   String? get aProdouctName => productName;
@@ -146,7 +148,7 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? get aPurchaseDate => '';
   String? get aRequestNo => '';
   String? get aServiceID => productId.toString();
-  String? get aServiceType => '';
+  //String? get aServiceType => '';
   String? get aSiteID => '';
   String? get aStartDay => '';
 

@@ -15,9 +15,10 @@ import 'package:eagle_pixels/api/urls.dart';
 extension JobCompletedAction on JobCompletedScreen {
   onComplete() async {
     try {
-      var authStatus = await AppController.to.verifyUser();
-      if (authStatus.isValid) {
-        Position position = await AppController.to.determinePosition();
+
+      AppController().verifyUser().then((result) async {
+        print(result);
+         Position position = await AppController.to.determinePosition();
         var body = {
           'SiteID': detail.siteId,
           'latitude': '${position.latitude}',
@@ -36,10 +37,35 @@ extension JobCompletedAction on JobCompletedScreen {
           Toast.show(response.message ?? 'Failed to clock out', textStyle: Get.context);
           return;
         }
-      } else {
-        Toast.show('Authentication failed', textStyle: Get.context);
-        return;
-      }
+        
+      }).catchError((error) {
+        print('Error during verification: $error');
+      });
+      // var authStatus = await AppController.to.verifyUser();
+      // if (authStatus.isValid) {
+      //   Position position = await AppController.to.determinePosition();
+      //   var body = {
+      //     'SiteID': detail.siteId,
+      //     'latitude': '${position.latitude}',
+      //     'longitude': '${position.longitude}',
+      //     'serviceID': detail.aServiceId
+      //   };
+
+      //   var response = await API.service.call(
+      //     model: MClockInResponse(),
+      //     endPoint: EndPoint.clockOut,
+      //     body: body,
+      //   );
+      //   if (response.isSuccess) {
+      //     navigator!.popUntil((route) => route.settings.name == NavPage.root);
+      //   } else {
+      //     Toast.show(response.message ?? 'Failed to clock out', textStyle: Get.context);
+      //     return;
+      //   }
+      // } else {
+      //   Toast.show('Authentication failed', textStyle: Get.context);
+      //   return;
+      // }
     } catch (e) {
       Toast.show(e.toString(), textStyle: Get.context);
       return;

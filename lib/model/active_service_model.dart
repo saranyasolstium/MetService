@@ -92,7 +92,7 @@ class MActiveService extends AActiveService {
     attendenceDate =
         DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
 
-    print(json['AttendenceEndDate']);
+    //print("sranya_active_Service"+json['AttendenceEndDate']);
 
     if (json['AttendenceEndDate'] != null) {
       DateTime attendanceEndDateTime =
@@ -172,8 +172,8 @@ class MActiveService extends AActiveService {
   String? get aProductImage => productImage;
   String? get aPurchaseDate => purchaseDate;
   String? get aRequestNo => requesterId.toString();
-  String? get aServiceType => '';
   String? get aStartDay => attendenceDate.toString();
+ 
   List<AJobTime>? aAttendanceEntry;
   String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();

@@ -164,55 +164,55 @@ class ServiceReportScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 12.dynamic),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6.dynamic),
-                              color: Colors.white,
-                            ),
-                            margin:
-                                EdgeInsets.symmetric(horizontal: 17.dynamic),
-                            padding: EdgeInsets.all(14.dynamic),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Engineer Feedback',
-                                  style: TextStyle(
-                                    fontSize: 12.dynamic,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colour.appText,
-                                  ),
-                                ),
-                                SizedBox(height: 12.dynamic),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colour.appLightGrey,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: TextFormField(
-                                    onChanged: (txt) {
-                                      controller.engineerFeedback.value = txt;
-                                    },
-                                    obscureText: false,
-                                    // controller: _remarkController,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 4,
-                                    style: TextStyle(
-                                        fontSize: 14.dynamic,
-                                        fontWeight: FontWeight.w300),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.fromLTRB(
-                                          20.0, 15.0, 20.0, 15.0),
-                                      hintText: "Write your feedback",
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 12.dynamic),
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(6.dynamic),
+                          //     color: Colors.white,
+                          //   ),
+                          //   margin:
+                          //       EdgeInsets.symmetric(horizontal: 17.dynamic),
+                          //   padding: EdgeInsets.all(14.dynamic),
+                          //   child: Column(
+                          //     mainAxisSize: MainAxisSize.min,
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       Text(
+                          //         'Engineer Feedback',
+                          //         style: TextStyle(
+                          //           fontSize: 12.dynamic,
+                          //           fontWeight: FontWeight.w400,
+                          //           color: Colour.appText,
+                          //         ),
+                          //       ),
+                          //       SizedBox(height: 12.dynamic),
+                          //       Container(
+                          //         decoration: BoxDecoration(
+                          //           color: Colour.appLightGrey,
+                          //           borderRadius: BorderRadius.circular(5.0),
+                          //         ),
+                          //         child: TextFormField(
+                          //           onChanged: (txt) {
+                          //             controller.engineerFeedback.value = txt;
+                          //           },
+                          //           obscureText: false,
+                          //           // controller: _remarkController,
+                          //           keyboardType: TextInputType.multiline,
+                          //           maxLines: 4,
+                          //           style: TextStyle(
+                          //               fontSize: 14.dynamic,
+                          //               fontWeight: FontWeight.w300),
+                          //           decoration: InputDecoration(
+                          //             contentPadding: EdgeInsets.fromLTRB(
+                          //                 20.0, 15.0, 20.0, 15.0),
+                          //             hintText: "Write your feedback",
+                          //             border: InputBorder.none,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          // SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
@@ -259,24 +259,25 @@ class ServiceReportScreen extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(height: 10.dynamic),
-                                RatingBar.builder(
-                                  unratedColor: HexColor.fromHex('B1D7DD'),
-                                  initialRating: 0,
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: false,
-                                  itemCount: 5,
-                                  itemPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
-                                  itemBuilder: (context, _) => Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (rat) {
-                                    controller.starRate.value = rat;
-                                    print(controller.starRate.value);
-                                  },
-                                ),
+                                // RatingBar.builder(
+                                //   unratedColor: HexColor.fromHex('B1D7DD'),
+                                //   initialRating: 0,
+                                //   minRating: 1,
+                                //   direction: Axis.horizontal,
+                                //   allowHalfRating: false,
+                                //   itemCount: 5,
+                                //   itemPadding:
+                                //       EdgeInsets.symmetric(horizontal: 4.0),
+                                //   itemBuilder: (context, _) => Icon(
+                                //     Icons.star,
+                                //     color: Colors.amber,
+                                //   ),
+                                //   onRatingUpdate: (rat) {
+                                //     controller.starRate.value = rat;
+                                //     print(controller.starRate.value);
+                                //   },
+                                // ),
+                             
                               ],
                             ),
                           ),
@@ -327,12 +328,9 @@ class ServiceReportScreen extends StatelessWidget {
                                   showLoading();
                                   String? status =
                                       await checkListController.onCompleteJob(
-                                    service_id: detail.aServiceId ?? '0',
-                                    rating: controller.starRate.value,
+                                    requestID: detail.aServiceId ?? '0',
                                     signature: base64Encode(bytes),
                                     feedback: controller.feedback.value,
-                                    technicalComment:
-                                        controller.engineerFeedback.value,
                                   );
 
                                   if (status != null) {

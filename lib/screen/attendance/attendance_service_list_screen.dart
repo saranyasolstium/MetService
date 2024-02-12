@@ -177,12 +177,10 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       AttendanceTitleView(
-                                          'Email:', 
-                                          AppController.user.email,
+                                          'Email:', AppController.user.email,
                                           color: Colour.appBlack),
                                     ],
                                   ),
-                                  
                                   SizedBox(
                                     height: 15.dynamic,
                                   ),
@@ -200,6 +198,8 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                 );
                               } else if (attendance
                                   .activeJobViewState.value.isSuccess) {
+                                print("saranya");
+
                                 return ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
@@ -210,6 +210,7 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                       child: AttendenceDetail(
                                         item:
                                             attendance.arrActiveService[index],
+                                        attendanceStatus: true,
                                       ),
                                     );
                                   },
@@ -221,8 +222,8 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                 return Padding(
                                   padding: const EdgeInsets.only(top: 40),
                                   child: Center(
-                                    child:
-                                        Text("Get Active Job list Successfully."),
+                                    child: Text(
+                                        "Get Active Job list Successfully."),
                                   ),
                                 );
                               } else {
@@ -246,7 +247,8 @@ class AttendanceServiceListScreen extends StatelessWidget {
 
 class AttendenceDetail extends StatelessWidget {
   final AActiveService item;
-  AttendenceDetail({required this.item});
+  final bool attendanceStatus;
+  AttendenceDetail({required this.item, required this.attendanceStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -286,7 +288,7 @@ class AttendenceDetail extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      item.aEmployeeName ?? 'NA',
+                      AppController.user.employeeDetails!.userName ?? 'NA',
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w600,
@@ -300,40 +302,47 @@ class AttendenceDetail extends StatelessWidget {
           SizedBox(
             height: 20.dynamic,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              AttendanceTitleDescriptionView(
-                'Start Day At:',
-                item.aStartDay ?? K.na,
-                color: Colour.appGreen,
-              ),
-              SizedBox(
-                width: 10.dynamic,
-              ),
-              AttendanceTitleDescriptionView(
-                  'End Day At:', item.aEndDay ?? K.na,
-                  color: Colour.appRed),
-            ],
-          ),
-          SizedBox(
-            height: 15.dynamic,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              AttendanceTitleDescriptionView(
-                'LatIn:',
-                item.aLatIn.toString(),
-                color: Colour.appGreen,
-              ),
-              SizedBox(
-                width: 10.dynamic,
-              ),
-              AttendanceTitleDescriptionView('LatOut:', item.aLatOut.toString(),
-                  color: Colour.appRed),
-            ],
-          ),
+          attendanceStatus
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    AttendanceTitleDescriptionView(
+                      'Start Day At:',
+                      item.aStartDay ?? K.na,
+                      color: Colour.appGreen,
+                    ),
+                    SizedBox(
+                      width: 10.dynamic,
+                    ),
+                    AttendanceTitleDescriptionView(
+                        'End Day At:', item.aEndDay ?? K.na,
+                        color: Colour.appRed),
+                  ],
+                )
+              : Container(),
+          attendanceStatus
+              ? SizedBox(
+                  height: 15.dynamic,
+                )
+              : Container(),
+          attendanceStatus
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    AttendanceTitleDescriptionView(
+                      'LatIn:',
+                      item.aLatIn.toString(),
+                      color: Colour.appGreen,
+                    ),
+                    SizedBox(
+                      width: 10.dynamic,
+                    ),
+                    AttendanceTitleDescriptionView(
+                        'LatOut:', item.aLatOut.toString(),
+                        color: Colour.appRed),
+                  ],
+                )
+              : Container(),
 
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.start,

@@ -173,7 +173,7 @@ class MScheduledJobItem implements AServiceItem {
   String? get aProdouctName => productName;
   String? get aCctvID => sku.toString();
 
-  String? get aServiceType => seviceType;
+  //String? get aServiceType => seviceType;
   String? get aCustomerName => customerName;
   String? get aCustomerImage => customerImage;
   String? get aEmail => "";
@@ -185,9 +185,9 @@ class MScheduledJobItem implements AServiceItem {
   double? get aLong => long;
 
   String? get aPurchaseDate => purchaseDate;
-  String? get aEndDay => '';
+  String? get aEndDay => attendenceEndDate;
   String? get aRequestNo => '';
-  String? get aStartDay => '';
+  String? get aStartDay => attendenceDate;
   String? get aServiceID => id.toString();
   String? get aScheduleTime => bookingDate.toString();
 

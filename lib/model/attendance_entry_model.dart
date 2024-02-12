@@ -14,7 +14,7 @@ class MAttendanceEntry implements AJobTime {
   int? outTimeMinute;
   dynamic nWorkUnit;
   dynamic jobType;
-  String? employeeName;
+  dynamic? employeeName;
   dynamic eMPStatus;
   String? siteID;
   int? serviceID;
@@ -63,31 +63,12 @@ class MAttendanceEntry implements AJobTime {
       print(aStartTime);
     }
 
-    outTimeHour = json['OutTime_Hour'];
-    outTimeMinute = json['OutTime_Minute'];
-
-    // Update attendenceEndDate using OutTime_Hour and OutTime_Minute
-    if (outTimeHour != null && outTimeMinute != null) {
-      DateTime outTime = DateTime(
-        int.parse(attendenceDate!.substring(0, 4)),
-        int.parse(attendenceDate!.substring(5, 7)),
-        int.parse(attendenceDate!.substring(8, 10)),
-        outTimeHour!,
-        outTimeMinute!,
-      );
-
+    attendenceEndDate = json['AttendenceEndDate'];
+    if (attendenceEndDate != null) {
       aEndTime = DateFormat(AppDateFormat.defaultF)
-          .parse(outTime!.toString())
+          .parse(attendenceDate!)
           .string(AppDateFormat.attendanceDate);
-      print(aEndTime);
     }
-
-    // attendenceEndDate = json['AttendenceEndDate'];
-    // if (attendenceEndDate != null) {
-    //   aEndTime = DateFormat(AppDateFormat.defaultF)
-    //       .parse(attendenceDate!)
-    //       .string(AppDateFormat.attendanceDate);
-    // }
 
     iD = json['ID'];
     employeeCode = json['EmployeeCode'];
@@ -97,7 +78,7 @@ class MAttendanceEntry implements AJobTime {
 
     nWorkUnit = json['nWorkUnit'];
     jobType = json['JobType'];
-    employeeName = json['EmployeeName'];
+    aEmployeeName = json['EmployeeName'];
     eMPStatus = json['EMPStatus'];
     siteID = json['SiteID'];
     serviceID = json['serviceID'];
@@ -151,7 +132,7 @@ class MAttendanceEntry implements AJobTime {
     data['OutTime_Minute'] = this.outTimeMinute;
     data['nWorkUnit'] = this.nWorkUnit;
     data['JobType'] = this.jobType;
-    data['EmployeeName'] = this.employeeName;
+    data['EmployeeName'] = this.aEmployeeName;
     data['EMPStatus'] = this.eMPStatus;
     data['SiteID'] = this.siteID;
     data['serviceID'] = this.serviceID;
@@ -195,5 +176,5 @@ class MAttendanceEntry implements AJobTime {
 
   String? aEndTime;
   String? aStartTime;
-  String? aSiteID;
+  String? aEmployeeName ;
 }

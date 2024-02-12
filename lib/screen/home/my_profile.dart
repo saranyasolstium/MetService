@@ -1,12 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:qr/qr.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/colors.dart';
 
@@ -18,8 +15,7 @@ class MyProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           color: Colors.white,
-          // width: MediaQuery.of(context).size.width,
-          // height: MediaQuery.of(context).size.height,
+          
           child: Column(
             children: [
               SizedBox(

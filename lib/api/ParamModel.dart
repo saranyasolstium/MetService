@@ -53,24 +53,24 @@ class ParamSubmitJob {
 }
 
 class ParamCompleteJob {
-  var serviceID, rating, signature, feedback, lat, long, technicalComment;
+  var requestID, signature, feedback, lat, long;
   ParamCompleteJob({
-    this.serviceID,
-    this.rating,
+    this.requestID,
+    //this.rating,
     this.signature,
     this.feedback,
-    this.technicalComment,
+    //this.technicalComment,
     // this.lat,
     // this.long,
   });
 
   Future<Map<String, dynamic>> toJson() async {
     Map<String, dynamic> json = {};
-    json['service_id'] = serviceID;
-    json['rating'] = rating;
+    json['RequestID'] = requestID;
+    //json['rating'] = rating;
     json['signature'] = signature;
-    json['feedback'] = feedback;
-    json['technical_comment'] = technicalComment;
+    json['comment'] = feedback;
+    //json['technical_comment'] = technicalComment;
     // json['latitude'] = lat;
     // json['longitude'] = long;
     return json;

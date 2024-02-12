@@ -4,8 +4,11 @@ import 'dart:io';
 import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/api/methods.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'urls.dart';
 import 'package:pretty_json/pretty_json.dart';
@@ -158,6 +161,12 @@ class APIResponse<T> {
 
   updateResponse(http.Response? response) {
     try {
+      if (response!.statusCode == 401) {
+        print('logout');
+        Get.offAllNamed(NavPage.root);
+        AppController.to.storage.remove('token');
+        AppController.to.loginStatus.value = LoginStatus.logout;
+      }
       if (error != null) {
         print('response - Empty');
       }

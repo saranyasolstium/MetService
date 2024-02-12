@@ -111,7 +111,7 @@ class MShowAttendenceDetail implements AShowAttendance {
 
   String? get aCustomerName => customerName;
 
-  String? get aEndDay => '';
+  String? get aEndDay => "";
 
   String? get aImage => '';
 
