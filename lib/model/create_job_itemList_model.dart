@@ -49,51 +49,52 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? companyName;
   String? customerName;
   String? customerImage;
-  String? siteName;
-  String? siteAddress;
-  String? siteAddress2;
-  String? siteCity;
-  String? siteState;
-  String? siteZipcode;
-  String? subsiteName;
-  String? siteMap;
+  // String? siteName;
+  // String? siteAddress;
+  // String? siteAddress2;
+  // String? siteCity;
+  // String? siteState;
+  // String? siteZipcode;
+  // String? subsiteName;
+  // String? siteMap;
   String? warrantyEnding;
   String? warrentyPeriod;
-  String? attendenceDate;
+  // String? attendenceDate;
 
-  String? attendenceEndDate;
-  String? employeeName;
-  double? latIn;
-  double? latOut;
+  // String? attendenceEndDate;
+  // String? employeeName;
+  // double? latIn;
+  // double? latOut;
   MCustomerProductItem({required this.productId, required this.productName});
   MCustomerProductItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     productId = json['product_id'];
-    productName = json['product_name'] ?? '';
+    print("saranya"+json['product_name']);
+    productName = json['product_name'];
     productImage = json['product_image'];
     sku = json['sku'];
     serialNumber = json['serial_number'];
     companyName = json['company_name'];
     customerName = json['customer_name'];
     customerImage = json['customer_image'];
-    siteName = json['site_name'];
-    siteAddress = json['site_address'];
-    siteAddress2 = json['site_address2'];
-    siteCity = json['site_city'];
-    siteState = json['site_state'];
-    siteZipcode = json['site_zipcode'];
-    subsiteName = json['subsite_name'];
-    siteMap = json['site_map'];
+    // siteName = json['site_name'];
+    // siteAddress = json['site_address'];
+    // siteAddress2 = json['site_address2'];
+    // siteCity = json['site_city'];
+    // siteState = json['site_state'];
+    // siteZipcode = json['site_zipcode'];
+    // subsiteName = json['subsite_name'];
+    // siteMap = json['site_map'];
     warrantyEnding = json['warranty_ending'];
     warrentyPeriod = json['warrenty_period'];
     //Attendance entry
-    attendenceDate = json['AttendenceDate'];
-        print("create_job"+json['AttendenceEndDate']);
+    // attendenceDate = json['AttendenceDate'];
+    //     print("create_job"+json['AttendenceEndDate']);
 
-    attendenceEndDate = json['AttendenceEndDate'];
-    employeeName = json['EmployeeName'];
-    latIn = json['LatIn'];
-    latOut = json['LatOut'];
+    // attendenceEndDate = json['AttendenceEndDate'];
+    // employeeName = json['EmployeeName'];
+    // latIn = json['LatIn'];
+    // latOut = json['LatOut'];
   }
 
   Map<String, dynamic> toJson() {
@@ -107,28 +108,28 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
     data['company_name'] = this.companyName;
     data['customer_name'] = this.customerName;
     data['customer_image'] = this.customerImage;
-    data['site_name'] = this.siteName;
-    data['site_address'] = this.siteAddress;
-    data['site_address2'] = this.siteAddress2;
-    data['site_city'] = this.siteCity;
-    data['site_state'] = this.siteState;
-    data['site_zipcode'] = this.siteZipcode;
-    data['subsite_name'] = this.subsiteName;
-    data['site_map'] = this.siteMap;
+    // data['site_name'] = this.siteName;
+    // data['site_address'] = this.siteAddress;
+    // data['site_address2'] = this.siteAddress2;
+    // data['site_city'] = this.siteCity;
+    // data['site_state'] = this.siteState;
+    // data['site_zipcode'] = this.siteZipcode;
+    // data['subsite_name'] = this.subsiteName;
+    // data['site_map'] = this.siteMap;
     data['warranty_ending'] = this.warrantyEnding;
     data['warrenty_period'] = this.warrentyPeriod;
 
     //AttendanceEntry
-    data['AttendenceDate'] = this.attendenceDate;
-    data['AttendenceEndDate'] = this.attendenceEndDate;
-    data['EmployeeName'] = this.employeeName;
-    data['LatIn'] = this.latIn;
-    data['LatOut'] = this.latOut;
+    // data['AttendenceDate'] = this.attendenceDate;
+    // data['AttendenceEndDate'] = this.attendenceEndDate;
+    // data['EmployeeName'] = this.employeeName;
+    // data['LatIn'] = this.latIn;
+    // data['LatOut'] = this.latOut;
     return data;
   }
 
   String get aId => id.toString();
-  String get aName => productName;
+  String get aName => productName.toString();
   String? get aCctvID => sku;
   String? get aCustomerImage => customerImage;
   String? get aCustomerName => customerName;
@@ -140,7 +141,7 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? get aServiceName => "";
 
   String? get aSubServiceName => "";
-  String? get aEndDay => attendenceEndDate;
+  String? get aEndDay => "";
   double? get aLat => 0;
   double? get aLong => 0;
   String? get aProdouctName => productName;
@@ -155,19 +156,19 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? get aImage => productImage;
   // String get aId => productId.toString();
   // String get aName => productName;
-  String? get aFloorPlan => siteMap;
-  String? get aLocation => siteAddress;
+  String? get aFloorPlan => "";
+  String? get aLocation => "";
   String? get aSerialNumber => serialNumber;
-  String? get aSubLocation => siteAddress2;
+  String? get aSubLocation => "";
   String? get aWarrantyDate => warrantyEnding;
   // String? get aCombinedAddress => throw UnimplementedError();
-  String? get aCombinedAddress =>
-      constructAddress([siteAddress, siteCity, siteState, siteZipcode]);
+  String? get aCombinedAddress =>"";
+      //constructAddress(["", , siteState, siteZipcode]);
 
-  String? get aFloorPlanName => subsiteName;
-  String? get aEmployeeName => employeeName.toString();
+  String? get aFloorPlanName => "";
+  String? get aEmployeeName => "";
 
-  double? get aLatIn => latIn;
+  double? get aLatIn => 0;
 
-  double? get aLatOut => latOut;
+  double? get aLatOut => 0;
 }

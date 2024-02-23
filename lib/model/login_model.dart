@@ -4,31 +4,20 @@
 class LoginResponseModel {
   LoginResponseModel({
     this.tokenType,
-    this.expiresIn,
-    this.accessToken,
-    this.refreshToken,
     this.error,
   });
 
   String? tokenType;
-  int? expiresIn;
-  String? accessToken;
-  String? refreshToken;
+
   String? error;
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
       LoginResponseModel(
         tokenType: json["token_type"],
-        expiresIn: json["expires_in"],
-        accessToken: json["access_token"],
-        refreshToken: json["refresh_token"],
         error: json["error"] != null ? json["error"] : "",
       );
 
   Map<String, dynamic> toJson() => {
         "token_type": tokenType,
-        "expires_in": expiresIn,
-        "access_token": accessToken,
-        "refresh_token": refreshToken,
       };
 }
 
@@ -44,8 +33,8 @@ class LoginRequestModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'email': email!.trim(),
-      'password': password!.trim(),
+      'email': "usipweb+1@gmail.com",
+      'password': "12345678",
       // 'grant_type': 'password',
       // 'client_id': '22',
       // 'client_secret': 'XxYwnq03sDonxUXKzq5sYQQE1i9ukbxInOePXY9H',

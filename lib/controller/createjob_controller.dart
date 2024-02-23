@@ -36,16 +36,18 @@ class CreateJobController extends GetxController {
   // }
 
   List<String> arrString(List<ADropDown> list) {
-    print('List Length: ${list.length}');
     list.forEach((element) {
-      print('Value: ${element.aName}');
+      //print('Value: ${element.aName}');
     });
     return list.map((e) => e.aName).toList();
   }
 
   List<String> arrStringForProductList() {
+    print("saranya"+customerProductList.length.toString());
     return customerProductList.map((e) {
-      return '${e.aName} - ${e.serialNumber}';
+            print('Value: ${e.aName} - ${e.productId}');
+//return '${e.aName}';
+      return '${e.aName} - ${e.productId}';
     }).toList();
   }
 
@@ -67,7 +69,7 @@ class CreateJobController extends GetxController {
 
   ADropDown findProduct(String selected, List<MCustomerProductItem> list) {
     return list.firstWhere(
-        (element) => '${element.aName} - ${element.serialNumber}' == selected);
+        (element) => '${element.aName} - ${element.productId}' == selected);
   }
 
   fetchCustomerList() async {
@@ -88,6 +90,7 @@ class CreateJobController extends GetxController {
         );
     if (response.isValidModel) {
       customerProductList.value = response.model!.data;
+      print(customerProductList.length);
     } else {
       customerProductList.value = [];
     }

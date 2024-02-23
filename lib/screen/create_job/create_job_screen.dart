@@ -19,6 +19,7 @@ import 'package:toast/toast.dart';
 extension CreateJobAction on _CreateJobScreenState {
   onCreateJob() async {
     final param = ParamCreateJob(
+    
       customerID: selectedCustomer.value!.aId,
       productItemID: selectedProduct.value!.aId,
       serviceTypeID: selectedServiceType.value!.aId,
@@ -27,6 +28,7 @@ extension CreateJobAction on _CreateJobScreenState {
       description: _enterSub1.text,
     );
 
+print(param);
     try {
       final isJobCreated = await createJob.scCreateJob(param);
       if (isJobCreated) {
@@ -62,11 +64,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
 
   String get dSelectedProduct {
     final selected = selectedProduct.value as MCustomerProductItem?;
-    print(selected);
     if (selected == null) {
       return 'Select Product';
     }
-    return '${selected.aName} - ${selected.serialNumber}';
+    return '${selected.aName} - ${selected.productId}';
   }
 
   @override
@@ -204,7 +205,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                                     val!,
                                                     createJob
                                                         .customerProductList);
-                                            print(selectedProduct.value!.aId);
                                           },
                                           validator: (item) {
                                             if (dSelectedProduct == '')
