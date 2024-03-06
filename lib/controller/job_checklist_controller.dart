@@ -168,10 +168,11 @@ class JobCheckListController extends GetxController {
     //         feedback: feedback,
     //         technicalComment: technicalComment)
     //     .toJson();
-         var param = await ParamCompleteJob(
+    var param = await ParamCompleteJob(
             requestID: requestID,
             signature: signature,
-            feedback: feedback,)
+            feedback: feedback,
+            rating: "4")
         .toJson();
     Logger.log('Complete Job', feedback);
     var response = await API.service.call(

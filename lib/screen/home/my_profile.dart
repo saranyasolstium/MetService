@@ -285,6 +285,10 @@ extension MyProfileScreenWidgets on MyProfileScreen {
   }
 
   Widget get qrScannerView {
+    String mobileNumber = AppController.user.employeeDetails?.mobileNumber.toString() ?? "NA";
+String countryCode = AppController.user.employeeDetails?.countryCode?.toString() ?? "";
+String formattedNumber = (mobileNumber != "NA") ? "$countryCode $mobileNumber" : "NA";
+
     return Container(
       // constraints: BoxConstraints(
       //   minHeight: 339.dynamic,
@@ -333,11 +337,7 @@ extension MyProfileScreenWidgets on MyProfileScreen {
                       ),
                       builProfileRow(
                           "Mobile No : ",
-                          AppController.user.employeeDetails!.countryCode
-                                  .toString() +
-                              " " +
-                              AppController.user.employeeDetails!.mobileNumber
-                                  .toString(),
+                          formattedNumber,
                           color: Colour.appBlack),
                       SizedBox(
                         height: 14.dynamic,

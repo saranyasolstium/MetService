@@ -28,7 +28,7 @@ extension TimeOutAction on TimeOutScreen {
         print('yes clicked');
         try {
           showLoading();
-          AppController().verifyUser().then((result) async {
+         // AppController().verifyUser().then((result) async {
             var model = await attendance.onClockOut();
             if (model?.status?.isSuccess ?? false) {
               navigator!
@@ -36,26 +36,11 @@ extension TimeOutAction on TimeOutScreen {
             } else {
               Toast.show(model?.message ?? kErrorMsg, textStyle: Get.context);
             }
-          }).catchError((error) {
-            // Handle errors during verification
-            print('Error during verification: $error');
-          });
-
-          // var authStatus = await AppController.to.verifyUser();
-          // if (authStatus.isValid) {
-          // await getImage();
-          //   var model = await attendance.onClockOut();
-          //   if (model?.status?.isSuccess ?? false) {
-          //     navigator!
-          //         .popUntil((route) => route.settings.name == NavPage.root);
-          //   } else {
-          //     Toast.show(model?.message ?? kErrorMsg, textStyle: Get.context);
-          //   }
-        }
-        // } catch (e) {
-        //   Toast.show('$e', textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
-        // }
-        finally {
+          // }).catchError((error) {
+          //   // Handle errors during verification
+          //   print('Error during verification: $error');
+          // });
+        } finally {
           hideLoading(value: 0);
         }
       } else {
@@ -270,11 +255,12 @@ class TimeOutScreen extends StatelessWidget {
                           children: [
                             TimeInOutDetailItem(
                               title: 'Department::',
-                              description: user.employeeDetails?.department,
+                              description:
+                                  user.employeeDetails?.department ?? "NA",
                             ),
                             TimeInOutDetailItem(
                               title: 'Employee ID::',
-                              description: user.employeeCode,
+                              description: user.employeeCode ?? "NA",
                             ),
                           ],
                         ),

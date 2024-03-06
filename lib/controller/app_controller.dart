@@ -11,11 +11,14 @@ import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'package:eagle_pixels/model/profile_model.dart';
@@ -47,7 +50,6 @@ class AppController extends GetxController {
 
   bool get isAttendanceEngineer {
     return false;
-    return _user.value.employeeDetails?.designation != '1';
   }
 
   //Local Auth
@@ -65,32 +67,32 @@ class AppController extends GetxController {
   // double? latitude;
   // double? longitude;
 
-    Future<MAuthenticationStatus> verifyUser() async {
-    var result = MAuthenticationStatus();
-    try {
-      final position = await determinePosition();
-      result.position = position;
+  //   Future<MAuthenticationStatus> verifyUser() async {
+  //   var result = MAuthenticationStatus();
+  //   try {
+  //     final position = await determinePosition();
+  //     result.position = position;
 
-      final isLocalAuthenticated = await onLocalAuthenticate();
-      result.isLocalAuthenticated = isLocalAuthenticated;
-      hideLoading();
+  //     final isLocalAuthenticated = await onLocalAuthenticate();
+  //     result.isLocalAuthenticated = isLocalAuthenticated;
+  //     hideLoading();
 
-      final pickedImageFile = await ImagePicker().pickImage(source: ImageSource.camera);
+  //     final pickedImageFile = await ImagePicker().pickImage(source: ImageSource.camera);
 
-      if (pickedImageFile != null) {
-        // Handle the conversion from XFile to PickedFile
-        result.image = PickedFile(pickedImageFile.path);
-      } else {
-        throw Exception('Not able to get image');
-      }
+  //     if (pickedImageFile != null) {
+  //       // Handle the conversion from XFile to PickedFile
+  //       result.image = PickedFile(pickedImageFile.path);
+  //     } else {
+  //       throw Exception('Not able to get image');
+  //     }
 
-      print('Verification Result: $result');
-      return result;
-    } catch (e) {
-      print('Error during user verification: $e');
-      throw e;
-    }
-  }
+  //     print('Verification Result: $result');
+  //     return result;
+  //   } catch (e) {
+  //     print('Error during user verification: $e');
+  //     throw e;
+  //   }
+  // }
 
 
    Future<bool> onLocalAuthenticate() async {
@@ -125,34 +127,64 @@ class AppController extends GetxController {
       throw e;
     }
   }
+Future<Position> determinePosition() async {
+  try {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-  Future<Position> determinePosition() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      _showLocationPermissionToast() ;
+      throw Exception('Location services are disabled. Please enable location services on your device.');
+    }
 
-      if (!serviceEnabled) {
-        throw Exception('Location services are disabled.');
-      }
+    LocationPermission permission = await Geolocator.checkPermission();
 
-      LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      // Request location permissions
+      await Geolocator.requestPermission();
+      
+      // Check again after requesting permissions
+      permission = await Geolocator.checkPermission();
 
       if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          throw Exception('Location permissions are denied');
-        }
+        // Location permissions are still denied
+        _showLocationPermissionToast();
+        throw Exception('Location permissions are denied. Please grant location permissions for the app.');
       }
-
-      if (permission == LocationPermission.deniedForever) {
-        throw Exception('Location permissions are permanently denied, we cannot request permissions.');
-      }
-
-      return await Geolocator.getCurrentPosition();
-    } catch (e) {
-      print('Error during position determination: $e');
-      throw e;
     }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Location permissions are permanently denied
+      _showLocationPermissionToast();
+      throw Exception('Location permissions are permanently denied. You can enable them in the app settings.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  } catch (e) {
+    print('Error during position determination: $e');
+    throw e;
   }
+}
+
+void _showLocationPermissionToast() {
+         // Toast.show('Location permissions are required for this app. Please enable them in the app settings.', textStyle: Get.context);
+
+  Fluttertoast.showToast(
+    msg: "Location permissions are required for this app. Please enable them in the app settings.",
+   // toastLength: Toast(),
+    gravity: ToastGravity.CENTER,
+    backgroundColor: Colors.red,
+    textColor: Colors.white,
+    fontSize: 16.0,
+  );
+}
+
+void openLocationSettings() async {
+  if (await Permission.location.request().isDenied) {
+    // Open the app settings for location permissions
+    await openAppSettings();
+  }
+}
+
 
 
   void showSnackBar(
@@ -222,7 +254,7 @@ class AppController extends GetxController {
         Get.find<AttendanceController>().fetchAttendanceStatus();
       } else {
         loginStatus.value = LoginStatus.logout;
-        Toast.show('Account not active', textStyle: Get.context);
+        //Toast.show('Account not active', textStyle: Get.context);
       }
     } else {
       // loginStatus.value = LoginStatus.logout;

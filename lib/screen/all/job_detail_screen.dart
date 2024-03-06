@@ -1,6 +1,7 @@
 import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/common/currency_convertor.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
@@ -11,6 +12,7 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,56 +32,25 @@ extension JobDetailAction on JobDetailScreen {
   onStartJob() async {
     try {
       showLoading();
+      var res = await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
+      hideLoading();
+      String status = res[K.status] ?? '';
+      String error = res['error'] ?? '';
+      String message = res['message'] ?? res['error'] ?? kErrorMsg;
 
-      AppController().verifyUser().then((result) async {
-        print(result);
-        var res =
-            await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
-        hideLoading();
-        String status = res[K.status] ?? '';
-        String error = res['error'] ?? '';
-        String message = res['message'] ?? res['error'] ?? kErrorMsg;
-
-        if (isSuccess(status) || error == K.already_checkIn) {
-          schedule.reloadList();
-          Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
-        } else {
-          Toast.show(message, textStyle: Get.context);
-        }
-      }).catchError((error) {
-        print('Error during verification: $error');
-      });
-
-      // var authStatus = await AppController.to.verifyUser();
-      // if (authStatus.isValid) {
-      //   // if (true) {
-      //   // var res =
-      //   //     await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
-      //   // hideLoading();
-      //   // String status = res[K.status] ?? '';
-      //   // String error = res['error'] ?? '';
-      //   // String message = res['message'] ?? res['error'] ?? kErrorMsg;
-
-      //   // if (isSuccess(status) || error == K.already_checkIn) {
-      //   //   // final index = schedule.scheduleList.indexWhere((element) {
-      //   //   //   Logger.log('Service id',
-      //   //   //       '${element.aServiceID ?? ''} - ${detail.aServiceId}');
-      //   //   //   return ((element.aServiceID ?? '') == detail.aServiceId);
-      //   //   // });
-
-      //   //   // schedule.scheduleList[index].engineerStatus = 1;
-
-      //   //   // schedule.update();
-      //   //   schedule.reloadList();
-      //   //   Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
-      //   //   // Get.toNamed(NavPage.jobCheckListScreen);
-      //   // } else {
-      //   //   Toast.show(message, textStyle: Get.context);
-      //   // }
-      // }
+      if (isSuccess(status) || error == K.already_checkIn) {
+        schedule.reloadList();
+        Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
+      } else {
+        Toast.show(message,
+            backgroundColor: Colors.white,
+            textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
+      }
     } catch (e) {
       Toast.show('$e',
+          backgroundColor: Colors.white,
           textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
+      print(e);
     }
   }
 }
@@ -97,6 +68,24 @@ class JobDetailScreen extends StatelessWidget {
     return controller.detail.value;
   }
 
+  Future<String> convertAndDisplayAmount(String amount) async {
+    try {
+      double amountInSGD = double.tryParse(amount) ?? 0.0;
+      String? toCurrency =
+          await SharedPreferencesHelper.instance.readCurrencyCode();
+      String? currencySymbol =
+          await SharedPreferencesHelper.instance.readCurrencySymbol();
+
+      print(toCurrency);
+      double result = await CurrencyConversionService()
+          .convertAmount(amountInSGD, 'SGD', toCurrency!);
+      return '$currencySymbol $result';
+    } catch (error) {
+      print('Error converting amount: $error');
+      return 'Error';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!controller.isRequestedDetailService) {
@@ -105,6 +94,7 @@ class JobDetailScreen extends StatelessWidget {
         controller.fetchDetail(jobID: jobID);
       });
     }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
@@ -181,62 +171,61 @@ class JobDetailScreen extends StatelessWidget {
                                         fontSize: 16.dynamic),
                                   ),
                                   this.customerInformationView,
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.start,
-                                  //   children: [
-                                  //     Container(
-                                  //       padding: EdgeInsets.only(
-                                  //           top: 20.dynamic,
-                                  //           bottom: 10.dynamic),
-                                  //       child: Text(
-                                  //         'Site Address:',
-                                  //         style: TextStyle(
-                                  //             color: Colour.appDarkGrey,
-                                  //             fontWeight: FontWeight.normal,
-                                  //             fontSize: 12.dynamic),
-                                  //       ),
-                                  //     ),
-                                  //     GestureDetector(
-                                  //       onTap: () async {
-                                  //         String query = Uri.encodeComponent(
-                                  //             detail.aCombinedAddress ?? '');
-                                  //         String googleUrl =
-                                  //             "https://www.google.com/maps/search/?api=1&query=$query";
-                                  //         if (await canLaunch(googleUrl)) {
-                                  //           await launch(googleUrl);
-                                  //         }
-                                  //       },
-                                  //       child: Container(
-                                  //         padding: EdgeInsets.only(
-                                  //             top: 20.dynamic,
-                                  //             bottom: 10.dynamic),
-                                  //         child: Icon(
-                                  //           Icons.location_on,
-                                  //           size: 25,
-                                  //           color: Colour.appDarkGrey,
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.only(bottom: 10.dynamic),
+                                        child: Text(
+                                          'Site Address:',
+                                          style: TextStyle(
+                                              color: Colour.appDarkGrey,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 12.dynamic),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          String query = Uri.encodeComponent(
+                                              detail.aCombinedAddress ?? '');
+                                          String googleUrl =
+                                              "https://www.google.com/maps/search/?api=1&query=$query";
+                                          if (await canLaunch(googleUrl)) {
+                                            await launch(googleUrl);
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 20.dynamic,
+                                              bottom: 10.dynamic),
+                                          child: Icon(
+                                            Icons.location_on,
+                                            size: 25,
+                                            color: Colour.appDarkGrey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
 
-                                  // Text(
-                                  //   detail.aCombinedAddress ?? 'NA',
-                                  //   style: TextStyle(
-                                  //       color: Colour.appBlack,
-                                  //       fontWeight: FontWeight.w600,
-                                  //       fontSize: 14.dynamic),
-                                  // ),
+                                  Text(
+                                    detail.aCombinedAddress ?? 'NA',
+                                    style: TextStyle(
+                                        color: Colour.appBlack,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14.dynamic),
+                                  ),
                                   // this.warrantyInfo,
                                   SizedBox(height: 30.dynamic),
                                   Text(
-                                    'Booking information:',
+                                    'Service information:',
                                     style: TextStyle(
                                         color: Colour.appBlue,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16.dynamic),
                                   ),
-                                  this.bookingReportView
+                                  this.serviceReportView
                                   // isNeedServiceReport
                                   //     ? Container(
                                   //         child: Column(
@@ -302,129 +291,6 @@ extension JobDetailWidgets on JobDetailScreen {
       ),
     );
   }
-  // Widget androidDropdown() {
-  //   List<DropdownMenuItem<String>> dropdownItems = [];
-  //   var siteList = detailController.arrSites;
-  //   siteList.forEach((site) {
-  //     dropdownItems.add(
-  //       DropdownMenuItem(
-  //         child: Text(site.displayText),
-  //         value: site.displayText,
-  //       ),
-  //     );
-  //   });
-  //
-  //   // for (String site in siteList.value) {
-  //   //   var newItem = DropdownMenuItem(
-  //   //     child: Text(site.),
-  //   //     value: site,
-  //   //   );
-  //   //   dropdownItems.add(newItem);
-  //   // }
-  //
-  //   return Container(
-  //     margin: EdgeInsets.only(bottom: 19.dynamic),
-  //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-  //     width: double.infinity,
-  //     decoration: BoxDecoration(
-  //       color: Colour.appLightGrey,
-  //       borderRadius: BorderRadius.all(
-  //         Radius.circular(5.dynamic),
-  //       ),
-  //     ),
-  //     child: DropdownButton<String>(
-  //       value: detailController.selectedSite.value?.displayText ?? '',
-  //       items: dropdownItems,
-  //       underline: Container(),
-  //       icon: Expanded(
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.end,
-  //           children: [
-  //             Icon(
-  //               Icons.keyboard_arrow_down,
-  //               size: 30.dynamic,
-  //               color: Colour.appDarkGrey,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       onChanged: (value) {
-  //         detailController.selectedSite.value = detailController.arrSites
-  //             .where((element) => element.displayText == value)
-  //             .first;
-  //       },
-  //     ),
-  //   );
-  // }
-
-  // Widget get cameraInfoView {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.start,
-  //     children: [
-  //       Image.asset(
-  //         'images/camera.png',
-  //       ),
-  //       SizedBox(
-  //         width: 13.dynamic,
-  //       ),
-  //       Expanded(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               detail.aCustomerName ?? 'NA',
-  //               style: TextStyle(
-  //                   color: Colour.appBlack,
-  //                   fontWeight: FontWeight.w400,
-  //                   fontSize: 16.dynamic),
-  //             ),
-  //             SizedBox(
-  //               height: 4.dynamic,
-  //             ),
-  //             Text(
-  //               detail.aCameraID ?? 'NA',
-  //               style: TextStyle(
-  //                   color: Colour.appDarkGrey,
-  //                   fontWeight: FontWeight.w400,
-  //                   fontSize: 12.dynamic),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget get tickInformationView {
-  //   return Column(
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView('Ticket ID:', detail.aTicketID),
-  //           JobDetailTitleDescriptionView('Priority:', detail.aPriority),
-  //         ],
-  //       ),
-  //       SizedBox(height: 15.dynamic),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView('Status:', detail.aStatus),
-  //           JobDetailTitleDescriptionView('Source:', detail.aSource),
-  //         ],
-  //       ),
-  //       SizedBox(height: 15.dynamic),
-  //       Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-  //         JobDetailTitleDescriptionView('Subject:', detail.aSubject),
-  //       ]),
-  //       SizedBox(height: 15.dynamic),
-  //       Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-  //         JobDetailTitleDescriptionView('Description:', detail.aDescription),
-  //       ]),
-  //     ],
-  //   );
-  // }
 
   Widget get customerInformationView {
     return Column(
@@ -433,8 +299,11 @@ extension JobDetailWidgets on JobDetailScreen {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            JobDetailTitleDescriptionImageView('Customer:',
-                detail.aCustomerName ?? 'NA', detail.aCustomerImage ?? 'NA', kUserPlaceholder),
+            JobDetailTitleDescriptionImageView(
+                'Customer:',
+                detail.aCustomerName ?? 'NA',
+                detail.aCustomerImage ?? 'NA',
+                kUserPlaceholder),
             // JobDetailTitleDescriptionView('Item:', detail.aItem),
           ],
         ),
@@ -446,141 +315,11 @@ extension JobDetailWidgets on JobDetailScreen {
             JobDetailTitleDescriptionView('Phone No:', detail.aPhoneNo ?? 'NA'),
           ],
         ),
-        SizedBox(height: 15.dynamic),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            JobDetailTitleDescriptionView('Service Name:', detail.aServiceName ?? 'NA'),
-            JobDetailTitleDescriptionView(
-                'Sub Service Name', detail.aSubServiceName ?? 'NA'),
-          ],
-        )
       ],
     );
   }
 
-  // Widget get serviceInformationView {
-  //   return Column(
-  //     children: [
-  //       SizedBox(height: 10.dynamic),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionImageView('Customer:',
-  //               detail.aCustomerName, detail.aCustomerImage, kUserPlaceholder),
-  //           JobDetailTitleDescriptionView('Item:', detail.aItem),
-  //         ],
-  //       ),
-  //       SizedBox(height: 15.dynamic),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView(
-  //               'Serial Number:', detail.aSerialNumber),
-  //           JobDetailTitleDescriptionView('Site:', detail.aSite),
-  //         ],
-  //       ),
-  //       SizedBox(height: 15.dynamic),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView('Subsite:', detail.aSubSite),
-  //           JobDetailTitleDescriptionView('Sale Order', detail.aSaleOrder),
-  //         ],
-  //       )
-  //     ],
-  //   );
-  // }
-
-  // Widget get detailsView {
-  //   return Column(
-  //     children: [
-  //       SizedBox(
-  //         height: 20.dynamic,
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView(
-  //               'Purchase Date:', detail.aPurchaseDate),
-  //           JobDetailTitleDescriptionView(
-  //               'Purchase Order Number:', detail.aPurchaseOrderNumber),
-  //         ],
-  //       ),
-  //       SizedBox(
-  //         height: 15.dynamic,
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView(
-  //               'Scheduled Date:', detail.aScheduleDate),
-  //           JobDetailTitleDescriptionImageView('Customer Name:',
-  //               detail.aCustomerName, detail.aCameraImage ?? '')
-  //         ],
-  //       ),
-  //       SizedBox(
-  //         height: 15.dynamic,
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView(
-  //               'Scheduled Time:', detail.aScheduleTime),
-  //           JobDetailTitleDescriptionImageView(
-  //               'Scheduled By:', detail.aScheduledBy, detail.aScheduledBy)
-  //         ],
-  //       ),
-  //       SizedBox(
-  //         height: 15.dynamic,
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           JobDetailTitleDescriptionView(
-  //               'Warranty Status', detail.aWarrantyStatus),
-  //           JobDetailTitleDescriptionView(
-  //               'Warranty Ending On', detail.aWarrantyEndingOn),
-  //         ],
-  //       ),
-  //       SizedBox(
-  //         height: 15.dynamic,
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           Expanded(
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Text(
-  //                   'Instructions from Customer',
-  //                   style: TextStyle(
-  //                       color: Colour.appDarkGrey,
-  //                       fontWeight: FontWeight.w400,
-  //                       fontSize: 12.dynamic),
-  //                 ),
-  //                 SizedBox(
-  //                   height: 4.dynamic,
-  //                 ),
-  //                 Text(
-  //                   detail.aCustomerInstruction ?? 'NA',
-  //                   style: TextStyle(
-  //                       color: Colour.appRed,
-  //                       fontWeight: FontWeight.w400,
-  //                       fontSize: 14.dynamic),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  Widget get bookingReportView {
+  Widget get serviceReportView {
     return Column(
       children: [
         SizedBox(
@@ -589,9 +328,13 @@ extension JobDetailWidgets on JobDetailScreen {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            JobDetailTitleDescriptionView('Team Name:', detail.aTeamName ?? 'NA'),
             JobDetailTitleDescriptionView(
-                'Booking Amount', detail.aBookingAmount ?? 'NA'),
+                'Service Name:', detail.aTeamName ?? 'NA'),
+            JobDetailAmountDescriptionView(
+              'Service Amount',
+              () async =>
+                  await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
+            ),
           ],
         ),
         SizedBox(
@@ -600,8 +343,10 @@ extension JobDetailWidgets on JobDetailScreen {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            JobDetailTitleDescriptionView('Booking date:', detail.aBookingDate ?? 'NA'),
-            JobDetailTitleDescriptionView('Booking Time:', detail.aBookingTime ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Service date:', detail.aBookingDate ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Schedule Time:', detail.aBookingTime ?? 'NA'),
 
             // Expanded(
             //   child: Column(
@@ -777,6 +522,60 @@ class JobDetailTitleDescriptionView extends StatelessWidget {
   }
 }
 
+class JobDetailAmountDescriptionView extends StatelessWidget {
+  final String title;
+  final Future<String?> Function() descriptionFutureFunction;
+
+  JobDetailAmountDescriptionView(this.title, this.descriptionFutureFunction);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: Colour.appDarkGrey,
+              fontWeight: FontWeight.normal,
+              fontSize: 12.dynamic,
+            ),
+          ),
+          SizedBox(
+            height: 4.dynamic,
+          ),
+          FutureBuilder<String?>(
+            future: descriptionFutureFunction(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                final data = snapshot.data;
+                if (data != null) {
+                  return Text(
+                    data,
+                    style: TextStyle(
+                      color: Colour.appBlack,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14.dynamic,
+                    ),
+                  );
+                } else {
+                  return Text('NA');
+                }
+              } else if (snapshot.hasError) {
+                return Text('NA');
+              } else {
+                return Text('NA');
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class JobDetailTitleDescriptionImageView extends StatelessWidget {
   final String title;
   final String? description;
@@ -809,36 +608,19 @@ class JobDetailTitleDescriptionImageView extends StatelessWidget {
                 width: 24.dynamic,
                 height: 24.dynamic,
                 alignment: Alignment.center,
-                child: SvgPicture.network(
-                  image!,
-                  placeholderBuilder: (BuildContext context) =>
-                      Image.asset('images/user.png'),
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.blue,
-                  ),
-                  borderRadius: BorderRadius.circular(37.5.dynamic),
-                ),
+                child: Image.asset('images/user.png'),
+                // child: SvgPicture.network(
+                //   image!,
+                //   placeholderBuilder: (BuildContext context) =>
+                //       Image.asset('images/user.png'),
+                // ),
+                // decoration: BoxDecoration(
+                //   border: Border.all(
+                //     color: Colors.blue,
+                //   ),
+                //   borderRadius: BorderRadius.circular(37.5.dynamic),
+                // ),
               ),
-
-              // Container(
-              //   width: 24.dynamic,
-              //   height: 24.dynamic,
-              //   alignment: Alignment.center,
-              //   child: NetworkImageView(image, this.placeholder),
-              //   decoration: BoxDecoration(
-              //     // image: DecorationImage(
-              //     //   fit: BoxFit.contain,
-              //     //   image:
-              //     //   AssetImage('images/user.png'),
-              //     // ),
-              //     border: Border.all(
-              //       color: Colors.blue,
-              //     ),
-              //     borderRadius: BorderRadius.circular(37.5.dynamic),
-              //   ),
-              // ),
               SizedBox(
                 width: 7.dynamic,
               ),

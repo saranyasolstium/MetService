@@ -68,7 +68,7 @@ class MScheduledJobItem implements AServiceItem {
       this.siteState,
       this.siteCity,
       this.engineerStatus,
-      this.seviceType,
+      this.serviceType,
       this.serviceDate,
       this.attendenceDate,
       this.attendenceEndDate,
@@ -97,7 +97,7 @@ class MScheduledJobItem implements AServiceItem {
   dynamic? siteCity;
   dynamic? siteState;
   dynamic? siteZipCode;
-  dynamic? seviceType;
+  dynamic? serviceType;
   int? engineerStatus;
   String? serviceDate;
   dynamic bookingTime;
@@ -115,25 +115,26 @@ class MScheduledJobItem implements AServiceItem {
         siteId: json["site_id"],
         ticketId: json["ticket_id"],
         productId: json["product_id"],
-        productName: json["service_name"],
+        productName: json["product_name"],
         productImage: json["product_image"],
         sku: json["sku"],
         bookingDate: json['bookingdate'],
         bookingTime: json['bookingtime'],
         serialNumber: json["serial_number"],
         purchaseDate: json["bookingtime"],
-        customerName: json["customer_name"],
+        customerName: json["name"],
         customerImage: json["customer_image"],
         subject: json["subject"],
         description: json["description"],
         name: json["name"],
-        siteAddress: json["site_address"],
+        siteAddress: json["address"],
         siteCity: json["site_city"],
         siteState: json["site_state"],
         siteZipCode: json["site_zipcode"],
         engineerStatus: json["engineer_status"],
-        seviceType: json["service"],
+        serviceType: json["service_type"],
         serviceDate: json["service_date"],
+  
         //Attendance entry
         attendenceDate: json['AttendenceDate'],
         attendenceEndDate: json['AttendenceEndDate'],
@@ -148,7 +149,7 @@ class MScheduledJobItem implements AServiceItem {
         "site_id": siteId,
         "ticket_id": ticketId,
         "product_id": productId,
-        "service_name": productName,
+        "product_name": productName,
         "product_image": productImage,
         "sku": sku,
         "bookingtime": bookingTime,
@@ -160,7 +161,8 @@ class MScheduledJobItem implements AServiceItem {
         "subject": subject,
         "description": description,
         "name": name,
-        "service": seviceType,
+        "address":siteAddress,
+        "service_type": serviceType,
         //AttendanceEntry
         'AttendenceDate': attendenceDate,
         'AttendenceEndDate': attendenceEndDate,
@@ -173,26 +175,26 @@ class MScheduledJobItem implements AServiceItem {
   String? get aProdouctName => productName;
   String? get aCctvID => sku.toString();
 
-  //String? get aServiceType => seviceType;
+  //String? get aServiceType => serviceType;
   String? get aCustomerName => customerName;
   String? get aCustomerImage => customerImage;
   String? get aEmail => "";
   String? get aPhoneNo => "";
-  String? get aServiceName => "";
+  String? get aServiceName => serviceType;
   String? get aSubServiceName => "";
 
   double? get aLat => lat;
   double? get aLong => long;
 
-  String? get aPurchaseDate => purchaseDate;
+  String? get aPurchaseDate => serviceDate;
   String? get aEndDay => attendenceEndDate;
   String? get aRequestNo => '';
   String? get aStartDay => attendenceDate;
   String? get aServiceID => id.toString();
   String? get aScheduleTime => bookingDate.toString();
 
-  String? get aCombinedAddress =>
-      constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
+  String? get aCombinedAddress =>siteAddress.toString() ?? "NA";
+     // constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
 
   String? get aSiteID => siteId.toString();
 

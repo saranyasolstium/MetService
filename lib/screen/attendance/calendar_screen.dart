@@ -13,7 +13,6 @@ import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
@@ -25,7 +24,6 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:http/http.dart' as http;
 import 'package:eagle_pixels/api/api_service.dart';
 import '../../colors.dart';
-import 'package:colorize/colorize.dart';
 import 'package:toast/toast.dart';
 
 extension CalendarAction on CalendarScreen {
@@ -35,7 +33,13 @@ extension CalendarAction on CalendarScreen {
     print(attendance.isClockedIn);
     if (status != null) {
       if (status.isServiceStarted && !status.isAttendanceStarted) {
-        Toast.show('You already in service attendance', textStyle: Get.context);
+        Toast.show(
+          'You already in service attendance',
+          backgroundColor: Colors.white,
+          textStyle: TextStyle(
+              fontSize: 16.0,
+              color: Colors.black), // Provide an appropriate TextStyle
+        );
         //print('You already in service attendance');
         return;
       }
@@ -65,58 +69,32 @@ extension CalendarAction on CalendarScreen {
     }
     showLoading();
     try {
-      AppController().verifyUser().then((result) async {
-        var model = await attendance.onClockIn();
-        if (model?.status?.isSuccess ?? false) {
-          var resp = MAttendanceStatusResponse();
-          resp.startedDate = DateTime.now();
-          attendance.attendanceStatus.value = resp;
-          final status = attendance.attendanceStatus.value;
-          if (status != null) {
-            status.isAttendanceStarted = !status.isAttendanceStarted;
-            attendance.update();
-          } else {
-            attendance.attendanceStatus.value = MAttendanceStatusResponse();
-            attendance.attendanceStatus.value!.isAttendanceStarted = true;
-            attendance.update();
-          }
-          Get.toNamed(NavPage.clockOut);
+      // AppController().verifyUser().then((result) async {
+      var model = await attendance.onClockIn();
+      if (model?.status?.isSuccess ?? false) {
+        var resp = MAttendanceStatusResponse();
+        resp.startedDate = DateTime.now();
+        attendance.attendanceStatus.value = resp;
+        final status = attendance.attendanceStatus.value;
+        if (status != null) {
+          status.isAttendanceStarted = !status.isAttendanceStarted;
+          attendance.update();
         } else {
-          Toast.show(
-            model?.message ?? 'Problem in clock in. please try again.',
-            textStyle: TextStyle(color: Colors.black, fontSize: 16.0),
-          );
+          attendance.attendanceStatus.value = MAttendanceStatusResponse();
+          attendance.attendanceStatus.value!.isAttendanceStarted = true;
+          attendance.update();
         }
-      }).catchError((error) {
-        // Handle errors during verification
-        print('Error during verification: $error');
-      });
-
-      //   var authStatus = await AppController.to.verifyUser();
-      //   print(authStatus.isValid);
-      //  if (authStatus.isValid) {
-      //     var model = await attendance.onClockIn();
-      //     if (model?.status?.isSuccess ?? false) {
-      //       var resp = MAttendanceStatusResponse();
-      //       resp.startedDate = DateTime.now();
-      //       attendance.attendanceStatus.value = resp;
-      //       final status = attendance.attendanceStatus.value;
-      //       if (status != null) {
-      //         status.isAttendanceStarted = !status.isAttendanceStarted;
-      //         attendance.update();
-      //       } else {
-      //         attendance.attendanceStatus.value = MAttendanceStatusResponse();
-      //         attendance.attendanceStatus.value!.isAttendanceStarted = true;
-      //         attendance.update();
-      //       }
-      //       Get.toNamed(NavPage.clockOut);
-      //     } else {
-      //       Toast.show(
-      //         model?.message ?? 'Problem in clock in. please try again.',
-      //         textStyle: TextStyle(color: Colors.black, fontSize: 16.0),
-      //       );
-      //     }
-      //   }
+        Get.toNamed(NavPage.clockOut);
+      } else {
+        Toast.show(
+          model?.message ?? 'Problem in clock in. please try again.',
+          textStyle: TextStyle(color: Colors.black, fontSize: 16.0),
+        );
+      }
+      // }).catchError((error) {
+      //   // Handle errors during verification
+      //   print('Error during verification: $error');
+      // });
     } catch (e) {
       Toast.show(
         '$e',
@@ -460,8 +438,9 @@ extension CalendarWidgets on CalendarScreen {
 
   Widget get calendar {
     return CalendarCarousel<Event>(
-      targetDateTime: DateTime(int.parse(attendance.selectedYear.value),
-          int.parse(attendance.selectedMonthInNumber)),
+    targetDateTime: DateTime.now().subtract(Duration(days: DateTime.now().day - 1)),
+
+
       todayBorderColor: Colors.transparent,
       customDayBuilder: (isSelectable,
           index,
@@ -494,7 +473,7 @@ extension CalendarWidgets on CalendarScreen {
         attendance.selectedActiveJobDate = date;
         this.showAttendance(DateFormat(AppDateFormat.yyyy_MM_dd).format(date));
       },
-      
+
       // weekdayTextStyle: TextStyle(
       //   color: Colors.green,
       // ),
@@ -527,8 +506,7 @@ extension CalendarWidgets on CalendarScreen {
           ),
         );
       },
-      // minSelectedDate: _currentDate.subtract(Duration(days: 360)),
-      // maxSelectedDate: _currentDate.add(Duration(days: 360)),
+
       scrollDirection: Axis.horizontal,
       isScrollable: false,
       prevDaysTextStyle: TextStyle(
@@ -539,21 +517,8 @@ extension CalendarWidgets on CalendarScreen {
         color: Colors.grey,
         fontSize: 16,
       ),
-      // onCalendarChanged: (DateTime date) {
-      //   this.setState(() {
-      //     _targetDateTime = date;
-      //     _currentMonth = DateFormat.yMMM().format(_targetDateTime);
-      //   });
-      // },
-      onDayLongPressed: (DateTime date) {
-        // int day = int.parse(DateFormat.d().format(date));
-        // if ([4, 5, 6].contains(day)) {
-        //   print('contain');
-        // } else {
-        //   print('not contain');
-        // }
-        // print('long pressed date $date');
-      },
+
+      onDayLongPressed: (DateTime date) {},
     );
   }
 
@@ -633,10 +598,6 @@ extension CalendarWidgets on CalendarScreen {
               () => Text(
                 DateFormat('hh:mm a  |  dd MMMM yyyy')
                     .format(TimerController.to.currentDate.value),
-
-                // Jiffy(TimerController.to.currentDate.value)
-                //     .format('hh:mm a  |  do MMMM yyyy'),
-
                 style: TextStyle(
                   fontSize: 14.dynamic,
                   fontWeight: FontWeight.w600,

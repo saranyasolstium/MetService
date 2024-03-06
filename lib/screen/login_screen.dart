@@ -4,12 +4,15 @@ import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/login_model.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
+import 'package:eagle_pixels/reuse/storage.dart';
 import 'package:eagle_pixels/screen/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -29,8 +32,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    _obsecureText = false;
     super.initState();
+    _obsecureText = false;
+  }
+
+  Future<String?> getLocalCurrencyCode() async {
+    var locale = Localizations.localeOf(context);
+    var currency = NumberFormat.simpleCurrency(locale: locale.toString());
+    await SharedPreferencesHelper.instance
+        .saveCurrencyCode(currency.currencyName!);
+
+    // Save the currency symbol using SharedPreferences
+    await SharedPreferencesHelper.instance
+        .saveCurrencySymbol(currency.currencySymbol);
+
+    return currency.currencyName;
   }
 
   @override
@@ -88,6 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () async {
           var email = _emailController.text;
           var password = _passwordController.text;
+          getLocalCurrencyCode();
+          String? toCurrency =
+              await SharedPreferencesHelper.instance.readCurrencyCode();
+          print(toCurrency);
           if (_formkey.currentState!.validate()) {
             FocusScopeNode currentFocus = FocusScope.of(context);
             currentFocus.unfocus();
@@ -100,20 +120,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 body: loginRequestModel.toJson());
 
             var map = response.map;
-            var dataMap = map['data'][0] as Map<String, dynamic>;
-            var token = dataMap['token'] as String?;
-            
-            if (token != null && token.isNotEmpty) {
-              await AppController.to.storage.write('token', token);
-              print('Stored Token - $token');
-              AppController.to.fetchProfile();
-              Future.delayed(
-                Duration(seconds: 1),
-                () => Get.snackbar("Login Success", 'Successfully logged in.'),
-              );
+            var status = map['status'] as String;
+            var message = map['message'] ?? 'Invalid Login Credentials';
+            if (status == 'success') {
+              var dataMap = map['data'][0] as Map<String, dynamic>;
+              var token = dataMap['token'] as String?;
+
+              if (token != null && token.isNotEmpty) {
+                await AppController.to.storage.write('token', token);
+                print('Stored Token - $token');
+                AppController.to.fetchProfile();
+                Future.delayed(
+                  Duration(seconds: 1),
+                  () =>
+                      Get.snackbar("Login Success", 'Successfully logged in.'),
+                );
+              } else {
+                Get.snackbar("Login Failed", 'Invalid token received.');
+              }
             } else {
-              var message =
-                  map['error'] ??= 'Something went wrong. Please try again';
               Get.snackbar("Login Failed", '$message');
             }
           } else {

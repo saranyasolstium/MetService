@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 
 import '../../colors.dart';
 import '../../constant.dart';
-import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:eagle_pixels/reuse/date_manager.dart';
 
 class AttendanceServiceListScreen extends StatelessWidget {
@@ -198,7 +197,6 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                 );
                               } else if (attendance
                                   .activeJobViewState.value.isSuccess) {
-                                print("saranya");
 
                                 return ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
@@ -267,8 +265,12 @@ class AttendenceDetail extends StatelessWidget {
               Container(
                   width: 61.dynamic,
                   height: 61.dynamic,
-                  child:
-                      NetworkImageView(item.aProductImage, kCameraPlaceholder)),
+                 child: SvgPicture.network(
+                          'https://met.solstium.net/admin/images/user-profile.svg',
+                          placeholderBuilder: (BuildContext context) =>
+                              Image.network(kCameraPlaceholder),
+                        ),
+              ),
               SizedBox(
                 width: 13.dynamic,
               ),

@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';

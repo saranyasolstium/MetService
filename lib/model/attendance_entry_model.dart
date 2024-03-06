@@ -1,3 +1,4 @@
+import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:intl/intl.dart';
@@ -56,17 +57,23 @@ class MAttendanceEntry implements AJobTime {
 
   MAttendanceEntry.fromJson(Map<String, dynamic> json) {
     attendenceDate = json['AttendenceDate'];
+    print("saranya ${json['AttendenceDate']}");
     if (attendenceDate != null) {
+      DateTime utcStartTime =
+          DateTime.parse(json['AttendenceDate'] + "Z").toLocal();
+
       aStartTime = DateFormat(AppDateFormat.defaultF)
-          .parse(attendenceDate!)
+          .parse(utcStartTime.toString()!)
           .string(AppDateFormat.attendanceDate);
       print(aStartTime);
     }
 
     attendenceEndDate = json['AttendenceEndDate'];
     if (attendenceEndDate != null) {
+      DateTime utcEndTime =
+          DateTime.parse(json['AttendenceDate'] + "Z").toLocal();
       aEndTime = DateFormat(AppDateFormat.defaultF)
-          .parse(attendenceDate!)
+          .parse(utcEndTime.toString())
           .string(AppDateFormat.attendanceDate);
     }
 
@@ -176,5 +183,5 @@ class MAttendanceEntry implements AJobTime {
 
   String? aEndTime;
   String? aStartTime;
-  String? aEmployeeName ;
+  String? aEmployeeName;
 }

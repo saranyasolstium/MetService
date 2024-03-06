@@ -33,8 +33,8 @@ class LoginRequestModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'email': "usipweb+1@gmail.com",
-      'password': "12345678",
+      'email': email,
+      'password': password,
       // 'grant_type': 'password',
       // 'client_id': '22',
       // 'client_secret': 'XxYwnq03sDonxUXKzq5sYQQE1i9ukbxInOePXY9H',

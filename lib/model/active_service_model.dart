@@ -74,7 +74,7 @@ class MActiveService extends AActiveService {
     //customer infomation
     customerName = json['customer_name'];
     customerImage = json['customer_image'];
-    email = json['email'];
+    email = json['customer_email'];
     phone = json['phone'];
     serviceName = json['service_name'];
     subserviceName = json['subservice_name'];
@@ -85,18 +85,18 @@ class MActiveService extends AActiveService {
     aAddress = json['site_address'];
     final attendance = json['attendance'];
     //Attendance entry
-    // attendenceDate = json['AttendenceDate'];
     print(json['AttendenceDate']);
+    DateTime utcStartTime = DateTime.parse(json['AttendenceDate']+"Z").toLocal();
     DateTime attendanceDateTime =
-        DateTime.tryParse(json['AttendenceDate']) ?? DateTime.now();
+        DateTime.tryParse(utcStartTime.toString()) ?? DateTime.now();
     attendenceDate =
         DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
 
-    //print("sranya_active_Service"+json['AttendenceEndDate']);
-
     if (json['AttendenceEndDate'] != null) {
+          DateTime utcEndTime = DateTime.parse(json['AttendenceEndDate']+"Z").toLocal();
+
       DateTime attendanceEndDateTime =
-          DateTime.tryParse(json['AttendenceEndDate']) ?? DateTime.now();
+          DateTime.tryParse(utcEndTime.toString()) ?? DateTime.now();
       attendenceEndDate =
           DateFormat(AppDateFormat.scheduledTime).format(attendanceEndDateTime);
     } else {
@@ -134,7 +134,7 @@ class MActiveService extends AActiveService {
     data['company_name'] = this.companyName;
     data['customer_name'] = this.customerName;
     data['customer_image'] = this.customerImage;
-    data['email'] = this.email;
+    data['customer_email'] = this.email;
     data['phone'] = this.phone;
     data['service_name'] = this.serviceName;
     data['subservice_name'] = this.subserviceName;
@@ -173,7 +173,7 @@ class MActiveService extends AActiveService {
   String? get aPurchaseDate => purchaseDate;
   String? get aRequestNo => requesterId.toString();
   String? get aStartDay => attendenceDate.toString();
- 
+
   List<AJobTime>? aAttendanceEntry;
   String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();

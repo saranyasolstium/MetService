@@ -24,7 +24,8 @@ class MAttendanceStatusResponse implements Codable, AAttendanceStatus {
   String? status;
   String? message;
 
-  MAttendanceStatusItem? data;
+  // MAttendanceStatusItem? data;
+  List<MAttendanceStatusItem>? data;
   var isServiceStarted = false;
   var isAttendanceStarted = false;
 
@@ -34,18 +35,19 @@ class MAttendanceStatusResponse implements Codable, AAttendanceStatus {
 
     isServiceStarted = json['service_status'] == 1 ? true : false;
     isAttendanceStarted = json['attendence_status'] == 1 ? true : false;
-    if (json.containsKey("data") && json["data"] != null) {
-      data = MAttendanceStatusItem.fromJson(json["data"]);
-      startedDate = data?.attendenceDate;
-    }
+    // if (json.containsKey("data") && json["data"] != null) {
+    //   data = MAttendanceStatusItem.fromJson(json["data"]);
+    //   startedDate = data?.attendenceDate;
+    // }
 
-    // Check if the message is "Unauthenticated."
-    if (message == "Unauthenticated.") {
-      // Log out the user
-      AppController.to.storage.remove('token');
-      AppController.to.loginStatus.value = LoginStatus.logout;
-      //Navigator.of(Get.context, rootNavigator: true).pop();
-      print("saranya logout");
+    if (json.containsKey("data") && json["data"] != null) {
+      if (json["data"] is List) {
+        data = List<MAttendanceStatusItem>.from(
+          json["data"].map((item) => MAttendanceStatusItem.fromJson(item)),
+        );
+      } else {
+        data = [MAttendanceStatusItem.fromJson(json["data"])];
+      }
     }
 
     return this;
@@ -54,7 +56,8 @@ class MAttendanceStatusResponse implements Codable, AAttendanceStatus {
   Map<String, dynamic> toJson() => {
         "status": status,
         'message': message,
-        "data": data?.toJson(),
+        // "data": data?.toJson(),
+        "data": data?.map((item) => item.toJson()).toList(),
       };
 
   @override

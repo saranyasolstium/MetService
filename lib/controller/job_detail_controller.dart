@@ -1,6 +1,5 @@
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
-import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:get/get.dart';

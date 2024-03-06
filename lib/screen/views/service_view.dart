@@ -53,6 +53,21 @@ class ServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  
+    String? purchaseDateString = item.aPurchaseDate;
+    DateTime? purchaseDate;
+
+    if (purchaseDateString != null) {
+      purchaseDate = DateTime.tryParse(purchaseDateString);
+    }
+
+    String formattedTime = purchaseDate != null
+        ? "${purchaseDate.hour}:${purchaseDate.minute.toString().padLeft(2, '0')}"
+        : "N/A";
+
+    print("Formatted Time: $formattedTime");
+    print("Address: ${item.aCombinedAddress}");
+
     return Container(
       padding: EdgeInsets.only(
         top: 16.dynamic,
@@ -72,10 +87,11 @@ class ServiceView extends StatelessWidget {
               Container(
                 width: 61.dynamic,
                 height: 61.dynamic,
-                child: NetworkImageView(
-                  item.aProductImage,
-                  kCameraPlaceholder,
-                ),
+                // child: NetworkImageView(
+                //   item.aProductImage,
+                //   kCameraPlaceholder,
+                // ),
+                child: Image.asset('images/user.png'),
               ),
               SizedBox(
                 width: 13.dynamic,
@@ -90,7 +106,7 @@ class ServiceView extends StatelessWidget {
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w400,
-                          fontSize: 16.dynamic),
+                          fontSize: 14.dynamic),
                     ),
                     SizedBox(
                       height: 4.dynamic,
@@ -130,7 +146,7 @@ class ServiceView extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      'NA',
+                      item.aServiceName ?? "NA",
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w600,
@@ -207,9 +223,8 @@ class ServiceView extends StatelessWidget {
                         ),
                       ),
                     ),
-                   
                     Text(
-                      item.aPurchaseDate ?? 'NA',
+                      formattedTime,
                       style: TextStyle(
                         color: Colour.appBlack,
                         fontWeight: FontWeight.w600,
@@ -248,19 +263,18 @@ class ServiceView extends StatelessWidget {
           //   ),
 
           if (isNeedScheduledTime)
-            Text(
-              "",
-              // (item as MScheduledJobItem).serviceDate!,
-              style: TextStyle(
-                  color: Colour.appBlack,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.dynamic),
-            ),
+            // Text(
+            //   "",
+            //   // (item as MScheduledJobItem).serviceDate!,
+            //   style: TextStyle(
+            //       color: Colour.appBlack,
+            //       fontWeight: FontWeight.w600,
+            //       fontSize: 14.dynamic),
+            // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
                 child: Text(
                   'Site Address:',
                   style: TextStyle(

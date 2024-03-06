@@ -54,9 +54,11 @@ class ParamSubmitJob {
 
 class ParamCompleteJob {
   var requestID, signature, feedback, lat, long;
+  
+  var rating;
   ParamCompleteJob({
     this.requestID,
-    //this.rating,
+    this.rating,
     this.signature,
     this.feedback,
     //this.technicalComment,
@@ -67,7 +69,7 @@ class ParamCompleteJob {
   Future<Map<String, dynamic>> toJson() async {
     Map<String, dynamic> json = {};
     json['RequestID'] = requestID;
-    //json['rating'] = rating;
+    json['rating'] = rating;
     json['signature'] = signature;
     json['comment'] = feedback;
     //json['technical_comment'] = technicalComment;

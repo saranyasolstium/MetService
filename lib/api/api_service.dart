@@ -161,12 +161,13 @@ class APIResponse<T> {
 
   updateResponse(http.Response? response) {
     try {
-      if (response!.statusCode == 401) {
-        print('logout');
-        Get.offAllNamed(NavPage.root);
-        AppController.to.storage.remove('token');
-        AppController.to.loginStatus.value = LoginStatus.logout;
-      }
+      print(response!.statusCode);
+      // if (response.statusCode == 401) {
+      //   print('logout');
+      //   Get.offAllNamed(NavPage.root);
+      //   AppController.to.storage.remove('token');
+      //   AppController.to.loginStatus.value = LoginStatus.logout;
+      // }
       if (error != null) {
         print('response - Empty');
       }

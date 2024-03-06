@@ -61,8 +61,13 @@ dependencies:
   toast: ^0.3.0
   photo_view: ^0.14.0
   dropdown_search: ^0.6.1
-  flutter_svg: ^2.0.9
+  flutter_svg: ^2.0.0+1 
   flutter_signature_pad: ^3.0.1
+  permission_handler: ^11.3.0
+  fluttertoast: ^8.2.4
+  jovial_svg: ^1.1.20
+  webview_flutter: ^4.5.0
+  shared_preferences: ^2.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

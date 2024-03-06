@@ -100,8 +100,8 @@ class AttendanceController extends GetxController {
     var status = (attendanceStatus.value as MAttendanceStatusResponse).data;
     if (status != null) {
       return !(jobStartedTime != null &&
-          status.siteId != '0' &&
-          status.serviceId != 0);
+          status.first.siteId != '0' &&
+          status.first.serviceId != 0);
     } else {
       return true;
     }
@@ -111,8 +111,8 @@ class AttendanceController extends GetxController {
     var status = (attendanceStatus.value as MAttendanceStatusResponse).data;
     if (status != null) {
       return (jobStartedTime != null &&
-          status.siteId == siteID &&
-          status.serviceId.toString() == serviceID);
+          status.first.siteId == siteID &&
+          status.first.serviceId.toString() == serviceID);
     } else {
       return false;
     }
