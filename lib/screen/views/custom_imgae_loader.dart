@@ -34,7 +34,7 @@ class CustomImageLoader extends StatelessWidget {
           );
         },
         errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-          return   Image.network(kCameraPlaceholder);// Fallback icon in case of error
+          return   Image.asset(kCameraPlaceholder);// Fallback icon in case of error
         },
       );
     }

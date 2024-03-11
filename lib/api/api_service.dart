@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/api/methods.dart';
+import 'package:eagle_pixels/common/logger.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
@@ -82,7 +83,6 @@ class API {
       error = "Something went wrong. Please try again";
     } finally {
       print('url -> ${endPoint.method.string} $url');
-      // print('Header -> ${endPoint.header}');
       print('body ->');
       printPrettyJson(body, indent: 2);
 
@@ -97,12 +97,11 @@ class API {
       //   print("response - Empty");
       // }
       // ignore: control_flow_in_finally
-      return APIResponse(
-        model,
-        response: response,
-        error: error,
-        isNeedModel: (model != null),
-      );
+      return APIResponse(model,
+          response: response,
+          error: error,
+          isNeedModel: (model != null),
+          endPoint: endPoint);
     }
   }
 
@@ -154,20 +153,25 @@ class APIResponse<T> {
   APIResponse(this._model,
       {required http.Response? response,
       this.error,
-      this.isNeedModel = false}) {
+      this.isNeedModel = false,
+      required EndPoint endPoint}) {
     // _model = object;
-    updateResponse(response);
+    updateResponse(response, endPoint);
   }
 
-  updateResponse(http.Response? response) {
+  updateResponse(http.Response? response, EndPoint endPoint) {
     try {
-      print(response!.statusCode);
-      // if (response.statusCode == 401) {
-      //   print('logout');
-      //   Get.offAllNamed(NavPage.root);
-      //   AppController.to.storage.remove('token');
-      //   AppController.to.loginStatus.value = LoginStatus.logout;
-      // }
+      print(endPoint.toString());
+      if (endPoint == EndPoint.profile ||
+          endPoint == EndPoint.getCustomerProductItemList) {
+        print(response!.statusCode);
+        if (response.statusCode == 401) {
+          print('logout');
+          Get.offAllNamed(NavPage.root);
+          AppController.to.storage.remove('token');
+          AppController.to.loginStatus.value = LoginStatus.logout;
+        }
+      }
       if (error != null) {
         print('response - Empty');
       }

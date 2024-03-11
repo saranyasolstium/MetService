@@ -5,14 +5,12 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/login_model.dart';
 import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
-import 'package:eagle_pixels/reuse/storage.dart';
-import 'package:eagle_pixels/screen/signup_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -48,6 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return currency.currencyName;
   }
+
+  
 
   @override
   Widget build(BuildContext context) {

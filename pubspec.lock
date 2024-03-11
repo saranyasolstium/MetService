@@ -113,6 +113,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  country_currency_pickers:
+    dependency: "direct main"
+    description:
+      name: country_currency_pickers
+      sha256: "5a6fd78f33f5c7806677b04675be14bb8a5da3826678817790ed871f1c024ce5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   cross_file:
     dependency: transitive
     description:

@@ -68,6 +68,7 @@ dependencies:
   jovial_svg: ^1.1.20
   webview_flutter: ^4.5.0
   shared_preferences: ^2.2.2
+  country_currency_pickers: ^3.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
