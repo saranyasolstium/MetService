@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyProfileScreen extends StatelessWidget {
   bool get isEngineer => AppController.to.isEngineer;
@@ -155,8 +157,7 @@ class MyProfileScreen extends StatelessWidget {
                                                 Navigator.of(context,
                                                         rootNavigator: true)
                                                     .pop(true);
-                                                AppController.to.storage
-                                                    .remove('token');
+                                                SharedPreferencesHelper.clearToken();
                                                 AppController.to.loginStatus
                                                     .value = LoginStatus.logout;
                                               },

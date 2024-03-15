@@ -28,14 +28,17 @@ extension TimeOutAction on TimeOutScreen {
         print('yes clicked');
         try {
           showLoading();
-         // AppController().verifyUser().then((result) async {
-            var model = await attendance.onClockOut();
-            if (model?.status?.isSuccess ?? false) {
-              navigator!
-                  .popUntil((route) => route.settings.name == NavPage.root);
-            } else {
-              Toast.show(model?.message ?? kErrorMsg, textStyle: Get.context);
-            }
+          // AppController().verifyUser().then((result) async {
+          var model = await attendance.onClockOut();
+          if (model?.status?.isSuccess ?? false) {
+            navigator!.popUntil((route) => route.settings.name == NavPage.root);
+          } else {
+            Toast.show(
+              model?.message ?? kErrorMsg,
+              backgroundColor: Colors.white,
+              textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+            );
+          }
           // }).catchError((error) {
           //   // Handle errors during verification
           //   print('Error during verification: $error');

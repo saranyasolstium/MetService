@@ -41,7 +41,8 @@ extension TimeInAction on TimeInScreen {
 
   Future getImage() async {
     try {
-          final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.camera);
 
       print('image picked');
       if (pickedFile != null) {
@@ -55,10 +56,18 @@ extension TimeInAction on TimeInScreen {
             attendance.attendanceStatus.value = resp;
             Get.toNamed(NavPage.clockOut);
           } else {
-            Toast.show(model?.message ?? kErrorMsg, textStyle: Get.context);
+            Toast.show(
+              model?.message ?? kErrorMsg,
+              backgroundColor: Colors.white,
+              textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+            );
           }
         } else {
-          Toast.show('Upload failed. please try again', textStyle: Get.context);
+          Toast.show(
+            'Upload failed. please try again',
+            backgroundColor: Colors.white,
+            textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+          );
         }
       } else {
         print('No image selected.');
@@ -68,20 +77,21 @@ extension TimeInAction on TimeInScreen {
     }
   }
 
-  Future<String?> uploadImage(filepath, url) async {
+  Future<String?> uploadImage(String filepath, String url) async {
     try {
       showLoading();
       print('image uploading');
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['service_id'] = '1';
       request.files.add(await http.MultipartFile.fromPath('image', filepath));
-      request.headers.addAll(Header.defaultHeader);
+      request.headers.addAll(await Header.defaultHeader);
       var res = await request.send();
       var jsonResponse = await http.Response.fromStream(res);
       return jsonDecode(jsonResponse.body)["status"];
       // return res.reasonPhrase;
     } catch (e) {
       print('Error$e');
+      return null;
     } finally {
       hideLoading();
     }

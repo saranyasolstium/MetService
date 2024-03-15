@@ -40,6 +40,7 @@ extension JobDetailAction on JobDetailScreen {
 
       if (isSuccess(status) || error == K.already_checkIn) {
         schedule.reloadList();
+        //scheduled_job_details_model.dart
         Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
       } else {
         Toast.show(message,
@@ -226,33 +227,7 @@ class JobDetailScreen extends StatelessWidget {
                                         fontSize: 16.dynamic),
                                   ),
                                   this.serviceReportView
-                                  // isNeedServiceReport
-                                  //     ? Container(
-                                  //         child: Column(
-                                  //           crossAxisAlignment:
-                                  //               CrossAxisAlignment.start,
-                                  //           children: [
-                                  //             SizedBox(
-                                  //               height: 10.dynamic,
-                                  //             ),
-                                  //             Divider(
-                                  //               color: Colors.grey,
-                                  //             ),
-                                  //             SizedBox(
-                                  //               height: 10.dynamic,
-                                  //             ),
-                                  //             Text(
-                                  //               'Service Report',
-                                  //               style: TextStyle(
-                                  //                   color: Colour.appBlue,
-                                  //                   fontWeight: FontWeight.w400,
-                                  //                   fontSize: 16.dynamic),
-                                  //             ),
-                                  //             this.serviceReportView
-                                  //           ],
-                                  //         ),
-                                  //       )
-                                  //     : Container(), ///
+                                  
                                 ],
                               ),
                             ),
@@ -329,12 +304,24 @@ extension JobDetailWidgets on JobDetailScreen {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             JobDetailTitleDescriptionView(
-                'Service Name:', detail.aTeamName ?? 'NA'),
-            JobDetailAmountDescriptionView(
-              'Service Amount',
-              () async =>
-                  await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
-            ),
+                'Service Name:', detail.aServiceName ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'SubService Name:', detail.aSubServiceName ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Service Type:', detail.aTeamName ?? 'NA'),
+            // JobDetailAmountDescriptionView(
+            //   'Service Amount',
+            //   () async =>
+            //       await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
+            // ),
           ],
         ),
         SizedBox(
@@ -347,68 +334,20 @@ extension JobDetailWidgets on JobDetailScreen {
                 'Service date:', detail.aBookingDate ?? 'NA'),
             JobDetailTitleDescriptionView(
                 'Schedule Time:', detail.aBookingTime ?? 'NA'),
-
-            // Expanded(
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       Text(
-            //         'Booking Time',
-            //         style: TextStyle(
-            //             color: Colour.appDarkGrey,
-            //             fontWeight: FontWeight.w400,
-            //             fontSize: 12.dynamic),
-            //       ),
-            //       SizedBox(
-            //         height: 4.dynamic,
-            //       ),
-            //       GestureDetector(
-            //         onTap: () async {
-            //           final floorText = detail.aBookingTime;
-            //           if (floorText != null && floorText.length > 3) {
-            //             final isPDF =
-            //                 floorText.substring(floorText.length - 3) == 'pdf';
-            //             if (isPDF) {
-            //               Get.bottomSheet(
-            //                 Center(
-            //                   child: Container(
-            //                     child: PDFViewer(
-            //                       document:
-            //                           await PDFDocument.fromURL(floorText),
-            //                     ),
-            //                   ),
-            //                 ),
-            //                 isScrollControlled: true,
-            //                 ignoreSafeArea: false,
-            //               );
-            //             } else {
-            //               Get.bottomSheet(
-            //                 Center(
-            //                   child: PhotoView(
-            //                     imageProvider: NetworkImage(floorText),
-            //                   ),
-            //                 ),
-            //                 isScrollControlled: true,
-            //                 ignoreSafeArea: false,
-            //               );
-            //             }
-            //           } else {
-            //             Toast.show('Invalid Floor Plan',
-            //                 textStyle: Get.context);
-            //           }
-            //         },
-            //         child: Text(
-            //           detail.aFloorPlanName ?? 'NA',
-            //           style: TextStyle(
-            //               color: Colour.appBlue,
-            //               fontWeight: FontWeight.w600,
-            //               fontSize: 14.dynamic),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            
+            JobDetailAmountDescriptionView(
+              'Service Amount',
+              () async =>
+                  await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
+            ),
           ],
         ),
       ],
@@ -472,7 +411,10 @@ extension JobDetailWidgets on JobDetailScreen {
                   this.onStartJob();
                 },
                 child: Text(
-                  'Start Job',
+                  ((detail.aEnginnerStatus ?? 0) == 2 ||
+                          (detail.aEnginnerStatus ?? 0) == 1)
+                      ? 'Resume Job'
+                      : 'Start Job',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16.dynamic,

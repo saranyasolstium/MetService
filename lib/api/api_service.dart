@@ -3,12 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:eagle_pixels/api/headers.dart';
 import 'package:eagle_pixels/api/methods.dart';
-import 'package:eagle_pixels/common/logger.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:flutter/material.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'urls.dart';
@@ -34,7 +33,7 @@ class API {
     bool needLoader = true,
   }) async {
     final String url = route.url(endPoint.string);
-    final Map<String, String> safeHeader = header ??= endPoint.header;
+    Map<String, String> safeHeader = header ?? await endPoint.header;
     http.Response? response;
     String? error;
 
@@ -83,6 +82,7 @@ class API {
       error = "Something went wrong. Please try again";
     } finally {
       print('url -> ${endPoint.method.string} $url');
+      // print('Header -> ${endPoint.header}');
       print('body ->');
       printPrettyJson(body, indent: 2);
 
@@ -97,11 +97,12 @@ class API {
       //   print("response - Empty");
       // }
       // ignore: control_flow_in_finally
-      return APIResponse(model,
-          response: response,
-          error: error,
-          isNeedModel: (model != null),
-          endPoint: endPoint);
+      return APIResponse(
+        model,
+        response: response,
+        error: error,
+        isNeedModel: (model != null),
+      );
     }
   }
 
@@ -153,29 +154,29 @@ class APIResponse<T> {
   APIResponse(this._model,
       {required http.Response? response,
       this.error,
-      this.isNeedModel = false,
-      required EndPoint endPoint}) {
+      this.isNeedModel = false}) {
     // _model = object;
-    updateResponse(response, endPoint);
+    updateResponse(response);
   }
 
-  updateResponse(http.Response? response, EndPoint endPoint) {
+  updateResponse(http.Response? response) {
     try {
-      print(endPoint.toString());
-      if (endPoint == EndPoint.profile ||
-          endPoint == EndPoint.getCustomerProductItemList) {
-        print(response!.statusCode);
-        if (response.statusCode == 401) {
-          print('logout');
-          Get.offAllNamed(NavPage.root);
-          AppController.to.storage.remove('token');
-          AppController.to.loginStatus.value = LoginStatus.logout;
-        }
-      }
       if (error != null) {
         print('response - Empty');
+        throw Exception(error!);
       }
       responseObj = response;
+      // Check if the status code is 401
+      if (responseObj!.statusCode == 401) {
+        print('Logout due to status code 401');
+                print(response?.body);
+
+        Get.offAllNamed(NavPage.root);
+        SharedPreferencesHelper.clearToken();
+        AppController.to.loginStatus.value = LoginStatus.logout;
+        return;
+      }
+
       var decoded = jsonDecode(responseObj!.body);
 
       if (decoded != null) {

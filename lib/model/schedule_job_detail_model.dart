@@ -293,7 +293,7 @@ print(amount);
 
   List<ACheckListItem> get checkList => [];
 
-  String? get aServiceId => requesterId.toString();
+  String? get aServiceId => id.toString();
 
   List<AJobTime>? aAttendanceEntry;
 
@@ -330,4 +330,6 @@ print(amount);
   double? get aLatIn => latIn ?? 0;
 
   double? get aLatOut => latOut ?? 0;
+  
+  int? get aEnginnerStatus => engineerStatus ;
 }

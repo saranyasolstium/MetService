@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:eagle_pixels/api/urls.dart';
-import 'package:eagle_pixels/controller/app_controller.dart';
-import 'package:eagle_pixels/reuse/storage.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 
 extension Header on EndPoint {
   static Map<String, String> get profile {
@@ -21,36 +20,35 @@ extension Header on EndPoint {
     return map;
   }
 
-  static Map<String, String> get defaultHeader {
+  static Future<Map<String, String>> get defaultHeader async {
+    String? token = await SharedPreferencesHelper.getToken();
     Map<String, String> map = {
       HttpHeaders.acceptHeader: 'application/json',
-      HttpHeaders.authorizationHeader:
-          'Bearer ${AppController.to.storage.token}'
+      HttpHeaders.authorizationHeader: 'Bearer $token'
     };
     return map;
   }
 
-  static Map<String, String> get submitJobHeader {
+  static Future<Map<String, String>> get submitJobHeader async {
+    String? token = await SharedPreferencesHelper.getToken();
     Map<String, String> map = {
       HttpHeaders.acceptHeader: 'application/json',
       HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.authorizationHeader:
-          'Bearer ${AppController.to.storage.token}'
+      HttpHeaders.authorizationHeader: 'Bearer $token'
     };
     return map;
   }
 
-  Map<String, String> get header {
+  Future<Map<String, String>> get header async {
     switch (this) {
       case EndPoint.profile:
-        return Header.defaultHeader;
+        return await Header.defaultHeader;
       case EndPoint.login:
         return {};
       case EndPoint.submitJob:
-        return Header.submitJobHeader;
+        return await Header.submitJobHeader;
       default:
-        Header.defaultHeader;
+        return await Header.defaultHeader;
     }
-    return Header.defaultHeader;
   }
 }

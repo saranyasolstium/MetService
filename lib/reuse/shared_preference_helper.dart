@@ -8,6 +8,22 @@ class SharedPreferencesHelper {
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
+  static Future<String?> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
+  static Future<void> setToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  static Future<void> clearToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+  }
+
+
   Future<void> saveCurrencyCode(String currencyCode) async {
     final SharedPreferences prefs = await _prefs;
     await prefs.setString('currencyCode', currencyCode);

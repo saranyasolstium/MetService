@@ -266,9 +266,9 @@ class AttendenceDetail extends StatelessWidget {
                   width: 61.dynamic,
                   height: 61.dynamic,
                  child: SvgPicture.network(
-                          'https://met.solstium.net/admin/images/user-profile.svg',
+                      AppController.user.employeeDetails!.profileImage ?? '',
                           placeholderBuilder: (BuildContext context) =>
-                              Image.network(kCameraPlaceholder),
+                              Image.asset(kCameraPlaceholder),
                         ),
               ),
               SizedBox(

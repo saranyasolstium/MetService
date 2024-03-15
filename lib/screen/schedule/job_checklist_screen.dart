@@ -76,21 +76,20 @@ extension StopJobAction on JobCheckListScreen {
   }
 
   onCompleteJob(BuildContext context) async {
-      // for (var element in checkListController.checkList) {
-      //   if (element.selectedItem.length == 0 &&
-      //       (element.options?.length ?? 0) > 0) {
-      //     Toast.show('Please Complete CheckList', textStyle: Get.context);
-      //     return;
-      //   }
-      // }
+    // for (var element in checkListController.checkList) {
+    //   if (element.selectedItem.length == 0 &&
+    //       (element.options?.length ?? 0) > 0) {
+    //     Toast.show('Please Complete CheckList', textStyle: Get.context);
+    //     return;
+    //   }
+    // }
 
-      // final isCompleted = await _onSubmitWork();
-      // if (isCompleted) {
-      //   Get.toNamed(NavPage.jobServiceReportScreen);
-      // }
+    // final isCompleted = await _onSubmitWork();
+    // if (isCompleted) {
+    //   Get.toNamed(NavPage.jobServiceReportScreen);
+    // }
 
-       Get.toNamed(NavPage.jobServiceReportScreen);
-
+    Get.toNamed(NavPage.jobServiceReportScreen);
 
     // showDialog(
     //   context: context,
@@ -117,15 +116,7 @@ class JobCheckListScreen extends StatelessWidget {
       Get.put(JobCheckListController());
   @override
   Widget build(BuildContext context) {
-    // if (!checkListController.isOneTimeListRequested) {
-    //   checkListController.isOneTimeListRequested = true;
-    //   checkListController
-    //       .fetchCheckList(controller.detail.value.aServiceId.toString());
-    //   // Future.delayed(Duration(milliseconds: 100), () {
-    //   //   checkListController.isOneTimeListRequested = true;
-    //   //   checkListController.fetchCheckList(serviceID);
-    //   // });
-    // }
+    
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -290,10 +281,11 @@ class JobCheckListScreen extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () {
-                                schedule.reloadList();
-                                navigator!.popUntil((route) =>
-                                    route.settings.name ==
-                                    NavPage.scheduleScreen);
+                                // schedule.reloadList();
+                                // navigator!.popUntil((route) =>
+                                //     route.settings.name ==
+                                //     NavPage.scheduleScreen);
+                                onStopJob();
                               },
                               child: Text(
                                 'Cancel',

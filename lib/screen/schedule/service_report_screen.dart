@@ -9,6 +9,7 @@ import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -31,6 +32,66 @@ class ServiceReportScreen extends StatelessWidget {
   final controller = Get.find<JobDetailController>();
   AJobDetail get detail {
     return controller.detail.value;
+  }
+
+  Widget get serviceReportView {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Service Name:', detail.aServiceName ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'SubService Name:', detail.aSubServiceName ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Service Type:', detail.aTeamName ?? 'NA'),
+            // JobDetailAmountDescriptionView(
+            //   'Service Amount',
+            //   () async =>
+            //       await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
+            // ),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Service date:', detail.aBookingDate ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Schedule Time:', detail.aBookingTime ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.start,
+        //   children: [
+
+        //     JobDetailAmountDescriptionView(
+        //       'Service Amount',
+        //       () async =>
+        //           await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
+        //     ),
+        //   ],
+        // ),
+      ],
+    );
   }
 
   @override
@@ -107,6 +168,33 @@ class ServiceReportScreen extends StatelessWidget {
                               );
                             },
                           ),
+                          SizedBox(height: 12.dynamic),
+
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Service information:',
+                                  style: TextStyle(
+                                      color: Colour.appBlue,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16.dynamic),
+                                ),
+                                this.serviceReportView
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 12.dynamic),
+
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
@@ -277,7 +365,6 @@ class ServiceReportScreen extends StatelessWidget {
                                 //     print(controller.starRate.value);
                                 //   },
                                 // ),
-                             
                               ],
                             ),
                           ),
@@ -334,13 +421,22 @@ class ServiceReportScreen extends StatelessWidget {
                                   );
 
                                   if (status != null) {
-                                    Toast.show(status, textStyle: Get.context);
+                                    Toast.show(
+                                      status,
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.0, color: Colors.black),
+                                    );
                                   } else {
                                     Get.toNamed(NavPage.jobCompleted);
                                   }
                                 } else {
-                                  Toast.show('Please put your signature',
-                                      textStyle: Get.context);
+                                  Toast.show(
+                                    'Please put your signature',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
                                 }
                               },
                               child: Text(

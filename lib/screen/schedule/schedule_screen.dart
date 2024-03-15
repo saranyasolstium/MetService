@@ -55,6 +55,42 @@ class ScheduleScreen extends StatelessWidget {
                   SizedBox(
                     height: 17.dynamic,
                   ),
+                  Obx(
+                    () => schedule.viewState.value.isSuccess
+                        ? Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 14.dynamic,
+                              vertical: 13.dynamic,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              color: Colors.white,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Total Job Count : ',
+                                  style: TextStyle(
+                                      color: Colour.appBlack,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.dynamic),
+                                ),
+                                Text(
+                                  schedule.scheduleList.length.toString(),
+                                  style: TextStyle(
+                                      color: Colour.appBlue,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.dynamic),
+                                ),
+                              ],
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                  ),
+                  SizedBox(
+                    height: 17.dynamic,
+                  ),
                   Expanded(
                     child: Obx(() {
                       if (schedule.viewState.value.isSuccess) {
@@ -80,8 +116,12 @@ class ScheduleScreen extends StatelessWidget {
                                     // if (attendance.isClockedIn) {
                                     if (false) {
                                       Toast.show(
-                                          'Please clock out the attendance',
-                                          textStyle: Get.context);
+                                        'Please clock out the attendance',
+                                        backgroundColor: Colors.white,
+                                        textStyle: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      );
                                     } else {
                                       Get.to(
                                         () => JobDetailScreen(

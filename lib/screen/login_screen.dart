@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/colors.dart';
@@ -8,9 +11,12 @@ import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,28 +33,129 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isApiCallService = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  Position? _currentPosition;
+  String? _countryCode;
 
   @override
   void initState() {
     super.initState();
     _obsecureText = false;
+    _getLocation();
   }
 
-  Future<String?> getLocalCurrencyCode() async {
-    var locale = Localizations.localeOf(context);
-    var currency = NumberFormat.simpleCurrency(locale: locale.toString());
-    await SharedPreferencesHelper.instance
-        .saveCurrencyCode(currency.currencyName!);
+   Future<void> _getLocation() async {
+  try {
+    Position position = await AppController().determinePosition();
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude, position.longitude);
+    if (placemarks.isNotEmpty) {
+      Placemark placemark = placemarks.first;
+      String? countryCode = placemark.isoCountryCode;
+      if (countryCode != null) {
+        String? currencyCode =
+            await getCurrencyCodeFromCountryCode(countryCode);
+        if (currencyCode != null) {
+          // Save the currency code using SharedPreferences
+          await SharedPreferencesHelper.instance.saveCurrencyCode(currencyCode);
+          await SharedPreferencesHelper.instance.saveCurrencySymbol("₹");
 
-    // Save the currency symbol using SharedPreferences
-    await SharedPreferencesHelper.instance
-        .saveCurrencySymbol(currency.currencySymbol);
+          print('Currency Code: $currencyCode');
+        } else {
+          print('Currency code not found for country code: $countryCode');
+        }
+      } else {
+        print('Country code not found.');
+      }
+    } else {
+      print('No placemarks found.');
+    }
+  } catch (e) {
+    print('Error getting location or currency code: $e');
+  }
+}
 
-    return currency.currencyName;
+
+
+  //   Future<void> _getLocation() async {
+  //   // Check if the widget is still mounted
+  //   if (!mounted) return;
+
+  //   // Check if location permission is already granted
+  //   PermissionStatus permission = await Permission.location.status;
+  //   if (permission != PermissionStatus.granted &&
+  //       permission != PermissionStatus.denied) {
+  //     try {
+  //       // Request location permission
+  //       permission = await Permission.location.request();
+  //     } catch (e) {
+  //       print("Error requesting location permission: $e");
+  //       return;
+  //     }
+  //   }
+
+  //   // If permission is granted, get the location
+  //   if (permission == PermissionStatus.granted) {
+  //     try {
+  //       // Get the current position
+  //       Position position = await Geolocator.getCurrentPosition(
+  //           desiredAccuracy: LocationAccuracy.high);
+  //       if (!mounted) return;
+  //       setState(() {
+  //         _currentPosition = position;
+  //         // Print latitude and longitude values
+  //         print('Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}');
+  //       });
+
+  //       // Get the address details from latitude and longitude
+  //       List<Placemark> placemarks = await placemarkFromCoordinates(
+  //           _currentPosition!.latitude, _currentPosition!.longitude);
+  //       if (placemarks.isNotEmpty) {
+  //         Placemark placemark = placemarks.first;
+  //         // Print address details
+  //         print(
+  //             'Address: ${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}, ${placemark.isoCountryCode}');
+  //         String? currencyCode = await getCurrencyCodeFromCountryCode(
+  //             placemark.isoCountryCode.toString());
+
+  //         await SharedPreferencesHelper.instance
+  //             .saveCurrencyCode(currencyCode!);
+
+  //         // Save the currency symbol using SharedPreferences
+  //         await SharedPreferencesHelper.instance.saveCurrencySymbol("₹");
+  //         print(currencyCode);
+  //       }
+  //     } catch (e) {
+  //       print("Error getting location: $e");
+  //     }
+  //   } else {
+  //     // Handle the case where the user denied location permission
+  //     print('Location permission denied by user');
+  //     // Optionally, prompt the user to check app permissions or provide instructions on enabling location services.
+  //   }
+  // }
+
+
+  Future<String?> getCurrencyCodeFromCountryCode(String countryCode) async {
+    try {
+      final response = await http
+          .get(Uri.parse('https://restcountries.com/v3.1/alpha/$countryCode'));
+      if (response.statusCode == 200) {
+        final jsonResult = json.decode(response.body);
+        final currencies = jsonResult[0]['currencies'];
+        print(currencies);
+        if (currencies != null && currencies.isNotEmpty) {
+          // Assuming there's only one currency per country, so taking the first one
+          final currencyCode = currencies.keys.first;
+          return currencyCode;
+        }
+      }
+    } catch (e) {
+      print("Error fetching currency code: $e");
+    }
+    return null;
   }
 
   
-
   @override
   Widget build(BuildContext context) {
     final emailField = TextFormField(
@@ -104,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () async {
           var email = _emailController.text;
           var password = _passwordController.text;
-          getLocalCurrencyCode();
+          _getLocation();
           String? toCurrency =
               await SharedPreferencesHelper.instance.readCurrencyCode();
           print(toCurrency);
@@ -127,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
               var token = dataMap['token'] as String?;
 
               if (token != null && token.isNotEmpty) {
-                await AppController.to.storage.write('token', token);
+                SharedPreferencesHelper.setToken(token);
                 print('Stored Token - $token');
                 AppController.to.fetchProfile();
                 Future.delayed(

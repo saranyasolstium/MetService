@@ -100,6 +100,7 @@ abstract class AJobDetail {
   String? get aBookingAmount;
   String? get aBookingDate;
   String? get aBookingTime;
+  int? get aEnginnerStatus;
   
 
   List<ACheckListItem> get checkList;

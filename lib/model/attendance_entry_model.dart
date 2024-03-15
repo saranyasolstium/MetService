@@ -57,7 +57,7 @@ class MAttendanceEntry implements AJobTime {
 
   MAttendanceEntry.fromJson(Map<String, dynamic> json) {
     attendenceDate = json['AttendenceDate'];
-    print("saranya ${json['AttendenceDate']}");
+    print("saranya1 ${json['AttendenceDate']}");
     if (attendenceDate != null) {
       DateTime utcStartTime =
           DateTime.parse(json['AttendenceDate'] + "Z").toLocal();

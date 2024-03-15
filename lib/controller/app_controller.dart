@@ -6,7 +6,7 @@ import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:eagle_pixels/reuse/storage.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:flutter/material.dart';
@@ -166,7 +166,6 @@ Future<Position> determinePosition() async {
 }
 
 void _showLocationPermissionToast() {
-         // Toast.show('Location permissions are required for this app. Please enable them in the app settings.', textStyle: Get.context);
 
   Fluttertoast.showToast(
     msg: "Location permissions are required for this app. Please enable them in the app settings.",
@@ -202,10 +201,17 @@ void openLocationSettings() async {
     try {
       showLoading();
       print('image uploading');
+
+      // Await the default header
+      Map<String, String> headers = await Header.defaultHeader;
+
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['service_id'] = '1';
       request.files.add(await http.MultipartFile.fromPath('image', filepath));
-      request.headers.addAll(Header.defaultHeader);
+
+      // Assign the awaited header to the request.headers
+      request.headers.addAll(headers);
+
       var res = await request.send();
       var jsonResponse = await http.Response.fromStream(res);
       return jsonDecode(jsonResponse.body)["status"];
@@ -216,6 +222,7 @@ void openLocationSettings() async {
       hideLoading();
     }
   }
+
 
   static AppController get to => Get.find<AppController>();
 
@@ -258,13 +265,14 @@ void openLocationSettings() async {
       }
     } else {
       // loginStatus.value = LoginStatus.logout;
-      // TODO: try again request;
     }
   }
 
-  loadInitialState() async {
+   loadInitialState() async {
     await GetStorage.init();
-    if (storage.token.isNotEmpty) {
+    String? token = await SharedPreferencesHelper.getToken();
+
+    if (token != null && token.isNotEmpty) {
       fetchProfile();
     } else {
       loginStatus.value = LoginStatus.logout;

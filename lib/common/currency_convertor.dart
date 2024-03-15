@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class CurrencyConversionService {
-  static final CurrencyConversionService _instance = CurrencyConversionService._internal();
+  static final CurrencyConversionService _instance =
+      CurrencyConversionService._internal();
 
   factory CurrencyConversionService() {
     return _instance;
@@ -10,7 +11,8 @@ class CurrencyConversionService {
 
   CurrencyConversionService._internal();
 
-  Future<double> convertAmount(double amount, String fromCurrency, String toCurrency) async {
+  Future<double> convertAmount(
+      double amount, String fromCurrency, String toCurrency) async {
     try {
       const apiKey = '6ad17a10442becefdadff26e';
       final url = Uri.parse(
@@ -23,7 +25,8 @@ class CurrencyConversionService {
         final jsonResponse = json.decode(response.body);
         final rate = jsonResponse['conversion_rates'][toCurrency];
         if (rate is double) {
-          return amount * rate;
+          double result = amount * rate;
+          return double.parse(result.toStringAsFixed(2));
         } else {
           throw Exception('Invalid rate type');
         }

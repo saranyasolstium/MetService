@@ -63,7 +63,11 @@ extension CalendarAction on CalendarScreen {
     //comment by saranya
     if (AppController.to.isAttendanceEngineer) {
       if (attendance.selectedSite.value == null) {
-        Toast.show('invalid selected site', textStyle: Get.context);
+        Toast.show(
+          'invalid selected site',
+          backgroundColor: Colors.white,
+          textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+        );
         return;
       }
     }
@@ -136,20 +140,21 @@ extension CalendarAction on CalendarScreen {
     }
   }
 
-  Future<String?> uploadImage(filepath, url) async {
+  Future<String?> uploadImage(String filepath, String url) async {
     try {
       showLoading();
       print('image uploading');
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['service_id'] = '1';
       request.files.add(await http.MultipartFile.fromPath('image', filepath));
-      request.headers.addAll(Header.defaultHeader);
+      request.headers.addAll(await Header.defaultHeader);
       var res = await request.send();
       var jsonResponse = await http.Response.fromStream(res);
       return jsonDecode(jsonResponse.body)["status"];
       // return res.reasonPhrase;
     } catch (e) {
       print('Error$e');
+      return null; // Add a return statement here
     } finally {
       hideLoading();
     }
@@ -438,8 +443,8 @@ extension CalendarWidgets on CalendarScreen {
 
   Widget get calendar {
     return CalendarCarousel<Event>(
-    targetDateTime: DateTime.now().subtract(Duration(days: DateTime.now().day - 1)),
-
+      targetDateTime:
+          DateTime.now().subtract(Duration(days: DateTime.now().day - 1)),
 
       todayBorderColor: Colors.transparent,
       customDayBuilder: (isSelectable,

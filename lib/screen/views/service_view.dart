@@ -53,7 +53,6 @@ class ServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
     String? purchaseDateString = item.aPurchaseDate;
     DateTime? purchaseDate;
 
@@ -271,39 +270,40 @@ class ServiceView extends StatelessWidget {
             //       fontWeight: FontWeight.w600,
             //       fontSize: 14.dynamic),
             // ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                child: Text(
-                  'Site Address:',
-                  style: TextStyle(
-                      color: Colour.appDarkGrey,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 12.dynamic),
-                ),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  String query =
-                      Uri.encodeComponent(item.aCombinedAddress ?? '');
-                  String googleUrl =
-                      "https://www.google.com/maps/search/?api=1&query=$query";
-                  if (await canLaunch(googleUrl)) {
-                    await launch(googleUrl);
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
-                  child: Icon(
-                    Icons.location_on,
-                    size: 25,
-                    color: Colour.appDarkGrey,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  child: Text(
+                    'Site Address:',
+                    style: TextStyle(
+                        color: Colour.appDarkGrey,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 12.dynamic),
                   ),
                 ),
-              ),
-            ],
-          ),
+                GestureDetector(
+                  onTap: () async {
+                    String query =
+                        Uri.encodeComponent(item.aCombinedAddress ?? '');
+                    String googleUrl =
+                        "https://www.google.com/maps/search/?api=1&query=$query";
+                    if (await canLaunch(googleUrl)) {
+                      await launch(googleUrl);
+                    }
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
+                    child: Icon(
+                      Icons.location_on,
+                      size: 25,
+                      color: Colour.appDarkGrey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           Text(
             item.aCombinedAddress ?? 'NA',
             style: TextStyle(
