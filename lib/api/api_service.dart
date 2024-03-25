@@ -7,7 +7,6 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'urls.dart';
@@ -82,7 +81,7 @@ class API {
       error = "Something went wrong. Please try again";
     } finally {
       print('url -> ${endPoint.method.string} $url');
-      // print('Header -> ${endPoint.header}');
+      print('Header -> ${endPoint.toString()}');
       print('body ->');
       printPrettyJson(body, indent: 2);
 
@@ -97,12 +96,11 @@ class API {
       //   print("response - Empty");
       // }
       // ignore: control_flow_in_finally
-      return APIResponse(
-        model,
-        response: response,
-        error: error,
-        isNeedModel: (model != null),
-      );
+      return APIResponse(model,
+          response: response,
+          error: error,
+          isNeedModel: (model != null),
+          endPoint: endPoint);
     }
   }
 
@@ -154,28 +152,33 @@ class APIResponse<T> {
   APIResponse(this._model,
       {required http.Response? response,
       this.error,
-      this.isNeedModel = false}) {
+      this.isNeedModel = false,
+      required EndPoint endPoint}) {
     // _model = object;
-    updateResponse(response);
+    updateResponse(response, endPoint);
   }
 
-  updateResponse(http.Response? response) {
+  updateResponse(http.Response? response, EndPoint endPoint) {
     try {
+      print(endPoint.toString());
+
+      if (endPoint == EndPoint.profile ||
+          endPoint == EndPoint.getCustomerProductItemList ||
+          endPoint == EndPoint.scheduled_job_list) {
+        print(response!.statusCode);
+        if (response.statusCode == 401) {
+          print('logout');
+          Get.offAllNamed(NavPage.root);
+          AppController.to.storage.remove('token');
+          AppController.to.loginStatus.value = LoginStatus.logout;
+        }
+      }
+
       if (error != null) {
         print('response - Empty');
         throw Exception(error!);
       }
       responseObj = response;
-      // Check if the status code is 401
-      if (responseObj!.statusCode == 401) {
-        print('Logout due to status code 401');
-                print(response?.body);
-
-        Get.offAllNamed(NavPage.root);
-        SharedPreferencesHelper.clearToken();
-        AppController.to.loginStatus.value = LoginStatus.logout;
-        return;
-      }
 
       var decoded = jsonDecode(responseObj!.body);
 

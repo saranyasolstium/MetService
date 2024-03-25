@@ -69,6 +69,7 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? warrantyEnding;
   String? vendorWarranty;
   String? serviceType;
+  String? type;
   String? serviceAmount;
   int? engineerStatus;
   String? warrantyCard;
@@ -152,7 +153,7 @@ print(amount);
     engineerStatus = json['engineer_status'];
     warrantyCard = json['warranty_card'];
     aAddress = json['site_address'];
-
+    type=json['type'];
     siteAddress = json["address"];
     siteCity = json["site_city"];
     siteState = json["site_state"];
@@ -227,6 +228,7 @@ print(amount);
     data['service_amount'] = this.serviceAmount;
     data['engineer_status'] = this.engineerStatus;
     data['warranty_card'] = this.warrantyCard;
+    data['type']=this.type;
     return data;
   }
 
@@ -326,6 +328,8 @@ print(amount);
   String? get aFloorPlanName => subsiteName;
 
   String? get aEmployeeName => employeeName.toString();
+
+  String? get aType => type;
 
   double? get aLatIn => latIn ?? 0;
 

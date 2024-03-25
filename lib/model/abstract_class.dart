@@ -78,6 +78,7 @@ abstract class AJobDetail {
   String? get aPhoneNo;
   String? get aServiceName;
   String? get aSubServiceName;
+  String? get aType;
   // String? get aItem;
   // String? get aSerialNumber;
   // String? get aSite;

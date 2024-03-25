@@ -21,7 +21,6 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:signature/signature.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:toast/toast.dart';
 
 class ServiceReportScreen extends StatelessWidget {

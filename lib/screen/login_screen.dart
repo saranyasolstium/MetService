@@ -238,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 print('Stored Token - $token');
                 AppController.to.fetchProfile();
                 Future.delayed(
-                  Duration(seconds: 1),
+                  Duration(seconds: 0),
                   () =>
                       Get.snackbar("Login Success", 'Successfully logged in.'),
                 );

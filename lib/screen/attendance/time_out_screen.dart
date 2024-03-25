@@ -27,7 +27,7 @@ extension TimeOutAction on TimeOutScreen {
       if (value == true) {
         print('yes clicked');
         try {
-          showLoading();
+         // showLoading();
           // AppController().verifyUser().then((result) async {
           var model = await attendance.onClockOut();
           if (model?.status?.isSuccess ?? false) {
