@@ -24,16 +24,18 @@ import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../colors.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:eagle_pixels/common/logger.dart';
 
 // ignore: must_be_immutable
 extension JobDetailAction on JobDetailScreen {
   onStartJob() async {
     try {
-      showLoading();
-      var res = await schedule.onStartJob(service_id: detail.aServiceId ?? '0');
-      hideLoading();
+      // AppController().verifyUser().then((result) async {
+      // print(result.image?.path);
+      // if (result.image?.path != null && result.image!.path.isNotEmpty) {
+      // showLoading();
+      var res = await schedule.onStartJob(
+        service_id: detail.aServiceId ?? '0',
+      );
       String status = res[K.status] ?? '';
       String error = res['error'] ?? '';
       String message = res['message'] ?? res['error'] ?? kErrorMsg;
@@ -47,12 +49,21 @@ extension JobDetailAction on JobDetailScreen {
             backgroundColor: Colors.white,
             textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
       }
+      // }
+      //});
     } catch (e) {
       Toast.show('$e',
           backgroundColor: Colors.white,
           textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
       print(e);
     }
+  }
+
+  onCompleteJob() async {
+    print('saranya');
+    schedule.reloadList();
+    //scheduled_job_details_model.dart
+    Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
   }
 }
 
@@ -172,6 +183,9 @@ class JobDetailScreen extends StatelessWidget {
                                         fontSize: 16.dynamic),
                                   ),
                                   this.customerInformationView,
+                                  SizedBox(
+                                    height: 21.dynamic,
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -197,9 +211,6 @@ class JobDetailScreen extends StatelessWidget {
                                           }
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.only(
-                                              top: 20.dynamic,
-                                              bottom: 10.dynamic),
                                           child: Icon(
                                             Icons.location_on,
                                             size: 25,
@@ -227,7 +238,6 @@ class JobDetailScreen extends StatelessWidget {
                                         fontSize: 16.dynamic),
                                   ),
                                   this.serviceReportView
-                                  
                                 ],
                               ),
                             ),
@@ -317,18 +327,13 @@ extension JobDetailWidgets on JobDetailScreen {
           children: [
             JobDetailTitleDescriptionView(
                 'Service Type:', detail.aTeamName ?? 'NA'),
+            // JobDetailAmountDescriptionView(
+            //   'Service Amount',
+            //   () async =>
+            //       await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
+            // ),
           ],
         ),
-        //  SizedBox(
-        //   height: 20.dynamic,
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: [
-        //     JobDetailTitleDescriptionView(
-        //         'Type:', detail.aType ?? 'NA'),
-        //   ],
-        // ),
         SizedBox(
           height: 20.dynamic,
         ),
@@ -347,7 +352,6 @@ extension JobDetailWidgets on JobDetailScreen {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            
             JobDetailAmountDescriptionView(
               'Service Amount',
               () async =>
@@ -413,12 +417,16 @@ extension JobDetailWidgets on JobDetailScreen {
               ),
               child: TextButton(
                 onPressed: () {
-                  this.onStartJob();
+                  //this.onStartJob();
+                  ((detail.aEnginnerStatus ?? 0) == 2 ||
+                          (detail.aEnginnerStatus ?? 0) == 1)
+                      ? this.onCompleteJob()
+                      : this.onStartJob();
                 },
                 child: Text(
                   ((detail.aEnginnerStatus ?? 0) == 2 ||
                           (detail.aEnginnerStatus ?? 0) == 1)
-                      ? 'Resume Job'
+                      ? 'Complete Job'
                       : 'Start Job',
                   style: TextStyle(
                       color: Colors.white,

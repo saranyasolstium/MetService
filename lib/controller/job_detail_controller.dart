@@ -14,6 +14,8 @@ class JobDetailController extends GetxController {
   // late Rx<MSite?> selectedSite = Rx(null);
 
   final signatureController = SignatureController().obs;
+  final signatureTechnicianController = SignatureController().obs;
+
   final Rx<double> starRate = 0.toDouble().obs;
   final RxString feedback = ''.obs;
   final RxString engineerFeedback = ''.obs;

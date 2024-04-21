@@ -6,6 +6,8 @@ class MShowAttendenceResponse implements Codable {
   String? message;
   List<MShowAttendenceDetail>? data;
 
+    MShowAttendenceResponse(); 
+
   fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
@@ -15,6 +17,8 @@ class MShowAttendenceResponse implements Codable {
         data?.add(new MShowAttendenceDetail.fromJson(v));
       });
     }
+        
+
     return this;
   }
 
@@ -131,3 +135,5 @@ class MShowAttendenceDetail implements AShowAttendance {
 
   
 }
+
+

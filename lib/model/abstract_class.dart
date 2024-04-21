@@ -78,7 +78,6 @@ abstract class AJobDetail {
   String? get aPhoneNo;
   String? get aServiceName;
   String? get aSubServiceName;
-  String? get aType;
   // String? get aItem;
   // String? get aSerialNumber;
   // String? get aSite;
@@ -95,6 +94,9 @@ abstract class AJobDetail {
   String? get aFloorPlan;
   String? get aFloorPlanName;
   String? get aCombinedAddress;
+  String? get aAttention;
+  String? get aCustomerType;
+  String? get aServiceOrderNo;
 
   // Booking Information
   String? get aTeamName;
@@ -102,7 +104,6 @@ abstract class AJobDetail {
   String? get aBookingDate;
   String? get aBookingTime;
   int? get aEnginnerStatus;
-  
 
   List<ACheckListItem> get checkList;
 }

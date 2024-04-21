@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:eagle_pixels/colors.dart';
@@ -23,7 +24,19 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:signature/signature.dart';
 import 'package:toast/toast.dart';
 
-class ServiceReportScreen extends StatelessWidget {
+class ServiceReportScreen extends StatefulWidget {
+  final String imagePath;
+
+  const ServiceReportScreen({Key? key, required this.imagePath})
+      : super(key: key);
+  @override
+  _ServiceReportScreenState createState() => _ServiceReportScreenState();
+}
+
+class _ServiceReportScreenState extends State<ServiceReportScreen> {
+  String? selectedPaymentMode = 'Cash';
+  String? selectedChemist = 'Advion Cockroach Gel';
+
   final TimerController time = Get.find();
   final JobCheckListController checkListController = Get.find();
   final ScheduleListController schedule = Get.find();
@@ -56,11 +69,28 @@ class ServiceReportScreen extends StatelessWidget {
           children: [
             JobDetailTitleDescriptionView(
                 'Service Type:', detail.aTeamName ?? 'NA'),
-            // JobDetailAmountDescriptionView(
-            //   'Service Amount',
-            //   () async =>
-            //       await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
-            // ),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Customer Type:', detail.aCustomerType ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Service Order No:', detail.aServiceOrderNo ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Attention:', detail.aAttention ?? 'NA'),
           ],
         ),
         SizedBox(
@@ -78,17 +108,6 @@ class ServiceReportScreen extends StatelessWidget {
         SizedBox(
           height: 20.dynamic,
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: [
-
-        //     JobDetailAmountDescriptionView(
-        //       'Service Amount',
-        //       () async =>
-        //           await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
-        //     ),
-        //   ],
-        // ),
       ],
     );
   }
@@ -168,7 +187,6 @@ class ServiceReportScreen extends StatelessWidget {
                             },
                           ),
                           SizedBox(height: 12.dynamic),
-
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
@@ -188,12 +206,176 @@ class ServiceReportScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16.dynamic),
                                 ),
-                                this.serviceReportView
+                                serviceReportView
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 12.dynamic,
+                          ),
+                          detail.aServiceName == "Pest Control Management"
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(6.dynamic),
+                                    color: Colors.white,
+                                  ),
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 17.dynamic),
+                                  padding: EdgeInsets.all(14.dynamic),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'Chemical list:',
+                                        style: TextStyle(
+                                          fontSize: 14.dynamic,
+                                          color: Colour.appBlack,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      DropdownButton<String>(
+                                        value: selectedChemist,
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            selectedChemist = newValue!;
+                                            print(selectedChemist);
+                                          });
+                                        },
+                                        items: <String>[
+                                          "Advion Cockroach Gel",
+                                          "Insect Detector 100i",
+                                          "Deltacide (Misting)",
+                                          "Fogging Solution (W)",
+                                          "Diesel",
+                                          "Demand 2.5 CS",
+                                          "NewCyper 15WP",
+                                          "Newcyper 6.5 EC",
+                                          "Temprid SC",
+                                          "Tenopa SC",
+                                          "Rodent bait box",
+                                          "Rodent bait",
+                                          "Newcumin Tracking Powder",
+                                          "Rodent glueboard tamper proof box",
+                                          "Rodent glueboard ",
+                                          "Optigard ant gel",
+                                          "Termikil powder",
+                                          "Premise 200 SC",
+                                          "Xterm AG baiting",
+                                          "Xterm IG station",
+                                          "Rat cage",
+                                          "Anti malaria oil",
+                                          "Spar 1%",
+                                          "Mosquito dunk (BTI)",
+                                          "Dome Trap",
+                                          "Sulphur powder",
+                                          "Ultrathor",
+                                          "Ultriset"
+                                        ].map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
+                          SizedBox(height: 12.dynamic),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Payment Mode :',
+                                      style: TextStyle(
+                                        fontSize: 14.dynamic,
+                                        color: Colour.appBlack,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: selectedPaymentMode,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedPaymentMode = newValue!;
+                                          print(selectedPaymentMode);
+                                        });
+                                      },
+                                      items: <String>[
+                                        'Cash',
+                                        'Bank Transfer',
+                                        'Others'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 12.dynamic,
+                                ),
+                                selectedPaymentMode == "Bank Transfer"
+                                    ? Image.asset(
+                                        'images/met_sgqr.jpg',
+                                        fit: BoxFit.fill,
+                                        height: 400.dynamic,
+                                      )
+                                    : SizedBox(),
+                                selectedPaymentMode == "Others"
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          color: Colour.appLightGrey,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                        child: TextFormField(
+                                          onChanged: (txt) {
+                                            controller.feedback.value = txt;
+                                          },
+                                          obscureText: false,
+                                          // controller: _remarkController,
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              fontSize: 14.dynamic,
+                                              fontWeight: FontWeight.w300),
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.fromLTRB(
+                                                20.0, 15.0, 20.0, 15.0),
+                                            hintText: "Others",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
                               ],
                             ),
                           ),
                           SizedBox(height: 12.dynamic),
-
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
@@ -251,55 +433,64 @@ class ServiceReportScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 12.dynamic),
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(6.dynamic),
-                          //     color: Colors.white,
-                          //   ),
-                          //   margin:
-                          //       EdgeInsets.symmetric(horizontal: 17.dynamic),
-                          //   padding: EdgeInsets.all(14.dynamic),
-                          //   child: Column(
-                          //     mainAxisSize: MainAxisSize.min,
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       Text(
-                          //         'Engineer Feedback',
-                          //         style: TextStyle(
-                          //           fontSize: 12.dynamic,
-                          //           fontWeight: FontWeight.w400,
-                          //           color: Colour.appText,
-                          //         ),
-                          //       ),
-                          //       SizedBox(height: 12.dynamic),
-                          //       Container(
-                          //         decoration: BoxDecoration(
-                          //           color: Colour.appLightGrey,
-                          //           borderRadius: BorderRadius.circular(5.0),
-                          //         ),
-                          //         child: TextFormField(
-                          //           onChanged: (txt) {
-                          //             controller.engineerFeedback.value = txt;
-                          //           },
-                          //           obscureText: false,
-                          //           // controller: _remarkController,
-                          //           keyboardType: TextInputType.multiline,
-                          //           maxLines: 4,
-                          //           style: TextStyle(
-                          //               fontSize: 14.dynamic,
-                          //               fontWeight: FontWeight.w300),
-                          //           decoration: InputDecoration(
-                          //             contentPadding: EdgeInsets.fromLTRB(
-                          //                 20.0, 15.0, 20.0, 15.0),
-                          //             hintText: "Write your feedback",
-                          //             border: InputBorder.none,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(height: 12.dynamic),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Technician E-Sign',
+                                      style: TextStyle(
+                                        fontSize: 12.dynamic,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colour.appText,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller
+                                            .signatureTechnicianController.value
+                                            .clear();
+                                      },
+                                      child: Text(
+                                        'Clear',
+                                        style: TextStyle(
+                                          fontSize: 12.dynamic,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colour.appBlue,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 12.dynamic),
+                                DottedBorder(
+                                  color: Colour.appDarkGrey,
+                                  borderType: BorderType.RRect,
+                                  dashPattern: [4.dynamic, 4.dynamic],
+                                  child: Signature(
+                                    height: 67.dynamic,
+                                    width: Get.width - 60.dynamic,
+                                    controller: controller
+                                        .signatureTechnicianController.value,
+                                    backgroundColor: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
@@ -346,24 +537,55 @@ class ServiceReportScreen extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(height: 10.dynamic),
-                                // RatingBar.builder(
-                                //   unratedColor: HexColor.fromHex('B1D7DD'),
-                                //   initialRating: 0,
-                                //   minRating: 1,
-                                //   direction: Axis.horizontal,
-                                //   allowHalfRating: false,
-                                //   itemCount: 5,
-                                //   itemPadding:
-                                //       EdgeInsets.symmetric(horizontal: 4.0),
-                                //   itemBuilder: (context, _) => Icon(
-                                //     Icons.star,
-                                //     color: Colors.amber,
-                                //   ),
-                                //   onRatingUpdate: (rat) {
-                                //     controller.starRate.value = rat;
-                                //     print(controller.starRate.value);
-                                //   },
-                                // ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 12.dynamic),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Technician Feedback',
+                                  style: TextStyle(
+                                    fontSize: 12.dynamic,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colour.appText,
+                                  ),
+                                ),
+                                SizedBox(height: 12.dynamic),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colour.appLightGrey,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: TextFormField(
+                                    onChanged: (txt) {
+                                      controller.engineerFeedback.value = txt;
+                                    },
+                                    obscureText: false,
+                                    // controller: _remarkController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 4,
+                                    style: TextStyle(
+                                        fontSize: 14.dynamic,
+                                        fontWeight: FontWeight.w300),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(
+                                          20.0, 15.0, 20.0, 15.0),
+                                      hintText: "Write your feedback",
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -410,14 +632,32 @@ class ServiceReportScreen extends StatelessWidget {
                                 var bytes = await controller
                                     .signatureController.value
                                     .toPngBytes();
-                                if (bytes != null) {
+                                var techBytes = await controller
+                                    .signatureTechnicianController.value
+                                    .toPngBytes();
+                                File imageFile = File(widget.imagePath);
+                                List<int> imageBytes =
+                                    await imageFile.readAsBytes();
+
+                                String base64Image = base64Encode(imageBytes);
+                                if (bytes != null && techBytes != null) {
                                   showLoading();
-                                  String? status =
-                                      await checkListController.onCompleteJob(
-                                    requestID: detail.aServiceId ?? '0',
-                                    signature: base64Encode(bytes),
-                                    feedback: controller.feedback.value,
-                                  );
+
+                                  String? status = await checkListController
+                                      .onCompleteJob(
+                                          requestID: detail.aServiceId ?? '0',
+                                          signature: base64Encode(bytes),
+                                          technicianSign: base64Encode(
+                                              techBytes),
+                                          feedback: controller.feedback.value,
+                                          paymentMode: selectedPaymentMode!,
+                                          chemicalList: detail.aServiceName ==
+                                                  "Pest Control Management"
+                                              ? selectedChemist!
+                                              : "",
+                                          technicianComment:
+                                              controller.engineerFeedback.value,
+                                          imagPath: base64Image);
 
                                   if (status != null) {
                                     Toast.show(

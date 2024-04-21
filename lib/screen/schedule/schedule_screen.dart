@@ -4,8 +4,8 @@ import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
-import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:eagle_pixels/screen/views/service_view.dart';
+import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -106,7 +106,7 @@ class ScheduleScreen extends StatelessWidget {
                                   buttonTitle:
                                       ((item.engineerStatus ?? 0) == 2 ||
                                               (item.engineerStatus ?? 0) == 1)
-                                          ? 'Resume Job'
+                                          ? 'Complete Job'
                                           : 'Start Job',
                                   // isNeedStatus: ,
                                   isNeedDetail: true,

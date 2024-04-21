@@ -33,7 +33,7 @@ class NavPage {
   static String myReward = '/myReward';
   static String jobHistory = '/jobHistory';
   // static String jobCheckListScreen = '/joCheckList';
-  static String jobServiceReportScreen = '/jobServiceReport';
+ // static String jobServiceReportScreen = '/jobServiceReport';
   static String scheduleJobDetailsScreen = '/scheduleJobDetailsScreen';
   static String root = "/";
   static String attendanceServiceList = '/AttendanceServiceList';
@@ -92,9 +92,9 @@ class MyApp extends StatelessWidget {
         //   name: NavPage.jobCheckListScreen,
         //   page: () => JobCheckListScreen(),
         // ),
-        GetPage(
-            name: NavPage.jobServiceReportScreen,
-            page: () => ServiceReportScreen()),
+        // GetPage(
+        //     name: NavPage.jobServiceReportScreen,
+        //     page: () => ServiceReportScreen()),
         // GetPage(name: NavPage.confirmation, page: () => ConfirmationScreen()),
         GetPage(
             name: NavPage.customerInformation,

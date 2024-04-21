@@ -4,11 +4,16 @@ import 'dart:typed_data';
 import 'package:eagle_pixels/model/abstract_class.dart';
 
 class ParamStartJob {
-  var serviceID, lat, long;
-  ParamStartJob(this.serviceID, this.lat, this.long);
+  var serviceID, lat, long, img;
+  ParamStartJob(this.serviceID, this.lat, this.long, this.img);
 
   Map<String, dynamic> toJson() {
-    return {'RequestID': serviceID, 'latitude': lat, 'longitude': long};
+    return {
+      'RequestID': serviceID,
+      'latitude': lat,
+      'longitude': long,
+      'before_service_img': ""
+    };
   }
 }
 
@@ -53,28 +58,48 @@ class ParamSubmitJob {
 }
 
 class ParamCompleteJob {
-  var requestID, signature, feedback, lat, long;
-  
-  var rating;
+  var requestID,
+      imagPath,
+      signature,
+      technicianSign,
+      feedback,
+      lat,
+      long,
+      technicianComment,
+      paymentMode,
+      chemicalList,
+      rating;
   ParamCompleteJob({
     this.requestID,
+    this.imagPath,
     this.rating,
     this.signature,
     this.feedback,
-    //this.technicalComment,
-    // this.lat,
-    // this.long,
+    this.technicianComment,
+    this.paymentMode,
+    this.technicianSign,
+    this.chemicalList,
   });
 
   Future<Map<String, dynamic>> toJson() async {
     Map<String, dynamic> json = {};
     json['RequestID'] = requestID;
     json['rating'] = rating;
+    json['customer_comment'] = feedback;
+    json['employee_comment'] = technicianComment;
+    json['paymet_mode'] = paymentMode;
+    json['chemical_list'] = chemicalList;
+    json['after_service_img'] = imagPath;
+    json['employee_sign'] = technicianSign;
     json['signature'] = signature;
-    json['comment'] = feedback;
-    //json['technical_comment'] = technicalComment;
-    // json['latitude'] = lat;
-    // json['longitude'] = long;
+    json['contact_name'] = "";
+    json['client_id'] = "";
+    json['job_title'] = "";
+    json['Authid'] = "";
+    json['type'] = "";
+    json['method'] = "";
+    json['quantity'] = "";
+
     return json;
   }
 }

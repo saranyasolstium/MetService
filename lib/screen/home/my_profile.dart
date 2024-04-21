@@ -17,7 +17,6 @@ class MyProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           color: Colors.white,
-          
           child: Column(
             children: [
               SizedBox(
@@ -157,7 +156,8 @@ class MyProfileScreen extends StatelessWidget {
                                                 Navigator.of(context,
                                                         rootNavigator: true)
                                                     .pop(true);
-                                                SharedPreferencesHelper.clearToken();
+                                                SharedPreferencesHelper
+                                                    .clearToken();
                                                 AppController.to.loginStatus
                                                     .value = LoginStatus.logout;
                                               },
@@ -286,9 +286,14 @@ extension MyProfileScreenWidgets on MyProfileScreen {
   }
 
   Widget get qrScannerView {
-    String mobileNumber = AppController.user.employeeDetails?.mobileNumber.toString() ?? "NA";
-String countryCode = AppController.user.employeeDetails?.countryCode?.toString() ?? "";
-String formattedNumber = (mobileNumber != "NA") ? "$countryCode $mobileNumber" : "NA";
+    String? mobileNumber =
+        AppController.user.employeeDetails?.mobileNumber?.toString();
+    String? countryCode =
+        AppController.user.employeeDetails?.countryCode?.toString();
+    String formattedNumber =
+        (mobileNumber != null && mobileNumber != "null" && countryCode != null)
+            ? "$countryCode $mobileNumber"
+            : "NA";
 
     return Container(
       // constraints: BoxConstraints(
@@ -336,9 +341,7 @@ String formattedNumber = (mobileNumber != "NA") ? "$countryCode $mobileNumber" :
                       SizedBox(
                         height: 14.dynamic,
                       ),
-                      builProfileRow(
-                          "Mobile No : ",
-                          formattedNumber,
+                      builProfileRow("Mobile No : ", formattedNumber,
                           color: Colour.appBlack),
                       SizedBox(
                         height: 14.dynamic,

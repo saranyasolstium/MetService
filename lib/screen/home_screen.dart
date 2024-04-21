@@ -247,19 +247,22 @@ extension HomeWidgets on HomeScreen {
               name: 'Customer Information',
             ),
           ),
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(top: 26.0, bottom: 34.0),
-              child: Center(
-                child: Image.asset(
-                  'images/poweredby.png',
-                  fit: BoxFit.fill,
-                  // width: 60.dynamic,
-                  // height: 60.dynamic,
-                ),
-              ),
-            ),
+          SizedBox(
+            height: 18.dynamic,
           ),
+          // SafeArea(
+          //   child: Padding(
+          //     padding: EdgeInsets.only(top: 26.0, bottom: 34.0),
+          //     child: Center(
+          //       child: Image.asset(
+          //         'images/poweredby.png',
+          //         fit: BoxFit.fill,
+          //         // width: 60.dynamic,
+          //         // height: 60.dynamic,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

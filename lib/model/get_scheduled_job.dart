@@ -193,7 +193,7 @@ class MScheduledJobItem implements AServiceItem {
   String? get aServiceID => id.toString();
   String? get aScheduleTime => bookingDate.toString();
 
-  String? get aCombinedAddress =>siteAddress.toString() ?? "NA";
+  String? get aCombinedAddress =>siteAddress;
      // constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
 
   String? get aSiteID => siteId.toString();

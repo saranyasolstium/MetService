@@ -316,14 +316,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Image.asset(
                                         'images/met.png',
                                         fit: BoxFit.fill,
-                                        width: 120.dynamic,
+                                        width: 100.dynamic,
                                         height: 60.dynamic,
                                       ),
                                     ],
                                   ),
                                 ),
                                 Text(
-                                  'Welcome to Met.',
+                                  'Welcome to MET.',
                                   style: TextStyle(
                                       color: Colour.appBlack,
                                       fontWeight: FontWeight.w400,

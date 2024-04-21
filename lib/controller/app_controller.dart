@@ -28,7 +28,7 @@ import 'dart:io';
 enum LoginStatus { logged, logout, loading }
 
 class MAuthenticationStatus {
-  PickedFile? image;
+  XFile? image;
   bool isLocalAuthenticated = false;
   Position? position;
   Future<String> get base64Image async {
@@ -94,8 +94,38 @@ class AppController extends GetxController {
   //   }
   // }
 
+  final ImagePicker _imagePicker = ImagePicker();
 
-   Future<bool> onLocalAuthenticate() async {
+  Future<MAuthenticationStatus> verifyUser() async {
+    var result = MAuthenticationStatus();
+
+    // Get user position
+    final position = await determinePosition();
+    result.position = position;
+
+    // Authenticate locally
+    final isLocalAuthenticated = await onLocalAuthenticate();
+    result.isLocalAuthenticated = isLocalAuthenticated;
+
+    hideLoading();
+
+    try {
+      final pickedImageFile =
+          await _imagePicker.pickImage(source: ImageSource.camera);
+
+      if (pickedImageFile != null) {
+        result.image = pickedImageFile as XFile?;
+      } else {
+        print("No image picked");
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
+
+    return result;
+  }
+
+  Future<bool> onLocalAuthenticate() async {
     try {
       var isAvailable = await _localAuth.isDeviceSupported();
 
@@ -127,64 +157,66 @@ class AppController extends GetxController {
       throw e;
     }
   }
-Future<Position> determinePosition() async {
-  try {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    if (!serviceEnabled) {
-      _showLocationPermissionToast() ;
-      throw Exception('Location services are disabled. Please enable location services on your device.');
-    }
+  Future<Position> determinePosition() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    LocationPermission permission = await Geolocator.checkPermission();
+      if (!serviceEnabled) {
+        _showLocationPermissionToast();
+        throw Exception(
+            'Location services are disabled. Please enable location services on your device.');
+      }
 
-    if (permission == LocationPermission.denied) {
-      // Request location permissions
-      await Geolocator.requestPermission();
-      
-      // Check again after requesting permissions
-      permission = await Geolocator.checkPermission();
+      LocationPermission permission = await Geolocator.checkPermission();
 
       if (permission == LocationPermission.denied) {
-        // Location permissions are still denied
-        _showLocationPermissionToast();
-        throw Exception('Location permissions are denied. Please grant location permissions for the app.');
+        // Request location permissions
+        await Geolocator.requestPermission();
+
+        // Check again after requesting permissions
+        permission = await Geolocator.checkPermission();
+
+        if (permission == LocationPermission.denied) {
+          // Location permissions are still denied
+          _showLocationPermissionToast();
+          throw Exception(
+              'Location permissions are denied. Please grant location permissions for the app.');
+        }
       }
+
+      if (permission == LocationPermission.deniedForever) {
+        // Location permissions are permanently denied
+        _showLocationPermissionToast();
+        throw Exception(
+            'Location permissions are permanently denied. You can enable them in the app settings.');
+      }
+
+      return await Geolocator.getCurrentPosition();
+    } catch (e) {
+      print('Error during position determination: $e');
+      throw e;
     }
+  }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Location permissions are permanently denied
-      _showLocationPermissionToast();
-      throw Exception('Location permissions are permanently denied. You can enable them in the app settings.');
+  void _showLocationPermissionToast() {
+    Fluttertoast.showToast(
+      msg:
+          "Location permissions are required for this app. Please enable them in the app settings.",
+      // toastLength: Toast(),
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
+  void openLocationSettings() async {
+    if (await Permission.location.request().isDenied) {
+      // Open the app settings for location permissions
+      await openAppSettings();
     }
-
-    return await Geolocator.getCurrentPosition();
-  } catch (e) {
-    print('Error during position determination: $e');
-    throw e;
   }
-}
-
-void _showLocationPermissionToast() {
-
-  Fluttertoast.showToast(
-    msg: "Location permissions are required for this app. Please enable them in the app settings.",
-   // toastLength: Toast(),
-    gravity: ToastGravity.CENTER,
-    backgroundColor: Colors.red,
-    textColor: Colors.white,
-    fontSize: 16.0,
-  );
-}
-
-void openLocationSettings() async {
-  if (await Permission.location.request().isDenied) {
-    // Open the app settings for location permissions
-    await openAppSettings();
-  }
-}
-
-
 
   void showSnackBar(
       {required String title,
@@ -196,7 +228,6 @@ void openLocationSettings() async {
         snackPosition: SnackPosition.BOTTOM);
   }
 
-  
   Future<String?> uploadImage(filepath, url) async {
     try {
       showLoading();
@@ -222,7 +253,6 @@ void openLocationSettings() async {
       hideLoading();
     }
   }
-
 
   static AppController get to => Get.find<AppController>();
 
@@ -268,7 +298,7 @@ void openLocationSettings() async {
     }
   }
 
-   loadInitialState() async {
+  loadInitialState() async {
     await GetStorage.init();
     String? token = await SharedPreferencesHelper.getToken();
 

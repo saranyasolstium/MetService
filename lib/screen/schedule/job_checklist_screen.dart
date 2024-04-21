@@ -12,6 +12,7 @@ import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:eagle_pixels/screen/toast/photo_choose_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -50,7 +51,8 @@ extension StopJobAction on JobCheckListScreen {
     hideLoading();
     if (errorWhenSubmit != null) {
       Toast.show(errorWhenSubmit,
-          textStyle: TextStyle(color: Colors.white, fontSize: 16.0));
+          backgroundColor: Colors.white,
+          textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
       return false;
     } else {
       return true;
@@ -88,8 +90,17 @@ extension StopJobAction on JobCheckListScreen {
     // if (isCompleted) {
     //   Get.toNamed(NavPage.jobServiceReportScreen);
     // }
+    AppController().verifyUser().then((result) async {
+      print(result.image?.path);
+      if (result.image?.path != null && result.image!.path.isNotEmpty) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ServiceReportScreen(imagePath: result.image!.path)),
+        );
 
-    Get.toNamed(NavPage.jobServiceReportScreen);
+       // Get.toNamed(NavPage.jobServiceReportScreen);
+      }
+    });
 
     // showDialog(
     //   context: context,
@@ -116,7 +127,8 @@ class JobCheckListScreen extends StatelessWidget {
       Get.put(JobCheckListController());
   @override
   Widget build(BuildContext context) {
-    
+    //return WillPopScope(
+    //child:
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -250,27 +262,28 @@ class JobCheckListScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colour.appRed,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.dynamic),
-                              ),
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                onStopJob();
-                              },
-                              child: Text(
-                                'Pause Job',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.dynamic,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   width: double.infinity,
+                          //   decoration: BoxDecoration(
+                          //     color: Colour.appRed,
+                          //     borderRadius: BorderRadius.all(
+                          //       Radius.circular(5.dynamic),
+                          //     ),
+                          //   ),
+                          //   child: TextButton(
+                          //     onPressed: () {
+                          //       onStopJob();
+                          //     },
+                          //     child: Text(
+                          //       'Pause Job',
+                          //       style: TextStyle(
+                          //           color: Colors.white,
+                          //           fontSize: 16.dynamic,
+                          //           fontWeight: FontWeight.w300),
+                          //     ),
+                          //   ),
+                          // ),
+
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
@@ -281,11 +294,11 @@ class JobCheckListScreen extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () {
-                                // schedule.reloadList();
-                                // navigator!.popUntil((route) =>
-                                //     route.settings.name ==
-                                //     NavPage.scheduleScreen);
-                                onStopJob();
+                                schedule.reloadList();
+                                navigator!.popUntil((route) =>
+                                    route.settings.name ==
+                                    NavPage.scheduleScreen);
+                                //onStopJob();
                               },
                               child: Text(
                                 'Cancel',
@@ -308,6 +321,11 @@ class JobCheckListScreen extends StatelessWidget {
         ),
       ),
     );
+    //   onWillPop: () async {
+    //    // onStopJob();
+    //     return false;
+    //   },
+    // );
   }
 }
 

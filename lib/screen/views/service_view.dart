@@ -11,10 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../colors.dart';
-import '../../constant.dart';
 
 extension ServiceViewAction on ServiceView {
   onStopJob() async {
@@ -149,7 +147,7 @@ class ServiceView extends StatelessWidget {
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w600,
-                          fontSize: 14.dynamic),
+                          fontSize: 13.dynamic),
                     ),
                   ],
                 ),
@@ -194,7 +192,7 @@ class ServiceView extends StatelessWidget {
                           style: TextStyle(
                               color: Colour.appBlack,
                               fontWeight: FontWeight.w600,
-                              fontSize: 14.dynamic),
+                              fontSize: 13.dynamic),
                         ),
                       ],
                     ),
@@ -203,6 +201,9 @@ class ServiceView extends StatelessWidget {
               ),
             ],
           ),
+           SizedBox(
+              height: 21.dynamic,
+            ),
           if (isNeedScheduledTime)
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -212,7 +213,7 @@ class ServiceView extends StatelessWidget {
                   children: [
                     Container(
                       padding:
-                          EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
+                          EdgeInsets.only( bottom: 10.dynamic),
                       child: Text(
                         'Scheduled Time:',
                         style: TextStyle(
@@ -270,40 +271,41 @@ class ServiceView extends StatelessWidget {
             //       fontWeight: FontWeight.w600,
             //       fontSize: 14.dynamic),
             // ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  child: Text(
-                    'Site Address:',
-                    style: TextStyle(
-                        color: Colour.appDarkGrey,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12.dynamic),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    String query =
-                        Uri.encodeComponent(item.aCombinedAddress ?? '');
-                    String googleUrl =
-                        "https://www.google.com/maps/search/?api=1&query=$query";
-                    if (await canLaunch(googleUrl)) {
-                      await launch(googleUrl);
-                    }
-                  },
-                  child: Container(
-                    padding:
-                        EdgeInsets.only(top: 20.dynamic, bottom: 10.dynamic),
-                    child: Icon(
-                      Icons.location_on,
-                      size: 25,
-                      color: Colour.appDarkGrey,
-                    ),
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: 21.dynamic,
             ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                child: Text(
+                  'Site Address:',
+                  style: TextStyle(
+                      color: Colour.appDarkGrey,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 12.dynamic),
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  String query =
+                      Uri.encodeComponent(item.aCombinedAddress ?? '');
+                  String googleUrl =
+                      "https://www.google.com/maps/search/?api=1&query=$query";
+                  if (await canLaunch(googleUrl)) {
+                    await launch(googleUrl);
+                  }
+                },
+                child: Container(
+                  child: Icon(
+                    Icons.location_on,
+                    size: 25,
+                    color: Colour.appDarkGrey,
+                  ),
+                ),
+              ),
+            ],
+          ),
           Text(
             item.aCombinedAddress ?? 'NA',
             style: TextStyle(

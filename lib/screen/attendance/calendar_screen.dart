@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eagle_pixels/api/headers.dart';
+import 'package:eagle_pixels/common/logger.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
@@ -11,6 +12,7 @@ import 'package:eagle_pixels/model/attendece_status_model.dart';
 import 'package:eagle_pixels/model/profile_model.dart';
 import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
@@ -27,25 +29,59 @@ import '../../colors.dart';
 import 'package:toast/toast.dart';
 
 extension CalendarAction on CalendarScreen {
+  // startOrEndDay() async {
+  //   final status = attendance.attendanceStatus.value;
+  //   print(attendance.isClockedIn);
+  //   if (status != null) {
+  //     if (status.isServiceStarted && !status.isAttendanceStarted) {
+  //       Toast.show(
+  //         'You already in service attendance',
+  //         backgroundColor: Colors.white,
+  //         textStyle: TextStyle(
+  //             fontSize: 16.0,
+  //             color: Colors.black), // Provide an appropriate TextStyle
+  //       );
+  //       //print('You already in service attendance');
+  //       return;
+  //     }
+  //   }
+  //   if (attendance.isClockedIn) {
+  //     Get.toNamed(NavPage.clockOut);
+  //   } else {
+  //     startDay();
+  //     if (!attendance.isAllowForClockIn) {
+  //       //temp inverse condition
+  //     } else {
+  //       Toast.show(
+  //         'Please clock out the service attendance',
+  //         backgroundColor: Colors.white,
+  //         textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+  //       );
+  //     }
+  //   }
+  //   // var response = await attendance.onClockIn();
+  //   // if (response!.isValid) {}
+  // }
+
   startOrEndDay() async {
     final status = attendance.attendanceStatus.value;
+    print(status?.isAttendanceStarted);
+    print(status?.isServiceStarted);
 
-    print(attendance.isClockedIn);
     if (status != null) {
       if (status.isServiceStarted && !status.isAttendanceStarted) {
         Toast.show(
-          'You already in service attendance',
-          backgroundColor: Colors.white,
+          'You already in service attendance', backgroundColor: Colors.white,
           textStyle: TextStyle(
               fontSize: 16.0,
-              color: Colors.black), // Provide an appropriate TextStyle
+              color: Colors.black), 
         );
-        //print('You already in service attendance');
         return;
       }
     }
     if (attendance.isClockedIn) {
-      Get.toNamed(NavPage.clockOut);
+      onEndDay();
+      // Get.toNamed(NavPage.clockOut);
     } else {
       startDay();
       // if (!attendance.isAllowForClockIn) {
@@ -73,6 +109,7 @@ extension CalendarAction on CalendarScreen {
     }
     showLoading();
     try {
+      print(MAttendanceStatusResponse);
       // AppController().verifyUser().then((result) async {
       var model = await attendance.onClockIn();
       if (model?.status?.isSuccess ?? false) {
@@ -92,7 +129,8 @@ extension CalendarAction on CalendarScreen {
       } else {
         Toast.show(
           model?.message ?? 'Problem in clock in. please try again.',
-          textStyle: TextStyle(color: Colors.black, fontSize: 16.0),
+          backgroundColor: Colors.white,
+          textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
         );
       }
       // }).catchError((error) {
@@ -102,62 +140,45 @@ extension CalendarAction on CalendarScreen {
     } catch (e) {
       Toast.show(
         '$e',
-        textStyle: TextStyle(color: Colors.black, fontSize: 16.0),
+        backgroundColor: Colors.white,
+        textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
       );
     } finally {
       hideLoading(value: 0);
     }
   }
 
-  Future getImage() async {
-    try {
-      final pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.camera);
-      print('Image picked');
-      if (pickedFile != null) {
-        // Your existing code for handling the picked image
-
-        var res = await uploadImage(pickedFile.path,
-            'https://pixel.solstium.net/api/v1/employee/upload_sign');
-        if (res?.isSuccess ?? false) {
-          var model = await attendance.onClockIn();
+  onEndDay() async {
+    Get.dialog(
+      ConfirmationScreen(),
+      barrierDismissible: false,
+    ).then((value) async {
+      if (value == true) {
+        print('yes clicked');
+        try {
+          showLoading();
+          // AppController().verifyUser().then((result) async {
+          var model = await attendance.onClockOut();
           if (model?.status?.isSuccess ?? false) {
-            var resp = MAttendanceStatusResponse();
-            resp.startedDate = DateTime.now();
-            attendance.attendanceStatus.value = resp;
-            Get.toNamed(NavPage.clockOut);
+            navigator!.popUntil((route) => route.settings.name == NavPage.root);
           } else {
-            // Handle the case where onClockIn is not successful
+            Toast.show(
+              model?.message ?? kErrorMsg,
+              backgroundColor: Colors.white,
+              textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+            );
           }
-        } else {
-          // Handle the case where uploadImage is not successful
+          // }).catchError((error) {
+          //   // Handle errors during verification
+          //   print('Error during verification: $error');
+          // });
+        } finally {
+          hideLoading(value: 0);
         }
       } else {
-        print('No image selected.');
+        print('no clicked');
       }
-    } catch (error) {
-      print('Error $error');
-    }
-  }
-
-  Future<String?> uploadImage(String filepath, String url) async {
-    try {
-      showLoading();
-      print('image uploading');
-      var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.fields['service_id'] = '1';
-      request.files.add(await http.MultipartFile.fromPath('image', filepath));
-      request.headers.addAll(await Header.defaultHeader);
-      var res = await request.send();
-      var jsonResponse = await http.Response.fromStream(res);
-      return jsonDecode(jsonResponse.body)["status"];
-      // return res.reasonPhrase;
-    } catch (e) {
-      print('Error$e');
-      return null; // Add a return statement here
-    } finally {
-      hideLoading();
-    }
+    });
   }
 
   showAttendance(String date) {
@@ -623,7 +644,7 @@ extension CalendarWidgets on CalendarScreen {
                 ),
               ),
               child: TextButton(
-                onPressed: this.startDay,
+                onPressed: this.startOrEndDay,
                 child: Text(
                   'Start the day',
                   style: TextStyle(

@@ -7,6 +7,7 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'urls.dart';
@@ -83,7 +84,7 @@ class API {
       print('url -> ${endPoint.method.string} $url');
       print('Header -> ${endPoint.toString()}');
       print('body ->');
-      printPrettyJson(body, indent: 2);
+      print(body);
 
       if (needLoader) {
         hideLoading();

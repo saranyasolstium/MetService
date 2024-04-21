@@ -69,7 +69,6 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? warrantyEnding;
   String? vendorWarranty;
   String? serviceType;
-  String? type;
   String? serviceAmount;
   int? engineerStatus;
   String? warrantyCard;
@@ -91,13 +90,17 @@ class MJobDetail implements AJobDetail, AActiveService {
   double? latIn;
   double? latOut;
 
+  String? attention;
+  String? customerType;
+  String? serviceOrderNo;
+
   MJobDetail();
 
   MJobDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
 
     requesterId = json['requester_id'];
-    Logger.log("requester" , requesterId.toString());
+    Logger.log("requester", requesterId.toString());
     siteId = json['site_id'];
     ticketId = json['ticket_id'];
     productId = json['product_id'];
@@ -131,7 +134,7 @@ class MJobDetail implements AJobDetail, AActiveService {
     formattedBookingDate = DateFormat('dd MMMM yyyy').format(bookingDateTime);
     bookingTime = json['scheduled_time'];
     amount = json['service_amount'];
-print(amount);
+    print(amount);
     //Attendance entry
     attendenceDate = json['AttendenceDate'];
     attendenceEndDate = json['AttendenceEndDate'];
@@ -153,11 +156,16 @@ print(amount);
     engineerStatus = json['engineer_status'];
     warrantyCard = json['warranty_card'];
     aAddress = json['site_address'];
-    type=json['type'];
+
     siteAddress = json["address"];
     siteCity = json["site_city"];
     siteState = json["site_state"];
     siteZipCode = json["site_zipcode"];
+
+    attention = json["attention"];
+    customerType = json["customer_type"];
+    serviceOrderNo = json["service_order_no"];
+
     final attendance = json['attendance'];
     aAttendanceEntry = [];
 
@@ -190,7 +198,7 @@ print(amount);
     data['subject'] = this.subject;
     data['description'] = this.description;
     data['name'] = this.customerName;
-    data['address']=this.siteAddress;
+    data['address'] = this.siteAddress;
     data['purchase_date'] = this.purchaseDate;
     data['po_number'] = this.poNumber;
     data['service_date'] = this.serviceDate;
@@ -201,6 +209,10 @@ print(amount);
     data['customer_phone'] = this.phone;
     data['service_name'] = this.serviceName;
     data['subservice_name'] = this.subserviceName;
+
+    data['attention'] = this.attention;
+    data['customer_type'] = this.customerType;
+    data['service_order_no'] = this.serviceOrderNo;
 
     // //Booking Information
     data['service_type'] = this.teamName;
@@ -228,10 +240,8 @@ print(amount);
     data['service_amount'] = this.serviceAmount;
     data['engineer_status'] = this.engineerStatus;
     data['warranty_card'] = this.warrantyCard;
-    data['type']=this.type;
     return data;
   }
-
 
   String? get aCameraID => sku;
 
@@ -322,18 +332,26 @@ print(amount);
   String? get aStartDay => attendenceDate.toString();
   String? get aServiceID => id.toString();
   String? get aSiteID => siteId.toString();
-  String? get aCombinedAddress =>siteAddress.toString();
-      //constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
+  String? get aCombinedAddress => siteAddress;
+  //constructAddress([siteAddress, siteCity, siteState, siteZipCode]);
+
+  String? get aAttention => attention;
+
+  String? get aCustomerType => customerType;
+
+  String? get aServiceOrderNo => serviceOrderNo;
 
   String? get aFloorPlanName => subsiteName;
 
   String? get aEmployeeName => employeeName.toString();
 
-  String? get aType => type;
-
   double? get aLatIn => latIn ?? 0;
 
   double? get aLatOut => latOut ?? 0;
+
+  int? get aEnginnerStatus => engineerStatus;
+
+  List<Map<String, dynamic>> get aServiceDetails => [];
   
-  int? get aEnginnerStatus => engineerStatus ;
+ 
 }

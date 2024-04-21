@@ -158,28 +158,32 @@ class JobCheckListController extends GetxController {
     required String requestID,
     required signature,
     required String feedback,
+    required imagPath,
+    required technicianSign,
+    required String technicianComment,
+    required String paymentMode,
+    required String chemicalList,
   }) async {
-    // Position position = await AppController.to.determinePosition();
-    //comment by saranya
-    // var param = await ParamCompleteJob(
-    //         serviceID: service_id,
-    //         rating: rating,
-    //         signature: signature,
-    //         feedback: feedback,
-    //         technicalComment: technicalComment)
-    //     .toJson();
     var param = await ParamCompleteJob(
             requestID: requestID,
             signature: signature,
             feedback: feedback,
-            rating: "4")
+            rating: "4",
+            chemicalList: chemicalList,
+            imagPath: imagPath,
+            paymentMode: paymentMode,
+            technicianComment: technicianComment,
+            technicianSign: technicianSign)
         .toJson();
+
     Logger.log('Complete Job', feedback);
+    print(param);
+
     var response = await API.service.call(
       endPoint: EndPoint.completeJob,
       body: param,
     );
-    hideLoading();
+    print(response);
     if (response.isSuccess) {
       detail.completedMessage = response.message ?? 'Job Completed';
       return null;

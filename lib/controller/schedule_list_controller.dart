@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:eagle_pixels/api/ParamModel.dart';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
@@ -12,7 +15,7 @@ import '../constant.dart';
 
 class ScheduleListController extends GetxController {
   var scheduleList = <MScheduledJobItem>[].obs;
-  final selectedDate = DateTime.now().obs;
+  var selectedDate;
   final viewState = ViewState.loading.obs;
   reloadList() {
     fetchScheduleList();
@@ -21,6 +24,7 @@ class ScheduleListController extends GetxController {
 
   @override
   void onInit() {
+    selectedDate = DateTime.now().obs;
     fetchScheduleList();
     super.onInit();
   }
@@ -105,12 +109,19 @@ extension ScheduleListService on ScheduleListController {
     // }
   }
 
-  Future<Map> onStartJob({required String service_id}) async {
+  Future<Map> onStartJob(
+      {required String service_id}) async {
     Position position = await AppController.to.determinePosition();
     print('Allowed location permission');
+    // File imageFile = File(imagePath);
+    // List<int> imageBytes = await imageFile.readAsBytes();
+
+    // String base64Image = base64Encode(imageBytes);
+
     var response = await API.service.call(
       endPoint: EndPoint.startJob,
-      body: ParamStartJob(service_id, position.latitude, position.longitude)
+      body: ParamStartJob(
+              service_id, position.latitude, position.longitude, "")
           .toJson(),
     );
     return response.map;
@@ -122,7 +133,7 @@ extension ScheduleListService on ScheduleListController {
     print('Allowed location permission');
     var response = await API.service.call(
       endPoint: EndPoint.stopJob,
-      body: ParamStartJob(service_id, position.latitude, position.longitude)
+      body: ParamStartJob(service_id, position.latitude, position.longitude,"")
           .toJson(),
     );
     return response.map;

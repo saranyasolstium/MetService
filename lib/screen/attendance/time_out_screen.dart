@@ -1,11 +1,11 @@
+import 'package:eagle_pixels/reuse/loader.dart';
+import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/profile_model.dart';
-import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
-import 'package:eagle_pixels/screen/toast/confirmation_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,7 +27,7 @@ extension TimeOutAction on TimeOutScreen {
       if (value == true) {
         print('yes clicked');
         try {
-         // showLoading();
+          showLoading();
           // AppController().verifyUser().then((result) async {
           var model = await attendance.onClockOut();
           if (model?.status?.isSuccess ?? false) {

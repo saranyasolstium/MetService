@@ -48,6 +48,8 @@ class AttendanceController extends GetxController {
   }
 
   var arrActiveService = <AActiveService>[].obs;
+  List<ServiceDetail>? arrServiceDetails;
+
   var selectedActiveJobDate = DateTime.now();
 
   final activeJobViewState = ViewState.loading.obs;
@@ -79,6 +81,9 @@ class AttendanceController extends GetxController {
 
   bool get isClockedIn {
     if (attendanceStatus.value != null) {
+      print(attendanceStatus.value!.isServiceStarted);
+      print(attendanceStatus.value!.isAttendanceStarted);
+
       return attendanceStatus.value!.isAttendanceStarted;
     } else {
       return false;
@@ -338,7 +343,7 @@ extension AttendanceControllerService on AttendanceController {
   Future<MClockInResponse?> onClockOut() async {
     Position position = await AppController.to.determinePosition();
     var body = {
-     // 'SiteID': '0',
+      // 'SiteID': '0',
       'latitude': '${position.latitude}',
       'longitude': '${position.longitude}',
       //'serviceID': '0'
@@ -382,6 +387,8 @@ extension AttendanceControllerService on AttendanceController {
         body: {'date': date});
     if (res.isValidModel) {
       arrActiveService.value = res.model!.data;
+      print(arrActiveService.length);
+      arrServiceDetails = res.model!.serviceDetails;
       activeJobViewState.value = ViewState.success;
     } else {
       activeJobErrorMessage = res.message ?? kErrorMsg;

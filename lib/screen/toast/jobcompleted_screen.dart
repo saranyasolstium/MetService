@@ -13,40 +13,40 @@ import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 
 extension JobCompletedAction on JobCompletedScreen {
-  onComplete() async {
-    try {
-      Position position = await AppController.to.determinePosition();
-      var body = {
-        'SiteID': detail.siteId,
-        'latitude': '${position.latitude}',
-        'longitude': '${position.longitude}',
-        'serviceID': detail.aServiceId
-      };
+//   onComplete() async {
+//     try {
+//       Position position = await AppController.to.determinePosition();
+//       var body = {
+//         'SiteID': detail.siteId,
+//         'latitude': '${position.latitude}',
+//         'longitude': '${position.longitude}',
+//         'serviceID': detail.aServiceId
+//       };
 
-      var response = await API.service.call(
-        model: MClockInResponse(),
-        endPoint: EndPoint.clockOut,
-        body: body,
-      );
-      if (response.isSuccess) {
-        navigator!.popUntil((route) => route.settings.name == NavPage.root);
-      } else {
-        Toast.show(
-          response.message ?? 'Failed to clock out',
-          backgroundColor: Colors.white,
-          textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
-        );
-        return;
-      }
-    } catch (e) {
-      Toast.show(
-        e.toString(),
-        backgroundColor: Colors.white,
-        textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
-      );
-      return;
-    }
-  }
+//       var response = await API.service.call(
+//         model: MClockInResponse(),
+//         endPoint: EndPoint.clockOut,
+//         body: body,
+//       );
+//       if (response.isSuccess) {
+//         navigator!.popUntil((route) => route.settings.name == NavPage.root);
+//       } else {
+//         Toast.show(
+//           response.message ?? 'Failed to clock out',
+//           backgroundColor: Colors.white,
+//           textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+//         );
+//         return;
+//       }
+//     } catch (e) {
+//       Toast.show(
+//         e.toString(),
+//         backgroundColor: Colors.white,
+//         textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+//       );
+//       return;
+//     }
+//   }
 }
 
 class JobCompletedScreen extends StatelessWidget {
@@ -137,7 +137,9 @@ class JobCompletedScreen extends StatelessWidget {
                       width: Get.width * 0.7,
                       child: TextButton(
                         onPressed: () {
-                          onComplete();
+                          // onComplete();
+                          navigator!.popUntil(
+                              (route) => route.settings.name == NavPage.root);
                         },
                         child: Text(
                           'Close attendance',

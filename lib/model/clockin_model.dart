@@ -32,7 +32,7 @@ class MClockInItem {
   String? attendenceDate;
   String? employeeCode;
   String? siteID;
-  int? serviceID;
+  String? serviceID;
   String? siteName;
   String? employeeName;
   String? inTimeHour;
@@ -82,8 +82,9 @@ class MClockInItem {
 
 class MClockInSiteDetail {
   int? id;
-  // Null location;
-  // Null sublocation;
+  int? clientId;
+  Null location;
+  Null sublocation;
   String? name;
   String? address1;
   Null address2;
@@ -97,8 +98,9 @@ class MClockInSiteDetail {
 
   MClockInSiteDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    // location = json['location'];
-    // sublocation = json['sublocation'];
+    clientId = json['client_id'];
+    location = json['location'];
+    sublocation = json['sublocation'];
     name = json['name'];
     address1 = json['address_1'];
     address2 = json['address_2'];
@@ -114,8 +116,9 @@ class MClockInSiteDetail {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    // data['location'] = this.location;
-    // data['sublocation'] = this.sublocation;
+    data['client_id'] = this.clientId;
+    data['location'] = this.location;
+    data['sublocation'] = this.sublocation;
     data['name'] = this.name;
     data['address_1'] = this.address1;
     data['address_2'] = this.address2;

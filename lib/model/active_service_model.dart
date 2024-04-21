@@ -8,6 +8,7 @@ class MActiveServiceResponse extends Codable {
   String? status;
   String? message;
   late List<MActiveService> data;
+  List<ServiceDetail>? serviceDetails;
 
   MActiveServiceResponse fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,6 +19,14 @@ class MActiveServiceResponse extends Codable {
         data.add(MActiveService.fromJson(v));
       });
     }
+
+    if (json['service_details'] != null) {
+      // Parse service_details if available
+      serviceDetails = <ServiceDetail>[];
+      json['service_details'].forEach((v) {
+        serviceDetails?.add(new ServiceDetail.fromJson(v));
+      });
+    }
     return this;
   }
 
@@ -26,6 +35,7 @@ class MActiveServiceResponse extends Codable {
     data['status'] = this.status;
     data['message'] = this.message;
     data['data'] = this.data.map((v) => v.toJson()).toList();
+
     return data;
   }
 
@@ -84,16 +94,20 @@ class MActiveService extends AActiveService {
     name = json['name'];
     aAddress = json['site_address'];
     final attendance = json['attendance'];
-    //Attendance entry
-    print(json['AttendenceDate']);
-    DateTime utcStartTime = DateTime.parse(json['AttendenceDate']+"Z").toLocal();
-    DateTime attendanceDateTime =
-        DateTime.tryParse(utcStartTime.toString()) ?? DateTime.now();
-    attendenceDate =
-        DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
+
+    if (attendance != null) {
+      DateTime utcStartTime = DateTime.parse(attendance + "Z").toLocal();
+      DateTime attendanceDateTime =
+          DateTime.tryParse(utcStartTime.toString()) ?? DateTime.now();
+      attendenceDate =
+          DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
+    } else {
+      attendenceDate = "N/A";
+    }
 
     if (json['AttendenceEndDate'] != null) {
-          DateTime utcEndTime = DateTime.parse(json['AttendenceEndDate']+"Z").toLocal();
+      DateTime utcEndTime =
+          DateTime.parse(json['AttendenceEndDate'] + "Z").toLocal();
 
       DateTime attendanceEndDateTime =
           DateTime.tryParse(utcEndTime.toString()) ?? DateTime.now();
@@ -185,4 +199,64 @@ class MActiveService extends AActiveService {
   double? get aLatOut => latOut ?? 0;
 
   // String? get aCombinedAddress => '$siteAddress $siteCity $siteState $siteZipCode';
+}
+
+class ServiceDetail {
+  // Define the ServiceDetail class
+  int? id;
+  String? employeeCode;
+  String? employeeName;
+  String? serviceStartDate;
+  String? serviceEndDate;
+  double? latIn;
+  double? latOut;
+  // Add other properties as needed
+
+  ServiceDetail(); // Constructor
+
+  ServiceDetail.fromJson(Map<String, dynamic> json) {
+    id = json['ID'];
+    employeeCode = json['EmployeeCode'];
+    employeeName = json['EmployeeName'];
+    //Attendance entry
+    print(json['service_time_start']);
+    serviceStartDate = json['service_time_start'];
+    
+    
+    // DateTime utcStartTime =
+    //     DateTime.parse(json['service_time_start'] + "Z").toLocal();
+    // DateTime attendanceDateTime =
+    //     DateTime.tryParse(utcStartTime.toString()) ?? DateTime.now();
+    // serviceStartDate =
+    //     DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
+
+    serviceEndDate = json['service_time_end'];
+    // if (json['service_time_end'] != null) {
+    //   DateTime utcEndTime =
+    //       DateTime.parse(json['service_time_end'] + "Z").toLocal();
+
+    //   DateTime attendanceEndDateTime =
+    //       DateTime.tryParse(utcEndTime.toString()) ?? DateTime.now();
+    //   serviceEndDate =
+    //       DateFormat(AppDateFormat.scheduledTime).format(attendanceEndDateTime);
+    // } else {
+    //   serviceEndDate = "N/A";
+    // }
+    latIn = json['LatIn'] ?? 0;
+    latOut = json['LatOut'] ?? 0;
+    // Parse other properties
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['ID'] = this.id;
+    data['EmployeeCode'] = this.employeeCode;
+    data['EmployeeName'] = this.employeeName;
+    data['service_time_start'] = this.serviceStartDate;
+    data['service_time_end'] = this.serviceEndDate;
+    data['LatIn'] = this.latIn;
+    data['LatOut'] = this.latOut;
+    // Add other properties
+    return data;
+  }
 }
