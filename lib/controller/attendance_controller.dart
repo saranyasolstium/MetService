@@ -379,22 +379,26 @@ extension AttendanceControllerService on AttendanceController {
   // }
 
   fetchService(String date) async {
-    Logger.log('Active Job List', 'Request date - $date');
-    activeJobViewState.value = ViewState.loading;
-    var res = await API.service.call(
-        model: MActiveServiceResponse(),
-        endPoint: EndPoint.attendanceStatus,
-        body: {'date': date});
-    if (res.isValidModel) {
-      arrActiveService.value = res.model!.data;
-      print(arrActiveService.length);
-      arrServiceDetails = res.model!.serviceDetails;
-      activeJobViewState.value = ViewState.success;
-    } else {
-      activeJobErrorMessage = res.message ?? kErrorMsg;
-      activeJobViewState.value = ViewState.failed;
-    }
+  Logger.log('Active Job List', 'Request date - $date');
+  activeJobViewState.value = ViewState.loading;
+  var res = await API.service.call(
+    model: MActiveServiceResponse(),
+    endPoint: EndPoint.attendanceStatus,
+    body: {'date': date}
+  );
+
+print(res.model!.data.length);
+print(res.model!.serviceDetails!.length);
+  if (res.model!.data.isNotEmpty || res.model!.serviceDetails!.isNotEmpty) {
+    arrActiveService.value = res.model!.data;
+    print(arrActiveService.length);
+    arrServiceDetails = res.model!.serviceDetails;
+    activeJobViewState.value = ViewState.success;
+  } else {
+    activeJobErrorMessage = res.message ?? kErrorMsg;
+    activeJobViewState.value = ViewState.failed;
   }
+}
 
   fetchSite() async {
     var response = await API.service.call(

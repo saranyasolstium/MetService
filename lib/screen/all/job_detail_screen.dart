@@ -4,6 +4,7 @@ import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/common/currency_convertor.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
@@ -14,6 +15,7 @@ import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
+import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -43,7 +45,9 @@ extension JobDetailAction on JobDetailScreen {
       if (isSuccess(status) || error == K.already_checkIn) {
         schedule.reloadList();
         //scheduled_job_details_model.dart
-        Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
+        // Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
+        Get.put(JobCheckListController());
+        Get.to(() => ServiceReportScreen());
       } else {
         Toast.show(message,
             backgroundColor: Colors.white,
@@ -63,7 +67,18 @@ extension JobDetailAction on JobDetailScreen {
     print('saranya');
     schedule.reloadList();
     //scheduled_job_details_model.dart
-    Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
+    //Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
+
+    // AppController().verifyUser().then((result) async {
+    //   print(result.image?.path);
+    //   if (result.image?.path != null && result.image!.path.isNotEmpty) {
+
+    //   }
+    // });
+
+    Get.put(JobCheckListController());
+
+    Get.to(() => ServiceReportScreen());
   }
 }
 

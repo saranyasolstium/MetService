@@ -95,7 +95,7 @@ extension StopJobAction on JobCheckListScreen {
       if (result.image?.path != null && result.image!.path.isNotEmpty) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ServiceReportScreen(imagePath: result.image!.path)),
+          MaterialPageRoute(builder: (context) => ServiceReportScreen()),
         );
 
        // Get.toNamed(NavPage.jobServiceReportScreen);

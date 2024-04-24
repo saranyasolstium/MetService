@@ -93,7 +93,8 @@ class MActiveService extends AActiveService {
     description = json['description'];
     name = json['name'];
     aAddress = json['site_address'];
-    final attendance = json['attendance'];
+    final attendance = json['AttendenceDate'];
+    print(attendance);
 
     if (attendance != null) {
       DateTime utcStartTime = DateTime.parse(attendance + "Z").toLocal();
@@ -101,9 +102,10 @@ class MActiveService extends AActiveService {
           DateTime.tryParse(utcStartTime.toString()) ?? DateTime.now();
       attendenceDate =
           DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
-    } else {
-      attendenceDate = "N/A";
-    }
+    } 
+    // else {
+    //   attendenceDate = "N/A";
+    // }
 
     if (json['AttendenceEndDate'] != null) {
       DateTime utcEndTime =
@@ -204,58 +206,55 @@ class MActiveService extends AActiveService {
 class ServiceDetail {
   // Define the ServiceDetail class
   int? id;
-  String? employeeCode;
-  String? employeeName;
+  // String? employeeCode;
+  // String? employeeName;
   String? serviceStartDate;
   String? serviceEndDate;
-  double? latIn;
-  double? latOut;
+  // double? latIn;
+  // double? latOut;
   // Add other properties as needed
 
   ServiceDetail(); // Constructor
 
   ServiceDetail.fromJson(Map<String, dynamic> json) {
     id = json['ID'];
-    employeeCode = json['EmployeeCode'];
-    employeeName = json['EmployeeName'];
+    // employeeCode = json['EmployeeCode'];
+    // employeeName = json['EmployeeName'];
     //Attendance entry
-    print(json['service_time_start']);
-    serviceStartDate = json['service_time_start'];
     
     
-    // DateTime utcStartTime =
-    //     DateTime.parse(json['service_time_start'] + "Z").toLocal();
-    // DateTime attendanceDateTime =
-    //     DateTime.tryParse(utcStartTime.toString()) ?? DateTime.now();
-    // serviceStartDate =
-    //     DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
+    DateTime utcStartTime =
+        DateTime.parse(json['job_time_start'] + "Z").toLocal();
+    DateTime attendanceDateTime =
+        DateTime.tryParse(utcStartTime.toString()) ?? DateTime.now();
+    serviceStartDate =
+        DateFormat(AppDateFormat.scheduledTime).format(attendanceDateTime);
+        print(serviceStartDate);
 
-    serviceEndDate = json['service_time_end'];
-    // if (json['service_time_end'] != null) {
-    //   DateTime utcEndTime =
-    //       DateTime.parse(json['service_time_end'] + "Z").toLocal();
+    if (json['job_time_end'] != null) {
+      DateTime utcEndTime =
+          DateTime.parse(json['job_time_end'] + "Z").toLocal();
 
-    //   DateTime attendanceEndDateTime =
-    //       DateTime.tryParse(utcEndTime.toString()) ?? DateTime.now();
-    //   serviceEndDate =
-    //       DateFormat(AppDateFormat.scheduledTime).format(attendanceEndDateTime);
-    // } else {
-    //   serviceEndDate = "N/A";
-    // }
-    latIn = json['LatIn'] ?? 0;
-    latOut = json['LatOut'] ?? 0;
+      DateTime attendanceEndDateTime =
+          DateTime.tryParse(utcEndTime.toString()) ?? DateTime.now();
+      serviceEndDate =
+          DateFormat(AppDateFormat.scheduledTime).format(attendanceEndDateTime);
+          print(serviceEndDate);
+    } else {
+      serviceEndDate = "N/A";
+    }
+    
     // Parse other properties
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['ID'] = this.id;
-    data['EmployeeCode'] = this.employeeCode;
-    data['EmployeeName'] = this.employeeName;
-    data['service_time_start'] = this.serviceStartDate;
-    data['service_time_end'] = this.serviceEndDate;
-    data['LatIn'] = this.latIn;
-    data['LatOut'] = this.latOut;
+    //data['EmployeeCode'] = this.employeeCode;
+    //data['EmployeeName'] = this.employeeName;
+    data['job_time_start'] = this.serviceStartDate;
+    data['job_time_end'] = this.serviceEndDate;
+   
     // Add other properties
     return data;
   }

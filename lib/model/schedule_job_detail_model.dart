@@ -164,6 +164,9 @@ class MJobDetail implements AJobDetail, AActiveService {
 
     attention = json["attention"];
     customerType = json["customer_type"];
+    print('saranya');
+        print(json["attention"]);
+
     serviceOrderNo = json["service_order_no"];
 
     final attendance = json['attendance'];

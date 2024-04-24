@@ -178,10 +178,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final passwordField = TextFormField(
       validator: MultiValidator([
         RequiredValidator(errorText: "* Required"),
-        MinLengthValidator(6,
-            errorText: "Password should be atleast 6 characters"),
-        MaxLengthValidator(15,
-            errorText: "Password should not be greater than 15 characters")
+        // MinLengthValidator(6,
+        //     errorText: "Password should be atleast 6 characters"),
+        // MaxLengthValidator(15,
+        //     errorText: "Password should not be greater than 15 characters")
       ]),
       controller: _passwordController,
       obscureText: _obsecureText,
@@ -227,7 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 body: loginRequestModel.toJson());
 
             var map = response.map;
-            var status = map['status'] as String;
+            var status = map['status'];
             var message = map['message'] ?? 'Invalid Login Credentials';
             if (status == 'success') {
               var dataMap = map['data'][0] as Map<String, dynamic>;

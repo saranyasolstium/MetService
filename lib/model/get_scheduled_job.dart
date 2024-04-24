@@ -133,7 +133,7 @@ class MScheduledJobItem implements AServiceItem {
         siteZipCode: json["site_zipcode"],
         engineerStatus: json["engineer_status"],
         serviceType: json["service_type"],
-        serviceDate: json["service_date"],
+        serviceDate: json["service_time_start"],
   
         //Attendance entry
         attendenceDate: json['AttendenceDate'],

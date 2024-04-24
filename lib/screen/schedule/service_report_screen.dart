@@ -21,25 +21,29 @@ import 'package:eagle_pixels/reuse/custom_checkbox.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:signature/signature.dart';
 import 'package:toast/toast.dart';
 
 class ServiceReportScreen extends StatefulWidget {
-  final String imagePath;
+  //final String imagePath;
 
-  const ServiceReportScreen({Key? key, required this.imagePath})
-      : super(key: key);
+  const ServiceReportScreen({Key? key}) : super(key: key);
   @override
   _ServiceReportScreenState createState() => _ServiceReportScreenState();
 }
 
 class _ServiceReportScreenState extends State<ServiceReportScreen> {
   String? selectedPaymentMode = 'Cash';
-  String? selectedChemist = 'Advion Cockroach Gel';
+  String? selectedChemist = '';
 
   final TimerController time = Get.find();
   final JobCheckListController checkListController = Get.find();
   final ScheduleListController schedule = Get.find();
+  TextEditingController otherController = TextEditingController();
+
   // final controller = Get.put(JobDetailController());
   final controller = Get.find<JobDetailController>();
   AJobDetail get detail {
@@ -238,51 +242,49 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                         ),
                                       ),
                                       SizedBox(height: 10),
-                                      DropdownButton<String>(
-                                        value: selectedChemist,
-                                        onChanged: (String? newValue) {
+                                      MultiSelectDialogField(
+                                        items: <MultiSelectItem<String>>[
+                                          for (String value in [
+                                            "Advion Cockroach Gel",
+                                            "Insect Detector 100i",
+                                            "Deltacide (Misting)",
+                                            "Fogging Solution (W)",
+                                            "Diesel",
+                                            "Demand 2.5 CS",
+                                            "NewCyper 15WP",
+                                            "Newcyper 6.5 EC",
+                                            "Temprid SC",
+                                            "Tenopa SC",
+                                            "Rodent bait box",
+                                            "Rodent bait",
+                                            "Newcumin Tracking Powder",
+                                            "Rodent glueboard tamper proof box",
+                                            "Rodent glueboard ",
+                                            "Optigard ant gel",
+                                            "Termikil powder",
+                                            "Premise 200 SC",
+                                            "Xterm AG baiting",
+                                            "Xterm IG station",
+                                            "Rat cage",
+                                            "Anti malaria oil",
+                                            "Spar 1%",
+                                            "Mosquito dunk (BTI)",
+                                            "Dome Trap",
+                                            "Sulphur powder",
+                                            "Ultrathor",
+                                            "Ultriset"
+                                          ])
+                                            MultiSelectItem<String>(
+                                                value, value),
+                                        ],
+                                        listType: MultiSelectListType.CHIP,
+                                        onConfirm: (values) {
                                           setState(() {
-                                            selectedChemist = newValue!;
+                                            selectedChemist = values.join(", ");
                                             print(selectedChemist);
                                           });
                                         },
-                                        items: <String>[
-                                          "Advion Cockroach Gel",
-                                          "Insect Detector 100i",
-                                          "Deltacide (Misting)",
-                                          "Fogging Solution (W)",
-                                          "Diesel",
-                                          "Demand 2.5 CS",
-                                          "NewCyper 15WP",
-                                          "Newcyper 6.5 EC",
-                                          "Temprid SC",
-                                          "Tenopa SC",
-                                          "Rodent bait box",
-                                          "Rodent bait",
-                                          "Newcumin Tracking Powder",
-                                          "Rodent glueboard tamper proof box",
-                                          "Rodent glueboard ",
-                                          "Optigard ant gel",
-                                          "Termikil powder",
-                                          "Premise 200 SC",
-                                          "Xterm AG baiting",
-                                          "Xterm IG station",
-                                          "Rat cage",
-                                          "Anti malaria oil",
-                                          "Spar 1%",
-                                          "Mosquito dunk (BTI)",
-                                          "Dome Trap",
-                                          "Sulphur powder",
-                                          "Ultrathor",
-                                          "Ultriset"
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 )
@@ -339,10 +341,21 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                   height: 12.dynamic,
                                 ),
                                 selectedPaymentMode == "Bank Transfer"
-                                    ? Image.asset(
-                                        'images/met_sgqr.jpg',
-                                        fit: BoxFit.fill,
-                                        height: 400.dynamic,
+                                    ? Column(
+                                        children: [
+                                          Image.asset(
+                                            'images/met_sgqr.jpg',
+                                            fit: BoxFit.fill,
+                                            height: 400.dynamic,
+                                          ),
+                                          Text(
+                                            'OCBC Bank : AC 509079455001',
+                                            style: TextStyle(
+                                              fontSize: 16.dynamic,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       )
                                     : SizedBox(),
                                 selectedPaymentMode == "Others"
@@ -357,7 +370,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                             controller.feedback.value = txt;
                                           },
                                           obscureText: false,
-                                          // controller: _remarkController,
+                                          controller: otherController,
                                           keyboardType: TextInputType.multiline,
                                           maxLines: 1,
                                           style: TextStyle(
@@ -635,40 +648,63 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 var techBytes = await controller
                                     .signatureTechnicianController.value
                                     .toPngBytes();
-                                File imageFile = File(widget.imagePath);
-                                List<int> imageBytes =
-                                    await imageFile.readAsBytes();
 
-                                String base64Image = base64Encode(imageBytes);
-                                if (bytes != null && techBytes != null) {
-                                  showLoading();
+                                if (detail.aServiceName ==
+                                        "Pest Control Management" &&
+                                    selectedChemist!.isEmpty) {
+                                  Toast.show(
+                                    'Please select chemist value',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
+                                } else if (selectedPaymentMode == "Others" &&
+                                    otherController.text.trim().isEmpty) {
+                                  Toast.show(
+                                    'Please enter other ',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
+                                } else if (bytes != null && techBytes != null) {
+                                  AppController()
+                                      .verifyUser()
+                                      .then((result) async {
+                                        print(result.image!.path);
+                                    File imageFile = File(result.image!.path);
+                                    List<int> imageBytes =
+                                        await imageFile.readAsBytes();
 
-                                  String? status = await checkListController
-                                      .onCompleteJob(
-                                          requestID: detail.aServiceId ?? '0',
-                                          signature: base64Encode(bytes),
-                                          technicianSign: base64Encode(
-                                              techBytes),
-                                          feedback: controller.feedback.value,
-                                          paymentMode: selectedPaymentMode!,
-                                          chemicalList: detail.aServiceName ==
-                                                  "Pest Control Management"
-                                              ? selectedChemist!
-                                              : "",
-                                          technicianComment:
-                                              controller.engineerFeedback.value,
-                                          imagPath: base64Image);
+                                    String base64Image =
+                                        base64Encode(imageBytes);
+                                    String? status =
+                                        await checkListController.onCompleteJob(
+                                            requestID: detail.aServiceId ?? '0',
+                                            signature: base64Encode(bytes),
+                                            technicianSign:
+                                                base64Encode(techBytes),
+                                            feedback: controller.feedback.value,
+                                            paymentMode: selectedPaymentMode!,
+                                            chemicalList: detail.aServiceName ==
+                                                    "Pest Control Management"
+                                                ? selectedChemist!
+                                                : "",
+                                            technicianComment: controller
+                                                .engineerFeedback.value,
+                                            imagPath: base64Image);
 
-                                  if (status != null) {
-                                    Toast.show(
-                                      status,
-                                      backgroundColor: Colors.white,
-                                      textStyle: TextStyle(
-                                          fontSize: 16.0, color: Colors.black),
-                                    );
-                                  } else {
-                                    Get.toNamed(NavPage.jobCompleted);
-                                  }
+                                    if (status != null) {
+                                      Toast.show(
+                                        status,
+                                        backgroundColor: Colors.white,
+                                        textStyle: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      );
+                                    } else {
+                                      Get.toNamed(NavPage.jobCompleted);
+                                    }
+                                  });
                                 } else {
                                   Toast.show(
                                     'Please put your signature',

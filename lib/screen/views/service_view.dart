@@ -51,19 +51,19 @@ class ServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? purchaseDateString = item.aPurchaseDate;
-    DateTime? purchaseDate;
+    // String? purchaseDateString = item.aPurchaseDate;
+    // DateTime? purchaseDate;
 
-    if (purchaseDateString != null) {
-      purchaseDate = DateTime.tryParse(purchaseDateString);
-    }
+    // if (purchaseDateString != null) {
+    //   purchaseDate = DateTime.tryParse(purchaseDateString);
+    // }
 
-    String formattedTime = purchaseDate != null
-        ? "${purchaseDate.hour}:${purchaseDate.minute.toString().padLeft(2, '0')}"
-        : "N/A";
+    // String formattedTime = purchaseDate != null
+    //     ? "${purchaseDate.hour}:${purchaseDate.minute.toString().padLeft(2, '0')}"
+    //     : "N/A";
 
-    print("Formatted Time: $formattedTime");
-    print("Address: ${item.aCombinedAddress}");
+    // print("Formatted Time: $formattedTime");
+    // print("Address: ${item.aCombinedAddress}");
 
     return Container(
       padding: EdgeInsets.only(
@@ -224,7 +224,7 @@ class ServiceView extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      formattedTime,
+                      item.aPurchaseDate ?? "NA",
                       style: TextStyle(
                         color: Colour.appBlack,
                         fontWeight: FontWeight.w600,

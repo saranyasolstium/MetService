@@ -176,7 +176,7 @@ class JobCheckListController extends GetxController {
             technicianSign: technicianSign)
         .toJson();
 
-    Logger.log('Complete Job', feedback);
+    Logger.log('Complete Job', imagPath);
     print(param);
 
     var response = await API.service.call(
@@ -188,6 +188,7 @@ class JobCheckListController extends GetxController {
       detail.completedMessage = response.message ?? 'Job Completed';
       return null;
     } else {
+      print(response.message);
       return response.message ?? kErrorMsg;
     }
   }
