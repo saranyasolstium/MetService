@@ -341,7 +341,11 @@ extension JobDetailWidgets on JobDetailScreen {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             JobDetailTitleDescriptionView(
-                'Service Type:', detail.aTeamName ?? 'NA'),
+                'Service Type:',
+                detail.aTeamName != null && detail.aTeamName!.isNotEmpty
+                    ? detail.aTeamName
+                    : 'NA')
+
             // JobDetailAmountDescriptionView(
             //   'Service Amount',
             //   () async =>

@@ -132,7 +132,7 @@ class MScheduledJobItem implements AServiceItem {
         siteState: json["site_state"],
         siteZipCode: json["site_zipcode"],
         engineerStatus: json["engineer_status"],
-        serviceType: json["service_type"],
+        serviceType: json["service_name"],
         serviceDate: json["service_time_start"],
   
         //Attendance entry
@@ -162,7 +162,7 @@ class MScheduledJobItem implements AServiceItem {
         "description": description,
         "name": name,
         "address":siteAddress,
-        "service_type": serviceType,
+        "service_name": serviceType,
         //AttendanceEntry
         'AttendenceDate': attendenceDate,
         'AttendenceEndDate': attendenceEndDate,
@@ -172,7 +172,7 @@ class MScheduledJobItem implements AServiceItem {
       };
 
   String? get aProductImage => productImage;
-  String? get aProdouctName => productName;
+  String? get aProdouctName => productName.toString().isNotEmpty ? productName : "NA";
   String? get aCctvID => sku.toString();
 
   //String? get aServiceType => serviceType;
@@ -180,7 +180,7 @@ class MScheduledJobItem implements AServiceItem {
   String? get aCustomerImage => customerImage;
   String? get aEmail => "";
   String? get aPhoneNo => "";
-  String? get aServiceName => serviceType;
+  String? get aServiceName => serviceType ?? "NA";
   String? get aSubServiceName => "";
 
   double? get aLat => lat;

@@ -133,7 +133,7 @@ class ServiceView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Type of Service',
+                      'Service Name',
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
@@ -201,9 +201,9 @@ class ServiceView extends StatelessWidget {
               ),
             ],
           ),
-           SizedBox(
-              height: 21.dynamic,
-            ),
+          SizedBox(
+            height: 21.dynamic,
+          ),
           if (isNeedScheduledTime)
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -212,8 +212,7 @@ class ServiceView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.only( bottom: 10.dynamic),
+                      padding: EdgeInsets.only(bottom: 10.dynamic),
                       child: Text(
                         'Scheduled Time:',
                         style: TextStyle(

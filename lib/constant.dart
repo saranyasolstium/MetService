@@ -4,6 +4,9 @@ import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+
 
 const kCameraPlaceholder = 'images/camera.png';
 const kUserPlaceholder = 'images/user.png';
@@ -18,6 +21,48 @@ String safeString(String dateString) {
     print('Error parsing date: $e');
     return ''; // or return the original string or a default value
   }
+}
+
+
+
+Future<Object?> compressImage(File imageFile) async {
+  // Get the original file size
+  int originalSize = await imageFile.length();
+
+  // Target size in bytes (1 MB = 1024 * 1024 bytes)
+  int targetSize = 1024 * 1024;
+
+  // If the original size is already below the target size, return the original image file
+  if (originalSize < targetSize) {
+    return imageFile;
+  }
+
+  // Compress the image
+  var result = await FlutterImageCompress.compressAndGetFile(
+    imageFile.path,
+    imageFile.path, // Path to save the compressed image (overwrite the original file)
+    quality: 70, // Adjust the quality as needed (0-100)
+    minHeight: 1920, // Set the minimum height (optional)
+    minWidth: 1080, // Set the minimum width (optional)
+  );
+
+  // Get the size of the compressed file
+  int compressedSize = await result!.length();
+
+  // If the compressed size is still above the target size, further reduce the quality
+  while (compressedSize > targetSize) {
+    result = await FlutterImageCompress.compressAndGetFile(
+      imageFile.path,
+      imageFile.path, // Path to save the compressed image (overwrite the original file)
+      quality: 60, // Reduce the quality further
+      minHeight: 1920, // Set the minimum height (optional)
+      minWidth: 1080, // Set the minimum width (optional)
+    );
+    compressedSize = await result!.length();
+  }
+
+  // Return the compressed image file
+  return result;
 }
 
 

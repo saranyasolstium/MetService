@@ -167,7 +167,7 @@ class MJobDetail implements AJobDetail, AActiveService {
     print('saranya');
         print(json["attention"]);
 
-    serviceOrderNo = json["service_order_no"];
+    serviceOrderNo = json["service_order_id"];
 
     final attendance = json['attendance'];
     aAttendanceEntry = [];
@@ -215,7 +215,7 @@ class MJobDetail implements AJobDetail, AActiveService {
 
     data['attention'] = this.attention;
     data['customer_type'] = this.customerType;
-    data['service_order_no'] = this.serviceOrderNo;
+    data['service_order_id'] = this.serviceOrderNo;
 
     // //Booking Information
     data['service_type'] = this.teamName;

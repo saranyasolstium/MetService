@@ -85,8 +85,8 @@ class ParamCompleteJob {
     Map<String, dynamic> json = {};
     json['RequestID'] = requestID;
     json['rating'] = rating;
-    json['customer_comment'] = feedback;
-    json['employee_comment'] = technicianComment;
+    json['customer_comment'] = technicianComment;
+    json['employee_comment'] = feedback;
     json['paymet_mode'] = paymentMode;
     json['chemical_list'] = chemicalList;
     json['after_service_img'] = imagPath;

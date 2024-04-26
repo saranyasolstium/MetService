@@ -72,7 +72,10 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             JobDetailTitleDescriptionView(
-                'Service Type:', detail.aTeamName ?? 'NA'),
+                'Service Type:',
+                detail.aTeamName != null && detail.aTeamName!.isNotEmpty
+                    ? detail.aTeamName
+                    : 'NA')
           ],
         ),
         SizedBox(
@@ -670,7 +673,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                   AppController()
                                       .verifyUser()
                                       .then((result) async {
-                                        print(result.image!.path);
+                                    print(result.image!.path);
                                     File imageFile = File(result.image!.path);
                                     List<int> imageBytes =
                                         await imageFile.readAsBytes();
