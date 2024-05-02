@@ -152,9 +152,7 @@ class JobCheckListController extends GetxController {
     }
   }
 
-  Future<String?> onCompleteJob(
-      // ignore: non_constant_identifier_names
-      {
+  Future<String?> onCompleteJob({
     required String requestID,
     required signature,
     required String feedback,
@@ -163,26 +161,28 @@ class JobCheckListController extends GetxController {
     required String technicianComment,
     required String paymentMode,
     required String chemicalList,
+    required String visitType,
+    required String inspectionReport,
+    required String preparation,
+    required String areasInspected,
+    required String remark,
   }) async {
     var param = await ParamCompleteJob(
-            requestID: requestID,
-            signature: signature,
-            feedback: feedback,
-            rating: "4",
-            chemicalList: chemicalList,
-            imagPath: imagPath,
-            paymentMode: paymentMode,
-            technicianComment: technicianComment,
-            technicianSign: technicianSign)
-        .toJson();
-
-// // Split the concatenated string by commas
-// List<String> splitImages = imagPath.split(',');
-
-// // Print each value
-// for (String image in splitImages) {
-//   print(image);
-// }
+      requestID: requestID,
+      visitType: visitType,
+      inspectionReport: inspectionReport,
+      preparation: preparation,
+      areasInspected: areasInspected,
+      remark: remark,
+      chemicalList: chemicalList,
+      paymentMode: paymentMode,
+      feedback: feedback,
+      technicianComment: technicianComment,
+      technicianSign: technicianSign,
+      signature: signature,
+      imagPath: imagPath,
+      rating: "4",
+    ).toJson();
 
     Logger.log('Complete Job', imagPath);
     print(param);

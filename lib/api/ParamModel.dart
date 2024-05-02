@@ -68,6 +68,11 @@ class ParamCompleteJob {
       technicianComment,
       paymentMode,
       chemicalList,
+      visitType,
+      inspectionReport,
+      preparation,
+      areasInspected,
+      remark,
       rating;
   ParamCompleteJob({
     this.requestID,
@@ -79,6 +84,11 @@ class ParamCompleteJob {
     this.paymentMode,
     this.technicianSign,
     this.chemicalList,
+    this.visitType,
+    this.inspectionReport,
+    this.areasInspected,
+    this.preparation,
+    this.remark,
   });
 
   Future<Map<String, dynamic>> toJson() async {
@@ -89,16 +99,14 @@ class ParamCompleteJob {
     json['employee_comment'] = feedback;
     json['paymet_mode'] = paymentMode;
     json['chemical_list'] = chemicalList;
+    json['visit_type'] = visitType;
+    json["inspection_report"] = inspectionReport;
+    json['preparation'] = preparation;
+    json['areas_inspected'] = areasInspected;
+    json['employee_comment'] = remark;
     json['after_service_img'] = imagPath;
     json['employee_sign'] = technicianSign;
     json['signature'] = signature;
-    json['contact_name'] = "";
-    json['client_id'] = "";
-    json['job_title'] = "";
-    json['Authid'] = "";
-    json['type'] = "";
-    json['method'] = "";
-    json['quantity'] = "";
 
     return json;
   }

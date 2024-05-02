@@ -377,7 +377,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       controller.areasInspected.value = txt;
                                     },
                                     obscureText: false,
-                                    // controller: _remarkController,
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 4,
                                     style: TextStyle(
@@ -427,7 +426,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       controller.remark.value = txt;
                                     },
                                     obscureText: false,
-                                    // controller: _remarkController,
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 4,
                                     style: TextStyle(
@@ -523,9 +521,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                               BorderRadius.circular(5.0),
                                         ),
                                         child: TextFormField(
-                                          onChanged: (txt) {
-                                            controller.feedback.value = txt;
-                                          },
+                                         
                                           obscureText: false,
                                           controller: otherController,
                                           keyboardType: TextInputType.multiline,
@@ -939,7 +935,12 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                               : "",
                                           technicianComment:
                                               controller.engineerFeedback.value,
-                                          imagPath: concatenatedImages);
+                                          imagPath: concatenatedImages,
+                                          visitType: controller.visitType.value,
+                                          inspectionReport: controller.selectedCheckboxValues.toString(),
+                                          remark: controller.remark.value,
+                                          areasInspected: controller.areasInspected.value,
+                                          preparation: controller.preparation.value);
 
                                   if (status != null) {
                                     Toast.show(

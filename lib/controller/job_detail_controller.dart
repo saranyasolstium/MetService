@@ -19,12 +19,11 @@ class JobDetailController extends GetxController {
   final Rx<double> starRate = 0.toDouble().obs;
   final RxString feedback = ''.obs;
   final RxString engineerFeedback = ''.obs;
-    final RxString areasInspected  = ''.obs;
+  final RxString areasInspected = ''.obs;
   final RxString remark = ''.obs;
-    final RxString visitType = ''.obs;
-
-
-
+  final RxString visitType = ''.obs;
+  final Map<String, String> selectedCheckboxValues = {};
+  final RxString preparation=''.obs;
   @override
   void onInit() {
     // fetchSite();

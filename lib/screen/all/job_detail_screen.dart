@@ -49,7 +49,7 @@ extension JobDetailAction on JobDetailScreen {
         // Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
 
         Get.put(JobCheckListController());
-        Get.to(() => ServiceReportScreen());
+        Get.to(() => ServiceReportScreen1());
         Future.delayed(
           Duration(seconds: 0),
           () => Get.snackbar(

@@ -57,6 +57,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
   TextEditingController typeCtrl = TextEditingController();
   TextEditingController methodCtrl = TextEditingController();
   TextEditingController quantityCtrl = TextEditingController();
+  TextEditingController otherCtrl = TextEditingController();
 
   late List<String> items;
   late List<List<String>> selectedValues;
@@ -77,14 +78,12 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
     quantityCtrl.clear();
   }
 
-  Map<String, String> selectedCheckboxValues = {};
-
   void handleCheckboxChange(String item, String value, bool isChecked) {
     setState(() {
       if (isChecked) {
-        selectedCheckboxValues[item] = value;
+        controller.selectedCheckboxValues[item] = value;
       } else {
-        selectedCheckboxValues.remove(item);
+        controller.selectedCheckboxValues.remove(item);
       }
     });
   }
@@ -103,6 +102,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
       "Fleas",
     ];
     selectedValues = List.generate(items.length, (index) => []);
+    controller.selectedCheckboxValues.clear();
   }
 
   Widget get serviceReportView {
@@ -442,34 +442,35 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                     },
                                   ),
                                 ]),
-                                _isOtherChecked?
-                                 Container(
-                                  decoration: BoxDecoration(
-                                    color: Colour.appLightGrey,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: TextFormField(
-                                    onChanged: (txt) {
-                                      // controller.feedback.value = txt;
-                                    },
-                                    obscureText: false,
-                                    controller: typeCtrl,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 15.0, horizontal: 20.0),
-                                      hintText: "Specify other",
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                )
-                                :SizedBox(),
+                                _isOtherChecked
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          color: Colour.appLightGrey,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          border:
+                                              Border.all(color: Colors.grey),
+                                        ),
+                                        child: TextFormField(
+                                          obscureText: false,
+                                          controller: otherController,
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                          decoration: InputDecoration(
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 15.0,
+                                                    horizontal: 20.0),
+                                            hintText: "Specify other",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
 
                                 SizedBox(
                                   height: 10.dynamic,
@@ -792,9 +793,33 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                             ),
                             child: TextButton(
                               onPressed: () async {
-                                // Get.put(JobCheckListController());
+                                controller.visitType.value = selectedVisitType!;
+                                if (_isOtherChecked) {
+                                  if (otherController.text.isNotEmpty) {
+                                    handleCheckboxChange(
+                                        "Other", otherController.text, true);
+                                  } else {
+                                    Toast.show(
+                                      'Please specify other"',
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.0, color: Colors.black),
+                                    );
+                                  }
+                                } else {
+                                  handleCheckboxChange("Other", "", false);
+                                }
 
-                                // Get.to(() => ServiceReportScreen());
+                                print(controller.selectedCheckboxValues
+                                    .toString());
+
+                                controller.preparation.value =
+                                    jsonEncode(enteredValues);
+                                print(controller.preparation.value);
+
+                                Get.put(JobCheckListController());
+
+                                Get.to(() => ServiceReportScreen());
                               },
                               child: Text(
                                 'Next',
