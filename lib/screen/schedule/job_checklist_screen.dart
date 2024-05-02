@@ -13,6 +13,7 @@ import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
+import 'package:eagle_pixels/screen/schedule/service_report_screen1.dart';
 import 'package:eagle_pixels/screen/toast/photo_choose_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -95,7 +96,7 @@ extension StopJobAction on JobCheckListScreen {
       if (result.image?.path != null && result.image!.path.isNotEmpty) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ServiceReportScreen()),
+          MaterialPageRoute(builder: (context) => ServiceReportScreen1()),
         );
 
        // Get.toNamed(NavPage.jobServiceReportScreen);

@@ -176,6 +176,14 @@ class JobCheckListController extends GetxController {
             technicianSign: technicianSign)
         .toJson();
 
+// // Split the concatenated string by commas
+// List<String> splitImages = imagPath.split(',');
+
+// // Print each value
+// for (String image in splitImages) {
+//   print(image);
+// }
+
     Logger.log('Complete Job', imagPath);
     print(param);
 

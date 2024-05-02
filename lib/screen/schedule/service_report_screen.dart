@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
@@ -38,6 +39,10 @@ class ServiceReportScreen extends StatefulWidget {
 class _ServiceReportScreenState extends State<ServiceReportScreen> {
   String? selectedPaymentMode = 'Cash';
   String? selectedChemist = '';
+  List<File> _images = [];
+  List<String> _imagePaths = [];
+
+  final picker = ImagePicker();
 
   final TimerController time = Get.find();
   final JobCheckListController checkListController = Get.find();
@@ -48,6 +53,54 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
   final controller = Get.find<JobDetailController>();
   AJobDetail get detail {
     return controller.detail.value;
+  }
+
+  Future getImage(ImageSource source) async {
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      setState(() {
+        _images.add(File(pickedFile.path));
+        _imagePaths.add(pickedFile.name);
+      });
+    }
+  }
+
+  Future<void> _removeImage(int index) async {
+    setState(() {
+      _images.removeAt(index);
+      _imagePaths.removeAt(index);
+    });
+  }
+
+  void showImagePickerModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () {
+                  getImage(ImageSource.gallery);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Camera'),
+                onTap: () {
+                  getImage(ImageSource.camera);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget get serviceReportView {
@@ -194,32 +247,32 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                             },
                           ),
                           SizedBox(height: 12.dynamic),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6.dynamic),
-                              color: Colors.white,
-                            ),
-                            margin:
-                                EdgeInsets.symmetric(horizontal: 17.dynamic),
-                            padding: EdgeInsets.all(14.dynamic),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Service information:',
-                                  style: TextStyle(
-                                      color: Colour.appBlue,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16.dynamic),
-                                ),
-                                serviceReportView
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 12.dynamic,
-                          ),
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(6.dynamic),
+                          //     color: Colors.white,
+                          //   ),
+                          //   margin:
+                          //       EdgeInsets.symmetric(horizontal: 17.dynamic),
+                          //   padding: EdgeInsets.all(14.dynamic),
+                          //   child: Column(
+                          //     mainAxisSize: MainAxisSize.min,
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       Text(
+                          //         'Service information:',
+                          //         style: TextStyle(
+                          //             color: Colour.appBlue,
+                          //             fontWeight: FontWeight.w400,
+                          //             fontSize: 16.dynamic),
+                          //       ),
+                          //       serviceReportView
+                          //     ],
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 12.dynamic,
+                          // ),
                           detail.aServiceName == "Pest Control Management"
                               ? Container(
                                   decoration: BoxDecoration(
@@ -292,6 +345,107 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                   ),
                                 )
                               : SizedBox(),
+                          SizedBox(height: 12.dynamic),
+                           Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Areas Inspected/Treated',
+                                    style: TextStyle(
+                                          fontSize: 12.dynamic,
+                                          color: Colour.appBlack,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                ),
+                                SizedBox(height: 12.dynamic),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colour.appLightGrey,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: TextFormField(
+                                    onChanged: (txt) {
+                                      controller.areasInspected.value = txt;
+                                    },
+                                    obscureText: false,
+                                    // controller: _remarkController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 4,
+                                    style: TextStyle(
+                                        fontSize: 14.dynamic,
+                                        fontWeight: FontWeight.w300),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(
+                                          20.0, 15.0, 20.0, 15.0),
+                                      hintText: "Write your areas inspected",
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 10.dynamic),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 12.dynamic),
+                           Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.dynamic),
+                              color: Colors.white,
+                            ),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            padding: EdgeInsets.all(14.dynamic),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Recommendation/Remarks',
+                                    style: TextStyle(
+                                          fontSize: 12.dynamic,
+                                          color: Colour.appBlack,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                ),
+                                SizedBox(height: 12.dynamic),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colour.appLightGrey,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: TextFormField(
+                                    onChanged: (txt) {
+                                      controller.remark.value = txt;
+                                    },
+                                    obscureText: false,
+                                    // controller: _remarkController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 4,
+                                    style: TextStyle(
+                                        fontSize: 14.dynamic,
+                                        fontWeight: FontWeight.w300),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(
+                                          20.0, 15.0, 20.0, 15.0),
+                                      hintText: "Write your remarks",
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 10.dynamic),
+                              ],
+                            ),
+                          ),
+                         
                           SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
@@ -605,10 +759,64 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                               ],
                             ),
                           ),
+                          SizedBox(height: 20.dynamic),
+                          Container(
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 17.dynamic),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colour.appBlue,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.dynamic),
+                              ),
+                            ),
+                            child: TextButton(
+                              onPressed: () async {
+                                showImagePickerModal(context);
+                              },
+                              child: Text(
+                                'Select Image',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.dynamic,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List<Widget>.generate(_imagePaths.length,
+                                (index) {
+                              final path = _imagePaths[index];
+                              return Row(
+                                children: [
+                                  SizedBox(width: 10),
+                                  IconButton(
+                                    icon: Icon(Icons.close, color: Colors.red),
+                                    onPressed: () {
+                                      _removeImage(index);
+                                    },
+                                  ),
+                                  SizedBox(width: 5),
+                                  Expanded(
+                                    child: Text(
+                                      path,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                ],
+                              );
+                            }),
+                          ),
                           SizedBox(height: 42.dynamic),
                         ],
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 20.dynamic,
                   ),
                   Container(
                     width: double.infinity,
@@ -669,45 +877,80 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     textStyle: TextStyle(
                                         fontSize: 16.0, color: Colors.black),
                                   );
+                                } else if (controller.feedback.value.isEmpty) {
+                                  Toast.show(
+                                    'Please provide customer feedback',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
+                                } else if (controller
+                                    .engineerFeedback.value.isEmpty) {
+                                  Toast.show(
+                                    'Please provide technician feedback',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
+                                } else if (_images.isEmpty) {
+                                  Toast.show(
+                                    'Please select at least one image',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
                                 } else if (bytes != null && techBytes != null) {
-                                  AppController()
-                                      .verifyUser()
-                                      .then((result) async {
-                                    print(result.image!.path);
-                                    File imageFile = File(result.image!.path);
+                                  List<String> base64Images = [];
+                                 
+
+                                  print(_images.length);
+                                  for (var imageFile in _images) {
                                     List<int> imageBytes =
                                         await imageFile.readAsBytes();
-
                                     String base64Image =
                                         base64Encode(imageBytes);
-                                    String? status =
-                                        await checkListController.onCompleteJob(
-                                            requestID: detail.aServiceId ?? '0',
-                                            signature: base64Encode(bytes),
-                                            technicianSign:
-                                                base64Encode(techBytes),
-                                            feedback: controller.feedback.value,
-                                            paymentMode: selectedPaymentMode!,
-                                            chemicalList: detail.aServiceName ==
-                                                    "Pest Control Management"
-                                                ? selectedChemist!
-                                                : "",
-                                            technicianComment: controller
-                                                .engineerFeedback.value,
-                                            imagPath: base64Image);
+                                    base64Images.add(base64Image);
+                                  }
+                                  print(base64Images.length);
 
-                                    if (status != null) {
-                                      Toast.show(
-                                        status,
-                                        backgroundColor: Colors.white,
-                                        textStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.black),
-                                      );
-                                    } else {
-                                      Get.toNamed(NavPage.jobCompleted);
+                                  String concatenatedImages = '';
+
+                                  for (int i = 0;
+                                      i < base64Images.length;
+                                      i++) {
+                                    concatenatedImages += base64Images[i];
+                                    if (i < base64Images.length - 1) {
+                                      concatenatedImages += ',';
                                     }
-                                  });
+                                  }
+                                 
+
+                                  String? status = await checkListController
+                                      .onCompleteJob(
+                                          requestID: detail.aServiceId ?? '0',
+                                          signature: base64Encode(bytes),
+                                          technicianSign: base64Encode(
+                                              techBytes),
+                                          feedback: controller.feedback.value,
+                                          paymentMode: selectedPaymentMode!,
+                                          chemicalList: detail.aServiceName ==
+                                                  "Pest Control Management"
+                                              ? selectedChemist!
+                                              : "",
+                                          technicianComment:
+                                              controller.engineerFeedback.value,
+                                          imagPath: concatenatedImages);
+
+                                  if (status != null) {
+                                    Toast.show(
+                                      status,
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.0, color: Colors.black),
+                                    );
+                                  } else {
+                                    Get.toNamed(NavPage.jobCompleted);
+                                  }
                                 } else {
                                   Toast.show(
                                     'Please put your signature',

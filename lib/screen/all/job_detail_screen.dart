@@ -16,6 +16,7 @@ import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:eagle_pixels/screen/schedule/job_checklist_screen.dart';
 import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
+import 'package:eagle_pixels/screen/schedule/service_report_screen1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -46,8 +47,14 @@ extension JobDetailAction on JobDetailScreen {
         schedule.reloadList();
         //scheduled_job_details_model.dart
         // Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
+
         Get.put(JobCheckListController());
         Get.to(() => ServiceReportScreen());
+        Future.delayed(
+          Duration(seconds: 0),
+          () => Get.snackbar(
+              "Service Started", 'The service has started successfully.'),
+        );
       } else {
         Toast.show(message,
             backgroundColor: Colors.white,
@@ -78,7 +85,7 @@ extension JobDetailAction on JobDetailScreen {
 
     Get.put(JobCheckListController());
 
-    Get.to(() => ServiceReportScreen());
+    Get.to(() => ServiceReportScreen1());
   }
 }
 
