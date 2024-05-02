@@ -165,17 +165,6 @@ class MyProfileScreen extends StatelessWidget {
                                           ],
                                         );
                                       });
-                                  // Get.defaultDialog(
-                                  //     title: 'Confirm',
-                                  //     content: Text(
-                                  //         'Are you sure you want to logout?'),
-                                  //     textConfirm: 'Confirm',
-                                  //     textCancel: 'Cancel',
-                                  //     onConfirm: () {
-                                  //       AppController.to.storage.remove('token');
-                                  //       AppController.to.loginStatus.value =
-                                  //           LoginStatus.logout;
-                                  //     });
                                 },
                                 child: ListOptions(
                                   listName: 'Logout',
@@ -381,11 +370,11 @@ class ListOptions extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios_outlined,
-                color: Colors.grey,
-                size: 13.dynamic,
-              )
+              // Icon(
+              //   Icons.arrow_forward_ios_outlined,
+              //   color: Colors.grey,
+              //   size: 13.dynamic,
+              // )
             ],
           ),
           SizedBox(

@@ -346,7 +346,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 )
                               : SizedBox(),
                           SizedBox(height: 12.dynamic),
-                           Container(
+                          Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
                               color: Colors.white,
@@ -360,11 +360,11 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                               children: [
                                 Text(
                                   'Areas Inspected/Treated',
-                                    style: TextStyle(
-                                          fontSize: 12.dynamic,
-                                          color: Colour.appBlack,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                  style: TextStyle(
+                                    fontSize: 12.dynamic,
+                                    color: Colour.appBlack,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 SizedBox(height: 12.dynamic),
                                 Container(
@@ -395,7 +395,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                             ),
                           ),
                           SizedBox(height: 12.dynamic),
-                           Container(
+                          Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
                               color: Colors.white,
@@ -409,11 +409,11 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                               children: [
                                 Text(
                                   'Recommendation/Remarks',
-                                    style: TextStyle(
-                                          fontSize: 12.dynamic,
-                                          color: Colour.appBlack,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                  style: TextStyle(
+                                    fontSize: 12.dynamic,
+                                    color: Colour.appBlack,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 SizedBox(height: 12.dynamic),
                                 Container(
@@ -443,7 +443,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                               ],
                             ),
                           ),
-                         
+
                           SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
@@ -521,7 +521,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                               BorderRadius.circular(5.0),
                                         ),
                                         child: TextFormField(
-                                         
                                           obscureText: false,
                                           controller: otherController,
                                           keyboardType: TextInputType.multiline,
@@ -897,7 +896,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                   );
                                 } else if (bytes != null && techBytes != null) {
                                   List<String> base64Images = [];
-                                 
 
                                   print(_images.length);
                                   for (var imageFile in _images) {
@@ -919,14 +917,21 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       concatenatedImages += ',';
                                     }
                                   }
-                                 
+                                  Map<String, String> convertedMap = {};
 
-                                  String? status = await checkListController
-                                      .onCompleteJob(
+                                  controller.selectedCheckboxValues
+                                      .forEach((key, value) {
+                                  convertedMap['"$key"'] = '"$value"';
+                                  });
+
+                                  print(convertedMap.toString());
+
+                                  String? status =
+                                      await checkListController.onCompleteJob(
                                           requestID: detail.aServiceId ?? '0',
                                           signature: base64Encode(bytes),
-                                          technicianSign: base64Encode(
-                                              techBytes),
+                                          technicianSign:
+                                              base64Encode(techBytes),
                                           feedback: controller.feedback.value,
                                           paymentMode: selectedPaymentMode!,
                                           chemicalList: detail.aServiceName ==
@@ -937,10 +942,13 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                               controller.engineerFeedback.value,
                                           imagPath: concatenatedImages,
                                           visitType: controller.visitType.value,
-                                          inspectionReport: controller.selectedCheckboxValues.toString(),
+                                          inspectionReport:
+                                              convertedMap.toString(),
                                           remark: controller.remark.value,
-                                          areasInspected: controller.areasInspected.value,
-                                          preparation: controller.preparation.value);
+                                          areasInspected:
+                                              controller.areasInspected.value,
+                                          preparation:
+                                              controller.preparation.value);
 
                                   if (status != null) {
                                     Toast.show(

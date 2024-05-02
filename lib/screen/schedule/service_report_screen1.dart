@@ -813,6 +813,15 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                 print(controller.selectedCheckboxValues
                                     .toString());
 
+                                Map<String, String> convertedMap = {};
+
+                                controller.selectedCheckboxValues
+                                    .forEach((key, value) {
+                                  convertedMap['"$key"'] = '"$value"';
+                                });
+
+                                print(convertedMap.toString());
+
                                 controller.preparation.value =
                                     jsonEncode(enteredValues);
                                 print(controller.preparation.value);

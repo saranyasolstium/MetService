@@ -103,7 +103,6 @@ class ParamCompleteJob {
     json["inspection_report"] = inspectionReport;
     json['preparation'] = preparation;
     json['areas_inspected'] = areasInspected;
-    json['employee_comment'] = remark;
     json['after_service_img'] = imagPath;
     json['employee_sign'] = technicianSign;
     json['signature'] = signature;

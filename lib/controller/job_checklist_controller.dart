@@ -184,7 +184,7 @@ class JobCheckListController extends GetxController {
       rating: "4",
     ).toJson();
 
-    Logger.log('Complete Job', imagPath);
+    //Logger.log('Complete Job', imagPath);
     print(param);
 
     var response = await API.service.call(

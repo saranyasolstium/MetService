@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
@@ -5,6 +7,7 @@ import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -12,6 +15,11 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+
+
 import '../../colors.dart';
 
 extension ServiceViewAction on ServiceView {
@@ -64,6 +72,42 @@ class ServiceView extends StatelessWidget {
 
     // print("Formatted Time: $formattedTime");
     // print("Address: ${item.aCombinedAddress}");
+    
+
+    void fetchAndOpenPdf(String serviceId) async {
+  String url = "https://met.solstium.net/api/v1/employee/report_pdf/$serviceId";
+    String? token = await SharedPreferencesHelper.getToken();
+
+  try {
+    http.Response response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+
+      String pdfPath = '$tempPath/report.pdf';
+      await File(pdfPath).writeAsBytes(response.bodyBytes);
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PDFView(
+            filePath: pdfPath,
+          ),
+        ),
+      );
+    } else {
+      print('Request failed with status: ${response.statusCode}');
+    }
+  } catch (error) {
+    print('Error while fetching PDF: $error');
+  }
+}
+
 
     return Container(
       padding: EdgeInsets.only(
@@ -400,12 +444,43 @@ class ServiceView extends StatelessWidget {
                             );
                           }
                         },
-                        child: Text(
-                          'View Details',
-                          style: TextStyle(
-                              color: Colour.appBlue,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16.dynamic),
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  'View Details',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colour.appBlue,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16.dynamic,
+                                  ),
+                                ),
+                              ),
+                              isNeedStartJob
+                                  ? Container()
+                                  : Expanded(
+                                      flex: 1,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                         fetchAndOpenPdf(item.aServiceID!);
+  },
+                                        child: Text(
+                                          'View Pdf',
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                            color: Colour.appBlue,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16.dynamic,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          ),
                         ),
                       ),
                     )
