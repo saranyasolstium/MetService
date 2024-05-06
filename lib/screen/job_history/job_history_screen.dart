@@ -1,6 +1,5 @@
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_history_controller.dart';
-// import 'package:eagle_pixels/model/get_scheduled_job.dart';
 import 'package:eagle_pixels/screen/views/ChangeDateView.dart';
 import 'package:eagle_pixels/screen/views/service_view.dart';
 import 'package:flutter/material.dart';
@@ -11,18 +10,30 @@ import '../../colors.dart';
 import '../../constant.dart';
 
 class JobHistoryScreen extends StatelessWidget {
-  // const JobHistoryScreen({Key key}) : super(key: key);
   final JobHistoryController history = Get.put(JobHistoryController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colour.appLightGrey,
-      appBar: this.appBar,
+      appBar:  AppBar(
+          toolbarHeight: 50.dynamic,
+          elevation: 0,
+          backgroundColor: Color(0xFFFFFFFF),
+          leading: RawMaterialButton(
+            onPressed: () => Get.back(),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colour.appBlue,
+              size: 20.dynamic,
+            ),
+          ),
+          title: titleText('Job History'),
+        ),
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.all(17.0),
+            padding: EdgeInsets.all(17.dynamic),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -81,35 +92,3 @@ class JobHistoryScreen extends StatelessWidget {
   }
 }
 
-extension JobHistoryWidgets on JobHistoryScreen {
-  AppBar get appBar {
-    return AppBar(
-      title: titleText(
-        'Job History',
-      ),
-      backgroundColor: Colors.white,
-      elevation: 0,
-      leading: RawMaterialButton(
-        onPressed: () => Get.back(),
-        child: Icon(
-          Icons.arrow_back,
-          color: Colour.appBlue,
-        ),
-      ),
-    );
-  }
-}
-
-// class JobHistoryItem extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.only(bottom: 15),
-//       child: Container(
-//         width: double.infinity,
-//         height: 100,
-//         color: Colors.red,
-//       ),
-//     );
-//   }
-// }

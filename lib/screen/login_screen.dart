@@ -191,18 +191,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 SharedPreferencesHelper.setToken(token);
                 print('Stored Token - $token');
                 AppController.to.fetchProfile();
-                //SnackbarService.showSnackbar("Login Success", "Successfully logged in.");
+                SnackbarService.showSnackbar(
+                    "Login Success", "Successfully logged in.");
 
-                Future.delayed(
-                  Duration(seconds: 0),
-                  () =>
-                      Get.snackbar("Login Success", 'Successfully logged in.'),
-                );
+                // Future.delayed(
+                //   Duration(seconds: 0),
+                //   () =>
+                //       Get.snackbar("Login Success", 'Successfully logged in.'),
+                // );
               } else {
-                Get.snackbar("Login Failed", 'Invalid token received.');
+                SnackbarService.showSnackbar(
+                    "Login Failed", "Invalid email or password");
               }
             } else {
-              Get.snackbar("Login Failed", '$message');
+              SnackbarService.showSnackbar("Login Failed", '$message');
             }
           } else {
             print('Not Validated');

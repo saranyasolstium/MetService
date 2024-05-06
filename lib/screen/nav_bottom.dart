@@ -1,4 +1,5 @@
 import 'package:eagle_pixels/controller/app_controller.dart';
+import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/screen/home/my_profile.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,7 @@ class _NavState extends State<Nav> {
     bottomBar.add(BottomNavigationBarItem(
       icon: Icon(
         Icons.person,
+        size: 20.dynamic,
       ),
       label: 'My Profile',
     ));
@@ -42,8 +44,10 @@ class _NavState extends State<Nav> {
       bottomBar.add(BottomNavigationBarItem(
         icon: Icon(
           Icons.home,
+          size: 20.dynamic,
         ),
         label: 'Home',
+        
       ));
     } else {
       // _widgetOptions = [
@@ -76,10 +80,11 @@ class _NavState extends State<Nav> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: this.bars,
+        
         currentIndex: _selectedIndex,
         onTap: _onItemTap,
-        selectedFontSize: 13.0,
-        unselectedFontSize: 13.0,
+        selectedFontSize: 13.dynamic,
+        unselectedFontSize: 13.dynamic,
       ),
     );
   }

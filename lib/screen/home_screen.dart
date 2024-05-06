@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eagle_pixels/colors.dart';
-import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -8,7 +7,6 @@ import 'package:eagle_pixels/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:eagle_pixels/screen/create_job/create_job_screen.dart';
 
 extension HomeAction on HomeScreen {
   onAttendance() {
@@ -120,11 +118,11 @@ extension HomeWidgets on HomeScreen {
                           fontSize: 16.dynamic,
                           fontWeight: FontWeight.w400),
                     ),
-                    Icon(
-                      Icons.keyboard_arrow_down,
-                      color: Colour.appBlue,
-                      size: 30.dynamic,
-                    ),
+                    // Icon(
+                    //   Icons.keyboard_arrow_down,
+                    //   color: Colour.appBlue,
+                    //   size: 30.dynamic,
+                    // ),
                   ],
                 ),
               ),

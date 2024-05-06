@@ -217,7 +217,7 @@ class ServiceDetail {
   ServiceDetail(); // Constructor
 
   ServiceDetail.fromJson(Map<String, dynamic> json) {
-    id = json['ID'];
+    id = json['id'];
     // employeeCode = json['EmployeeCode'];
     // employeeName = json['EmployeeName'];
     //Attendance entry
@@ -249,7 +249,7 @@ class ServiceDetail {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ID'] = this.id;
+    data['id'] = this.id;
     //data['EmployeeCode'] = this.employeeCode;
     //data['EmployeeName'] = this.employeeName;
     data['job_time_start'] = this.serviceStartDate;

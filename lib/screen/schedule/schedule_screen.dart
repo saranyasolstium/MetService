@@ -26,7 +26,7 @@ class ScheduleScreen extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colour.appLightGrey,
         appBar: AppBar(
-          toolbarHeight: 66.dynamic,
+          toolbarHeight: 50.dynamic,
           elevation: 0,
           backgroundColor: Color(0xFFFFFFFF),
           leading: RawMaterialButton(
@@ -34,6 +34,7 @@ class ScheduleScreen extends StatelessWidget {
             child: Icon(
               Icons.arrow_back,
               color: Colour.appBlue,
+              size: 20.dynamic,
             ),
           ),
           title: titleText('Scheduled Job'),

@@ -8,7 +8,7 @@ class SnackbarService {
       '',
       '',
       snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.grey,
       colorText: Colors.white,
       duration: Duration(seconds: 3),
       titleText: Text(

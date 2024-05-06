@@ -235,7 +235,7 @@ class JobDetailScreen extends StatelessWidget {
                                         child: Container(
                                           child: Icon(
                                             Icons.location_on,
-                                            size: 25,
+                                            size: 20.dynamic,
                                             color: Colour.appDarkGrey,
                                           ),
                                         ),
@@ -378,11 +378,15 @@ extension JobDetailWidgets on JobDetailScreen {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            JobDetailAmountDescriptionView(
-              'Service Amount',
-              () async =>
-                  await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
-            ),
+          JobDetailAmountDescriptionView(
+  'Service Amount',
+  detail.aBookingAmount == null || detail.aBookingAmount!.isEmpty
+    ? () async => "NA"
+    : () async => await convertAndDisplayAmount(detail.aBookingAmount!),
+),
+
+
+
           ],
         ),
       ],

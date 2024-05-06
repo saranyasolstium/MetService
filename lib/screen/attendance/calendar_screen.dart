@@ -280,17 +280,21 @@ class CalendarScreen extends StatelessWidget {
 extension CalendarWidgets on CalendarScreen {
   AppBar get appBar {
     return AppBar(
-      title: titleText('Attendance'),
-      backgroundColor: CupertinoColors.white,
-      elevation: 0,
-      leading: RawMaterialButton(
-        onPressed: () => Get.back(),
-        child: Icon(
-          Icons.arrow_back,
-          color: Colour.appBlue,
-        ),
-      ),
-    );
+          toolbarHeight: 50.dynamic,
+          elevation: 0,
+          backgroundColor: Color(0xFFFFFFFF),
+          leading: RawMaterialButton(
+            onPressed: () => Get.back(),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colour.appBlue,
+              size: 20.dynamic,
+            ),
+          ),
+          title: titleText('Attendance'),
+        );
+    
+    
   }
 
   Widget get yearMonth {

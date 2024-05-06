@@ -573,11 +573,12 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                     },
                                     obscureText: false,
                                     controller: quantityCtrl,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
                                     inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly,
-                                      LengthLimitingTextInputFormatter(
-                                          3), // Limit to 3 digits
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d+\.?\d{0,2}')),
                                     ],
                                     maxLines: 1,
                                     style: TextStyle(

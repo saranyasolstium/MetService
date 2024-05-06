@@ -6,6 +6,7 @@ import 'package:eagle_pixels/model/active_service_model.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -233,7 +234,7 @@ class AttendanceServiceListScreen extends StatelessWidget {
                                             style: TextStyle(
                                               color: Colour.appBlack,
                                               fontWeight: FontWeight.w600,
-                                              fontSize: 16.0,
+                                              fontSize: 16.dynamic,
                                             ),
                                           ),
                                           SizedBox(height: 10.0),
@@ -491,6 +492,20 @@ class ServiceAttendenceDetail extends StatelessWidget {
           SizedBox(
             height: 20.dynamic,
           ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              'Job ID: ${serviceDetail.id ?? 'NA'}',
+              style: TextStyle(
+                  color: Colour.appBlack,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16.dynamic),
+            ),
+          ),
+
+          SizedBox(
+            height: 10.dynamic,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -507,26 +522,26 @@ class ServiceAttendenceDetail extends StatelessWidget {
                   color: Colour.appRed),
             ],
           ),
-        //   SizedBox(
-        //     height: 10.dynamic,
-        //   ),
-        //   Row(
-        //     mainAxisAlignment: MainAxisAlignment.start,
-        //     children: [
-        //       AttendanceTitleDescriptionView(
-        //         'LatIn:',
-        //         serviceDetail.latIn.toString(),
-        //         color: Colour.appGreen,
-        //       ),
-        //       SizedBox(
-        //         width: 10.dynamic,
-        //       ),
-        //       AttendanceTitleDescriptionView(
-        //           'LatOut:', serviceDetail.latOut.toString(),
-        //           color: Colour.appRed),
-        //     ],
-        //   )
-         ],
+          //   SizedBox(
+          //     height: 10.dynamic,
+          //   ),
+          //   Row(
+          //     mainAxisAlignment: MainAxisAlignment.start,
+          //     children: [
+          //       AttendanceTitleDescriptionView(
+          //         'LatIn:',
+          //         serviceDetail.latIn.toString(),
+          //         color: Colour.appGreen,
+          //       ),
+          //       SizedBox(
+          //         width: 10.dynamic,
+          //       ),
+          //       AttendanceTitleDescriptionView(
+          //           'LatOut:', serviceDetail.latOut.toString(),
+          //           color: Colour.appRed),
+          //     ],
+          //   )
+        ],
       ),
     );
   }

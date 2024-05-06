@@ -71,11 +71,9 @@ Future<void> _downloadPdf() async {
     );
 
     if (response.statusCode == 200) {
-      // Specify your custom folder path on external storage
       String customFolderPath = await ExternalPath.getExternalStoragePublicDirectory(
           ExternalPath.DIRECTORY_DOWNLOADS);
       
-      // Check if the custom folder exists, if not create it
       Directory customDir = Directory(customFolderPath);
       if (!customDir.existsSync()) {
         customDir.createSync(recursive: true);
@@ -86,7 +84,6 @@ Future<void> _downloadPdf() async {
       
       await File(filePath).writeAsBytes(response.bodyBytes);
 
-      // Show a snackbar to indicate successful download
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('PDF downloaded successfully. File saved at: $filePath'),

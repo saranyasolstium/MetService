@@ -46,7 +46,7 @@ class ChangeDateView extends StatelessWidget {
         vertical: 13.dynamic,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8.dynamic),
         color: Colors.white,
       ),
       child: Row(
@@ -71,7 +71,7 @@ class ChangeDateView extends StatelessWidget {
                     style: TextStyle(
                       color: Colour.appDarkGrey,
                       fontWeight: FontWeight.w400,
-                      fontSize: 12.0,
+                      fontSize: 12.dynamic,
                     ),
                   ),
                 ),
@@ -84,7 +84,7 @@ class ChangeDateView extends StatelessWidget {
                     style: TextStyle(
                       color: Colour.appBlack,
                       fontWeight: FontWeight.w400,
-                      fontSize: 14.0,
+                      fontSize: 14.dynamic,
                     ),
                   ),
                 ),
@@ -98,7 +98,7 @@ class ChangeDateView extends StatelessWidget {
               style: TextStyle(
                 color: Colour.appBlue,
                 fontWeight: FontWeight.w400,
-                fontSize: 16.0,
+                fontSize: 16.dynamic,
               ),
             ),
           ),
