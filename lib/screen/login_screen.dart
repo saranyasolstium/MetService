@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/colors.dart';
+import 'package:eagle_pixels/common/snackbar.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/model/login_model.dart';
@@ -33,8 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isApiCallService = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  Position? _currentPosition;
-  String? _countryCode;
 
   @override
   void initState() {
@@ -43,97 +42,37 @@ class _LoginScreenState extends State<LoginScreen> {
     _getLocation();
   }
 
-   Future<void> _getLocation() async {
-  try {
-    Position position = await AppController().determinePosition();
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude, position.longitude);
-    if (placemarks.isNotEmpty) {
-      Placemark placemark = placemarks.first;
-      String? countryCode = placemark.isoCountryCode;
-      if (countryCode != null) {
-        String? currencyCode =
-            await getCurrencyCodeFromCountryCode(countryCode);
-        if (currencyCode != null) {
-          // Save the currency code using SharedPreferences
-          await SharedPreferencesHelper.instance.saveCurrencyCode(currencyCode);
-          await SharedPreferencesHelper.instance.saveCurrencySymbol("₹");
+  Future<void> _getLocation() async {
+    try {
+      Position position = await AppController().determinePosition();
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      if (placemarks.isNotEmpty) {
+        Placemark placemark = placemarks.first;
+        String? countryCode = placemark.isoCountryCode;
+        if (countryCode != null) {
+          String? currencyCode =
+              await getCurrencyCodeFromCountryCode(countryCode);
+          if (currencyCode != null) {
+            // Save the currency code using SharedPreferences
+            await SharedPreferencesHelper.instance
+                .saveCurrencyCode(currencyCode);
+            await SharedPreferencesHelper.instance.saveCurrencySymbol("₹");
 
-          print('Currency Code: $currencyCode');
+            print('Currency Code: $currencyCode');
+          } else {
+            print('Currency code not found for country code: $countryCode');
+          }
         } else {
-          print('Currency code not found for country code: $countryCode');
+          print('Country code not found.');
         }
       } else {
-        print('Country code not found.');
+        print('No placemarks found.');
       }
-    } else {
-      print('No placemarks found.');
+    } catch (e) {
+      print('Error getting location or currency code: $e');
     }
-  } catch (e) {
-    print('Error getting location or currency code: $e');
   }
-}
-
-
-
-  //   Future<void> _getLocation() async {
-  //   // Check if the widget is still mounted
-  //   if (!mounted) return;
-
-  //   // Check if location permission is already granted
-  //   PermissionStatus permission = await Permission.location.status;
-  //   if (permission != PermissionStatus.granted &&
-  //       permission != PermissionStatus.denied) {
-  //     try {
-  //       // Request location permission
-  //       permission = await Permission.location.request();
-  //     } catch (e) {
-  //       print("Error requesting location permission: $e");
-  //       return;
-  //     }
-  //   }
-
-  //   // If permission is granted, get the location
-  //   if (permission == PermissionStatus.granted) {
-  //     try {
-  //       // Get the current position
-  //       Position position = await Geolocator.getCurrentPosition(
-  //           desiredAccuracy: LocationAccuracy.high);
-  //       if (!mounted) return;
-  //       setState(() {
-  //         _currentPosition = position;
-  //         // Print latitude and longitude values
-  //         print('Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}');
-  //       });
-
-  //       // Get the address details from latitude and longitude
-  //       List<Placemark> placemarks = await placemarkFromCoordinates(
-  //           _currentPosition!.latitude, _currentPosition!.longitude);
-  //       if (placemarks.isNotEmpty) {
-  //         Placemark placemark = placemarks.first;
-  //         // Print address details
-  //         print(
-  //             'Address: ${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}, ${placemark.isoCountryCode}');
-  //         String? currencyCode = await getCurrencyCodeFromCountryCode(
-  //             placemark.isoCountryCode.toString());
-
-  //         await SharedPreferencesHelper.instance
-  //             .saveCurrencyCode(currencyCode!);
-
-  //         // Save the currency symbol using SharedPreferences
-  //         await SharedPreferencesHelper.instance.saveCurrencySymbol("₹");
-  //         print(currencyCode);
-  //       }
-  //     } catch (e) {
-  //       print("Error getting location: $e");
-  //     }
-  //   } else {
-  //     // Handle the case where the user denied location permission
-  //     print('Location permission denied by user');
-  //     // Optionally, prompt the user to check app permissions or provide instructions on enabling location services.
-  //   }
-  // }
-
 
   Future<String?> getCurrencyCodeFromCountryCode(String countryCode) async {
     try {
@@ -155,7 +94,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  
   @override
   Widget build(BuildContext context) {
     final emailField = TextFormField(
@@ -168,8 +106,13 @@ class _LoginScreenState extends State<LoginScreen> {
       keyboardType: TextInputType.emailAddress,
       style: style,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        prefixIcon: Icon(
+          Icons.email,
+          size:
+              MediaQuery.of(context).size.width > 600 ? 14.dynamic : 18.dynamic,
+        ),
+        contentPadding:
+            EdgeInsets.fromLTRB(20.dynamic, 15.dynamic, 20.dynamic, 15.dynamic),
         hintText: "Email",
         border: InputBorder.none,
       ),
@@ -187,27 +130,38 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: _obsecureText,
       style: style,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock),
+        prefixIcon: Icon(
+          Icons.lock,
+          size:
+              MediaQuery.of(context).size.width > 600 ? 14.dynamic : 18.dynamic,
+        ),
         suffixIcon: IconButton(
-          icon: Icon(_obsecureText ? Icons.visibility_off : Icons.visibility),
+          icon: Icon(
+            _obsecureText ? Icons.visibility_off : Icons.visibility,
+            size: MediaQuery.of(context).size.width > 600
+                ? 14.dynamic
+                : 18.dynamic,
+          ),
           onPressed: () {
             setState(() {
               _obsecureText = !_obsecureText;
             });
           },
         ),
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        contentPadding:
+            EdgeInsets.fromLTRB(20.dynamic, 15.dynamic, 20.dynamic, 15.dynamic),
         hintText: "Password",
         border: InputBorder.none,
       ),
     );
     final loginButton = Material(
       // elevation: 5.0,
-      borderRadius: BorderRadius.circular(5.0),
+      borderRadius: BorderRadius.circular(5.dynamic),
       color: Colour.appBlue,
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        padding:
+            EdgeInsets.fromLTRB(20.dynamic, 15.dynamic, 20.dynamic, 15.dynamic),
         onPressed: () async {
           var email = _emailController.text;
           var password = _passwordController.text;
@@ -237,6 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 SharedPreferencesHelper.setToken(token);
                 print('Stored Token - $token');
                 AppController.to.fetchProfile();
+                //SnackbarService.showSnackbar("Login Success", "Successfully logged in.");
+
                 Future.delayed(
                   Duration(seconds: 0),
                   () =>
@@ -337,7 +293,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fontSize: 16.0.dynamic),
                                 ),
                                 SizedBox(
-                                  height: 150.dynamic,
+                                  height:
+                                      MediaQuery.of(context).size.width > 600
+                                          ? 100.dynamic
+                                          : 150.dynamic,
                                 ),
                               ],
                             ),
@@ -378,7 +337,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   loginButton,
                                   SizedBox(
-                                    height: 10.0,
+                                    height: 10.dynamic,
                                   ),
                                   // Align(
                                   //   alignment: Alignment.center,
@@ -397,7 +356,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   //       style: TextStyle(
                                   //           color: Colour.appBlue,
                                   //           fontWeight: FontWeight.w400,
-                                  //           fontSize: 16.0.dynamic),
+                                  //           fontSize: 16.dynamic.dynamic),
                                   //     ),
                                   //   ),
                                   // ),
@@ -405,7 +364,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   // SafeArea(
                                   //   child: Padding(
                                   //     padding: const EdgeInsets.only(
-                                  //         top: 85.0, bottom: 34.0),
+                                  //         top: 85.dynamic, bottom: 34.dynamic),
                                   //     child: Center(
                                   //       child: Image.asset(
                                   //         'images/poweredby.png',

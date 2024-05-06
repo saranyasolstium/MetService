@@ -9,6 +9,7 @@ import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/reuse/network_image_view.dart';
 import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
+import 'package:eagle_pixels/screen/job_history/pdf_viewer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
@@ -18,7 +19,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-
 
 import '../../colors.dart';
 
@@ -72,42 +72,40 @@ class ServiceView extends StatelessWidget {
 
     // print("Formatted Time: $formattedTime");
     // print("Address: ${item.aCombinedAddress}");
-    
 
-    void fetchAndOpenPdf(String serviceId) async {
-  String url = "https://met.solstium.net/api/v1/employee/report_pdf/$serviceId";
-    String? token = await SharedPreferencesHelper.getToken();
+//     void fetchAndOpenPdf(String serviceId) async {
+//   String url = "https://met.solstium.net/api/v1/employee/report_pdf/$serviceId";
+//     String? token = await SharedPreferencesHelper.getToken();
 
-  try {
-    http.Response response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
+//   try {
+//     http.Response response = await http.get(
+//       Uri.parse(url),
+//       headers: {
+//         'Authorization': 'Bearer $token',
+//       },
+//     );
 
-    if (response.statusCode == 200) {
-      Directory tempDir = await getTemporaryDirectory();
-      String tempPath = tempDir.path;
+//     if (response.statusCode == 200) {
+//       Directory tempDir = await getTemporaryDirectory();
+//       String tempPath = tempDir.path;
 
-      String pdfPath = '$tempPath/report.pdf';
-      await File(pdfPath).writeAsBytes(response.bodyBytes);
+//       String pdfPath = '$tempPath/report.pdf';
+//       await File(pdfPath).writeAsBytes(response.bodyBytes);
 
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => PDFView(
-            filePath: pdfPath,
-          ),
-        ),
-      );
-    } else {
-      print('Request failed with status: ${response.statusCode}');
-    }
-  } catch (error) {
-    print('Error while fetching PDF: $error');
-  }
-}
-
+//       Navigator.of(context).push(
+//         MaterialPageRoute(
+//           builder: (context) => PDFView(
+//             filePath: pdfPath,
+//           ),
+//         ),
+//       );
+//     } else {
+//       print('Request failed with status: ${response.statusCode}');
+//     }
+//   } catch (error) {
+//     print('Error while fetching PDF: $error');
+//   }
+// }
 
     return Container(
       padding: EdgeInsets.only(
@@ -466,8 +464,17 @@ class ServiceView extends StatelessWidget {
                                       flex: 1,
                                       child: GestureDetector(
                                         onTap: () {
-                                         fetchAndOpenPdf(item.aServiceID!);
-  },
+                                          //  fetchAndOpenPdf(item.aServiceID!);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PDFViewerScreen(
+                                                serviceId: item.aServiceID!,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         child: Text(
                                           'View Pdf',
                                           textAlign: TextAlign.right,

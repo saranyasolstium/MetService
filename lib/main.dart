@@ -105,116 +105,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primaryColor: Colour.appBlue,
           primarySwatch: Colors.blue,
-          fontFamily: 'Poppins'),
+          fontFamily: 'Poppins',
+          snackBarTheme: SnackBarThemeData(
+          backgroundColor: Colors.green,
+          contentTextStyle: TextStyle(fontSize: 16.dynamic, color: Colors.white), 
+        ),
+),
       initialRoute: NavPage.root,
+      
       // home: FeedbackScreen(),
     );
   }
 }
 
-// class Demo extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("ListView"),
-//       ),
-//       body: Container(
-//         color: Colors.yellow,
-//         child: ListView.builder(
-//           itemBuilder: (context, index) {
-//             return TestItem();
-//           },
-//           itemCount: 2,
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// class TestItem extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: GridView.count(
-//         shrinkWrap: true,
-//         scrollDirection: Axis.horizontal,
-//         crossAxisCount: 2,
-//         physics: NeverScrollableScrollPhysics(),
-//         children: [
-//           Text('fdsa'),
-//           Text('fafds'),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-class Demo extends StatelessWidget {
-  final list = generateNumbers();
-  Widget content() {
-    return ListView.builder(
-      itemBuilder: (con, index) {
-        return Column(
-          children: [
-            Text('TopView'),
-            GridView.builder(
-                itemCount: list.length,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, childAspectRatio: 3),
-                shrinkWrap: true,
-                itemBuilder: (con, ind) {
-                  var i = list[ind];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      // height: 20,
-                      child: Text(i.toString()),
-                      color: Colors.blue,
-                    ),
-                  );
-                }),
-          ],
-        );
-      },
-      itemCount: 4,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final TextEditingController _enterSub1 = TextEditingController();
-    return MaterialApp(
-      theme: ThemeData(),
-      home: SafeArea(
-        child: Scaffold(
-          body: Padding(
-            padding: EdgeInsets.only(bottom: 19.dynamic),
-            child: TextFormField(
-              validator: MultiValidator([
-                RequiredValidator(errorText: "* Required"),
-              ]),
-              obscureText: false,
-              controller: _enterSub1,
-              keyboardType: TextInputType.multiline,
-              onChanged: (val) {},
-              style:
-                  TextStyle(fontSize: 14.dynamic, fontWeight: FontWeight.w300),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                hintText: "Enter Subject",
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-List<int> generateNumbers() => List<int>.generate(10, (i) => i + 1);
-// List<int> generateList() => List<int>.generate(2, (i) => i + 1);

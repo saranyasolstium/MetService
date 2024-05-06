@@ -169,6 +169,8 @@ class JobCheckListController extends GetxController {
   }) async {
     var param = await ParamCompleteJob(
       requestID: requestID,
+      technicianSign: technicianSign,
+      signature: signature,
       visitType: visitType,
       inspectionReport: inspectionReport,
       preparation: preparation,
@@ -178,8 +180,7 @@ class JobCheckListController extends GetxController {
       paymentMode: paymentMode,
       feedback: feedback,
       technicianComment: technicianComment,
-      technicianSign: technicianSign,
-      signature: signature,
+      
       imagPath: imagPath,
       rating: "4",
     ).toJson();

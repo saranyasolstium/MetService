@@ -855,6 +855,9 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     .signatureTechnicianController.value
                                     .toPngBytes();
 
+                                    print(base64Encode(bytes!));
+                                    print(base64Encode(techBytes!));
+
                                 if (detail.aServiceName ==
                                         "Pest Control Management" &&
                                     selectedChemist!.isEmpty) {

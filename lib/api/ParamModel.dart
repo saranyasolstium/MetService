@@ -94,6 +94,8 @@ class ParamCompleteJob {
   Future<Map<String, dynamic>> toJson() async {
     Map<String, dynamic> json = {};
     json['RequestID'] = requestID;
+    json['employee_sign'] = technicianSign;
+    json['signature'] = signature;
     json['rating'] = rating;
     json['customer_comment'] = technicianComment;
     json['employee_comment'] = feedback;
@@ -104,8 +106,7 @@ class ParamCompleteJob {
     json['preparation'] = preparation;
     json['areas_inspected'] = areasInspected;
     json['after_service_img'] = imagPath;
-    json['employee_sign'] = technicianSign;
-    json['signature'] = signature;
+    
 
     return json;
   }
