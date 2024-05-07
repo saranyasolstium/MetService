@@ -15,23 +15,45 @@ class ChangeDateView extends StatelessWidget {
     }
   }
 
-  changeDate() {
-    final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
-    showDatePicker(
-      context: Get.context!,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(currentYear - 1),
-      lastDate: DateTime(currentYear + 1),
-      initialDatePickerMode: DatePickerMode.day,
-      initialEntryMode: DatePickerEntryMode.calendar,
-    ).then((value) {
-      print(value);
-      if (value != null) {
-        date.value = value;
-        didEnd();
-      }
-    });
-  }
+
+changeDate() {
+  final currentYear = int.parse(DateFormat.y().format(DateTime.now()));
+  final double fontSize = 12.dynamic; // Define your desired font size for tablets
+
+  showDatePicker(
+    context: Get.context!,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(currentYear - 1),
+    lastDate: DateTime(currentYear + 1),
+    initialDatePickerMode: DatePickerMode.day,
+    initialEntryMode: DatePickerEntryMode.calendar,
+    builder: (BuildContext context, Widget? child) {
+      return Theme(
+        data: ThemeData(
+          textTheme: TextTheme(
+            bodyText1: TextStyle(fontSize: fontSize), 
+            button: TextStyle(fontSize: 10.dynamic), 
+            
+          ),
+        ),
+        child: child!,
+      );
+    },
+  ).then((value) {
+    print(value);
+    if (value != null) {
+      date.value = value;
+      didEnd();
+    }
+  });
+}
+
+bool isTablet() {
+  // You can implement your own logic to determine if the device is a tablet or not
+  // For example, you can use the screen size or device type
+  // Here's a simple example assuming tablets have a screen width greater than 600 pixels
+  return Get.width > 600;
+}
 
   final Rx<DateTime> date;
   final Function() didEnd;

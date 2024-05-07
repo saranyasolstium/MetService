@@ -1,4 +1,4 @@
-package com.example.metservice
+package com.example.pixels_eagle
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

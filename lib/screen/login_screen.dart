@@ -292,7 +292,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: TextStyle(
                                       color: Colour.appDarkGrey,
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 16.0.dynamic),
+                                      fontSize: 16.dynamic.dynamic),
                                 ),
                                 SizedBox(
                                   height:
@@ -312,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     style: TextStyle(
                                         color: Colour.appBlack,
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 16.0.dynamic),
+                                        fontSize: 16.dynamic.dynamic),
                                   ),
                                   SizedBox(
                                     height: 18.dynamic,

@@ -63,17 +63,18 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
   late List<List<String>> selectedValues;
   final List<String> radioValues = ['N', 'L', 'M', 'H'];
   bool _isOtherChecked = false;
+  String? selectedPreparationType = 'Advion Cockroach Gel';
 
   void addValue() {
     setState(() {
       enteredValues.add({
-        "Type": typeCtrl.text,
+        "Type": selectedPreparationType!,
         "Method": methodCtrl.text,
         "Quantity": quantityCtrl.text,
       });
     });
 
-    typeCtrl.clear();
+    selectedPreparationType = 'Advion Cockroach Gel';
     methodCtrl.clear();
     quantityCtrl.clear();
   }
@@ -319,7 +320,11 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                           (String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
-                                          child: Text(value),
+                                          child: Text(
+                                            value,
+                                            style:
+                                                TextStyle(fontSize: 12.dynamic),
+                                          ),
                                         );
                                       }).toList(),
                                     )
@@ -351,86 +356,77 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                // MultiSelectDialogField(
-                                //   items: <MultiSelectItem<String>>[
-                                //     for (String value in [
-                                //       "Cockroach",
-                                //       "Common Ant",
-                                //       "Rodent",
-                                //       "Subterranean Termite",
-                                //       "Others,Please specify",
-                                //       "Mosquito",
-                                //       "Housefly",
-                                //       "Bedbug",
-                                //       "Fleas",
-                                //       "Other",
-                                //     ])
-                                //       MultiSelectItem<String>(value, value),
-                                //   ],
-                                //   listType: MultiSelectListType.CHIP,
-                                //   onConfirm: (values) {
-                                //     setState(() {
-                                //       selectedInspect = values.join(", ");
-                                //       print(selectedInspect);
-                                //     });
-                                //   },
-                                // ),
-
                                 Column(
                                   children:
                                       List.generate(items.length, (index) {
-                                    return Row(
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          width: 100,
-                                          child: Text(
-                                            items[index],
-                                            softWrap: true,
-                                          ),
-                                        ),
-                                        ...radioValues.map((value) {
-                                          return Row(
-                                            children: [
-                                              Checkbox(
-                                                value: selectedValues[index]
-                                                    .contains(value),
-                                                onChanged: (newValue) {
-                                                  setState(() {
-                                                    if (newValue!) {
-                                                      selectedValues[index] = [
-                                                        value
-                                                      ];
-                                                    } else {
-                                                      selectedValues[index]
-                                                          .remove(value);
-                                                    }
-                                                  });
-                                                  handleCheckboxChange(
-                                                      items[index],
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 100
+                                                  .dynamic, // Fixed width for the item text
+                                              child: Text(
+                                                items[index],
+                                                softWrap: true,
+                                                style: TextStyle(
+                                                    fontSize: 12.dynamic),
+                                              ),
+                                            ),
+                                            ...radioValues.map((value) {
+                                              return Row(
+                                                children: [
+                                                  Checkbox(
+                                                    value: selectedValues[index]
+                                                        .contains(value),
+                                                    onChanged: (newValue) {
+                                                      setState(() {
+                                                        if (newValue!) {
+                                                          selectedValues[
+                                                              index] = [value];
+                                                        } else {
+                                                          selectedValues[index]
+                                                              .remove(value);
+                                                        }
+                                                      });
+                                                      handleCheckboxChange(
+                                                          items[index],
+                                                          value,
+                                                          newValue!);
+                                                    },
+                                                  ),
+                                                  Container(
+                                                    width: Get.width > 600
+                                                        ? 25.dynamic
+                                                        : 5.dynamic,
+                                                    child: Text(
                                                       value,
-                                                      newValue!);
-                                                },
-                                              ),
-                                              Container(
-                                                width: 10,
-                                                child: Text(
-                                                  value,
-                                                  softWrap: true,
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        }).toList(),
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                          fontSize: 12.dynamic),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            }).toList(),
+                                          ],
+                                        ),
+                                        Get.width > 600
+                                            ? SizedBox(height: 10.dynamic)
+                                            : SizedBox(), // Add space between rows
                                       ],
                                     );
                                   }),
                                 ),
                                 Row(children: [
                                   Container(
-                                    width: 100,
+                                    width: 100.dynamic,
                                     child: Text(
                                       "Other",
                                       softWrap: true,
+                                      style: TextStyle(fontSize: 12.dynamic),
                                     ),
                                   ),
                                   Checkbox(
@@ -442,6 +438,9 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                     },
                                   ),
                                 ]),
+                                SizedBox(
+                                  height: 10.dynamic,
+                                ),
                                 _isOtherChecked
                                     ? Container(
                                         decoration: BoxDecoration(
@@ -457,7 +456,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                           keyboardType: TextInputType.multiline,
                                           maxLines: 1,
                                           style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12.dynamic,
                                             fontWeight: FontWeight.w300,
                                           ),
                                           decoration: InputDecoration(
@@ -471,7 +470,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                         ),
                                       )
                                     : SizedBox(),
-
                                 SizedBox(
                                   height: 10.dynamic,
                                 ),
@@ -479,278 +477,346 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                             ),
                           ),
                           SizedBox(height: 12.dynamic),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6.dynamic),
-                              color: Colors.white,
-                            ),
-                            margin:
-                                EdgeInsets.symmetric(horizontal: 17.dynamic),
-                            padding: EdgeInsets.all(14.dynamic),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 10),
-                                Text(
-                                  'Preparation Used:',
-                                  style: TextStyle(
-                                    fontSize: 14.dynamic,
-                                    color: Colour.appBlack,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
+                          detail.aServiceName == "Pest Control Management"
+                              ? Container(
                                   decoration: BoxDecoration(
-                                    color: Colour.appLightGrey,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(color: Colors.grey),
+                                    borderRadius:
+                                        BorderRadius.circular(6.dynamic),
+                                    color: Colors.white,
                                   ),
-                                  child: TextFormField(
-                                    onChanged: (txt) {
-                                      // controller.feedback.value = txt;
-                                    },
-                                    obscureText: false,
-                                    controller: typeCtrl,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 15.0, horizontal: 20.0),
-                                      hintText: "Type",
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colour.appLightGrey,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: TextFormField(
-                                    onChanged: (txt) {
-                                      // controller.feedback.value = txt;
-                                    },
-                                    obscureText: false,
-                                    controller: methodCtrl,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 15.0, horizontal: 20.0),
-                                      hintText: "Method",
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colour.appLightGrey,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: TextFormField(
-                                    onChanged: (txt) {
-                                      // controller.feedback.value = txt;
-                                    },
-                                    obscureText: false,
-                                    controller: quantityCtrl,
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'^\d+\.?\d{0,2}')),
-                                    ],
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 15.0, horizontal: 20.0),
-                                      hintText: "Quantity",
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10.dynamic,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colour.appBlue,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5.dynamic),
-                                    ),
-                                  ),
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      if (typeCtrl.text.isNotEmpty &&
-                                          methodCtrl.text.isNotEmpty &&
-                                          quantityCtrl.text.isNotEmpty) {
-                                        addValue();
-                                      } else {
-                                        Toast.show(
-                                          'Please enter all value',
-                                          backgroundColor: Colors.white,
-                                          textStyle: TextStyle(
-                                              fontSize: 16.0,
-                                              color: Colors.black),
-                                        );
-                                      }
-                                    },
-                                    child: Text(
-                                      'Add',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16.dynamic,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                enteredValues.isNotEmpty
-                                    ? DataTable(
-                                        columnSpacing: 10,
-                                        columns: [
-                                          DataColumn(
-                                            label: SizedBox(
-                                              width:
-                                                  80, // Set width for the first column
-                                              child: Text(
-                                                'Type',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 17.dynamic),
+                                  padding: EdgeInsets.all(14.dynamic),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 10.dynamic),
+                                      Text(
+                                        'Preparation Used:',
+                                        style: TextStyle(
+                                          fontSize: 14.dynamic,
+                                          color: Colour.appBlack,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //     color: Colour.appLightGrey,
+                                      //     borderRadius: BorderRadius.circular(5.0),
+                                      //     border: Border.all(color: Colors.grey),
+                                      //   ),
+                                      //   child: TextFormField(
+                                      //     onChanged: (txt) {
+                                      //       // controller.feedback.value = txt;
+                                      //     },
+                                      //     obscureText: false,
+                                      //     controller: typeCtrl,
+                                      //     keyboardType: TextInputType.multiline,
+                                      //     maxLines: 1,
+                                      //     style: TextStyle(
+                                      //       fontSize: 14,
+                                      //       fontWeight: FontWeight.w300,
+                                      //     ),
+                                      //     decoration: InputDecoration(
+                                      //       contentPadding: EdgeInsets.symmetric(
+                                      //           vertical: 15.0, horizontal: 20.0),
+                                      //       hintText: "Type",
+                                      //       border: InputBorder.none,
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      DropdownButton<String>(
+                                        value: selectedPreparationType,
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            selectedPreparationType = newValue!;
+                                            print(selectedPreparationType);
+                                          });
+                                        },
+                                        items: <String>[
+                                          "Advion Cockroach Gel",
+                                          "Insect Detector 100i",
+                                          "Deltacide (Misting)",
+                                          "Fogging Solution (W)",
+                                          "Diesel",
+                                          "Demand 2.5 CS",
+                                          "NewCyper 15WP",
+                                          "Newcyper 6.5 EC",
+                                          "Temprid SC",
+                                          "Tenopa SC",
+                                          "Rodent bait box",
+                                          "Rodent bait",
+                                          "Newcumin Tracking Powder",
+                                          "Rodent glueboard tamper proof box",
+                                          "Rodent glueboard ",
+                                          "Optigard ant gel",
+                                          "Termikil powder",
+                                          "Premise 200 SC",
+                                          "Xterm AG baiting",
+                                          "Xterm IG station",
+                                          "Rat cage",
+                                          "Anti malaria oil",
+                                          "Spar 1%",
+                                          "Mosquito dunk (BTI)",
+                                          "Dome Trap",
+                                          "Sulphur powder",
+                                          "Ultrathor",
+                                          "Ultriset"
+                                        ].map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              value,
+                                              style: TextStyle(
+                                                  fontSize: 12.dynamic),
                                             ),
-                                          ),
-                                          DataColumn(
-                                            label: SizedBox(
-                                              width:
-                                                  80, // Set width for the second column
-                                              child: Text(
-                                                'Method',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          DataColumn(
-                                            label: SizedBox(
-                                              width: 60,
-                                              child: Text(
-                                                'Quantity',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          DataColumn(
-                                            label: SizedBox(
-                                              width:
-                                                  60, // Set width for the fourth column
-                                              child: Text(
-                                                'Actions',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                        rows: enteredValues
-                                            .asMap()
-                                            .entries
-                                            .map((entry) {
-                                          final index = entry.key;
-                                          final value = entry.value;
-
-                                          return DataRow(cells: [
-                                            DataCell(
-                                              SizedBox(
-                                                width: 80,
-                                                child: Text(
-                                                  value["Type"] ?? "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-                                            DataCell(
-                                              SizedBox(
-                                                width: 80,
-                                                child: Text(
-                                                  value["Method"] ?? "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-                                            DataCell(
-                                              SizedBox(
-                                                width: 50,
-                                                child: Text(
-                                                  value["Quantity"] ?? "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-                                            DataCell(
-                                              SizedBox(
-                                                width: 50,
-                                                child: IconButton(
-                                                  icon: Icon(Icons.delete),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      enteredValues
-                                                          .removeAt(index);
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ]);
+                                          );
                                         }).toList(),
-                                      )
-                                    : SizedBox(),
-                              ],
-                            ),
-                          ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colour.appLightGrey,
+                                          borderRadius:
+                                              BorderRadius.circular(5.dynamic),
+                                          border:
+                                              Border.all(color: Colors.grey),
+                                        ),
+                                        child: TextFormField(
+                                          onChanged: (txt) {
+                                            // controller.feedback.value = txt;
+                                          },
+                                          obscureText: false,
+                                          controller: methodCtrl,
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: 12.dynamic,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                          decoration: InputDecoration(
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 15.0,
+                                                    horizontal: 20.0),
+                                            hintText: "Method",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colour.appLightGrey,
+                                          borderRadius:
+                                              BorderRadius.circular(5.dynamic),
+                                          border:
+                                              Border.all(color: Colors.grey),
+                                        ),
+                                        child: TextFormField(
+                                          obscureText: false,
+                                          controller: quantityCtrl,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: 12.dynamic,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                          decoration: InputDecoration(
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 15.0,
+                                                    horizontal: 20.0),
+                                            hintText: "Quantity",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colour.appBlue,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            if (methodCtrl.text.isNotEmpty &&
+                                                quantityCtrl.text.isNotEmpty) {
+                                              addValue();
+                                            } else {
+                                              Toast.show(
+                                                'Please enter all value',
+                                                backgroundColor: Colors.white,
+                                                textStyle: TextStyle(
+                                                    fontSize: 16.dynamic,
+                                                    color: Colors.black),
+                                              );
+                                            }
+                                          },
+                                          child: Text(
+                                            'Add',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16.dynamic,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      enteredValues.isNotEmpty
+                                          ? DataTable(
+                                              columnSpacing: 10.dynamic,
+                                              columns: [
+                                                DataColumn(
+                                                  label: SizedBox(
+                                                    width: 80
+                                                        .dynamic, // Set width for the first column
+                                                    child: Text(
+                                                      'Type',
+                                                      style: TextStyle(
+                                                        fontSize: 12.dynamic,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                DataColumn(
+                                                  label: SizedBox(
+                                                    width: 80
+                                                        .dynamic, // Set width for the second column
+                                                    child: Text(
+                                                      'Method',
+                                                      style: TextStyle(
+                                                        fontSize: 12.dynamic,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                DataColumn(
+                                                  label: SizedBox(
+                                                    width: 60.dynamic,
+                                                    child: Text(
+                                                      'Quantity',
+                                                      style: TextStyle(
+                                                        fontSize: 12.dynamic,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                DataColumn(
+                                                  label: SizedBox(
+                                                    width: 60
+                                                        .dynamic, // Set width for the fourth column
+                                                    child: Text(
+                                                      'Actions',
+                                                      style: TextStyle(
+                                                        fontSize: 12.dynamic,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                              rows: enteredValues
+                                                  .asMap()
+                                                  .entries
+                                                  .map((entry) {
+                                                final index = entry.key;
+                                                final value = entry.value;
+
+                                                return DataRow(cells: [
+                                                  DataCell(
+                                                    SizedBox(
+                                                      width: 80.dynamic,
+                                                      child: Text(
+                                                        value["Type"] ?? "",
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 12.dynamic,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    SizedBox(
+                                                      width: 80.dynamic,
+                                                      child: Text(
+                                                        value["Method"] ?? "",
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 12.dynamic,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    SizedBox(
+                                                      width: 50.dynamic,
+                                                      child: Text(
+                                                        value["Quantity"] ?? "",
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 12.dynamic,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    SizedBox(
+                                                      width: 50.dynamic,
+                                                      child: IconButton(
+                                                        icon: Icon(
+                                                          Icons.delete,
+                                                          size: 15.dynamic,
+                                                        ),
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            enteredValues
+                                                                .removeAt(
+                                                                    index);
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ]);
+                                              }).toList(),
+                                            )
+                                          : SizedBox(),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
                           SizedBox(height: 42.dynamic),
                         ],
                       ),
@@ -801,14 +867,29 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                         "Other", otherController.text, true);
                                   } else {
                                     Toast.show(
-                                      'Please specify other"',
+                                      'Please specify other',
                                       backgroundColor: Colors.white,
                                       textStyle: TextStyle(
-                                          fontSize: 16.0, color: Colors.black),
+                                          fontSize: 16.dynamic,
+                                          color: Colors.black),
                                     );
+                                    return;
                                   }
                                 } else {
                                   handleCheckboxChange("Other", "", false);
+                                }
+
+                                if (detail.aServiceName ==
+                                        "Pest Control Management" &&
+                                    enteredValues.isEmpty) {
+                                  Toast.show(
+                                    'Please enter preparation used',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.dynamic,
+                                        color: Colors.black),
+                                  );
+                                  return;
                                 }
 
                                 print(controller.selectedCheckboxValues
@@ -850,242 +931,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
             AppController.to.defaultLoaderView(),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class ReportItem extends StatelessWidget {
-  // final JobCheckListController checkListController = Get.find();
-  // final int index;
-  //
-  // ACheckListItem get item {
-  //   return checkListController.selectedlist[index];
-  // }
-  //
-  // MCheckListOption get selectedItem {
-  //   return item.selectedItem!;
-  // }
-
-  final ACheckListItem item;
-  ReportItem({required this.item});
-  // final _remarkController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 17.dynamic,
-        vertical: 18.dynamic,
-      ),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.only(
-          top: 12.dynamic,
-          left: 14.dynamic,
-          right: 14.dynamic,
-          bottom: 15.dynamic,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(
-            8.0,
-          ),
-          border: Border.all(
-            width: 1.5,
-            color: item.lastItem?.color ?? Colors.grey,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-              // mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    item.title,
-                    style: TextStyle(
-                      color: Colour.appBlack,
-                      fontSize: 16.0.dynamic,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
-                // Expanded(child: Container()),
-                SizedBox(width: 5.dynamic),
-                ReportCheckbox(
-                    item: item.lastItem ?? MCheckListOption('', Colors.grey)),
-              ],
-            ),
-            Divider(
-              color: Colour.appDarkGrey,
-            ),
-            // Row(
-            //   mainAxisSize: MainAxisSize.max,
-            //   children: [
-            //     CheckListSelectionView(section: index, row: 0),
-            //   ],
-            // ),
-            // Expanded(
-            //   child: Container(
-            //     child: StaggeredGridView.countBuilder(
-            //       crossAxisCount: 2,
-            //       itemCount: item.options.length,
-            //       itemBuilder: (builder, row) {
-            //         var selection = item.options[index];
-            //         return CheckListSelectionView(section: index, row: row);
-            //       },
-            //       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-            //     ),
-            //   ),
-            // ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 10.5.dynamic,
-                bottom: 5.dynamic,
-              ),
-              child: Text(
-                'Remarks',
-                style: TextStyle(
-                  color: Colour.appRed,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Text(
-                item.remarks,
-                style: TextStyle(
-                  fontSize: 14.dynamic,
-                  color: Colour.appDarkGrey,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10.dynamic,
-            ),
-            Row(
-              children: [
-                // Image.asset(
-                //   'images/add.png',
-                //   width: 19.dynamic,
-                //   height: 19.dynamic,
-                // ),
-                Text(
-                  'Photo Added',
-                  style: TextStyle(
-                    fontSize: 14.dynamic,
-                    fontWeight: FontWeight.w400,
-                    color: Colour.appText,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16.dynamic,
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                  item.selectedImages.length,
-                  (row) => Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colour.appBlue),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0),
-                          clipBehavior: Clip.hardEdge,
-                          child: (item.selectedImages[row] is Uint8List)
-                              ? Image.memory(
-                                  item.selectedImages[row],
-                                  height: 43.dynamic,
-                                  width: 43.dynamic,
-                                  fit: BoxFit.fill,
-                                  isAntiAlias: false,
-                                )
-                              : Image.network(
-                                  item.selectedImages[row],
-                                  height: 43.dynamic,
-                                  width: 43.dynamic,
-                                  fit: BoxFit.fill,
-                                  isAntiAlias: false,
-                                ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20.dynamic,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10.dynamic,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ReportCheckbox extends StatelessWidget {
-  final MCheckListOption item;
-
-  ReportCheckbox({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(
-          8.0,
-        ),
-      ),
-      child: Row(
-        children: [
-          Text(
-            item.name,
-            style: TextStyle(
-              color: Colour.appBlack,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          SizedBox(
-            width: 8.dynamic,
-          ),
-          CustomCheckbox(
-            isChecked: true,
-            size: 18.dynamic,
-            selectedColor: item.color,
-            selectedIconColor: Colors.white,
-            // didSelect: (checkbox) {
-            //   if (checkbox) {
-            //     checklistController.checkList[section].selectedItem = item;
-            //   } else {
-            //     checklistController.checkList[section].selectedItem = null;
-            //   }
-            //
-            //   checklistController.update();
-            // },
-          ),
-        ],
       ),
     );
   }

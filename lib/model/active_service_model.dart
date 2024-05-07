@@ -204,25 +204,17 @@ class MActiveService extends AActiveService {
 }
 
 class ServiceDetail {
-  // Define the ServiceDetail class
   int? id;
-  // String? employeeCode;
-  // String? employeeName;
   String? serviceStartDate;
   String? serviceEndDate;
-  // double? latIn;
-  // double? latOut;
-  // Add other properties as needed
-
-  ServiceDetail(); // Constructor
+  String? name;
+ 
+  ServiceDetail(); 
 
   ServiceDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    // employeeCode = json['EmployeeCode'];
-    // employeeName = json['EmployeeName'];
+    name=json['name'];
     //Attendance entry
-    
-    
     DateTime utcStartTime =
         DateTime.parse(json['job_time_start'] + "Z").toLocal();
     DateTime attendanceDateTime =
@@ -250,6 +242,7 @@ class ServiceDetail {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['name']=this.name;
     //data['EmployeeCode'] = this.employeeCode;
     //data['EmployeeName'] = this.employeeName;
     data['job_time_start'] = this.serviceStartDate;

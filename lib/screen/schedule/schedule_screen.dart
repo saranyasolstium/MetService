@@ -42,7 +42,7 @@ class ScheduleScreen extends StatelessWidget {
         body: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.all(17.0),
+              padding: EdgeInsets.all(17.dynamic),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -120,7 +120,7 @@ class ScheduleScreen extends StatelessWidget {
                                         'Please clock out the attendance',
                                         backgroundColor: Colors.white,
                                         textStyle: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: 16.dynamic,
                                             color: Colors.black),
                                       );
                                     } else {

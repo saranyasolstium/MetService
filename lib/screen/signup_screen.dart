@@ -157,7 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     style: TextStyle(
                                         color: Color(0xFF9A9A9A),
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 16.0.dynamic),
+                                        fontSize: 16.dynamic.dynamic),
                                   ),
                                 ),
                                 SizedBox(

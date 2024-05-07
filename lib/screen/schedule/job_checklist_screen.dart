@@ -53,7 +53,7 @@ extension StopJobAction on JobCheckListScreen {
     if (errorWhenSubmit != null) {
       Toast.show(errorWhenSubmit,
           backgroundColor: Colors.white,
-          textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
+          textStyle: TextStyle(color: Colors.black, fontSize: 16.dynamic));
       return false;
     } else {
       return true;
@@ -370,7 +370,7 @@ class CheckListItem extends StatelessWidget {
               item.title,
               style: TextStyle(
                 color: Colour.appBlack,
-                fontSize: 16.0,
+                fontSize: 16.dynamic,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -400,7 +400,7 @@ class CheckListItem extends StatelessWidget {
                 'Remarks',
                 style: TextStyle(
                   color: Colour.appBlack,
-                  fontSize: 16.0,
+                  fontSize: 16.dynamic,
                   fontWeight: FontWeight.w400,
                 ),
               ),

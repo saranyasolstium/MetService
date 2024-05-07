@@ -207,7 +207,7 @@ class AppController extends GetxController {
       gravity: ToastGravity.CENTER,
       backgroundColor: Colors.red,
       textColor: Colors.white,
-      fontSize: 16.0,
+      fontSize: 16.dynamic,
     );
   }
 

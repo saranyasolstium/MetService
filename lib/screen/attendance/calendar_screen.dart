@@ -38,7 +38,7 @@ extension CalendarAction on CalendarScreen {
   //         'You already in service attendance',
   //         backgroundColor: Colors.white,
   //         textStyle: TextStyle(
-  //             fontSize: 16.0,
+  //             fontSize: 16.dynamic,
   //             color: Colors.black), // Provide an appropriate TextStyle
   //       );
   //       //print('You already in service attendance');
@@ -73,7 +73,7 @@ extension CalendarAction on CalendarScreen {
         Toast.show(
           'You already in service attendance', backgroundColor: Colors.white,
           textStyle: TextStyle(
-              fontSize: 16.0,
+              fontSize: 16.dynamic,
               color: Colors.black), 
         );
         return;

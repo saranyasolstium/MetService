@@ -58,14 +58,14 @@ extension JobDetailAction on JobDetailScreen {
       } else {
         Toast.show(message,
             backgroundColor: Colors.white,
-            textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
+            textStyle: TextStyle(color: Colors.black, fontSize: 16.dynamic));
       }
       // }
       //});
     } catch (e) {
       Toast.show('$e',
           backgroundColor: Colors.white,
-          textStyle: TextStyle(color: Colors.black, fontSize: 16.0));
+          textStyle: TextStyle(color: Colors.black, fontSize: 16.dynamic));
       print(e);
     }
   }

@@ -37,8 +37,8 @@ class ServiceReportScreen extends StatefulWidget {
 }
 
 class _ServiceReportScreenState extends State<ServiceReportScreen> {
-  String? selectedPaymentMode = 'Cash';
-  String? selectedChemist = '';
+  String? selectedPaymentMode = 'Bank Transfer';
+ // String? selectedChemist = '';
   List<File> _images = [];
   List<String> _imagePaths = [];
 
@@ -103,75 +103,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
     );
   }
 
-  Widget get serviceReportView {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20.dynamic,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            JobDetailTitleDescriptionView(
-                'Service Name:', detail.aServiceName ?? 'NA'),
-            JobDetailTitleDescriptionView(
-                'SubService Name:', detail.aSubServiceName ?? 'NA'),
-          ],
-        ),
-        SizedBox(
-          height: 20.dynamic,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            JobDetailTitleDescriptionView(
-                'Service Type:',
-                detail.aTeamName != null && detail.aTeamName!.isNotEmpty
-                    ? detail.aTeamName
-                    : 'NA')
-          ],
-        ),
-        SizedBox(
-          height: 20.dynamic,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            JobDetailTitleDescriptionView(
-                'Customer Type:', detail.aCustomerType ?? 'NA'),
-            JobDetailTitleDescriptionView(
-                'Service Order No:', detail.aServiceOrderNo ?? 'NA'),
-          ],
-        ),
-        SizedBox(
-          height: 20.dynamic,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            JobDetailTitleDescriptionView(
-                'Attention:', detail.aAttention ?? 'NA'),
-          ],
-        ),
-        SizedBox(
-          height: 20.dynamic,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            JobDetailTitleDescriptionView(
-                'Service date:', detail.aBookingDate ?? 'NA'),
-            JobDetailTitleDescriptionView(
-                'Schedule Time:', detail.aBookingTime ?? 'NA'),
-          ],
-        ),
-        SizedBox(
-          height: 20.dynamic,
-        ),
-      ],
-    );
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -247,104 +179,79 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                             },
                           ),
                           SizedBox(height: 12.dynamic),
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(6.dynamic),
-                          //     color: Colors.white,
-                          //   ),
-                          //   margin:
-                          //       EdgeInsets.symmetric(horizontal: 17.dynamic),
-                          //   padding: EdgeInsets.all(14.dynamic),
-                          //   child: Column(
-                          //     mainAxisSize: MainAxisSize.min,
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       Text(
-                          //         'Service information:',
-                          //         style: TextStyle(
-                          //             color: Colour.appBlue,
-                          //             fontWeight: FontWeight.w400,
-                          //             fontSize: 16.dynamic),
-                          //       ),
-                          //       serviceReportView
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: 12.dynamic,
-                          // ),
-                          detail.aServiceName == "Pest Control Management"
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(6.dynamic),
-                                    color: Colors.white,
-                                  ),
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 17.dynamic),
-                                  padding: EdgeInsets.all(14.dynamic),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 10),
-                                      Text(
-                                        'Chemical list:',
-                                        style: TextStyle(
-                                          fontSize: 14.dynamic,
-                                          color: Colour.appBlack,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      MultiSelectDialogField(
-                                        items: <MultiSelectItem<String>>[
-                                          for (String value in [
-                                            "Advion Cockroach Gel",
-                                            "Insect Detector 100i",
-                                            "Deltacide (Misting)",
-                                            "Fogging Solution (W)",
-                                            "Diesel",
-                                            "Demand 2.5 CS",
-                                            "NewCyper 15WP",
-                                            "Newcyper 6.5 EC",
-                                            "Temprid SC",
-                                            "Tenopa SC",
-                                            "Rodent bait box",
-                                            "Rodent bait",
-                                            "Newcumin Tracking Powder",
-                                            "Rodent glueboard tamper proof box",
-                                            "Rodent glueboard ",
-                                            "Optigard ant gel",
-                                            "Termikil powder",
-                                            "Premise 200 SC",
-                                            "Xterm AG baiting",
-                                            "Xterm IG station",
-                                            "Rat cage",
-                                            "Anti malaria oil",
-                                            "Spar 1%",
-                                            "Mosquito dunk (BTI)",
-                                            "Dome Trap",
-                                            "Sulphur powder",
-                                            "Ultrathor",
-                                            "Ultriset"
-                                          ])
-                                            MultiSelectItem<String>(
-                                                value, value),
-                                        ],
-                                        listType: MultiSelectListType.CHIP,
-                                        onConfirm: (values) {
-                                          setState(() {
-                                            selectedChemist = values.join(", ");
-                                            print(selectedChemist);
-                                          });
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : SizedBox(),
+                         
+                          // detail.aServiceName == "Pest Control Management"
+                          //     ? Container(
+                          //         decoration: BoxDecoration(
+                          //           borderRadius:
+                          //               BorderRadius.circular(6.dynamic),
+                          //           color: Colors.white,
+                          //         ),
+                          //         margin: EdgeInsets.symmetric(
+                          //             horizontal: 17.dynamic),
+                          //         padding: EdgeInsets.all(14.dynamic),
+                          //         child: Column(
+                          //           mainAxisSize: MainAxisSize.min,
+                          //           crossAxisAlignment:
+                          //               CrossAxisAlignment.start,
+                          //           children: [
+                          //             SizedBox(height: 10),
+                          //             Text(
+                          //               'Chemical list:',
+                          //               style: TextStyle(
+                          //                 fontSize: 14.dynamic,
+                          //                 color: Colour.appBlack,
+                          //                 fontWeight: FontWeight.w600,
+                          //               ),
+                          //             ),
+                          //             SizedBox(height: 10),
+                          //             MultiSelectDialogField(
+                          //               items: <MultiSelectItem<String>>[
+                          //                 for (String value in [
+                          //                   "Advion Cockroach Gel",
+                          //                   "Insect Detector 100i",
+                          //                   "Deltacide (Misting)",
+                          //                   "Fogging Solution (W)",
+                          //                   "Diesel",
+                          //                   "Demand 2.5 CS",
+                          //                   "NewCyper 15WP",
+                          //                   "Newcyper 6.5 EC",
+                          //                   "Temprid SC",
+                          //                   "Tenopa SC",
+                          //                   "Rodent bait box",
+                          //                   "Rodent bait",
+                          //                   "Newcumin Tracking Powder",
+                          //                   "Rodent glueboard tamper proof box",
+                          //                   "Rodent glueboard ",
+                          //                   "Optigard ant gel",
+                          //                   "Termikil powder",
+                          //                   "Premise 200 SC",
+                          //                   "Xterm AG baiting",
+                          //                   "Xterm IG station",
+                          //                   "Rat cage",
+                          //                   "Anti malaria oil",
+                          //                   "Spar 1%",
+                          //                   "Mosquito dunk (BTI)",
+                          //                   "Dome Trap",
+                          //                   "Sulphur powder",
+                          //                   "Ultrathor",
+                          //                   "Ultriset"
+                          //                 ])
+                          //                   MultiSelectItem<String>(
+                          //                       value, value),
+                          //               ],
+                          //               listType: MultiSelectListType.CHIP,
+                          //               onConfirm: (values) {
+                          //                 setState(() {
+                          //                   selectedChemist = values.join(", ");
+                          //                   print(selectedChemist);
+                          //                 });
+                          //               },
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       )
+                          //     : SizedBox(),
                           SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
@@ -479,14 +386,13 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                         });
                                       },
                                       items: <String>[
-                                        'Cash',
                                         'Bank Transfer',
                                         'Others'
                                       ].map<DropdownMenuItem<String>>(
                                           (String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
-                                          child: Text(value),
+                                          child: Text(value,style: TextStyle(fontSize: 12.dynamic)),
                                         );
                                       }).toList(),
                                     )
@@ -526,7 +432,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                           keyboardType: TextInputType.multiline,
                                           maxLines: 1,
                                           style: TextStyle(
-                                              fontSize: 14.dynamic,
+                                              fontSize: 12.dynamic,
                                               fontWeight: FontWeight.w300),
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.fromLTRB(
@@ -858,29 +764,31 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     print(base64Encode(bytes!));
                                     print(base64Encode(techBytes!));
 
-                                if (detail.aServiceName ==
-                                        "Pest Control Management" &&
-                                    selectedChemist!.isEmpty) {
-                                  Toast.show(
-                                    'Please select chemist value',
-                                    backgroundColor: Colors.white,
-                                    textStyle: TextStyle(
-                                        fontSize: 16.0, color: Colors.black),
-                                  );
-                                } else if (selectedPaymentMode == "Others" &&
+                                // if (detail.aServiceName ==
+                                //         "Pest Control Management" &&
+                                //     selectedChemist!.isEmpty) {
+                                //   Toast.show(
+                                //     'Please select chemist value',
+                                //     backgroundColor: Colors.white,
+                                //     textStyle: TextStyle(
+                                //         fontSize: 16.dynamic, color: Colors.black),
+                                //   );
+                                // } 
+                                
+                                 if (selectedPaymentMode == "Others" &&
                                     otherController.text.trim().isEmpty) {
                                   Toast.show(
                                     'Please enter other ',
                                     backgroundColor: Colors.white,
                                     textStyle: TextStyle(
-                                        fontSize: 16.0, color: Colors.black),
+                                        fontSize: 16.dynamic, color: Colors.black),
                                   );
                                 } else if (controller.feedback.value.isEmpty) {
                                   Toast.show(
                                     'Please provide customer feedback',
                                     backgroundColor: Colors.white,
                                     textStyle: TextStyle(
-                                        fontSize: 16.0, color: Colors.black),
+                                        fontSize: 16.dynamic, color: Colors.black),
                                   );
                                 } else if (controller
                                     .engineerFeedback.value.isEmpty) {
@@ -888,14 +796,14 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     'Please provide technician feedback',
                                     backgroundColor: Colors.white,
                                     textStyle: TextStyle(
-                                        fontSize: 16.0, color: Colors.black),
+                                        fontSize: 16.dynamic, color: Colors.black),
                                   );
                                 } else if (_images.isEmpty) {
                                   Toast.show(
                                     'Please select at least one image',
                                     backgroundColor: Colors.white,
                                     textStyle: TextStyle(
-                                        fontSize: 16.0, color: Colors.black),
+                                        fontSize: 16.dynamic, color: Colors.black),
                                   );
                                 } else if (bytes != null && techBytes != null) {
                                   List<String> base64Images = [];
@@ -937,10 +845,11 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                               base64Encode(techBytes),
                                           feedback: controller.feedback.value,
                                           paymentMode: selectedPaymentMode!,
-                                          chemicalList: detail.aServiceName ==
-                                                  "Pest Control Management"
-                                              ? selectedChemist!
-                                              : "",
+                                          // chemicalList: detail.aServiceName ==
+                                          //         "Pest Control Management"
+                                          //     ? selectedChemist!
+                                          //     : "",
+                                          chemicalList: "",
                                           technicianComment:
                                               controller.engineerFeedback.value,
                                           imagPath: concatenatedImages,
@@ -958,7 +867,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       status,
                                       backgroundColor: Colors.white,
                                       textStyle: TextStyle(
-                                          fontSize: 16.0, color: Colors.black),
+                                          fontSize: 16.dynamic, color: Colors.black),
                                     );
                                   } else {
                                     Get.toNamed(NavPage.jobCompleted);
@@ -968,7 +877,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     'Please put your signature',
                                     backgroundColor: Colors.white,
                                     textStyle: TextStyle(
-                                        fontSize: 16.0, color: Colors.black),
+                                        fontSize: 16.dynamic, color: Colors.black),
                                   );
                                 }
                               },
@@ -1076,7 +985,7 @@ class ReportItem extends StatelessWidget {
                     item.title,
                     style: TextStyle(
                       color: Colour.appBlack,
-                      fontSize: 16.0.dynamic,
+                      fontSize: 16.dynamic.dynamic,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -1118,7 +1027,7 @@ class ReportItem extends StatelessWidget {
                 'Remarks',
                 style: TextStyle(
                   color: Colour.appRed,
-                  fontSize: 16.0,
+                  fontSize: 16.dynamic,
                   fontWeight: FontWeight.w400,
                 ),
               ),

@@ -468,7 +468,7 @@ class ServiceAttendenceDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Employee Name',
+                      'Customer Name',
                       style: TextStyle(
                           color: Colour.appDarkGrey,
                           fontWeight: FontWeight.w400,
@@ -478,7 +478,7 @@ class ServiceAttendenceDetail extends StatelessWidget {
                       height: 4.dynamic,
                     ),
                     Text(
-                      AppController.user.employeeDetails!.userName ?? 'NA',
+                     serviceDetail.name ?? 'NA',
                       style: TextStyle(
                           color: Colour.appBlack,
                           fontWeight: FontWeight.w600,
