@@ -4,6 +4,7 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/attendance_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
+import 'package:eagle_pixels/screen/create_job/create_job_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -128,50 +129,50 @@ extension HomeWidgets on HomeScreen {
               ),
             ],
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(right: 10),
-          //   child: Container(
-          //     width: Get.width * 0.4,
-          //     decoration: BoxDecoration(
-          //       color: Colour.appBlue,
-          //       borderRadius: BorderRadius.all(
-          //         Radius.circular(30.dynamic),
-          //       ),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Colour.appBlue.withOpacity(0.5),
-          //           blurRadius: 30,
-          //           offset: Offset(0.0, 5.0),
-          //           spreadRadius: 3,
-          //         )
-          //       ],
-          //     ),
-          //     child: Padding(
-          //       padding: EdgeInsets.only(left: 15),
-          //       child: Row(
-          //         mainAxisAlignment: MainAxisAlignment.start,
-          //         children: [
-          //           Icon(
-          //             Icons.medical_services_outlined,
-          //             color: Colors.white,
-          //           ),
-          //           TextButton(
-          //             onPressed: () {
-          //               Get.to(() => CreateJobScreen());
-          //             },
-          //             child: Text(
-          //               'Create Job',
-          //               style: TextStyle(
-          //                   color: Colors.white,
-          //                   fontSize: 16.dynamic,
-          //                   fontWeight: FontWeight.w500),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Container(
+              width: Get.width * 0.4,
+              decoration: BoxDecoration(
+                color: Colour.appBlue,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30.dynamic),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colour.appBlue.withOpacity(0.5),
+                    blurRadius: 30,
+                    offset: Offset(0.0, 5.0),
+                    spreadRadius: 3,
+                  )
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.medical_services_outlined,
+                      color: Colors.white,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Get.to(() => CreateJobScreen());
+                      },
+                      child: Text(
+                        'Create Job',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.dynamic,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         
         ],
       ),

@@ -94,6 +94,19 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? customerType;
   String? serviceOrderNo;
 
+  String? ServiceCover;
+  String? treatmentMethod;
+  String? serviceFrequency;
+  String? degreeInfestation;
+
+  String? preparation;
+  String? billingType;
+  String? referralName;
+  String? decisionMaker;
+  String? estimationFirstService;
+  String? servicePremiseAddress;
+  String? seeOnSite;
+
   MJobDetail();
 
   MJobDetail.fromJson(Map<String, dynamic> json) {
@@ -162,10 +175,23 @@ class MJobDetail implements AJobDetail, AActiveService {
     siteState = json["site_state"];
     siteZipCode = json["site_zipcode"];
 
+    ServiceCover = json["service_cover"];
+    treatmentMethod = json["treatment_method"];
+    serviceFrequency = json["service_frequency"];
+    degreeInfestation = json["degree_infestation"];
+
+    preparation = json["preparation"];
+    billingType = json["billing_type"];
+    referralName = json["referral_name"];
+    estimationFirstService = json["estimation_first_service"];
+    servicePremiseAddress = json["service_premise_address"];
+    seeOnSite = json["see_on_site"];
+    decisionMaker = json["decision_maker"];
+
     attention = json["attention"];
     customerType = json["customer_type"];
     print('saranya');
-        print(json["attention"]);
+    print(json["attention"]);
 
     serviceOrderNo = json["service_order_id"];
 
@@ -222,6 +248,18 @@ class MJobDetail implements AJobDetail, AActiveService {
     data['service_date'] = this.bookingDate;
     data['scheduled_time'] = this.bookingTime;
     data['service_amount'] = this.amount;
+
+    data["service_cover"] = this.ServiceCover;
+    data["treatment_method"] = this.treatmentMethod;
+    data["service_frequency"] = this.serviceFrequency;
+    data["degree_infestation"] = this.degreeInfestation;
+    data["preparation"] = this.preparation;
+    data["billing_type"] = this.billingType;
+    data["referral_name"] = this.referralName;
+    data["estimation_first_service"] = this.estimationFirstService;
+    data["service_premise_address"] = this.servicePremiseAddress;
+    data["see_on_site"] = this.seeOnSite;
+    data["decision_maker"] = this.decisionMaker;
 
     //AttendanceEntry
     data['AttendenceDate'] = this.attendenceDate;
@@ -352,9 +390,23 @@ class MJobDetail implements AJobDetail, AActiveService {
 
   double? get aLatOut => latOut ?? 0;
 
+  String? get aServiceCover => ServiceCover;
+
+  String? get aTreatmentMethod => treatmentMethod;
+
+  String? get aServiceFrequency => serviceFrequency;
+
+  String? get aDegreeInfestation => degreeInfestation;
+
+  String? get aPreparation => preparation;
+  String? get aBillingType => billingType;
+  String? get aReferralName => referralName;
+  String? get aDecisionMaker => decisionMaker;
+  String? get aEstimationFirstService => estimationFirstService;
+  String? get aServicePremiseAddress => servicePremiseAddress;
+  String? get aSeeOnSite => seeOnSite;
+
   int? get aEnginnerStatus => engineerStatus;
 
   List<Map<String, dynamic>> get aServiceDetails => [];
-  
- 
 }

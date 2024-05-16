@@ -101,4 +101,16 @@ class MCustomerSiteItem implements ADropDown {
   String get aId => siteID.toString();
 
   String get aName => siteName;
+  
+  @override
+  // TODO: implement aBillingAddress
+  String get aBillingAddress => throw UnimplementedError();
+  
+  @override
+  // TODO: implement aEmail
+  String get aEmail => throw UnimplementedError();
+  
+  @override
+  // TODO: implement aPhoneNo
+  String get aPhoneNo => throw UnimplementedError();
 }

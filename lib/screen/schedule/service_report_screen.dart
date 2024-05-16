@@ -268,7 +268,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 Text(
                                   'Areas Inspected/Treated',
                                   style: TextStyle(
-                                    fontSize: 12.dynamic,
+                                    fontSize: 14.dynamic,
                                     color: Colour.appBlack,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -317,7 +317,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 Text(
                                   'Recommendation/Remarks',
                                   style: TextStyle(
-                                    fontSize: 12.dynamic,
+                                    fontSize: 14.dynamic,
                                     color: Colour.appBlack,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -392,7 +392,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                           (String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
-                                          child: Text(value,style: TextStyle(fontSize: 12.dynamic)),
+                                          child: Text(value,style: TextStyle(fontSize: 14.dynamic)),
                                         );
                                       }).toList(),
                                     )
@@ -432,7 +432,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                           keyboardType: TextInputType.multiline,
                                           maxLines: 1,
                                           style: TextStyle(
-                                              fontSize: 12.dynamic,
+                                              fontSize: 14.dynamic,
                                               fontWeight: FontWeight.w300),
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.fromLTRB(
@@ -466,7 +466,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     Text(
                                       'Customer E-Sign',
                                       style: TextStyle(
-                                        fontSize: 12.dynamic,
+                                        fontSize: 14.dynamic,
                                         fontWeight: FontWeight.w400,
                                         color: Colour.appText,
                                       ),
@@ -479,7 +479,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       child: Text(
                                         'Clear',
                                         style: TextStyle(
-                                          fontSize: 12.dynamic,
+                                          fontSize: 14.dynamic,
                                           fontWeight: FontWeight.w400,
                                           color: Colour.appBlue,
                                         ),
@@ -523,7 +523,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     Text(
                                       'Technician E-Sign',
                                       style: TextStyle(
-                                        fontSize: 12.dynamic,
+                                        fontSize: 14.dynamic,
                                         fontWeight: FontWeight.w400,
                                         color: Colour.appText,
                                       ),
@@ -537,7 +537,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       child: Text(
                                         'Clear',
                                         style: TextStyle(
-                                          fontSize: 12.dynamic,
+                                          fontSize: 14.dynamic,
                                           fontWeight: FontWeight.w400,
                                           color: Colour.appBlue,
                                         ),
@@ -577,7 +577,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 Text(
                                   'Customer Feedback',
                                   style: TextStyle(
-                                    fontSize: 12.dynamic,
+                                    fontSize: 14.dynamic,
                                     fontWeight: FontWeight.w400,
                                     color: Colour.appText,
                                   ),
@@ -627,7 +627,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 Text(
                                   'Technician Feedback',
                                   style: TextStyle(
-                                    fontSize: 12.dynamic,
+                                    fontSize: 14.dynamic,
                                     fontWeight: FontWeight.w400,
                                     color: Colour.appText,
                                   ),

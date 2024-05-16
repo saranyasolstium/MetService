@@ -105,6 +105,19 @@ abstract class AJobDetail {
   String? get aBookingTime;
   int? get aEnginnerStatus;
 
+  String? get aServiceCover;
+  String? get aTreatmentMethod;
+  String? get aServiceFrequency;
+  String? get aDegreeInfestation;
+
+  String? get aPreparation;
+  String? get aBillingType;
+  String? get aReferralName;
+  String? get aDecisionMaker;
+  String? get aEstimationFirstService;
+  String? get aServicePremiseAddress;
+  String? get aSeeOnSite;
+
   List<ACheckListItem> get checkList;
 }
 
@@ -122,6 +135,9 @@ abstract class AJobTime {
 abstract class ADropDown {
   String get aId;
   String get aName;
+  String get aEmail;
+  String get aPhoneNo;
+  String get aBillingAddress;
 }
 
 abstract class AProduct {

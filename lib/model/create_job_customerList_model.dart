@@ -12,7 +12,6 @@ class MCustomerList implements Codable {
 
   MCustomerList({this.employeeId = 0}); // Add a constructor
 
-
   fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
@@ -42,31 +41,30 @@ class MCustomerItem implements ADropDown {
   // int? id;
   late String customerId;
   late String name;
-  // String? companyName;
+  String? companyName;
   String? firstName;
   String? lastName;
-  // String? userName;
-  // String? email;
-  // String? phoneNumber;
-  // String? billingAddress;
-  // String? shippingAddress;
-  // String? createdAt;
-  // String? updatedAt;
+  String? userName;
+  String? email;
+  String? phoneNumber;
+  String? billingAddress;
+  String? shippingAddress;
+  String? createdAt;
+  String? updatedAt;
 
   MCustomerItem.fromJson(Map<String, dynamic> json) {
-    // id = json['id'];
     customerId = json['customer_id'].toString();
     name = json['name'];
-    // companyName = json['company_name'];
+    companyName = json['company_name'];
     firstName = json['first_name'];
     lastName = json['last_name'];
-    // userName = json['user_name'];
-    // email = json['email'];
-    // phoneNumber = json['phone_number'];
-    // billingAddress = json['billing_address'];
-    // shippingAddress = json['shipping_address'];
-    // createdAt = json['created_at'];
-    // updatedAt = json['updated_at'];
+    userName = json['user_name'];
+    email = json['email'];
+    phoneNumber = json['phone_number'];
+    billingAddress = json['billing_address'];
+    shippingAddress = json['shipping_address'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
   }
 
   // Map<String, dynamic> toJson() {
@@ -89,5 +87,8 @@ class MCustomerItem implements ADropDown {
 
   String get aId => customerId.toString();
 
-  String get aName =>name.toString();
+  String get aName => name.toString();
+  String get aEmail => email?.toString() ?? "NA";
+  String get aPhoneNo => phoneNumber?.toString() ?? "NA";
+  String get aBillingAddress => billingAddress?.toString() ?? "NA";
 }

@@ -59,4 +59,16 @@ class MServiceType implements ADropDown {
   String get aId => id.toString();
 
   String get aName => name;
+  
+  @override
+  // TODO: implement aBillingAddress
+  String get aBillingAddress => throw UnimplementedError();
+  
+  @override
+  // TODO: implement aEmail
+  String get aEmail => throw UnimplementedError();
+  
+  @override
+  // TODO: implement aPhoneNo
+  String get aPhoneNo => throw UnimplementedError();
 }

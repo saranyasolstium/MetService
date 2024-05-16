@@ -1,6 +1,8 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/create_job_itemList_model.dart';
+import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
+import 'package:eagle_pixels/screen/create_job/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
@@ -19,7 +21,6 @@ import 'package:toast/toast.dart';
 extension CreateJobAction on _CreateJobScreenState {
   onCreateJob() async {
     final param = ParamCreateJob(
-    
       customerID: selectedCustomer.value!.aId,
       productItemID: selectedProduct.value!.aId,
       serviceTypeID: selectedServiceType.value!.aId,
@@ -28,7 +29,7 @@ extension CreateJobAction on _CreateJobScreenState {
       description: _enterSub1.text,
     );
 
-print(param);
+    print(param);
     try {
       final isJobCreated = await createJob.scCreateJob(param);
       if (isJobCreated) {
@@ -60,6 +61,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   final TextEditingController _enterSub1 = TextEditingController();
 
   final TextEditingController _enterSub2 = TextEditingController();
+  String? email = "";
+  String? phoneNO = "";
+  String? billingAddress = "";
+  String? selectedSource = "Select Source";
+  String? selectedProj = "Choose Project";
+  String? selectedPriority = "Select Priority";
+  String? selectedStatus = "Select Status";
+
   final _formKey = GlobalKey<FormState>();
 
   String get dSelectedProduct {
@@ -146,20 +155,27 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                             border: InputBorder.none,
                                           ),
                                           mode: Mode.MENU,
-                                           showSelectedItem: true,
-                                           items: createJob.arrString(createJob.customerList),
+                                          showSelectedItem: true,
+                                          items: createJob.arrString(
+                                              createJob.customerList),
 
-                                           //label: "Menu mode",
+                                          //label: "Menu mode",
                                           hint: "Choose Customer",
 
                                           onChanged: (val) async {
-
                                             selectedProduct.value = null;
+
                                             selectedCustomer.value =
                                                 createJob.find(val!,
                                                     createJob.customerList);
-                                                    print("choose value"+selectedCustomer
-                                                        .value!.aId);
+                                            phoneNO = selectedCustomer
+                                                .value!.aPhoneNo;
+                                            billingAddress = selectedCustomer
+                                                .value!.aBillingAddress;
+                                            email =
+                                                selectedCustomer.value!.aEmail;
+                                            print("choose value" +
+                                                selectedCustomer.value!.aId);
                                             await createJob
                                                 .fetchCustomerProductList(
                                                     selectedCustomer
@@ -169,7 +185,76 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           // selectedItem: createJob.valueOfDrop.value,
                                         ),
                                       ),
+                                      email!.isNotEmpty
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        6.dynamic),
+                                                color: Colors.white,
+                                              ),
+                                              padding:
+                                                  EdgeInsets.all(14.dynamic),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Customer Info',
+                                                    style: TextStyle(
+                                                      fontSize: 14.dynamic,
+                                                      color: Colour.appBlack,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 12.dynamic),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      JobDetailTitleDescriptionView(
+                                                          'Email:', email),
+                                                      JobDetailTitleDescriptionView(
+                                                          'Contact No:',
+                                                          phoneNO),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 12.dynamic),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      JobDetailTitleDescriptionView(
+                                                          'Billing Address:',
+                                                          billingAddress),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(),
+
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+
                                       // Select Product DropDown
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Product',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
                                       Container(
                                         margin:
                                             EdgeInsets.only(bottom: 19.dynamic),
@@ -215,6 +300,252 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           selectedItem: dSelectedProduct,
                                         ),
                                       ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: 'Type of permise',
+                                            style: TextStyle(
+                                              fontSize: 14.dynamic,
+                                              color: Colour.appBlack,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: '*',
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .red, // Set the asterisk (*) color to red
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          mode: Mode.MENU,
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          items: ['Residential', 'Commercial'],
+                                          hint: "Select Department",
+                                          onChanged: (val) {
+                                            // Handle department selection here
+                                          },
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: 'Address',
+                                            style: TextStyle(
+                                              fontSize: 14.dynamic,
+                                              color: Colour.appBlack,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: '*',
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .red, // Set the asterisk (*) color to red
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        child: TextFormField(
+                                          obscureText: false,
+                                          maxLines: 4,
+                                          controller: _enterSub2,
+                                          keyboardType: TextInputType.multiline,
+                                          onChanged: (val) {},
+                                          style: TextStyle(
+                                              fontSize: 14.dynamic,
+                                              fontWeight: FontWeight.w300),
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            contentPadding: EdgeInsets.fromLTRB(
+                                                20.0, 15.0, 20.0, 15.0),
+                                            hintText: "Address",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 12.dynamic,
+                                      ),
+
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: CustomDropdown(
+                                              items: [
+                                                'Choose Project',
+                                              ],
+                                              value: selectedProj!,
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  selectedProj = newValue!;
+                                                });
+                                              },
+                                            )),
+                                            Expanded(
+                                                child: CustomDropdown(
+                                              items: [
+                                                'Select Source',
+                                                'Email',
+                                                'Web Site',
+                                                'Phone',
+                                                'Forum',
+                                                'Twitter',
+                                                'Facebook',
+                                                'Chat',
+                                                'MobiHelp',
+                                                'Feedback Widget',
+                                                'Outbound Email',
+                                                'Ecommerce',
+                                                'Bot',
+                                                'Whatsapp'
+                                              ],
+                                              value: selectedSource!,
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  selectedSource = newValue!;
+                                                });
+                                              },
+                                            ))
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 12.dynamic,
+                                      ),
+
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: CustomDropdown(
+                                              items: [
+                                                'Select Priority',
+                                                'Low',
+                                                'Medium',
+                                                'High',
+                                                'Urgent'
+                                              ],
+                                              value: selectedPriority!,
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  selectedPriority = newValue!;
+                                                });
+                                              },
+                                            )),
+                                            Expanded(
+                                              child: CustomDropdown(
+                                                items: [
+                                                  'Select Status',
+                                                  'Open',
+                                                  'Pending',
+                                                  'Resolved',
+                                                  'Closed',
+                                                  'Waiting On Customer',
+                                                  'Waiting On Third Party',
+                                                ],
+                                                value: selectedStatus!,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    selectedStatus = newValue;
+                                                  });
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 12.dynamic,
+                                      ),
+                                       
+
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: CustomDropdown(
+                                              items: [
+                                                'Select Priority',
+                                                'Low',
+                                                'Medium',
+                                                'High',
+                                                'Urgent'
+                                              ],
+                                              value: selectedPriority!,
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  selectedPriority = newValue!;
+                                                });
+                                              },
+                                            )),
+                                            Expanded(
+                                              child: CustomDropdown(
+                                                items: [
+                                                  'Select Status',
+                                                  'Open',
+                                                  'Pending',
+                                                  'Resolved',
+                                                  'Closed',
+                                                  'Waiting On Customer',
+                                                  'Waiting On Third Party',
+                                                ],
+                                                value: selectedStatus!,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    selectedStatus = newValue;
+                                                  });
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                       SizedBox(
+                                        height: 12.dynamic,
+                                      ),
+
                                       // Choose Service Type DropDown
                                       Container(
                                         margin:

@@ -17,6 +17,7 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:eagle_pixels/reuse/custom_checkbox.dart';
@@ -79,6 +80,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
     quantityCtrl.clear();
   }
 
+  String selectedOtherValues = "";
+
   void handleCheckboxChange(String item, String value, bool isChecked) {
     setState(() {
       if (isChecked) {
@@ -101,6 +104,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
       "Housefly",
       "Bedbug",
       "Fleas",
+      "Other"
     ];
     selectedValues = List.generate(items.length, (index) => []);
     controller.selectedCheckboxValues.clear();
@@ -109,6 +113,13 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
   Widget get serviceReportView {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Product name:', detail.aCameraName ?? 'NA'),
+          ],
+        ),
         SizedBox(
           height: 20.dynamic,
         ),
@@ -131,17 +142,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                 'Service Type:',
                 detail.aTeamName != null && detail.aTeamName!.isNotEmpty
                     ? detail.aTeamName
-                    : 'NA')
-          ],
-        ),
-        SizedBox(
-          height: 20.dynamic,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            JobDetailTitleDescriptionView(
-                'Customer Type:', detail.aCustomerType ?? 'NA'),
+                    : 'NA'),
             JobDetailTitleDescriptionView(
                 'Service Order No:', detail.aServiceOrderNo ?? 'NA'),
           ],
@@ -153,7 +154,101 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             JobDetailTitleDescriptionView(
+                'Customer Type:', detail.aCustomerType ?? 'NA'),
+            JobDetailTitleDescriptionView('Subject:', detail.aSubject ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Warranty Status:', detail.aService ?? 'NA'),
+            JobDetailTitleDescriptionView('Vendor Warranty:', 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
                 'Attention:', detail.aAttention ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Priority:', detail.aPriority ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Service Cover:', detail.aServiceCover ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Treatment Method:', detail.aTreatmentMethod ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Degree Infestation:', detail.aDegreeInfestation ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Service Frequency:', detail.aServiceFrequency ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Preparation:', detail.aPreparation ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Referral Name:', detail.aReferralName ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Billing Type:', detail.aBillingType ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Decision Maker:', detail.aDecisionMaker ?? 'NA'),
+            JobDetailTitleDescriptionView('Estimation First Service:',
+                detail.aEstimationFirstService ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView('Service Premise Address:',
+                detail.aServicePremiseAddress ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'See On Site:', detail.aSeeOnSite ?? 'NA'),
           ],
         ),
         SizedBox(
@@ -323,7 +418,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                           child: Text(
                                             value,
                                             style:
-                                                TextStyle(fontSize: 12.dynamic),
+                                                TextStyle(fontSize: 14.dynamic),
                                           ),
                                         );
                                       }).toList(),
@@ -334,148 +429,223 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                             ),
                           ),
                           SizedBox(height: 12.dynamic),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6.dynamic),
-                              color: Colors.white,
-                            ),
-                            margin:
-                                EdgeInsets.symmetric(horizontal: 17.dynamic),
-                            padding: EdgeInsets.all(14.dynamic),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 10),
-                                Text(
-                                  'Inspected for:',
-                                  style: TextStyle(
-                                    fontSize: 14.dynamic,
-                                    color: Colour.appBlack,
-                                    fontWeight: FontWeight.w600,
+                          detail.aServiceName == "Pest Control Management"
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(6.dynamic),
+                                    color: Colors.white,
                                   ),
-                                ),
-                                SizedBox(height: 10),
-                                Column(
-                                  children:
-                                      List.generate(items.length, (index) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 100
-                                                  .dynamic, // Fixed width for the item text
-                                              child: Text(
-                                                items[index],
-                                                softWrap: true,
-                                                style: TextStyle(
-                                                    fontSize: 12.dynamic),
-                                              ),
-                                            ),
-                                            ...radioValues.map((value) {
-                                              return Row(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 17.dynamic),
+                                  padding: EdgeInsets.all(14.dynamic),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'Inspected for:',
+                                        style: TextStyle(
+                                          fontSize: 14.dynamic,
+                                          color: Colour.appBlack,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Column(
+                                        children: List.generate(items.length,
+                                            (index) {
+                                          return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
                                                 children: [
-                                                  Checkbox(
-                                                    value: selectedValues[index]
-                                                        .contains(value),
-                                                    onChanged: (newValue) {
-                                                      setState(() {
-                                                        if (newValue!) {
-                                                          selectedValues[
-                                                              index] = [value];
-                                                        } else {
-                                                          selectedValues[index]
-                                                              .remove(value);
-                                                        }
-                                                      });
-                                                      handleCheckboxChange(
-                                                          items[index],
-                                                          value,
-                                                          newValue!);
-                                                    },
-                                                  ),
                                                   Container(
-                                                    width: Get.width > 600
-                                                        ? 25.dynamic
-                                                        : 5.dynamic,
+                                                    width: 100
+                                                        .dynamic, // Fixed width for the item text
                                                     child: Text(
-                                                      value,
+                                                      items[index],
                                                       softWrap: true,
                                                       style: TextStyle(
-                                                          fontSize: 12.dynamic),
+                                                          fontSize: 14.dynamic),
                                                     ),
                                                   ),
+                                                  ...radioValues.map((value) {
+                                                    return Row(
+                                                      children: [
+                                                        Checkbox(
+                                                          value: selectedValues[
+                                                                  index]
+                                                              .contains(value),
+                                                          onChanged:
+                                                              (newValue) {
+                                                            setState(() {
+                                                              if (newValue!) {
+                                                                selectedValues[
+                                                                    index] = [
+                                                                  value
+                                                                ];
+
+                                                                if (items[
+                                                                        index] ==
+                                                                    "Other") {
+                                                                  _isOtherChecked =
+                                                                      true;
+                                                                  selectedOtherValues =
+                                                                      selectedValues[
+                                                                              index]
+                                                                          .first;
+                                                                  print(selectedValues[
+                                                                          index]
+                                                                      .first);
+                                                                }
+                                                              } else {
+                                                                selectedValues[
+                                                                        index]
+                                                                    .remove(
+                                                                        value);
+                                                                _isOtherChecked =
+                                                                    false;
+                                                              }
+                                                            });
+                                                            handleCheckboxChange(
+                                                                items[index],
+                                                                value,
+                                                                newValue!);
+                                                          },
+                                                        ),
+                                                        Container(
+                                                          width: Get.width > 600
+                                                              ? 25.dynamic
+                                                              : 5.dynamic,
+                                                          child: Text(
+                                                            value,
+                                                            softWrap: true,
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    12.dynamic),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }).toList(),
                                                 ],
-                                              );
-                                            }).toList(),
-                                          ],
-                                        ),
-                                        Get.width > 600
-                                            ? SizedBox(height: 10.dynamic)
-                                            : SizedBox(), // Add space between rows
-                                      ],
-                                    );
-                                  }),
-                                ),
-                                Row(children: [
-                                  Container(
-                                    width: 100.dynamic,
-                                    child: Text(
-                                      "Other",
-                                      softWrap: true,
-                                      style: TextStyle(fontSize: 12.dynamic),
-                                    ),
+                                              ),
+                                              Get.width > 600
+                                                  ? SizedBox(height: 10.dynamic)
+                                                  : SizedBox(), // Add space between rows
+                                            ],
+                                          );
+                                        }),
+                                      ),
+                                      // Row(
+                                      //   children: [
+                                      //     Container(
+                                      //       width: 100.dynamic,
+                                      //       child: Text(
+                                      //         "Other",
+                                      //         softWrap: true,
+                                      //         style: TextStyle(fontSize: 14.dynamic),
+                                      //       ),
+                                      //     ),
+                                      //     ...radioValues.map((value) {
+                                      //       return Row(
+                                      //         children: [
+                                      //           Checkbox(
+                                      //             value: selectedOtherValues
+                                      //                 .contains(value),
+                                      //             onChanged: (newValue) {
+                                      //               setState(() {
+                                      //                 if (newValue!) {
+                                      //                   selectedOtherValues
+                                      //                       .add(value);
+                                      //                   _isOtherChecked = true;
+                                      //                 } else {
+                                      //                   selectedOtherValues
+                                      //                       .remove(value);
+                                      //                   _isOtherChecked = false;
+                                      //                 }
+                                      //               });
+                                      //             },
+                                      //           ),
+                                      //           Container(
+                                      //             width: Get.width > 600
+                                      //                 ? 25.dynamic
+                                      //                 : 5.dynamic,
+                                      //             child: Text(
+                                      //               value,
+                                      //               softWrap: true,
+                                      //               style: TextStyle(
+                                      //                   fontSize: 14.dynamic),
+                                      //             ),
+                                      //           ),
+                                      //         ],
+                                      //       );
+                                      //     }).toList(),
+                                      //   ],
+                                      // ),
+
+                                      // Row(children: [
+                                      //   Container(
+                                      //     width: 100.dynamic,
+                                      //     child: Text(
+                                      //       "Other",
+                                      //       softWrap: true,
+                                      //       style: TextStyle(fontSize: 14.dynamic),
+                                      //     ),
+                                      //   ),
+                                      //   Checkbox(
+                                      //     value: _isOtherChecked,
+                                      //     onChanged: (newValue) {
+                                      //       setState(() {
+                                      //         _isOtherChecked = newValue!;
+                                      //       });
+                                      //     },
+                                      //   ),
+                                      // ]),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      _isOtherChecked
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                color: Colour.appLightGrey,
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                border: Border.all(
+                                                    color: Colors.grey),
+                                              ),
+                                              child: TextFormField(
+                                                obscureText: false,
+                                                controller: otherController,
+                                                keyboardType:
+                                                    TextInputType.multiline,
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontSize: 14.dynamic,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          vertical: 15.0,
+                                                          horizontal: 20.0),
+                                                  hintText: "Specify other",
+                                                  border: InputBorder.none,
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                    ],
                                   ),
-                                  Checkbox(
-                                    value: _isOtherChecked,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        _isOtherChecked = newValue!;
-                                      });
-                                    },
-                                  ),
-                                ]),
-                                SizedBox(
-                                  height: 10.dynamic,
-                                ),
-                                _isOtherChecked
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          color: Colour.appLightGrey,
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                        ),
-                                        child: TextFormField(
-                                          obscureText: false,
-                                          controller: otherController,
-                                          keyboardType: TextInputType.multiline,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            fontSize: 12.dynamic,
-                                            fontWeight: FontWeight.w300,
-                                          ),
-                                          decoration: InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 15.0,
-                                                    horizontal: 20.0),
-                                            hintText: "Specify other",
-                                            border: InputBorder.none,
-                                          ),
-                                        ),
-                                      )
-                                    : SizedBox(),
-                                SizedBox(
-                                  height: 10.dynamic,
-                                ),
-                              ],
-                            ),
-                          ),
+                                )
+                              : SizedBox(),
                           SizedBox(height: 12.dynamic),
                           detail.aServiceName == "Pest Control Management"
                               ? Container(
@@ -574,7 +744,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                             child: Text(
                                               value,
                                               style: TextStyle(
-                                                  fontSize: 12.dynamic),
+                                                  fontSize: 14.dynamic),
                                             ),
                                           );
                                         }).toList(),
@@ -600,7 +770,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                           keyboardType: TextInputType.multiline,
                                           maxLines: 1,
                                           style: TextStyle(
-                                            fontSize: 12.dynamic,
+                                            fontSize: 14.dynamic,
                                             fontWeight: FontWeight.w300,
                                           ),
                                           decoration: InputDecoration(
@@ -629,7 +799,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                           controller: quantityCtrl,
                                           maxLines: 1,
                                           style: TextStyle(
-                                            fontSize: 12.dynamic,
+                                            fontSize: 14.dynamic,
                                             fontWeight: FontWeight.w300,
                                           ),
                                           decoration: InputDecoration(
@@ -691,7 +861,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                     child: Text(
                                                       'Type',
                                                       style: TextStyle(
-                                                        fontSize: 12.dynamic,
+                                                        fontSize: 14.dynamic,
                                                         color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -706,7 +876,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                     child: Text(
                                                       'Method',
                                                       style: TextStyle(
-                                                        fontSize: 12.dynamic,
+                                                        fontSize: 14.dynamic,
                                                         color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -720,7 +890,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                     child: Text(
                                                       'Quantity',
                                                       style: TextStyle(
-                                                        fontSize: 12.dynamic,
+                                                        fontSize: 14.dynamic,
                                                         color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -735,7 +905,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                     child: Text(
                                                       'Actions',
                                                       style: TextStyle(
-                                                        fontSize: 12.dynamic,
+                                                        fontSize: 14.dynamic,
                                                         color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -760,7 +930,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: TextStyle(
-                                                          fontSize: 12.dynamic,
+                                                          fontSize: 14.dynamic,
                                                         ),
                                                       ),
                                                     ),
@@ -773,7 +943,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: TextStyle(
-                                                          fontSize: 12.dynamic,
+                                                          fontSize: 14.dynamic,
                                                         ),
                                                       ),
                                                     ),
@@ -786,7 +956,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: TextStyle(
-                                                          fontSize: 12.dynamic,
+                                                          fontSize: 14.dynamic,
                                                         ),
                                                       ),
                                                     ),
@@ -864,7 +1034,11 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                 if (_isOtherChecked) {
                                   if (otherController.text.isNotEmpty) {
                                     handleCheckboxChange(
-                                        "Other", otherController.text, true);
+                                        "Other",
+                                        selectedOtherValues +
+                                            "-" +
+                                            otherController.text,
+                                        true);
                                   } else {
                                     Toast.show(
                                       'Please specify other',

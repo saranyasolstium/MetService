@@ -134,9 +134,9 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   String? get aCustomerImage => customerImage;
   String? get aCustomerName => customerName;
 
-  String? get aEmail => "";
+  // String? get aEmail => "";
 
-  String? get aPhoneNo => "";
+  // String? get aPhoneNo => "";
 
   String? get aServiceName => "";
 
@@ -171,4 +171,16 @@ class MCustomerProductItem implements ADropDown, AProduct, AServiceItem {
   double? get aLatIn => 0;
 
   double? get aLatOut => 0;
+  
+  @override
+  // TODO: implement aBillingAddress
+  String get aBillingAddress => throw UnimplementedError();
+  
+  @override
+  // TODO: implement aEmail
+  String get aEmail => throw UnimplementedError();
+  
+  @override
+  // TODO: implement aPhoneNo
+  String get aPhoneNo => throw UnimplementedError();
 }
