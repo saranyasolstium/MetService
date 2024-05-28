@@ -1,11 +1,14 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/create_job_itemList_model.dart';
+import 'package:eagle_pixels/model/oppoinment_model.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
+import 'package:eagle_pixels/screen/create_job/create_job_screen2.dart';
 import 'package:eagle_pixels/screen/create_job/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 import '../../api/ParamModel.dart';
@@ -18,33 +21,33 @@ import '../../model/abstract_class.dart';
 import '../../reuse/date_manager.dart';
 import 'package:toast/toast.dart';
 
-extension CreateJobAction on _CreateJobScreenState {
-  onCreateJob() async {
-    final param = ParamCreateJob(
-      customerID: selectedCustomer.value!.aId,
-      productItemID: selectedProduct.value!.aId,
-      serviceTypeID: selectedServiceType.value!.aId,
-      serviceDate: DateFormat(AppDateFormat.yyyy_MM_dd).format(DateTime.now()),
-      subject: _enterSub1.text,
-      description: _enterSub1.text,
-    );
+//extension CreateJobAction on _CreateJobScreenState {
+//   onCreateJob() async {
+//     final param = ParamCreateJob(
+//       customerID: selectedCustomer.value!.aId,
+//       productItemID: "",
+//       serviceTypeID: selectedServiceType.value!.aId,
+//       serviceDate: DateFormat(AppDateFormat.yyyy_MM_dd).format(DateTime.now()),
+//       subject: _enterSub1.text,
+//       description: _enterSub1.text,
+//     );
 
-    print(param);
-    try {
-      final isJobCreated = await createJob.scCreateJob(param);
-      if (isJobCreated) {
-        Get.back();
-        Toast.show('New Job created successfully', duration: 2);
-        print('New Job created successfully');
-      } else {
-        Toast.show(kErrorMsg);
-      }
-    } catch (e) {
-      Toast.show('$e');
-      print(e);
-    }
-  }
-}
+//     print(param);
+//     try {
+//       final isJobCreated = await createJob.scCreateJob(param);
+//       if (isJobCreated) {
+//         Get.back();
+//         Toast.show('New Job created successfully', duration: 2);
+//         print('New Job created successfully');
+//       } else {
+//         Toast.show(kErrorMsg);
+//       }
+//     } catch (e) {
+//       Toast.show('$e');
+//       print(e);
+//     }
+//   }
+// }
 
 class CreateJobScreen extends StatefulWidget {
   @override
@@ -55,29 +58,34 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   final CreateJobController createJob = Get.put(CreateJobController());
 
   final Rx<ADropDown?> selectedCustomer = Rx(null);
-  final Rx<ADropDown?> selectedProduct = Rx(null);
+  // final Rx<ADropDown?> selectedProduct = Rx(null);
   final Rx<ADropDown?> selectedServiceType = Rx(null);
 
-  final TextEditingController _enterSub1 = TextEditingController();
-
-  final TextEditingController _enterSub2 = TextEditingController();
   String? email = "";
   String? phoneNO = "";
   String? billingAddress = "";
   String? selectedSource = "Select Source";
+  String? selectedProduct = "Select Product";
+
   String? selectedProj = "Choose Project";
   String? selectedPriority = "Select Priority";
   String? selectedStatus = "Select Status";
+  String? selectedAppoinment = "Select Appointment";
+  String? selectedSaleOrder = "Select Sale Order";
+  String? selectedprojectCode = "Select Project Code";
+  String selectedService = "";
+  String selectedSubService = "Select Sub Service";
+  String selectedcustomerType = "Select Customer type";
 
   final _formKey = GlobalKey<FormState>();
 
-  String get dSelectedProduct {
-    final selected = selectedProduct.value as MCustomerProductItem?;
-    if (selected == null) {
-      return 'Select Product';
-    }
-    return '${selected.aName} - ${selected.productId}';
-  }
+  // String get dSelectedProduct {
+  //   final selected = selectedProduct.value as MCustomerProductItem?;
+  //   if (selected == null) {
+  //     return 'Select Product';
+  //   }
+  //   return '${selected.aName} - ${selected.productId}';
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +137,20 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       // Choose Customer DropDown
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Choose Customer',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
                                       Container(
                                         margin:
                                             EdgeInsets.only(bottom: 19.dynamic),
@@ -163,7 +185,11 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           hint: "Choose Customer",
 
                                           onChanged: (val) async {
-                                            selectedProduct.value = null;
+                                            setState(() {
+                                              selectedAppoinment =
+                                                  "Select Appointment";
+                                              createJob.oppoinmentList.clear();
+                                            });
 
                                             selectedCustomer.value =
                                                 createJob.find(val!,
@@ -176,8 +202,11 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                                 selectedCustomer.value!.aEmail;
                                             print("choose value" +
                                                 selectedCustomer.value!.aId);
+                                            createJob.customerID = int.parse(
+                                                selectedCustomer.value!.aId);
+
                                             await createJob
-                                                .fetchCustomerProductList(
+                                                .fetchOppoinmentRequest(
                                                     selectedCustomer
                                                         .value!.aId);
                                           },
@@ -235,12 +264,151 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                               ),
                                             )
                                           : SizedBox(),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Appointment Request',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          mode: Mode.MENU,
+                                          items: createJob.oppoinmentList
+                                              .map((appointment) {
+                                            return '${appointment.bookingDate} - ${appointment.address}';
+                                          }).toList(),
+                                          hint: "Select Appointment",
+                                          onChanged: (val) {
+                                            setState(() {
+                                              selectedAppoinment = null;
+                                            });
+                                            selectedAppoinment = val;
+                                            createJob.getAppoinmentFromName(
+                                                selectedAppoinment!);
+                                          },
+                                          selectedItem: selectedAppoinment,
+                                        ),
+                                      ),
+
+                                      SizedBox(height: 10.dynamic),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Sale Order',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          mode: Mode.MENU,
+                                          hint: "Select Sales Order",
+                                          onChanged: (val) {},
+                                          selectedItem: selectedSaleOrder,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.dynamic),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: 'Address',
+                                            style: TextStyle(
+                                              fontSize: 14.dynamic,
+                                              color: Colour.appBlack,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: '*',
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .red, // Set the asterisk (*) color to red
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        child: TextFormField(
+                                          obscureText: false,
+                                          maxLines: 4,
+                                          controller: createJob.addressCtrl,
+                                          keyboardType: TextInputType.multiline,
+                                          onChanged: (val) {},
+                                          style: TextStyle(
+                                              fontSize: 14.dynamic,
+                                              fontWeight: FontWeight.w300),
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            contentPadding: EdgeInsets.fromLTRB(
+                                                20.0, 15.0, 20.0, 15.0),
+                                            hintText: "Address",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
 
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
 
-                                      // Select Product DropDown
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Text(
@@ -274,32 +442,23 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                             border: InputBorder.none,
                                           ),
                                           mode: Mode.MENU,
-                                          // showSelectedItem: true,
-                                          items: createJob
-                                              .arrStringForProductList(),
-                                          // selectedItem: selectedCustomerProduct
-                                          //         .value?.aName ??
-                                          //     'Select',
-                                          // label: "Menu mode",
+                                          items: createJob.productList
+                                              .map((product) =>
+                                                  product.name ?? '')
+                                              .toList(),
                                           hint: "Select Product",
-                                          // popupItemDisabled: (String s) =>
-                                          //     s.startsWith('I'),
                                           onChanged: (val) {
-                                            selectedProduct.value =
-                                                createJob.findProduct(
-                                                    val!,
-                                                    createJob
-                                                        .customerProductList);
+                                            selectedProduct = val;
+                                            createJob.getProductFromName(
+                                                selectedProduct!);
                                           },
-                                          validator: (item) {
-                                            if (dSelectedProduct == '')
-                                              return '* Required';
-                                            else
-                                              return null;
-                                          },
-                                          selectedItem: dSelectedProduct,
+                                          selectedItem: selectedProduct,
                                         ),
                                       ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: RichText(
@@ -322,6 +481,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                       ),
+
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
@@ -347,206 +507,34 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           items: ['Residential', 'Commercial'],
                                           hint: "Select Department",
                                           onChanged: (val) {
-                                            // Handle department selection here
+                                            if (val == "Residential") {
+                                              createJob.selectedDepartId = "29";
+                                            } else {
+                                              createJob.selectedDepartId = "38";
+                                            }
+                                            print(createJob.selectedDepartId);
                                           },
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: RichText(
-                                          text: TextSpan(
-                                            text: 'Address',
-                                            style: TextStyle(
-                                              fontSize: 14.dynamic,
-                                              color: Colour.appBlack,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                            children: [
-                                              TextSpan(
-                                                text: '*',
-                                                style: TextStyle(
-                                                  color: Colors
-                                                      .red, // Set the asterisk (*) color to red
-                                                ),
-                                              ),
-                                            ],
-                                          ),
                                         ),
                                       ),
 
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
-                                      Container(
-                                        child: TextFormField(
-                                          obscureText: false,
-                                          maxLines: 4,
-                                          controller: _enterSub2,
-                                          keyboardType: TextInputType.multiline,
-                                          onChanged: (val) {},
+
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Project Code',
                                           style: TextStyle(
-                                              fontSize: 14.dynamic,
-                                              fontWeight: FontWeight.w300),
-                                          decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            contentPadding: EdgeInsets.fromLTRB(
-                                                20.0, 15.0, 20.0, 15.0),
-                                            hintText: "Address",
-                                            border: InputBorder.none,
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ),
-
                                       SizedBox(
-                                        height: 12.dynamic,
+                                        height: 10.dynamic,
                                       ),
-
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(bottom: 19.dynamic),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                                child: CustomDropdown(
-                                              items: [
-                                                'Choose Project',
-                                              ],
-                                              value: selectedProj!,
-                                              onChanged: (newValue) {
-                                                setState(() {
-                                                  selectedProj = newValue!;
-                                                });
-                                              },
-                                            )),
-                                            Expanded(
-                                                child: CustomDropdown(
-                                              items: [
-                                                'Select Source',
-                                                'Email',
-                                                'Web Site',
-                                                'Phone',
-                                                'Forum',
-                                                'Twitter',
-                                                'Facebook',
-                                                'Chat',
-                                                'MobiHelp',
-                                                'Feedback Widget',
-                                                'Outbound Email',
-                                                'Ecommerce',
-                                                'Bot',
-                                                'Whatsapp'
-                                              ],
-                                              value: selectedSource!,
-                                              onChanged: (newValue) {
-                                                setState(() {
-                                                  selectedSource = newValue!;
-                                                });
-                                              },
-                                            ))
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 12.dynamic,
-                                      ),
-
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(bottom: 19.dynamic),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                                child: CustomDropdown(
-                                              items: [
-                                                'Select Priority',
-                                                'Low',
-                                                'Medium',
-                                                'High',
-                                                'Urgent'
-                                              ],
-                                              value: selectedPriority!,
-                                              onChanged: (newValue) {
-                                                setState(() {
-                                                  selectedPriority = newValue!;
-                                                });
-                                              },
-                                            )),
-                                            Expanded(
-                                              child: CustomDropdown(
-                                                items: [
-                                                  'Select Status',
-                                                  'Open',
-                                                  'Pending',
-                                                  'Resolved',
-                                                  'Closed',
-                                                  'Waiting On Customer',
-                                                  'Waiting On Third Party',
-                                                ],
-                                                value: selectedStatus!,
-                                                onChanged: (newValue) {
-                                                  setState(() {
-                                                    selectedStatus = newValue;
-                                                  });
-                                                },
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 12.dynamic,
-                                      ),
-                                       
-
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(bottom: 19.dynamic),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                                child: CustomDropdown(
-                                              items: [
-                                                'Select Priority',
-                                                'Low',
-                                                'Medium',
-                                                'High',
-                                                'Urgent'
-                                              ],
-                                              value: selectedPriority!,
-                                              onChanged: (newValue) {
-                                                setState(() {
-                                                  selectedPriority = newValue!;
-                                                });
-                                              },
-                                            )),
-                                            Expanded(
-                                              child: CustomDropdown(
-                                                items: [
-                                                  'Select Status',
-                                                  'Open',
-                                                  'Pending',
-                                                  'Resolved',
-                                                  'Closed',
-                                                  'Waiting On Customer',
-                                                  'Waiting On Third Party',
-                                                ],
-                                                value: selectedStatus!,
-                                                onChanged: (newValue) {
-                                                  setState(() {
-                                                    selectedStatus = newValue;
-                                                  });
-                                                },
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                       SizedBox(
-                                        height: 12.dynamic,
-                                      ),
-
-                                      // Choose Service Type DropDown
                                       Container(
                                         margin:
                                             EdgeInsets.only(bottom: 19.dynamic),
@@ -560,42 +548,179 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
+                                          mode: Mode.MENU,
                                           showAsSuffixIcons: true,
                                           dropdownSearchDecoration:
                                               InputDecoration(
                                             border: InputBorder.none,
                                           ),
-                                          mode: Mode.MENU,
-                                          // showSelectedItem: true,
-                                          items: createJob.arrString(
-                                              createJob.serviceTypeList),
-                                          // label: "Menu mode",
-                                          hint: "Choose Service Type",
+                                          items: [
+                                            'Choose Project Code',
+                                          ],
+                                          hint: "Choose Project Code",
                                           onChanged: (val) {
-                                            selectedServiceType.value =
-                                                createJob.find(val!,
-                                                    createJob.serviceTypeList);
+                                            // Handle department selection here
                                           },
-                                          validator: (item) {
-                                            if (item == null)
-                                              return '* Required';
-                                            else
-                                              return null;
-                                          },
-                                          // selectedItem: "Brazil",
                                         ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Priority',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          mode: Mode.MENU,
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          items: [
+                                            'Select Priority',
+                                            'Low',
+                                            'Medium',
+                                            'High',
+                                            'Urgent'
+                                          ],
+                                          hint: "Select Priority",
+                                          onChanged: (val) {
+                                            if (val == "Low") {
+                                              createJob.selectedPriorityId =
+                                                  "1";
+                                            } else if (val == "Medium") {
+                                              createJob.selectedPriorityId =
+                                                  "2";
+                                            } else if (val == "High") {
+                                              createJob.selectedPriorityId =
+                                                  "3";
+                                            } else if (val == "Urgent") {
+                                              createJob.selectedPriorityId =
+                                                  "4";
+                                            } else {
+                                              createJob.selectedPriorityId = "";
+                                            }
+                                            print(createJob.selectedPriorityId);
+                                          },
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Status',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          mode: Mode.MENU,
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          items: [
+                                            'Select Status',
+                                            'Open',
+                                            'Pending',
+                                            'Resolved',
+                                            'Closed',
+                                            'Waiting On Customer',
+                                            'Waiting On Third Party',
+                                          ],
+                                          hint: "Select Status",
+                                          onChanged: (val) {
+                                            if (val == "Open") {
+                                              createJob.selectedStatusId = "2";
+                                            } else if (val == "Pending") {
+                                              createJob.selectedStatusId = "3";
+                                            } else if (val == "Resolved") {
+                                              createJob.selectedStatusId = "4";
+                                            } else if (val == "Closed") {
+                                              createJob.selectedStatusId = "5";
+                                            } else if (val ==
+                                                "Waiting On Customer") {
+                                              createJob.selectedStatusId = "6";
+                                            } else if (val ==
+                                                "Waiting On Third Party") {
+                                              createJob.selectedStatusId = "7";
+                                            } else {
+                                              createJob.selectedStatusId = "";
+                                            }
+                                            print(createJob.selectedStatusId);
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Service Amount',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
                                       ),
                                       Padding(
                                         padding:
                                             EdgeInsets.only(bottom: 19.dynamic),
                                         child: TextFormField(
-                                          validator: MultiValidator([
-                                            RequiredValidator(
-                                                errorText: "* Required"),
-                                          ]),
                                           obscureText: false,
-                                          controller: _enterSub1,
-                                          keyboardType: TextInputType.multiline,
+                                          controller:
+                                              createJob.serviceAmountCtrl,
+                                          keyboardType: TextInputType.number,
                                           onChanged: (val) {},
                                           style: TextStyle(
                                               fontSize: 14.dynamic,
@@ -605,21 +730,203 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                             fillColor: Colors.white,
                                             contentPadding: EdgeInsets.fromLTRB(
                                                 20.0, 15.0, 20.0, 15.0),
-                                            hintText: "Enter Subject",
+                                            hintText: "Enter Service Amount",
                                             border: InputBorder.none,
                                           ),
                                         ),
                                       ),
+
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Service',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
                                       Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          mode: Mode.MENU,
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          items: createJob.serviceList
+                                              .map((serviceName) =>
+                                                  serviceName.serviceName ?? '')
+                                              .toList(),
+                                          hint: "Select Service",
+                                          onChanged: (val) {
+                                            setState(() {
+                                              selectedSubService =
+                                                  "Select Sub Service";
+                                              createJob.subServiceList.clear();
+                                            });
+
+                                            createJob.subServiceList.clear();
+                                            int? selectedServiceId = createJob
+                                                .getServiceIdFromName(val!);
+                                            print(selectedServiceId);
+                                            createJob.fetchSubServiceRequest(
+                                                selectedServiceId!);
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Sub Service',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5.dynamic)),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          mode: Mode.MENU,
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          items: createJob.subServiceList
+                                              .map((subService) {
+                                            return '${subService.serviceName}';
+                                          }).toList(),
+                                          hint: "Select Sub Service",
+                                          onChanged: (val) {
+                                            setState(() {
+                                              selectedSubService = "";
+                                            });
+                                            selectedSubService = val!;
+                                            createJob.subServiceID = createJob
+                                                .getServiceIdFromName(val)!;
+                                          },
+                                          selectedItem: selectedSubService,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Customer Type',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 19.dynamic),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
+                                          ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          mode: Mode.MENU,
+                                          showAsSuffixIcons: true,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          items: [
+                                            'Select Customer Type',
+                                            'CONTRACT',
+                                            'AD HOC',
+                                            'OTHERS'
+                                          ],
+                                          onChanged: (val) {
+                                            if (val == "Select Customer Type") {
+                                              createJob.selectedCustomerType =
+                                                  "";
+                                            } else {
+                                              createJob.selectedCustomerType =
+                                                  val!;
+                                            }
+                                            print(
+                                                createJob.selectedCustomerType);
+                                          },
+                                          selectedItem: selectedcustomerType,
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Attention',
+                                          style: TextStyle(
+                                            fontSize: 14.dynamic,
+                                            color: Colour.appBlack,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.dynamic,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.only(bottom: 19.dynamic),
                                         child: TextFormField(
-                                          validator: MultiValidator([
-                                            RequiredValidator(
-                                                errorText: "* Required"),
-                                          ]),
                                           obscureText: false,
-                                          maxLines: 4,
-                                          controller: _enterSub2,
-                                          keyboardType: TextInputType.multiline,
+                                          controller: createJob.attentionCtrl,
+                                          keyboardType: TextInputType.number,
                                           onChanged: (val) {},
                                           style: TextStyle(
                                               fontSize: 14.dynamic,
@@ -629,10 +936,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                             fillColor: Colors.white,
                                             contentPadding: EdgeInsets.fromLTRB(
                                                 20.0, 15.0, 20.0, 15.0),
-                                            hintText: "Description",
+                                            hintText: "Enter Attention",
                                             border: InputBorder.none,
                                           ),
                                         ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 12.dynamic,
                                       ),
                                     ],
                                   ),
@@ -677,13 +988,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                 ),
                                 child: TextButton(
                                   onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      _formKey.currentState!.save();
-                                      this.onCreateJob();
-                                    }
+                                    // if (_formKey.currentState!.validate()) {
+                                    //   _formKey.currentState!.save();
+                                    //   this.onCreateJob();
+                                    // }
+                                    Get.to(CreateJobScreen2());
                                   },
                                   child: Text(
-                                    'Create Job',
+                                    'Next',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 16.dynamic,

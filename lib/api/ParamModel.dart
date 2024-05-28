@@ -106,7 +106,6 @@ class ParamCompleteJob {
     json['preparation'] = preparation;
     json['areas_inspected'] = areasInspected;
     json['after_service_img'] = imagPath;
-    
 
     return json;
   }
@@ -135,29 +134,62 @@ class ParamSubmitItem {
 }
 
 class ParamCreateJob {
-  var customerID,
-      productItemID,
-      serviceDate,
-      serviceTypeID,
-      subject,
-      description;
+  var customerID, productItemID, startTime, endTime, Email, serviceDate;
 
   ParamCreateJob(
       {required this.customerID,
       required this.productItemID,
-      required this.serviceTypeID,
-      required this.serviceDate,
-      required this.subject,
-      required this.description});
+      required this.startTime,
+      required this.endTime,
+      required this.Email,
+      required this.serviceDate});
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
-    json['customer_id'] = customerID;
-    json['product_item_id'] = productItemID;
-    json['service_date'] = serviceDate;
-    json['service_type_id'] = serviceTypeID;
-    json['subject'] = subject;
-    json['description'] = description;
+
+    json["requester_id"] = customerID;
+    json["product_id"] = "";
+    json["address"] = "test";
+    json["department_id"] = "29";
+    json["project_id"] = "";
+    json["sales_order_id"] = "";
+    json["service_type_id"] = "2";
+    json["service_amount"] = "";
+    json["service_id"] = 7;
+    json["subservice_id"] = 12;
+    json["service_cover"] = "common ants";
+    json["service_other"] = "";
+    json["treatment_method"] = "inspection";
+    json["treatment_other"] = "";
+    json["service_frequency"] = "weekly (52x12)";
+    json["service_freq_other"] = "";
+    json["business_source"] = "google";
+    json["busines_source_other"] = "";
+    json["degree_infestation"] = "low";
+    json["billing_type"] = "others";
+    json["referral_name"] = "suriya";
+    json["estimation_first_service"] = "1hour";
+    json["decision_maker"] = "suriya";
+    json["see_on_site"] = "client";
+    json["service_premise_address"] = "singapore";
+    json["billing_frequency"] = "weekly";
+    json["preparation"] = "Advion Cockroach Gel";
+
+    json["date"] = serviceDate;
+    json["service_time_start"] = startTime;
+    json["service_time_end"] =  endTime;
+    json["new_engineer_id"] = "362";
+    json["subject"] = "test";
+    json["description"] = "test";
+    json["source"] = "2";
+    json["priority"] = "1";
+    json["status"] = 2;
+    json["customer_type"] = "CONTRACT";
+    json["service_order_id"] = "SR72727";
+    json["attention"] = "test";
+    json["oppoinment_request_id"] = "";
+    json["type"] = "";
+
     return json;
   }
 }

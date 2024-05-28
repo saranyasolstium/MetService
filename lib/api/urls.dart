@@ -19,7 +19,13 @@ enum EndPoint {
   getCustomerList,
   getCustomerProductItemList,
   getCustomerStoreList,
-  serviceTypeList,
+  //serviceTypeList,
+  oppoinmentList,
+  productSales,
+  customerProduct,
+  serviceLists,
+  subServicelists,
+  availableEngineer,
   createJob,
 }
 
@@ -64,12 +70,24 @@ extension EndPointString on EndPoint {
         return 'customer_list';
       case EndPoint.getCustomerProductItemList:
         return 'customer_item_list';
-      case EndPoint.serviceTypeList:
-        return 'get_servicetype_list';
+      // case EndPoint.serviceTypeList:
+      //   return 'get_servicetype_list';
       case EndPoint.createJob:
-        return 'create_job';
+        return 'create_serviceRequest';
       case EndPoint.getCustomerStoreList:
         return 'customer_storelist';
+      case EndPoint.oppoinmentList:
+        return 'getOppoinmentRequest';
+      case EndPoint.productSales:
+        return 'getProductSales';
+      case EndPoint.customerProduct:
+        return 'getCustomerProduct';
+      case EndPoint.serviceLists:
+        return 'servicelists';
+      case EndPoint.subServicelists:
+        return 'sub_servicelists';
+      case EndPoint.availableEngineer:
+        return 'getAvailableEngineer';
     }
   }
 }
