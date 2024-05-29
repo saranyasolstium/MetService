@@ -45,6 +45,9 @@ class CreateJobController extends GetxController {
   final TextEditingController servicePremiseCtrl = TextEditingController();
   final TextEditingController subjectCtrl = TextEditingController();
   final TextEditingController descriptionCtrl = TextEditingController();
+  final TextEditingController treatmentOtherCtrl = TextEditingController();
+  final TextEditingController freqOtherCtrl = TextEditingController();
+  final TextEditingController sourceOtherCtrl = TextEditingController();
 
   int? customerID = 46;
 
@@ -83,6 +86,8 @@ class CreateJobController extends GetxController {
     await fetchServiceRequest();
     serviceOrderCtrl.text = generateRandomSRNumber(8);
     print(serviceOrderCtrl.text);
+    selectedfrequency = "";
+
     // await fetchServiceType();
     super.onInit();
   }
@@ -332,18 +337,18 @@ class CreateJobController extends GetxController {
       "department_id": selectedDepartId,
       "project_id": "",
       "sales_order_id": "",
-      "service_type_id": "2",
+      "service_type_id": "",
       "service_amount": serviceAmountCtrl.text,
       "service_id": serviceId,
       "subservice_id": subServiceID,
       "service_cover": "",
       "service_other": "",
       "treatment_method": selectedTreatment,
-      "treatment_other": "",
+      "treatment_other": treatmentOtherCtrl.text,
       "service_frequency": selectedfrequency,
-      "service_freq_other": "",
+      "service_freq_other": freqOtherCtrl.text,
       "business_source": selectedSource,
-      "busines_source_other": "",
+      "busines_source_other": sourceOtherCtrl.text,
       "degree_infestation": selectedInfestation,
       "billing_type": selectedBillingType,
       "referral_name": referralNameCtrl.text,
@@ -351,7 +356,7 @@ class CreateJobController extends GetxController {
       "decision_maker": decisionMakerCtrl.text,
       "see_on_site": whomtoSeeCtrl.text,
       "service_premise_address": servicePremiseCtrl.text,
-      "billing_frequency": selectedfrequency,
+      "billing_frequency": billingFreqCtrl.text,
       "preparation": "",
       "date": '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
       "service_time_start": startTime,

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/create_job_itemList_model.dart';
@@ -841,7 +843,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                             selectedSubService = val!;
                                             createJob.subServiceID = createJob
                                                 .getSubServiceIdFromName(val)!;
-                                              print(createJob.subServiceID);
+                                            print(createJob.subServiceID);
                                           },
                                           selectedItem: selectedSubService,
                                         ),
@@ -927,7 +929,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                         child: TextFormField(
                                           obscureText: false,
                                           controller: createJob.attentionCtrl,
-                                          keyboardType: TextInputType.number,
                                           onChanged: (val) {},
                                           style: TextStyle(
                                               fontSize: 14.dynamic,
@@ -991,9 +992,37 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                   onPressed: () {
                                     // if (_formKey.currentState!.validate()) {
                                     //   _formKey.currentState!.save();
-                                    //   this.onCreateJob();
+                                    //  // this.onCreateJob();
                                     // }
-                                    Get.to(CreateJobScreen2());
+                                    if (selectedCustomer.value == null) {
+                                      Toast.show(
+                                        "please select customer",
+                                        backgroundColor: Colors.white,
+                                        textStyle: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      );
+                                    } else if (createJob
+                                        .addressCtrl.text.isEmpty) {
+                                      Toast.show(
+                                        "please enter address",
+                                        backgroundColor: Colors.white,
+                                        textStyle: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      );
+                                    } else if (createJob
+                                        .selectedDepartId.isEmpty) {
+                                      Toast.show(
+                                        "please select type of permise",
+                                        backgroundColor: Colors.white,
+                                        textStyle: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                      );
+                                    } else {
+                                      Get.to(CreateJobScreen2());
+                                    }
                                   },
                                   child: Text(
                                     'Next',
@@ -1004,28 +1033,28 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                   ),
                                 ),
                               ),
-                              // SizedBox(height: 10),
-                              Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5.dynamic),
-                                  ),
-                                ),
-                                child: TextButton(
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  child: Text(
-                                    'Cancel',
-                                    style: TextStyle(
-                                        color: Colour.appRed,
-                                        fontSize: 16.dynamic,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                ),
-                              ),
+                              SizedBox(height: 10),
+                              // Container(
+                              //   width: double.infinity,
+                              //   decoration: BoxDecoration(
+                              //     color: Colors.white,
+                              //     borderRadius: BorderRadius.all(
+                              //       Radius.circular(5.dynamic),
+                              //     ),
+                              //   ),
+                              //   child: TextButton(
+                              //     onPressed: () {
+                              //       Get.back();
+                              //     },
+                              //     child: Text(
+                              //       'Cancel',
+                              //       style: TextStyle(
+                              //           color: Colour.appRed,
+                              //           fontSize: 16.dynamic,
+                              //           fontWeight: FontWeight.w300),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

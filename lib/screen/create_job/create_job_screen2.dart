@@ -1,12 +1,11 @@
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:eagle_pixels/api/ParamModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/createjob_controller.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:toast/toast.dart';
 
 class CreateJobScreen2 extends StatelessWidget {
   final CreateJobController createJobController =
@@ -104,6 +103,7 @@ class CreateJobScreen2 extends StatelessWidget {
                                           controller.selectedTreatment = val!;
                                         }
                                         print(controller.selectedTreatment);
+                                        controller.update();
                                       },
                                       selectedItem: selectedTreatment,
                                     ),
@@ -111,6 +111,31 @@ class CreateJobScreen2 extends StatelessWidget {
                                   SizedBox(
                                     height: 10.dynamic,
                                   ),
+                                  controller.selectedTreatment == "Other"
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: 19.dynamic),
+                                          child: TextFormField(
+                                            obscureText: false,
+                                            controller:
+                                                controller.treatmentOtherCtrl,
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (val) {},
+                                            style: TextStyle(
+                                                fontSize: 14.dynamic,
+                                                fontWeight: FontWeight.w300),
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              contentPadding:
+                                                  EdgeInsets.fromLTRB(
+                                                      20.0, 15.0, 20.0, 15.0),
+                                              hintText: "Enter Other",
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(),
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
@@ -158,6 +183,7 @@ class CreateJobScreen2 extends StatelessWidget {
                                           controller.selectedfrequency = val!;
                                         }
                                         print(controller.selectedfrequency);
+                                        controller.update();
                                       },
                                       selectedItem: selectedFrequency,
                                     ),
@@ -165,6 +191,31 @@ class CreateJobScreen2 extends StatelessWidget {
                                   SizedBox(
                                     height: 10.dynamic,
                                   ),
+                                  controller.selectedfrequency == "Other"
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: 19.dynamic),
+                                          child: TextFormField(
+                                            obscureText: false,
+                                            controller:
+                                                controller.freqOtherCtrl,
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (val) {},
+                                            style: TextStyle(
+                                                fontSize: 14.dynamic,
+                                                fontWeight: FontWeight.w300),
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              contentPadding:
+                                                  EdgeInsets.fromLTRB(
+                                                      20.0, 15.0, 20.0, 15.0),
+                                              hintText: "Enter Other",
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(),
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
@@ -299,6 +350,7 @@ class CreateJobScreen2 extends StatelessWidget {
                                         } else {
                                           controller.selectedSource = val!;
                                         }
+                                        controller.update();
                                         print(controller.selectedSource);
                                       },
                                       selectedItem: selectedSource,
@@ -307,6 +359,31 @@ class CreateJobScreen2 extends StatelessWidget {
                                   SizedBox(
                                     height: 10.dynamic,
                                   ),
+                                  controller.selectedSource == "other"
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: 19.dynamic),
+                                          child: TextFormField(
+                                            obscureText: false,
+                                            controller:
+                                                controller.sourceOtherCtrl,
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (val) {},
+                                            style: TextStyle(
+                                                fontSize: 14.dynamic,
+                                                fontWeight: FontWeight.w300),
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              contentPadding:
+                                                  EdgeInsets.fromLTRB(
+                                                      20.0, 15.0, 20.0, 15.0),
+                                              hintText: "Enter Other",
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(),
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
@@ -763,7 +840,7 @@ class CreateJobScreen2 extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                             controller.date!.isEmpty
+                                            controller.date!.isEmpty
                                                 ? "Select Date"
                                                 : controller.date!,
                                             style: TextStyle(
@@ -829,7 +906,7 @@ class CreateJobScreen2 extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                             controller.endTime!.isEmpty
+                                            controller.endTime!.isEmpty
                                                 ? "Select End Time"
                                                 : controller.endTime!,
                                             style: TextStyle(
@@ -898,7 +975,41 @@ class CreateJobScreen2 extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () {
-                                controller.createJob();
+                                if (controller.selectedTreatment == "Other" &&
+                                    controller.treatmentOtherCtrl.text
+                                        .toString()
+                                        .isEmpty) {
+                                  Toast.show(
+                                    "please enter treatment other filed",
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
+                                } else if (controller.selectedfrequency ==
+                                        "Other" &&
+                                    controller.freqOtherCtrl.text
+                                        .toString()
+                                        .isEmpty) {
+                                  Toast.show(
+                                    "please enter frequency other filed",
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
+                                } else if (controller.selectedSource ==
+                                        "other" &&
+                                    controller.sourceOtherCtrl.text
+                                        .toString()
+                                        .isEmpty) {
+                                  Toast.show(
+                                    "please enter source other filed",
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
+                                } else {
+                                  controller.createJob();
+                                }
                               },
                               child: Text(
                                 'Create Job',
