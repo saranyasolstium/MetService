@@ -840,7 +840,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                             });
                                             selectedSubService = val!;
                                             createJob.subServiceID = createJob
-                                                .getServiceIdFromName(val)!;
+                                                .getSubServiceIdFromName(val)!;
+                                              print(createJob.subServiceID);
                                           },
                                           selectedItem: selectedSubService,
                                         ),

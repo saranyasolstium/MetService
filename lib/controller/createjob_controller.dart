@@ -71,8 +71,9 @@ class CreateJobController extends GetxController {
     valueOfDrop.value = value;
   }
 
-  void updateCheckboxState(MAvailableEngineer engineer, bool value) {
-    engineer.isChecked = value;
+  void updateCheckboxState(MAvailableEngineer engineer, bool isChecked) {
+    engineer.isChecked = isChecked;
+    update();
   }
 
   @override
@@ -316,8 +317,10 @@ class CreateJobController extends GetxController {
 
     if (response.isValidModel) {
       avaiableEngList.value = response.model!.data;
+      update();
     } else {
       avaiableEngList.value = [];
+      update();
     }
   }
 
@@ -347,7 +350,7 @@ class CreateJobController extends GetxController {
       "estimation_first_service": estimationDurationCtrl.text,
       "decision_maker": decisionMakerCtrl.text,
       "see_on_site": whomtoSeeCtrl.text,
-      "service_premise_address": servicePremiseCtrl,
+      "service_premise_address": servicePremiseCtrl.text,
       "billing_frequency": selectedfrequency,
       "preparation": "",
       "date": '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
