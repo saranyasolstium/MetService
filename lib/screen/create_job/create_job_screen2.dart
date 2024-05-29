@@ -7,6 +7,10 @@ import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:toast/toast.dart';
 
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:multi_select_flutter/util/multi_select_list_type.dart';
+
 class CreateJobScreen2 extends StatelessWidget {
   final CreateJobController createJobController =
       Get.find<CreateJobController>();
@@ -398,25 +402,69 @@ class CreateJobScreen2 extends StatelessWidget {
                                   SizedBox(
                                     height: 10.dynamic,
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 19.dynamic),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 15),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5.dynamic),
-                                      ),
-                                    ),
-                                    child: DropdownSearch<String>(
-                                      mode: Mode.MENU,
-                                      showAsSuffixIcons: true,
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
-                                      ),
-                                      items: [
-                                        'Select',
+
+                                  // Container(
+                                  //   margin: EdgeInsets.only(bottom: 19.dynamic),
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       vertical: 2, horizontal: 15),
+                                  //   width: double.infinity,
+                                  //   decoration: BoxDecoration(
+                                  //     color: Colors.white,
+                                  //     borderRadius: BorderRadius.all(
+                                  //       Radius.circular(5.dynamic),
+                                  //     ),
+                                  //   ),
+                                  //   child: DropdownSearch<String>(
+                                  //     mode: Mode.MENU,
+                                  //     showAsSuffixIcons: true,
+                                  //     dropdownSearchDecoration: InputDecoration(
+                                  //       border: InputBorder.none,
+                                  //     ),
+                                  //     items: [
+                                  //       'Select',
+                                  //       'Advion Cockroach Gel',
+                                  //       'Insect Detector 100i',
+                                  //       'Deltacide (Misting)',
+                                  //       'Fogging Solution (W)',
+                                  //       'Diesel',
+                                  //       'Demand 2.5 CS',
+                                  //       'NewCyper 15WP',
+                                  //       'Newcyper 6.5 EC',
+                                  //       'Temprid SC',
+                                  //       'Tenopa SC',
+                                  //       'Rodent bait box',
+                                  //       'Rodent bait',
+                                  //       'Newcumin Tracking Powder',
+                                  //       'Rodent glueboard tamper proof box',
+                                  //       'Rodent glueboard ',
+                                  //       'Optigard ant gel',
+                                  //       'Termikil powder',
+                                  //       'Premise 200 SC',
+                                  //       'Xterm AG baiting',
+                                  //       'Xterm IG station',
+                                  //       'Rat cage',
+                                  //       'Anti malaria oil',
+                                  //       'Spar 1% ',
+                                  //       'Mosquito dunk (BTI) ',
+                                  //       'Dome Trap ',
+                                  //       'Sulphur powder',
+                                  //       'Ultrathor',
+                                  //       'Ultriset',
+                                  //     ],
+                                  //     onChanged: (val) {
+                                  //       if (val == "Select") {
+                                  //         controller.selectedPreparation = "";
+                                  //       } else {
+                                  //         controller.selectedPreparation = val!;
+                                  //       }
+                                  //       print(controller.selectedPreparation);
+                                  //     },
+                                  //     selectedItem: selectedPreparation,
+                                  //   ),
+                                  // ),
+                                  MultiSelectDialogField(
+                                    items: <MultiSelectItem<String>>[
+                                      for (String value in [
                                         'Advion Cockroach Gel',
                                         'Insect Detector 100i',
                                         'Deltacide (Misting)',
@@ -445,20 +493,20 @@ class CreateJobScreen2 extends StatelessWidget {
                                         'Sulphur powder',
                                         'Ultrathor',
                                         'Ultriset',
-                                      ],
-                                      onChanged: (val) {
-                                        if (val == "Select") {
-                                          controller.selectedPreparation = "";
-                                        } else {
-                                          controller.selectedPreparation = val!;
-                                        }
-                                        print(controller.selectedPreparation);
-                                      },
-                                      selectedItem: selectedPreparation,
-                                    ),
+                                      ])
+                                        MultiSelectItem<String>(value, value),
+                                    ],
+                                    listType: MultiSelectListType.CHIP,
+                                    onConfirm: (values) {
+                                      controller.selectedPreparation =
+                                          values.cast<String>().toList();
+
+                                      print(controller.selectedPreparation);
+                                    },
                                   ),
+
                                   SizedBox(
-                                    height: 10.dynamic,
+                                    height: 20.dynamic,
                                   ),
                                   Align(
                                     alignment: Alignment.topLeft,
@@ -929,8 +977,12 @@ class CreateJobScreen2 extends StatelessWidget {
                                       title: Text(engineer.email ?? ''),
                                       value: engineer.isChecked,
                                       onChanged: (value) {
-                                        controller.updateCheckboxState(
-                                            engineer, value!);
+                                        controller.selectedEngId = controller
+                                            .updateCheckboxState(
+                                                engineer, value!)
+                                            .toString();
+                                        print(
+                                            'Selected ID1: ${controller.selectedEngId}');
                                       },
                                     ),
                                 ],
@@ -1003,6 +1055,13 @@ class CreateJobScreen2 extends StatelessWidget {
                                         .isEmpty) {
                                   Toast.show(
                                     "please enter source other filed",
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                  );
+                                } else if (controller.selectedEngId.isEmpty) {
+                                  Toast.show(
+                                    "please assign enginner",
                                     backgroundColor: Colors.white,
                                     textStyle: TextStyle(
                                         fontSize: 16.0, color: Colors.black),

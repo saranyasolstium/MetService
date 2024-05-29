@@ -13,6 +13,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import '../../api/ParamModel.dart';
 import '../../colors.dart';
 import '../../constant.dart';
@@ -813,41 +816,60 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(bottom: 19.dynamic),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2, horizontal: 15),
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5.dynamic)),
-                                        ),
-                                        child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
-                                          ),
-                                          items: createJob.subServiceList
-                                              .map((subService) {
-                                            return '${subService.serviceName}';
-                                          }).toList(),
-                                          hint: "Select Sub Service",
-                                          onChanged: (val) {
-                                            setState(() {
-                                              selectedSubService = "";
-                                            });
-                                            selectedSubService = val!;
-                                            createJob.subServiceID = createJob
-                                                .getSubServiceIdFromName(val)!;
-                                            print(createJob.subServiceID);
-                                          },
-                                          selectedItem: selectedSubService,
-                                        ),
+                                      MultiSelectDialogField(
+                                        items: createJob.subServiceList
+                                            .map((subService) =>
+                                                MultiSelectItem<String>(
+                                                  subService.id
+                                                      .toString(), 
+                                                  subService
+                                                      .serviceName!, 
+                                                ))
+                                            .toList(),
+                                        listType: MultiSelectListType.CHIP,
+                                        onConfirm: (values) {
+                                          createJob.selectedSubServiceIds =
+                                              values.cast<String>().toList();
+                                          // Now you have the IDs of the selected sub-services
+                                          print(createJob.selectedSubServiceIds);
+                                        },
                                       ),
+
+                                      // Container(
+                                      //   margin:
+                                      //       EdgeInsets.only(bottom: 19.dynamic),
+                                      //   padding: const EdgeInsets.symmetric(
+                                      //       vertical: 2, horizontal: 15),
+                                      //   width: double.infinity,
+                                      //   decoration: BoxDecoration(
+                                      //     color: Colors.white,
+                                      //     borderRadius: BorderRadius.all(
+                                      //         Radius.circular(5.dynamic)),
+                                      //   ),
+                                      //   child: DropdownSearch<String>(
+                                      //     mode: Mode.MENU,
+                                      //     showAsSuffixIcons: true,
+                                      //     dropdownSearchDecoration:
+                                      //         InputDecoration(
+                                      //       border: InputBorder.none,
+                                      //     ),
+                                      //     items: createJob.subServiceList
+                                      //         .map((subService) {
+                                      //       return '${subService.serviceName}';
+                                      //     }).toList(),
+                                      //     hint: "Select Sub Service",
+                                      //     onChanged: (val) {
+                                      //       setState(() {
+                                      //         selectedSubService = "";
+                                      //       });
+                                      //       selectedSubService = val!;
+                                      //       createJob.subServiceID = createJob
+                                      //           .getSubServiceIdFromName(val)!;
+                                      //       print(createJob.subServiceID);
+                                      //     },
+                                      //     selectedItem: selectedSubService,
+                                      //   ),
+                                      // ),
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),

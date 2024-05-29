@@ -32,11 +32,13 @@ class MAvailableEngineerResponse implements Codable {
 
 class MAvailableEngineer {
   late int allot;
+  int? id;
   String? email;
   String? designation;
   bool isChecked = false;
 
   MAvailableEngineer.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     allot = json['allot'];
     email = json['email'];
     designation = json['designation'];
@@ -44,10 +46,10 @@ class MAvailableEngineer {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
+    data['id'] = id;
     data['allot'] = allot;
     data['email'] = email;
     data['designation'] = designation;
     return data;
   }
 }
-

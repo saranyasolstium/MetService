@@ -67,16 +67,25 @@ class CreateJobController extends GetxController {
   String selectedfrequency = "";
   String selectedInfestation = "";
   String selectedSource = "";
-  String selectedPreparation = "";
+  List<String> selectedPreparation=[];
   String selectedBillingType = "";
+  String selectedEngId="";
+  List<String> selectedSubServiceIds=[];
 
   void setSelected(String value) {
     valueOfDrop.value = value;
   }
 
-  void updateCheckboxState(MAvailableEngineer engineer, bool isChecked) {
+  int? updateCheckboxState(MAvailableEngineer engineer, bool isChecked) {
+    for (var otherEngineer in avaiableEngList) {
+      if (otherEngineer != engineer) {
+        otherEngineer.isChecked = false;
+      }
+    }
+
     engineer.isChecked = isChecked;
     update();
+    return isChecked ? engineer.id : null;
   }
 
   @override
@@ -340,7 +349,7 @@ class CreateJobController extends GetxController {
       "service_type_id": "",
       "service_amount": serviceAmountCtrl.text,
       "service_id": serviceId,
-      "subservice_id": subServiceID,
+      "subservice_id": selectedSubServiceIds.isEmpty? "" : selectedAppointmentId,
       "service_cover": "",
       "service_other": "",
       "treatment_method": selectedTreatment,
@@ -357,11 +366,11 @@ class CreateJobController extends GetxController {
       "see_on_site": whomtoSeeCtrl.text,
       "service_premise_address": servicePremiseCtrl.text,
       "billing_frequency": billingFreqCtrl.text,
-      "preparation": "",
+      "preparation": selectedPreparation.isEmpty ? "" : selectedPreparation,
       "date": '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
       "service_time_start": startTime,
       "service_time_end": endTime,
-      "new_engineer_id": "362",
+      "new_engineer_id": selectedEngId,
       "subject": subjectCtrl.text,
       "description": descriptionCtrl.text,
       "source": 2,
