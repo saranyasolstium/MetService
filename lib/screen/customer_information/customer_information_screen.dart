@@ -56,7 +56,9 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                       //         Image.network(kCameraPlaceholder),
                       //   ),
                       // ),
-                      CustomImageLoader(imageUrl: 'https://met.solstium.net/admin/images/user-profile.svg'),
+                      CustomImageLoader(
+                          imageUrl:
+                              'https://met.solstium.net/admin/images/user-profile.svg'),
 
                       // SvgPicture.network(
                       //   'https://met.solstium.net/admin/images/user-profile.svg',
@@ -260,23 +262,20 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          showAsSuffixIcons: true,
-                                          // validator: (item) {
-                                          //   if (item == null)
-                                          //     return '* Required';
-                                          //   else
-                                          //     return null;
-                                          // },
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Customer",
+                                            ),
                                           ),
-                                          mode: Mode.MENU,
-                                          // showSelectedItem: true,
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
+                                          ),
                                           items: customer
                                               .arrString(customer.customerList),
                                           // label: "Menu mode",
-                                          hint: "Select Customer",
                                           onChanged: (val) async {
                                             customer.selectedCustomer.value =
                                                 customer.find(val!,
@@ -314,13 +313,18 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Location",
+                                            ),
                                           ),
-                                          mode: Mode.MENU,
-                                          // showSelectedItem: true,
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
+                                          ),
+
                                           items: customer
                                               .arrString(customer.locationList),
                                           selectedItem: customer
@@ -329,7 +333,6 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                                                   ?.aName ??
                                               'Select Location',
                                           // label: "Menu mode",
-                                          hint: "Select Location",
 
                                           onChanged: (val) async {
                                             customer.selectedLocation.value =
@@ -366,17 +369,21 @@ class _CustomerInformationScreenState extends State<CustomerInformationScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Product",
+                                            ),
                                           ),
-                                          mode: Mode.MENU,
-                                          // showSelectedItem: true,
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
+                                          ),
+
                                           items: customer
                                               .arrString(customer.productList),
                                           // label: "Menu mode",
-                                          hint: 'Select Product',
                                           onChanged: (val) async {
                                             customer.selectedProduct.value =
                                                 customer.find(

@@ -497,7 +497,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 state.errorText ?? '',
                                                 style: TextStyle(
                                                   color: Theme.of(context)
-                                                      .errorColor,
+                                                      .colorScheme.error,
                                                 ),
                                               ),
                                       ],
@@ -604,7 +604,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 state.errorText ?? '',
                                                 style: TextStyle(
                                                   color: Theme.of(context)
-                                                      .errorColor,
+                                                      .colorScheme.error,
                                                 ),
                                               ),
                                       ],

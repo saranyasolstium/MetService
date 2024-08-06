@@ -61,16 +61,17 @@ class CreateJobController extends GetxController {
   String selectedProductId = "";
   String selectedDepartId = "";
   String selectedPriorityId = "";
-  String selectedStatusId = "";
+  String selectedStatusId = "2";
   String selectedCustomerType = "";
   String selectedTreatment = "";
   String selectedfrequency = "";
   String selectedInfestation = "";
   String selectedSource = "";
-  List<String> selectedPreparation=[];
+  List<String> selectedPreparation = [];
   String selectedBillingType = "";
-  String selectedEngId="";
-  List<String> selectedSubServiceIds=[];
+  String selectedEngId = "";
+  List<String> selectedSubServiceIds = [];
+  bool isLoading = false;
 
   void setSelected(String value) {
     valueOfDrop.value = value;
@@ -138,6 +139,23 @@ class CreateJobController extends GetxController {
       print(endTime);
       update();
     }
+  }
+
+  String convertTo24HourFormat(String time) {
+    print(time);
+    time = time.replaceAll('\u202F', '');
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1].replaceAll(RegExp(r'[^0-9]'), ''));
+    if (time.contains('PM')) {
+      hours = (hours % 12) + 12;
+    } else {
+      hours = hours % 12;
+    }
+
+    String formattedTime =
+        '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+    return formattedTime;
   }
 
   String formatTimeOfDay(TimeOfDay timeOfDay) {
@@ -338,7 +356,11 @@ class CreateJobController extends GetxController {
     }
   }
 
-  createJob() async {
+  Future<void> createJob() async {
+    // Set loading state to true
+    isLoading = true;
+    update(); // Notify listeners of the change
+
     var requestBody = {
       "requester_id": customerID,
       "product_id": selectedProductId,
@@ -349,9 +371,10 @@ class CreateJobController extends GetxController {
       "service_type_id": "",
       "service_amount": serviceAmountCtrl.text,
       "service_id": serviceId,
-      "subservice_id": selectedSubServiceIds.isEmpty? "" : selectedAppointmentId,
-      "service_cover": "",
-      "service_other": "",
+      "subservice_id":
+          selectedSubServiceIds.isEmpty ? "" : selectedSubServiceIds,
+     // "service_cover": "",
+     // "service_other": "",
       "treatment_method": selectedTreatment,
       "treatment_other": treatmentOtherCtrl.text,
       "service_frequency": selectedfrequency,
@@ -364,46 +387,53 @@ class CreateJobController extends GetxController {
       "estimation_first_service": estimationDurationCtrl.text,
       "decision_maker": decisionMakerCtrl.text,
       "see_on_site": whomtoSeeCtrl.text,
-      "service_premise_address": servicePremiseCtrl.text,
+     // "service_premise_address": "",
       "billing_frequency": billingFreqCtrl.text,
       "preparation": selectedPreparation.isEmpty ? "" : selectedPreparation,
       "date": '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
-      "service_time_start": startTime,
-      "service_time_end": endTime,
+      "service_time_start": convertTo24HourFormat(startTime!),
+      "service_time_end": convertTo24HourFormat(endTime!),
       "new_engineer_id": selectedEngId,
-      "subject": subjectCtrl.text,
+      //"subject": "",
       "description": descriptionCtrl.text,
       "source": 2,
-      "priority": selectedPriorityId,
+      //"priority": "",
       "status": selectedStatusId,
       "customer_type": selectedCustomerType,
-      "service_order_id": serviceOrderCtrl.text,
-      "attention": attentionCtrl.text,
+      //"service_order_id": "",
+     // "attention": "",
       "oppoinment_request_id": selectedAppointmentId,
-      "type": ""
+      "send_mail_customer":"0",
+     // "type": ""
     };
 
     print('Request Body: $requestBody');
 
-    var response = await API.service.call(
-      endPoint: EndPoint.createJob,
-      body: requestBody,
-    );
-
-    if (response.isSuccess) {
-      SnackbarService.showSnackbar("", "Service Request Created successfully.");
-      Get.offAll(HomeScreen());
-    } else {
-      Toast.show(
-        response.message.toString(),
-        backgroundColor: Colors.white,
-        textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+    try {
+      var response = await API.service.call(
+        endPoint: EndPoint.createJob,
+        body: requestBody,
       );
+
+      if (response.isSuccess) {
+        SnackbarService.showSnackbar(
+            "", "Service Request Created successfully.");
+        Get.offAll(HomeScreen());
+      } else {
+        Toast.show(
+          response.message.toString(),
+          backgroundColor: Colors.white,
+          textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
+        );
+      }
+    } catch (e) {
+      // Handle any exceptions that might occur
+      print('Error occurred: $e');
+    } finally {
+      // Set loading state to false after the API call completes
+      isLoading = false;
+      update(); // Notify listeners of the change
     }
-
-    print(response.isSuccess);
-
-    // Handle response here
   }
 
   // In your fetchSubServiceRequest method
@@ -443,17 +473,6 @@ class CreateJobController extends GetxController {
 
     return generatedNumber;
   }
-  // fetchServiceType() async {
-  //   var response = await API.service.call(
-  //     endPoint: EndPoint.serviceTypeList,
-  //     model: MServiceTypeResponse(),
-  //   );
-  //   if (response.isValidModel) {
-  //     serviceTypeList.value = response.model!.data;
-  //   } else {
-  //     serviceTypeList.value = [];
-  //   }
-  // }
 
   Future<bool> scCreateJob(ParamCreateJob param) async {
     final response = await API.service.call(

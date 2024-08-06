@@ -90,5 +90,5 @@ class MCustomerItem implements ADropDown {
   String get aName => name.toString();
   String get aEmail => email?.toString() ?? "NA";
   String get aPhoneNo => phoneNumber?.toString() ?? "NA";
-  String get aBillingAddress => billingAddress?.toString() ?? "NA";
+  String get aBillingAddress => billingAddress?.toString() ?? "";
 }

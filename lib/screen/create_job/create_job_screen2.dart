@@ -84,21 +84,30 @@ class CreateJobScreen2 extends StatelessWidget {
                                       ),
                                     ),
                                     child: DropdownSearch<String>(
-                                      mode: Mode.MENU,
-                                      showAsSuffixIcons: true,
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Select Treatment method",
+                                        ),
                                       ),
                                       items: [
                                         'Select Treatment method',
-                                        'Residual spraying',
-                                        'Misting'
-                                            'Waterbase fogging',
-                                        'Oilbase fogging',
-                                        'Gelling',
-                                        'Montoring/Trapping',
-                                        'Inspection',
-                                        'Other'
+                                        'water base fogging',
+                                        'oilbased fogging',
+                                        'larviciding',
+                                        'residual spraying',
+                                        'gelling',
+                                        'waterbased misting',
+                                        'termite baiting',
+                                        'dusting',
+                                        'corrective treatment',
+                                        'soil treatment',
+                                        'bin chute (fogging)',
+                                        'inspection',
+                                        'monitoring',
+                                        'others',
                                       ],
                                       onChanged: (val) {
                                         if (val == "Select Treatment method") {
@@ -115,7 +124,7 @@ class CreateJobScreen2 extends StatelessWidget {
                                   SizedBox(
                                     height: 10.dynamic,
                                   ),
-                                  controller.selectedTreatment == "Other"
+                                  controller.selectedTreatment == "others"
                                       ? Padding(
                                           padding: EdgeInsets.only(
                                               bottom: 19.dynamic),
@@ -123,7 +132,6 @@ class CreateJobScreen2 extends StatelessWidget {
                                             obscureText: false,
                                             controller:
                                                 controller.treatmentOtherCtrl,
-                                            keyboardType: TextInputType.number,
                                             onChanged: (val) {},
                                             style: TextStyle(
                                                 fontSize: 14.dynamic,
@@ -166,10 +174,13 @@ class CreateJobScreen2 extends StatelessWidget {
                                       ),
                                     ),
                                     child: DropdownSearch<String>(
-                                      mode: Mode.MENU,
-                                      showAsSuffixIcons: true,
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Select Service Frequency",
+                                        ),
                                       ),
                                       items: [
                                         'Select Service Frequency',
@@ -203,7 +214,6 @@ class CreateJobScreen2 extends StatelessWidget {
                                             obscureText: false,
                                             controller:
                                                 controller.freqOtherCtrl,
-                                            keyboardType: TextInputType.number,
                                             onChanged: (val) {},
                                             style: TextStyle(
                                                 fontSize: 14.dynamic,
@@ -220,44 +230,43 @@ class CreateJobScreen2 extends StatelessWidget {
                                           ),
                                         )
                                       : SizedBox(),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      'Service Order Id',
-                                      style: TextStyle(
-                                        fontSize: 14.dynamic,
-                                        color: Colour.appBlack,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10.dynamic,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(bottom: 19.dynamic),
-                                    child: TextFormField(
-                                      obscureText: false,
-                                      readOnly: true,
-                                      controller: controller.serviceOrderCtrl,
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (val) {},
-                                      style: TextStyle(
-                                          fontSize: 14.dynamic,
-                                          fontWeight: FontWeight.w300),
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        contentPadding: EdgeInsets.fromLTRB(
-                                            20.0, 15.0, 20.0, 15.0),
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10.dynamic,
-                                  ),
+                                  // Align(
+                                  //   alignment: Alignment.topLeft,
+                                  //   child: Text(
+                                  //     'Service Order Id',
+                                  //     style: TextStyle(
+                                  //       fontSize: 14.dynamic,
+                                  //       color: Colour.appBlack,
+                                  //       fontWeight: FontWeight.w600,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 10.dynamic,
+                                  // ),
+                                  // Padding(
+                                  //   padding:
+                                  //       EdgeInsets.only(bottom: 19.dynamic),
+                                  //   child: TextFormField(
+                                  //     obscureText: false,
+                                  //     readOnly: true,
+                                  //     controller: controller.serviceOrderCtrl,
+                                  //     onChanged: (val) {},
+                                  //     style: TextStyle(
+                                  //         fontSize: 14.dynamic,
+                                  //         fontWeight: FontWeight.w300),
+                                  //     decoration: InputDecoration(
+                                  //       filled: true,
+                                  //       fillColor: Colors.white,
+                                  //       contentPadding: EdgeInsets.fromLTRB(
+                                  //           20.0, 15.0, 20.0, 15.0),
+                                  //       border: InputBorder.none,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 10.dynamic,
+                                  // ),
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
@@ -284,16 +293,23 @@ class CreateJobScreen2 extends StatelessWidget {
                                       ),
                                     ),
                                     child: DropdownSearch<String>(
-                                      mode: Mode.MENU,
-                                      showAsSuffixIcons: true,
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Select",
+                                        ),
+                                      ),
+                                      popupProps: PopupProps.menu(
+                                        showSelectedItems: true,
                                       ),
                                       items: [
                                         'Select',
                                         'Low',
                                         'Medium',
                                         'High',
+                                        'NIL'
                                       ],
                                       onChanged: (val) {
                                         if (val == "Select") {
@@ -335,10 +351,16 @@ class CreateJobScreen2 extends StatelessWidget {
                                       ),
                                     ),
                                     child: DropdownSearch<String>(
-                                      mode: Mode.MENU,
-                                      showAsSuffixIcons: true,
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Select Source",
+                                        ),
+                                      ),
+                                      popupProps: PopupProps.menu(
+                                        showSelectedItems: true,
                                       ),
                                       items: [
                                         'Select Source',
@@ -371,7 +393,6 @@ class CreateJobScreen2 extends StatelessWidget {
                                             obscureText: false,
                                             controller:
                                                 controller.sourceOtherCtrl,
-                                            keyboardType: TextInputType.number,
                                             onChanged: (val) {},
                                             style: TextStyle(
                                                 fontSize: 14.dynamic,
@@ -402,66 +423,6 @@ class CreateJobScreen2 extends StatelessWidget {
                                   SizedBox(
                                     height: 10.dynamic,
                                   ),
-
-                                  // Container(
-                                  //   margin: EdgeInsets.only(bottom: 19.dynamic),
-                                  //   padding: const EdgeInsets.symmetric(
-                                  //       vertical: 2, horizontal: 15),
-                                  //   width: double.infinity,
-                                  //   decoration: BoxDecoration(
-                                  //     color: Colors.white,
-                                  //     borderRadius: BorderRadius.all(
-                                  //       Radius.circular(5.dynamic),
-                                  //     ),
-                                  //   ),
-                                  //   child: DropdownSearch<String>(
-                                  //     mode: Mode.MENU,
-                                  //     showAsSuffixIcons: true,
-                                  //     dropdownSearchDecoration: InputDecoration(
-                                  //       border: InputBorder.none,
-                                  //     ),
-                                  //     items: [
-                                  //       'Select',
-                                  //       'Advion Cockroach Gel',
-                                  //       'Insect Detector 100i',
-                                  //       'Deltacide (Misting)',
-                                  //       'Fogging Solution (W)',
-                                  //       'Diesel',
-                                  //       'Demand 2.5 CS',
-                                  //       'NewCyper 15WP',
-                                  //       'Newcyper 6.5 EC',
-                                  //       'Temprid SC',
-                                  //       'Tenopa SC',
-                                  //       'Rodent bait box',
-                                  //       'Rodent bait',
-                                  //       'Newcumin Tracking Powder',
-                                  //       'Rodent glueboard tamper proof box',
-                                  //       'Rodent glueboard ',
-                                  //       'Optigard ant gel',
-                                  //       'Termikil powder',
-                                  //       'Premise 200 SC',
-                                  //       'Xterm AG baiting',
-                                  //       'Xterm IG station',
-                                  //       'Rat cage',
-                                  //       'Anti malaria oil',
-                                  //       'Spar 1% ',
-                                  //       'Mosquito dunk (BTI) ',
-                                  //       'Dome Trap ',
-                                  //       'Sulphur powder',
-                                  //       'Ultrathor',
-                                  //       'Ultriset',
-                                  //     ],
-                                  //     onChanged: (val) {
-                                  //       if (val == "Select") {
-                                  //         controller.selectedPreparation = "";
-                                  //       } else {
-                                  //         controller.selectedPreparation = val!;
-                                  //       }
-                                  //       print(controller.selectedPreparation);
-                                  //     },
-                                  //     selectedItem: selectedPreparation,
-                                  //   ),
-                                  // ),
                                   MultiSelectDialogField(
                                     items: <MultiSelectItem<String>>[
                                       for (String value in [
@@ -504,7 +465,6 @@ class CreateJobScreen2 extends StatelessWidget {
                                       print(controller.selectedPreparation);
                                     },
                                   ),
-
                                   SizedBox(
                                     height: 20.dynamic,
                                   ),
@@ -534,10 +494,16 @@ class CreateJobScreen2 extends StatelessWidget {
                                       ),
                                     ),
                                     child: DropdownSearch<String>(
-                                      mode: Mode.MENU,
-                                      showAsSuffixIcons: true,
-                                      dropdownSearchDecoration: InputDecoration(
-                                        border: InputBorder.none,
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Select Billing Type",
+                                        ),
+                                      ),
+                                      popupProps: PopupProps.menu(
+                                        showSelectedItems: true,
                                       ),
                                       items: [
                                         'Select Billing Type',
@@ -675,7 +641,7 @@ class CreateJobScreen2 extends StatelessWidget {
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      'Decision Maker',
+                                      'Decision Maker/Attention',
                                       style: TextStyle(
                                         fontSize: 14.dynamic,
                                         color: Colour.appBlack,
@@ -743,77 +709,77 @@ class CreateJobScreen2 extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 10.dynamic,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      'Service Premise Address',
-                                      style: TextStyle(
-                                        fontSize: 14.dynamic,
-                                        color: Colour.appBlack,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10.dynamic,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(bottom: 19.dynamic),
-                                    child: TextFormField(
-                                      obscureText: false,
-                                      controller: controller.servicePremiseCtrl,
-                                      onChanged: (val) {},
-                                      style: TextStyle(
-                                          fontSize: 14.dynamic,
-                                          fontWeight: FontWeight.w300),
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        contentPadding: EdgeInsets.fromLTRB(
-                                            20.0, 15.0, 20.0, 15.0),
-                                        hintText:
-                                            "Enter Service Premise Address",
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      'Subject',
-                                      style: TextStyle(
-                                        fontSize: 14.dynamic,
-                                        color: Colour.appBlack,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10.dynamic,
-                                  ),
-                                  Container(
-                                    child: TextFormField(
-                                      obscureText: false,
-                                      maxLines: 4,
-                                      controller: controller.subjectCtrl,
-                                      onChanged: (val) {},
-                                      style: TextStyle(
-                                          fontSize: 14.dynamic,
-                                          fontWeight: FontWeight.w300),
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        contentPadding: EdgeInsets.fromLTRB(
-                                            20.0, 15.0, 20.0, 15.0),
-                                        hintText: "Subject",
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
+                                  // SizedBox(
+                                  //   height: 10.dynamic,
+                                  // ),
+                                  // Align(
+                                  //   alignment: Alignment.topLeft,
+                                  //   child: Text(
+                                  //     'Service Premise Address',
+                                  //     style: TextStyle(
+                                  //       fontSize: 14.dynamic,
+                                  //       color: Colour.appBlack,
+                                  //       fontWeight: FontWeight.w600,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 10.dynamic,
+                                  // ),
+                                  // Padding(
+                                  //   padding:
+                                  //       EdgeInsets.only(bottom: 19.dynamic),
+                                  //   child: TextFormField(
+                                  //     obscureText: false,
+                                  //     controller: controller.servicePremiseCtrl,
+                                  //     onChanged: (val) {},
+                                  //     style: TextStyle(
+                                  //         fontSize: 14.dynamic,
+                                  //         fontWeight: FontWeight.w300),
+                                  //     decoration: InputDecoration(
+                                  //       filled: true,
+                                  //       fillColor: Colors.white,
+                                  //       contentPadding: EdgeInsets.fromLTRB(
+                                  //           20.0, 15.0, 20.0, 15.0),
+                                  //       hintText:
+                                  //           "Enter Service Premise Address",
+                                  //       border: InputBorder.none,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // Align(
+                                  //   alignment: Alignment.topLeft,
+                                  //   child: Text(
+                                  //     'Subject',
+                                  //     style: TextStyle(
+                                  //       fontSize: 14.dynamic,
+                                  //       color: Colour.appBlack,
+                                  //       fontWeight: FontWeight.w600,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 10.dynamic,
+                                  // ),
+                                  // Container(
+                                  //   child: TextFormField(
+                                  //     obscureText: false,
+                                  //     maxLines: 4,
+                                  //     controller: controller.subjectCtrl,
+                                  //     onChanged: (val) {},
+                                  //     style: TextStyle(
+                                  //         fontSize: 14.dynamic,
+                                  //         fontWeight: FontWeight.w300),
+                                  //     decoration: InputDecoration(
+                                  //       filled: true,
+                                  //       fillColor: Colors.white,
+                                  //       contentPadding: EdgeInsets.fromLTRB(
+                                  //           20.0, 15.0, 20.0, 15.0),
+                                  //       hintText: "Subject",
+                                  //       border: InputBorder.none,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   SizedBox(
                                     height: 10.dynamic,
                                   ),
@@ -1027,6 +993,7 @@ class CreateJobScreen2 extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () {
+
                                 if (controller.selectedTreatment == "Other" &&
                                     controller.treatmentOtherCtrl.text
                                         .toString()
@@ -1070,14 +1037,16 @@ class CreateJobScreen2 extends StatelessWidget {
                                   controller.createJob();
                                 }
                               },
-                              child: Text(
-                                'Create Job',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.dynamic,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
+                              child: controller.isLoading
+                                  ? Center(child: CircularProgressIndicator())
+                                  : Text(
+                                      'Create Job',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.dynamic,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
                             ),
                           ),
                           Container(

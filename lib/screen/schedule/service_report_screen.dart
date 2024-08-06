@@ -37,8 +37,7 @@ class ServiceReportScreen extends StatefulWidget {
 }
 
 class _ServiceReportScreenState extends State<ServiceReportScreen> {
-  String? selectedPaymentMode = 'Bank Transfer';
- // String? selectedChemist = '';
+  // String? selectedChemist = '';
   List<File> _images = [];
   List<String> _imagePaths = [];
 
@@ -47,7 +46,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
   final TimerController time = Get.find();
   final JobCheckListController checkListController = Get.find();
   final ScheduleListController schedule = Get.find();
-  TextEditingController otherController = TextEditingController();
 
   // final controller = Get.put(JobDetailController());
   final controller = Get.find<JobDetailController>();
@@ -103,7 +101,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
     );
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -179,80 +176,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                             },
                           ),
                           SizedBox(height: 12.dynamic),
-                         
-                          // detail.aServiceName == "Pest Control Management"
-                          //     ? Container(
-                          //         decoration: BoxDecoration(
-                          //           borderRadius:
-                          //               BorderRadius.circular(6.dynamic),
-                          //           color: Colors.white,
-                          //         ),
-                          //         margin: EdgeInsets.symmetric(
-                          //             horizontal: 17.dynamic),
-                          //         padding: EdgeInsets.all(14.dynamic),
-                          //         child: Column(
-                          //           mainAxisSize: MainAxisSize.min,
-                          //           crossAxisAlignment:
-                          //               CrossAxisAlignment.start,
-                          //           children: [
-                          //             SizedBox(height: 10),
-                          //             Text(
-                          //               'Chemical list:',
-                          //               style: TextStyle(
-                          //                 fontSize: 14.dynamic,
-                          //                 color: Colour.appBlack,
-                          //                 fontWeight: FontWeight.w600,
-                          //               ),
-                          //             ),
-                          //             SizedBox(height: 10),
-                          //             MultiSelectDialogField(
-                          //               items: <MultiSelectItem<String>>[
-                          //                 for (String value in [
-                          //                   "Advion Cockroach Gel",
-                          //                   "Insect Detector 100i",
-                          //                   "Deltacide (Misting)",
-                          //                   "Fogging Solution (W)",
-                          //                   "Diesel",
-                          //                   "Demand 2.5 CS",
-                          //                   "NewCyper 15WP",
-                          //                   "Newcyper 6.5 EC",
-                          //                   "Temprid SC",
-                          //                   "Tenopa SC",
-                          //                   "Rodent bait box",
-                          //                   "Rodent bait",
-                          //                   "Newcumin Tracking Powder",
-                          //                   "Rodent glueboard tamper proof box",
-                          //                   "Rodent glueboard ",
-                          //                   "Optigard ant gel",
-                          //                   "Termikil powder",
-                          //                   "Premise 200 SC",
-                          //                   "Xterm AG baiting",
-                          //                   "Xterm IG station",
-                          //                   "Rat cage",
-                          //                   "Anti malaria oil",
-                          //                   "Spar 1%",
-                          //                   "Mosquito dunk (BTI)",
-                          //                   "Dome Trap",
-                          //                   "Sulphur powder",
-                          //                   "Ultrathor",
-                          //                   "Ultriset"
-                          //                 ])
-                          //                   MultiSelectItem<String>(
-                          //                       value, value),
-                          //               ],
-                          //               listType: MultiSelectListType.CHIP,
-                          //               onConfirm: (values) {
-                          //                 setState(() {
-                          //                   selectedChemist = values.join(", ");
-                          //                   print(selectedChemist);
-                          //                 });
-                          //               },
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       )
-                          //     : SizedBox(),
-                          SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
@@ -283,6 +206,8 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     onChanged: (txt) {
                                       controller.areasInspected.value = txt;
                                     },
+                                    controller: TextEditingController(
+                                        text: controller.areasInspected.value),
                                     obscureText: false,
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 4,
@@ -332,6 +257,8 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     onChanged: (txt) {
                                       controller.remark.value = txt;
                                     },
+                                    controller: TextEditingController(
+                                        text: controller.remark.value),
                                     obscureText: false,
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 4,
@@ -350,7 +277,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                               ],
                             ),
                           ),
-
                           SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
@@ -378,21 +304,23 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       ),
                                     ),
                                     DropdownButton<String>(
-                                      value: selectedPaymentMode,
+                                      value: controller.selectedPaymentMode,
                                       onChanged: (String? newValue) {
                                         setState(() {
-                                          selectedPaymentMode = newValue!;
-                                          print(selectedPaymentMode);
+                                          controller.selectedPaymentMode =
+                                              newValue!;
+                                          controller.other.value="";
+                                          print(controller.selectedPaymentMode);
                                         });
                                       },
-                                      items: <String>[
-                                        'Bank Transfer',
-                                        'Others'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
+                                      items: <String>['Bank Transfer', 'Others']
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
-                                          child: Text(value,style: TextStyle(fontSize: 14.dynamic)),
+                                          child: Text(value,
+                                              style: TextStyle(
+                                                  fontSize: 14.dynamic)),
                                         );
                                       }).toList(),
                                     )
@@ -401,7 +329,8 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 SizedBox(
                                   height: 12.dynamic,
                                 ),
-                                selectedPaymentMode == "Bank Transfer"
+                                controller.selectedPaymentMode ==
+                                        "Bank Transfer"
                                     ? Column(
                                         children: [
                                           Image.asset(
@@ -419,7 +348,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                         ],
                                       )
                                     : SizedBox(),
-                                selectedPaymentMode == "Others"
+                                controller.selectedPaymentMode == "Others"
                                     ? Container(
                                         decoration: BoxDecoration(
                                           color: Colour.appLightGrey,
@@ -428,7 +357,11 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                         ),
                                         child: TextFormField(
                                           obscureText: false,
-                                          controller: otherController,
+                                          onChanged: (txt) {
+                                            controller.other.value = txt;
+                                          },
+                                          controller: TextEditingController(
+                                              text: controller.other.value),
                                           keyboardType: TextInputType.multiline,
                                           maxLines: 1,
                                           style: TextStyle(
@@ -593,7 +526,8 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       controller.feedback.value = txt;
                                     },
                                     obscureText: false,
-                                    // controller: _remarkController,
+                                    controller: TextEditingController(
+                                        text: controller.feedback.value),
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 4,
                                     style: TextStyle(
@@ -643,7 +577,9 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       controller.engineerFeedback.value = txt;
                                     },
                                     obscureText: false,
-                                    // controller: _remarkController,
+                                    controller: TextEditingController(
+                                        text:
+                                            controller.engineerFeedback.value),
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 4,
                                     style: TextStyle(
@@ -719,207 +655,202 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                   SizedBox(
                     height: 20.dynamic,
                   ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15.0),
-                        topRight: Radius.circular(15.0),
-                      ),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 10,
-                          spreadRadius: 1,
-                        )
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: 19.dynamic,
-                        left: 17.dynamic,
-                        right: 17.dynamic,
-                        bottom: 10.dynamic,
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colour.appBlue,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.dynamic),
-                              ),
-                            ),
-                            child: TextButton(
-                              onPressed: () async {
-                                var bytes = await controller
-                                    .signatureController.value
-                                    .toPngBytes();
-                                var techBytes = await controller
-                                    .signatureTechnicianController.value
-                                    .toPngBytes();
-
-                                    print(base64Encode(bytes!));
-                                    print(base64Encode(techBytes!));
-
-                                // if (detail.aServiceName ==
-                                //         "Pest Control Management" &&
-                                //     selectedChemist!.isEmpty) {
-                                //   Toast.show(
-                                //     'Please select chemist value',
-                                //     backgroundColor: Colors.white,
-                                //     textStyle: TextStyle(
-                                //         fontSize: 16.dynamic, color: Colors.black),
-                                //   );
-                                // } 
-                                
-                                 if (selectedPaymentMode == "Others" &&
-                                    otherController.text.trim().isEmpty) {
-                                  Toast.show(
-                                    'Please enter other ',
-                                    backgroundColor: Colors.white,
-                                    textStyle: TextStyle(
-                                        fontSize: 16.dynamic, color: Colors.black),
-                                  );
-                                } else if (controller.feedback.value.isEmpty) {
-                                  Toast.show(
-                                    'Please provide customer feedback',
-                                    backgroundColor: Colors.white,
-                                    textStyle: TextStyle(
-                                        fontSize: 16.dynamic, color: Colors.black),
-                                  );
-                                } else if (controller
-                                    .engineerFeedback.value.isEmpty) {
-                                  Toast.show(
-                                    'Please provide technician feedback',
-                                    backgroundColor: Colors.white,
-                                    textStyle: TextStyle(
-                                        fontSize: 16.dynamic, color: Colors.black),
-                                  );
-                                } else if (_images.isEmpty) {
-                                  Toast.show(
-                                    'Please select at least one image',
-                                    backgroundColor: Colors.white,
-                                    textStyle: TextStyle(
-                                        fontSize: 16.dynamic, color: Colors.black),
-                                  );
-                                } else if (bytes != null && techBytes != null) {
-                                  List<String> base64Images = [];
-
-                                  print(_images.length);
-                                  for (var imageFile in _images) {
-                                    List<int> imageBytes =
-                                        await imageFile.readAsBytes();
-                                    String base64Image =
-                                        base64Encode(imageBytes);
-                                    base64Images.add(base64Image);
-                                  }
-                                  print(base64Images.length);
-
-                                  String concatenatedImages = '';
-
-                                  for (int i = 0;
-                                      i < base64Images.length;
-                                      i++) {
-                                    concatenatedImages += base64Images[i];
-                                    if (i < base64Images.length - 1) {
-                                      concatenatedImages += ',';
-                                    }
-                                  }
-                                  Map<String, String> convertedMap = {};
-
-                                  controller.selectedCheckboxValues
-                                      .forEach((key, value) {
-                                  convertedMap['"$key"'] = '"$value"';
-                                  });
-
-                                  print(convertedMap.toString());
-
-                                  String? status =
-                                      await checkListController.onCompleteJob(
-                                          requestID: detail.aServiceId ?? '0',
-                                          signature: base64Encode(bytes),
-                                          technicianSign:
-                                              base64Encode(techBytes),
-                                          feedback: controller.feedback.value,
-                                          paymentMode: selectedPaymentMode!,
-                                          // chemicalList: detail.aServiceName ==
-                                          //         "Pest Control Management"
-                                          //     ? selectedChemist!
-                                          //     : "",
-                                          chemicalList: "",
-                                          technicianComment:
-                                              controller.engineerFeedback.value,
-                                          imagPath: concatenatedImages,
-                                          visitType: controller.visitType.value,
-                                          inspectionReport:
-                                              convertedMap.toString(),
-                                          remark: controller.remark.value,
-                                          areasInspected:
-                                              controller.areasInspected.value,
-                                          preparation:
-                                              controller.preparation.value);
-
-                                  if (status != null) {
-                                    Toast.show(
-                                      status,
-                                      backgroundColor: Colors.white,
-                                      textStyle: TextStyle(
-                                          fontSize: 16.dynamic, color: Colors.black),
-                                    );
-                                  } else {
-                                    Get.toNamed(NavPage.jobCompleted);
-                                  }
-                                } else {
-                                  Toast.show(
-                                    'Please put your signature',
-                                    backgroundColor: Colors.white,
-                                    textStyle: TextStyle(
-                                        fontSize: 16.dynamic, color: Colors.black),
-                                  );
-                                }
-                              },
-                              child: Text(
-                                'Submit',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.dynamic,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 14.dynamic,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border:
-                                  Border.all(width: 1.5, color: Colour.appBlue),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.dynamic),
-                              ),
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text(
-                                'Re-Check',
-                                style: TextStyle(
-                                    color: Colour.appBlue,
-                                    fontSize: 16.dynamic,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                          ),
+                  GetBuilder<JobCheckListController>(builder: (_) {
+                    return Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15.0),
+                          topRight: Radius.circular(15.0),
+                        ),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                          )
                         ],
                       ),
-                    ),
-                  ),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 19.dynamic,
+                          left: 17.dynamic,
+                          right: 17.dynamic,
+                          bottom: 10.dynamic,
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colour.appBlue,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5.dynamic),
+                                ),
+                              ),
+                              child: TextButton(
+                                onPressed: () async {
+                                  var bytes = await controller
+                                      .signatureController.value
+                                      .toPngBytes();
+                                  var techBytes = await controller
+                                      .signatureTechnicianController.value
+                                      .toPngBytes();
+
+                                  if (controller.selectedPaymentMode == "Others" &&
+                                      controller.other.isEmpty) {
+                                    Toast.show(
+                                      'Please enter other ',
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.dynamic,
+                                          color: Colors.black),
+                                    );
+                                  } else if (controller
+                                      .feedback.value.isEmpty) {
+                                    Toast.show(
+                                      'Please provide customer feedback',
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.dynamic,
+                                          color: Colors.black),
+                                    );
+                                  } else if (controller
+                                      .engineerFeedback.value.isEmpty) {
+                                    Toast.show(
+                                      'Please provide technician feedback',
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.dynamic,
+                                          color: Colors.black),
+                                    );
+                                  } else if (_images.isEmpty) {
+                                    Toast.show(
+                                      'Please select at least one image',
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.dynamic,
+                                          color: Colors.black),
+                                    );
+                                  } else if (bytes != null &&
+                                      techBytes != null) {
+                                    List<String> base64Images = [];
+
+                                    print(_images.length);
+                                    for (var imageFile in _images) {
+                                      List<int> imageBytes =
+                                          await imageFile.readAsBytes();
+                                      String base64Image =
+                                          base64Encode(imageBytes);
+                                      base64Images.add(base64Image);
+                                    }
+                                    print(base64Images.length);
+
+                                    String concatenatedImages = '';
+
+                                    for (int i = 0;
+                                        i < base64Images.length;
+                                        i++) {
+                                      concatenatedImages += base64Images[i];
+                                      if (i < base64Images.length - 1) {
+                                        concatenatedImages += ',';
+                                      }
+                                    }
+                                    Map<String, String> convertedMap = {};
+
+                                    controller.selectedCheckboxValues
+                                        .forEach((key, value) {
+                                      convertedMap['"$key"'] = '"$value"';
+                                    });
+
+                                    print(convertedMap.toString());
+
+                                    String? status =
+                                        await checkListController.onCompleteJob(
+                                            requestID: detail.aServiceId ?? '0',
+                                            signature: base64Encode(bytes),
+                                            technicianSign:
+                                                base64Encode(techBytes),
+                                            feedback: controller.feedback.value,
+                                            paymentMode: controller.selectedPaymentMode!,
+                                            chemicalList: "",
+                                            technicianComment: controller
+                                                .engineerFeedback.value,
+                                            imagPath: concatenatedImages,
+                                            visitType:
+                                                controller.visitType.value,
+                                            inspectionReport:
+                                                convertedMap.toString(),
+                                            remark: controller.remark.value,
+                                            areasInspected:
+                                                controller.areasInspected.value,
+                                            preparation:
+                                                controller.preparation.value);
+
+                                    if (status != null) {
+                                      Toast.show(
+                                        status,
+                                        backgroundColor: Colors.white,
+                                        textStyle: TextStyle(
+                                            fontSize: 16.dynamic,
+                                            color: Colors.black),
+                                      );
+                                    } else {
+                                      Get.toNamed(NavPage.jobCompleted);
+                                    }
+                                  } else {
+                                    Toast.show(
+                                      'Please put your signature',
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.dynamic,
+                                          color: Colors.black),
+                                    );
+                                  }
+                                },
+                                child: checkListController.isLoading
+                                    ? Center(child: CircularProgressIndicator())
+                                    : Text(
+                                        'Submit',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.dynamic,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 14.dynamic,
+                            ),
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                    width: 1.5, color: Colour.appBlue),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5.dynamic),
+                                ),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text(
+                                  'Re-Check',
+                                  style: TextStyle(
+                                      color: Colour.appBlue,
+                                      fontSize: 16.dynamic,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  })
                 ],
               ),
             ),

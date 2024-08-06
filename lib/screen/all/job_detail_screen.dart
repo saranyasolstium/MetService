@@ -344,22 +344,7 @@ extension JobDetailWidgets on JobDetailScreen {
         SizedBox(
           height: 20.dynamic,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            JobDetailTitleDescriptionView(
-                'Service Type:',
-                detail.aTeamName != null && detail.aTeamName!.isNotEmpty
-                    ? detail.aTeamName
-                    : 'NA')
-
-            // JobDetailAmountDescriptionView(
-            //   'Service Amount',
-            //   () async =>
-            //       await convertAndDisplayAmount(detail.aBookingAmount!) ?? "NA",
-            // ),
-          ],
-        ),
+       
         SizedBox(
           height: 20.dynamic,
         ),

@@ -105,6 +105,7 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? decisionMaker;
   String? estimationFirstService;
   String? servicePremiseAddress;
+  String? businessSource;
   String? seeOnSite;
 
   MJobDetail();
@@ -138,8 +139,14 @@ class MJobDetail implements AJobDetail, AActiveService {
 
     phone = json['customer_phone'];
     serviceName = json['service_name'];
-    subserviceName = json['subservice_name'];
+    // subserviceName = json['subservice_name'];
+    final List<dynamic>? subserviceList = json['subservice_name'];
+    if (subserviceList != null && subserviceList.isNotEmpty) {
+      subserviceName =
+          subserviceList.map((e) => e['subservice_name'].toString()).join(', ');
+    }
 
+    print(subserviceName);
     // //Booking Information
     teamName = json['service_type'];
     bookingDate = json['service_date'];
@@ -185,6 +192,7 @@ class MJobDetail implements AJobDetail, AActiveService {
     referralName = json["referral_name"];
     estimationFirstService = json["estimation_first_service"];
     servicePremiseAddress = json["service_premise_address"];
+    businessSource=json['business_source'];
     seeOnSite = json["see_on_site"];
     decisionMaker = json["decision_maker"];
 
@@ -258,6 +266,7 @@ class MJobDetail implements AJobDetail, AActiveService {
     data["referral_name"] = this.referralName;
     data["estimation_first_service"] = this.estimationFirstService;
     data["service_premise_address"] = this.servicePremiseAddress;
+    data['business_source']=this.businessSource;
     data["see_on_site"] = this.seeOnSite;
     data["decision_maker"] = this.decisionMaker;
 
@@ -404,6 +413,7 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aDecisionMaker => decisionMaker;
   String? get aEstimationFirstService => estimationFirstService;
   String? get aServicePremiseAddress => servicePremiseAddress;
+  String? get aBusinessSource => businessSource;
   String? get aSeeOnSite => seeOnSite;
 
   int? get aEnginnerStatus => engineerStatus;

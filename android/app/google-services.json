@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "32926213959",
+    "project_id": "met-pushnotification",
+    "storage_bucket": "met-pushnotification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32926213959:android:1a7b9f7c184d55ba44ce62",
+        "android_client_info": {
+          "package_name": "com.example.pixels_eagle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw4TibDnFMjOpliGRMbhBMUxt0mbzuIXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

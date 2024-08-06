@@ -1,30 +1,21 @@
-import 'dart:ffi';
-
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
-import 'package:eagle_pixels/model/create_job_itemList_model.dart';
-import 'package:eagle_pixels/model/oppoinment_model.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:eagle_pixels/screen/create_job/create_job_screen2.dart';
-import 'package:eagle_pixels/screen/create_job/custom_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
 
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
-import '../../api/ParamModel.dart';
 import '../../colors.dart';
 import '../../constant.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/controller/createjob_controller.dart';
 
 import '../../model/abstract_class.dart';
-import '../../reuse/date_manager.dart';
 import 'package:toast/toast.dart';
+import 'package:flutter_dropdown_search/flutter_dropdown_search.dart';
 
 //extension CreateJobAction on _CreateJobScreenState {
 //   onCreateJob() async {
@@ -156,6 +147,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
+
                                       Container(
                                         margin:
                                             EdgeInsets.only(bottom: 19.dynamic),
@@ -169,26 +161,28 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          showAsSuffixIcons: true,
-
                                           validator: (item) {
                                             if (item == null)
                                               return '* Required';
                                             else
                                               return null;
                                           },
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Choose Customer",
+                                            ),
                                           ),
-                                          mode: Mode.MENU,
-                                          showSelectedItem: true,
+
+                                          popupProps:
+                                              PopupProps.modalBottomSheet(
+                                                  showSelectedItems: true,
+                                                  showSearchBox: true),
+
                                           items: createJob.arrString(
                                               createJob.customerList),
-
-                                          //label: "Menu mode",
-                                          hint: "Choose Customer",
-
                                           onChanged: (val) async {
                                             setState(() {
                                               selectedAppoinment =
@@ -203,6 +197,9 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                                 .value!.aPhoneNo;
                                             billingAddress = selectedCustomer
                                                 .value!.aBillingAddress;
+                                            createJob.addressCtrl.text =
+                                                selectedCustomer
+                                                    .value!.aBillingAddress;
                                             email =
                                                 selectedCustomer.value!.aEmail;
                                             print("choose value" +
@@ -219,6 +216,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           // selectedItem: createJob.valueOfDrop.value,
                                         ),
                                       ),
+
                                       email!.isNotEmpty
                                           ? Container(
                                               decoration: BoxDecoration(
@@ -250,9 +248,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                                     children: [
                                                       JobDetailTitleDescriptionView(
                                                           'Email:', email),
-                                                      JobDetailTitleDescriptionView(
-                                                          'Contact No:',
-                                                          phoneNO),
                                                     ],
                                                   ),
                                                   SizedBox(height: 12.dynamic),
@@ -261,8 +256,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                                         MainAxisAlignment.start,
                                                     children: [
                                                       JobDetailTitleDescriptionView(
-                                                          'Billing Address:',
-                                                          billingAddress),
+                                                          'Contact No:',
+                                                          phoneNO),
                                                     ],
                                                   ),
                                                 ],
@@ -300,17 +295,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Appointment",
+                                            ),
                                           ),
-                                          mode: Mode.MENU,
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
+                                          ),
                                           items: createJob.oppoinmentList
                                               .map((appointment) {
                                             return '${appointment.bookingDate} - ${appointment.address}';
                                           }).toList(),
-                                          hint: "Select Appointment",
                                           onChanged: (val) {
                                             setState(() {
                                               selectedAppoinment = null;
@@ -351,13 +350,17 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Sales Order",
+                                            ),
                                           ),
-                                          mode: Mode.MENU,
-                                          hint: "Select Sales Order",
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
+                                          ),
                                           onChanged: (val) {},
                                           selectedItem: selectedSaleOrder,
                                         ),
@@ -441,17 +444,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Product",
+                                            ),
                                           ),
-                                          mode: Mode.MENU,
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
+                                          ),
                                           items: createJob.productList
                                               .map((product) =>
                                                   product.name ?? '')
                                               .toList(),
-                                          hint: "Select Product",
                                           onChanged: (val) {
                                             selectedProduct = val;
                                             createJob.getProductFromName(
@@ -503,14 +510,18 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Department",
+                                            ),
+                                          ),
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
                                           ),
                                           items: ['Residential', 'Commercial'],
-                                          hint: "Select Department",
                                           onChanged: (val) {
                                             if (val == "Residential") {
                                               createJob.selectedDepartId = "29";
@@ -553,154 +564,94 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Choose Project Code",
+                                            ),
+                                          ),
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
                                           ),
                                           items: [
                                             'Choose Project Code',
                                           ],
-                                          hint: "Choose Project Code",
                                           onChanged: (val) {
                                             // Handle department selection here
                                           },
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 10.dynamic,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          'Priority',
-                                          style: TextStyle(
-                                            fontSize: 14.dynamic,
-                                            color: Colour.appBlack,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10.dynamic,
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(bottom: 19.dynamic),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2, horizontal: 15),
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.dynamic),
-                                          ),
-                                        ),
-                                        child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
-                                          ),
-                                          items: [
-                                            'Select Priority',
-                                            'Low',
-                                            'Medium',
-                                            'High',
-                                            'Urgent'
-                                          ],
-                                          hint: "Select Priority",
-                                          onChanged: (val) {
-                                            if (val == "Low") {
-                                              createJob.selectedPriorityId =
-                                                  "1";
-                                            } else if (val == "Medium") {
-                                              createJob.selectedPriorityId =
-                                                  "2";
-                                            } else if (val == "High") {
-                                              createJob.selectedPriorityId =
-                                                  "3";
-                                            } else if (val == "Urgent") {
-                                              createJob.selectedPriorityId =
-                                                  "4";
-                                            } else {
-                                              createJob.selectedPriorityId = "";
-                                            }
-                                            print(createJob.selectedPriorityId);
-                                          },
-                                        ),
-                                      ),
+                                      // SizedBox(
+                                      //   height: 10.dynamic,
+                                      // ),
+                                      // Align(
+                                      //   alignment: Alignment.topLeft,
+                                      //   child: Text(
+                                      //     'Priority',
+                                      //     style: TextStyle(
+                                      //       fontSize: 14.dynamic,
+                                      //       color: Colour.appBlack,
+                                      //       fontWeight: FontWeight.w600,
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // SizedBox(
+                                      //   height: 10.dynamic,
+                                      // ),
+                                      // Container(
+                                      //   margin:
+                                      //       EdgeInsets.only(bottom: 19.dynamic),
+                                      //   padding: const EdgeInsets.symmetric(
+                                      //       vertical: 2, horizontal: 15),
+                                      //   width: double.infinity,
+                                      //   decoration: BoxDecoration(
+                                      //     color: Colors.white,
+                                      //     borderRadius: BorderRadius.all(
+                                      //       Radius.circular(5.dynamic),
+                                      //     ),
+                                      //   ),
+                                      //   child: DropdownSearch<String>(
+                                      //     dropdownDecoratorProps:
+                                      //         DropDownDecoratorProps(
+                                      //       dropdownSearchDecoration:
+                                      //           InputDecoration(
+                                      //         border: InputBorder.none,
+                                      //         hintText: "Select Priority",
+                                      //       ),
+                                      //     ),
+                                      //     popupProps: PopupProps.menu(
+                                      //       showSelectedItems: true,
+                                      //     ),
+                                      //     items: [
+                                      //       'Select Priority',
+                                      //       'Low',
+                                      //       'Medium',
+                                      //       'High',
+                                      //       'Urgent'
+                                      //     ],
+                                      //     onChanged: (val) {
+                                      //       if (val == "Low") {
+                                      //         createJob.selectedPriorityId =
+                                      //             "1";
+                                      //       } else if (val == "Medium") {
+                                      //         createJob.selectedPriorityId =
+                                      //             "2";
+                                      //       } else if (val == "High") {
+                                      //         createJob.selectedPriorityId =
+                                      //             "3";
+                                      //       } else if (val == "Urgent") {
+                                      //         createJob.selectedPriorityId =
+                                      //             "4";
+                                      //       } else {
+                                      //         createJob.selectedPriorityId = "";
+                                      //       }
+                                      //       print(createJob.selectedPriorityId);
+                                      //     },
+                                      //   ),
+                                      // ),
 
-                                      SizedBox(
-                                        height: 10.dynamic,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          'Status',
-                                          style: TextStyle(
-                                            fontSize: 14.dynamic,
-                                            color: Colour.appBlack,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10.dynamic,
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(bottom: 19.dynamic),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2, horizontal: 15),
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.dynamic),
-                                          ),
-                                        ),
-                                        child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
-                                          ),
-                                          items: [
-                                            'Select Status',
-                                            'Open',
-                                            'Pending',
-                                            'Resolved',
-                                            'Closed',
-                                            'Waiting On Customer',
-                                            'Waiting On Third Party',
-                                          ],
-                                          hint: "Select Status",
-                                          onChanged: (val) {
-                                            if (val == "Open") {
-                                              createJob.selectedStatusId = "2";
-                                            } else if (val == "Pending") {
-                                              createJob.selectedStatusId = "3";
-                                            } else if (val == "Resolved") {
-                                              createJob.selectedStatusId = "4";
-                                            } else if (val == "Closed") {
-                                              createJob.selectedStatusId = "5";
-                                            } else if (val ==
-                                                "Waiting On Customer") {
-                                              createJob.selectedStatusId = "6";
-                                            } else if (val ==
-                                                "Waiting On Third Party") {
-                                              createJob.selectedStatusId = "7";
-                                            } else {
-                                              createJob.selectedStatusId = "";
-                                            }
-                                            print(createJob.selectedStatusId);
-                                          },
-                                        ),
-                                      ),
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
@@ -744,6 +695,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
+
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Text(
@@ -771,17 +723,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Service",
+                                            ),
+                                          ),
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
                                           ),
                                           items: createJob.serviceList
                                               .map((serviceName) =>
                                                   serviceName.serviceName ?? '')
                                               .toList(),
-                                          hint: "Select Service",
                                           onChanged: (val) {
                                             setState(() {
                                               selectedSubService =
@@ -820,10 +776,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                         items: createJob.subServiceList
                                             .map((subService) =>
                                                 MultiSelectItem<String>(
-                                                  subService.id
-                                                      .toString(), 
-                                                  subService
-                                                      .serviceName!, 
+                                                  subService.id.toString(),
+                                                  subService.serviceName!,
                                                 ))
                                             .toList(),
                                         listType: MultiSelectListType.CHIP,
@@ -831,47 +785,13 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           createJob.selectedSubServiceIds =
                                               values.cast<String>().toList();
                                           // Now you have the IDs of the selected sub-services
-                                          print(createJob.selectedSubServiceIds);
+                                          print(
+                                              createJob.selectedSubServiceIds);
                                         },
                                       ),
 
-                                      // Container(
-                                      //   margin:
-                                      //       EdgeInsets.only(bottom: 19.dynamic),
-                                      //   padding: const EdgeInsets.symmetric(
-                                      //       vertical: 2, horizontal: 15),
-                                      //   width: double.infinity,
-                                      //   decoration: BoxDecoration(
-                                      //     color: Colors.white,
-                                      //     borderRadius: BorderRadius.all(
-                                      //         Radius.circular(5.dynamic)),
-                                      //   ),
-                                      //   child: DropdownSearch<String>(
-                                      //     mode: Mode.MENU,
-                                      //     showAsSuffixIcons: true,
-                                      //     dropdownSearchDecoration:
-                                      //         InputDecoration(
-                                      //       border: InputBorder.none,
-                                      //     ),
-                                      //     items: createJob.subServiceList
-                                      //         .map((subService) {
-                                      //       return '${subService.serviceName}';
-                                      //     }).toList(),
-                                      //     hint: "Select Sub Service",
-                                      //     onChanged: (val) {
-                                      //       setState(() {
-                                      //         selectedSubService = "";
-                                      //       });
-                                      //       selectedSubService = val!;
-                                      //       createJob.subServiceID = createJob
-                                      //           .getSubServiceIdFromName(val)!;
-                                      //       print(createJob.subServiceID);
-                                      //     },
-                                      //     selectedItem: selectedSubService,
-                                      //   ),
-                                      // ),
                                       SizedBox(
-                                        height: 10.dynamic,
+                                        height: 20.dynamic,
                                       ),
                                       Align(
                                         alignment: Alignment.topLeft,
@@ -901,11 +821,16 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           ),
                                         ),
                                         child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showAsSuffixIcons: true,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            border: InputBorder.none,
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Customer Type",
+                                            ),
+                                          ),
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
                                           ),
                                           items: [
                                             'Select Customer Type',
@@ -927,14 +852,13 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                           selectedItem: selectedcustomerType,
                                         ),
                                       ),
-
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Text(
-                                          'Attention',
+                                          'Status',
                                           style: TextStyle(
                                             fontSize: 14.dynamic,
                                             color: Colour.appBlack,
@@ -945,30 +869,103 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
-                                      Padding(
-                                        padding:
+                                      Container(
+                                        margin:
                                             EdgeInsets.only(bottom: 19.dynamic),
-                                        child: TextFormField(
-                                          obscureText: false,
-                                          controller: createJob.attentionCtrl,
-                                          onChanged: (val) {},
-                                          style: TextStyle(
-                                              fontSize: 14.dynamic,
-                                              fontWeight: FontWeight.w300),
-                                          decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            contentPadding: EdgeInsets.fromLTRB(
-                                                20.0, 15.0, 20.0, 15.0),
-                                            hintText: "Enter Attention",
-                                            border: InputBorder.none,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 15),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.dynamic),
                                           ),
+                                        ),
+                                        child: DropdownSearch<String>(
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Select Status",
+                                            ),
+                                          ),
+                                          popupProps: PopupProps.menu(
+                                            showSelectedItems: true,
+                                          ),
+                                          items: [
+                                            'Select Status',
+                                            'Open',
+                                            'Pending',
+                                            'Resolved',
+                                            'Closed',
+                                            'Waiting On Customer',
+                                            'Waiting On Third Party',
+                                          ],
+                                          onChanged: (val) {
+                                            if (val == "Open") {
+                                              createJob.selectedStatusId = "2";
+                                            } else if (val == "Pending") {
+                                              createJob.selectedStatusId = "3";
+                                            } else if (val == "Resolved") {
+                                              createJob.selectedStatusId = "4";
+                                            } else if (val == "Closed") {
+                                              createJob.selectedStatusId = "5";
+                                            } else if (val ==
+                                                "Waiting On Customer") {
+                                              createJob.selectedStatusId = "6";
+                                            } else if (val ==
+                                                "Waiting On Third Party") {
+                                              createJob.selectedStatusId = "7";
+                                            } else {
+                                              createJob.selectedStatusId = "";
+                                            }
+                                            print(createJob.selectedStatusId);
+                                          },
                                         ),
                                       ),
 
                                       SizedBox(
-                                        height: 12.dynamic,
+                                        height: 10.dynamic,
                                       ),
+                                      // Align(
+                                      //   alignment: Alignment.topLeft,
+                                      //   child: Text(
+                                      //     'Attention',
+                                      //     style: TextStyle(
+                                      //       fontSize: 14.dynamic,
+                                      //       color: Colour.appBlack,
+                                      //       fontWeight: FontWeight.w600,
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // SizedBox(
+                                      //   height: 10.dynamic,
+                                      // ),
+                                      // Padding(
+                                      //   padding:
+                                      //       EdgeInsets.only(bottom: 19.dynamic),
+                                      //   child: TextFormField(
+                                      //     obscureText: false,
+                                      //     controller: createJob.attentionCtrl,
+                                      //     onChanged: (val) {},
+                                      //     style: TextStyle(
+                                      //         fontSize: 14.dynamic,
+                                      //         fontWeight: FontWeight.w300),
+                                      //     decoration: InputDecoration(
+                                      //       filled: true,
+                                      //       fillColor: Colors.white,
+                                      //       contentPadding: EdgeInsets.fromLTRB(
+                                      //           20.0, 15.0, 20.0, 15.0),
+                                      //       hintText: "Enter Attention",
+                                      //       border: InputBorder.none,
+                                      //     ),
+                                      //   ),
+                                      // ),
+
+                                      // SizedBox(
+                                      //   height: 12.dynamic,
+                                      // ),
                                     ],
                                   ),
                                 )

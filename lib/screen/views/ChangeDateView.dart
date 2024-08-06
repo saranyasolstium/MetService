@@ -31,8 +31,8 @@ changeDate() {
       return Theme(
         data: ThemeData(
           textTheme: TextTheme(
-            bodyText1: TextStyle(fontSize: fontSize), 
-            button: TextStyle(fontSize: 10.dynamic), 
+            bodyLarge: TextStyle(fontSize: fontSize), 
+            labelLarge: TextStyle(fontSize: 10.dynamic), 
             
           ),
         ),

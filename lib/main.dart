@@ -1,18 +1,19 @@
 import 'dart:core';
 import 'dart:math';
 
-// import 'package:eagle_pixels/controller/attendance_controller.dart';
+import 'package:eagle_pixels/api/fcm/firebase_api.dart';
+import 'package:eagle_pixels/api/fcm/notification_sender.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:eagle_pixels/screen/Attendance/time_in_screen.dart';
 import 'package:eagle_pixels/screen/Attendance/time_out_screen.dart';
 import 'package:eagle_pixels/screen/home/my_reward_screen.dart';
 import 'package:eagle_pixels/screen/job_history/job_history_screen.dart';
 import 'package:eagle_pixels/screen/login_screen.dart';
 import 'package:eagle_pixels/screen/schedule/schedule_screen.dart';
-import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:eagle_pixels/screen/toast/jobcompleted_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:toast/toast.dart';
 
@@ -32,18 +33,21 @@ class NavPage {
   static String jobCompleted = '/jobCompleted';
   static String myReward = '/myReward';
   static String jobHistory = '/jobHistory';
-  // static String jobCheckListScreen = '/joCheckList';
- // static String jobServiceReportScreen = '/jobServiceReport';
   static String scheduleJobDetailsScreen = '/scheduleJobDetailsScreen';
   static String root = "/";
   static String attendanceServiceList = '/AttendanceServiceList';
   static String jobDetail = '/jobDetail';
   static String customerInformation = '/customerInformation';
-  // static String confirmation = '/confirmation';
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotification();
+
+ // String? fcmToken = await SharedPreferencesHelper.getFCMToken();
+  
+
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
@@ -103,18 +107,18 @@ class MyApp extends StatelessWidget {
       initialBinding: AppBinding(),
 
       theme: ThemeData(
-          primaryColor: Colour.appBlue,
-          primarySwatch: Colors.blue,
-          fontFamily: 'Poppins',
-          snackBarTheme: SnackBarThemeData(
+        primaryColor: Colour.appBlue,
+        primarySwatch: Colors.blue,
+        fontFamily: 'Poppins',
+        snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.green,
-          contentTextStyle: TextStyle(fontSize: 16.dynamic, color: Colors.white), 
+          contentTextStyle:
+              TextStyle(fontSize: 16.dynamic, color: Colors.white),
         ),
-),
+      ),
       initialRoute: NavPage.root,
-      
+
       // home: FeedbackScreen(),
     );
   }
 }
-

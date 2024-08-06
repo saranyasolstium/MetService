@@ -18,6 +18,16 @@ class SharedPreferencesHelper {
     await prefs.setString('token', token);
   }
 
+ static Future<String?> getFCMToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('fcm_token');
+  }
+
+  static Future<void> setFCMToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('fcm_token', token);
+  }
+
   static Future<void> clearToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');

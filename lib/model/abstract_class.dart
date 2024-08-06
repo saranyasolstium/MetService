@@ -109,6 +109,7 @@ abstract class AJobDetail {
   String? get aTreatmentMethod;
   String? get aServiceFrequency;
   String? get aDegreeInfestation;
+  String? get aBusinessSource;
 
   String? get aPreparation;
   String? get aBillingType;
