@@ -195,7 +195,12 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
             // JobDetailTitleDescriptionView(
             //     'Service Cover:', detail.aServiceCover ?? 'NA'),
             JobDetailTitleDescriptionView(
-                'Treatment Method:', detail.aTreatmentMethod ?? 'NA'),
+                'Treatment Method:',
+                detail.aTreatmentMethod!
+                        .replaceAll('[', '')
+                        .replaceAll(']', '')
+                        .trim() ??
+                    'NA'),
           ],
         ),
         SizedBox(
@@ -217,7 +222,10 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             JobDetailTitleDescriptionView(
-                'Preparation:', detail.aPreparation ?? 'NA'),
+                'Preparation:', detail.aPreparation!
+                        .replaceAll('[', '')
+                        .replaceAll(']', '')
+                        .trim() ?? 'NA'),
           ],
         ),
         SizedBox(

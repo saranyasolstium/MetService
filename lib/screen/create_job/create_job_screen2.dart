@@ -72,27 +72,9 @@ class CreateJobScreen2 extends StatelessWidget {
                                   SizedBox(
                                     height: 10.dynamic,
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 19.dynamic),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 15),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5.dynamic),
-                                      ),
-                                    ),
-                                    child: DropdownSearch<String>(
-                                      dropdownDecoratorProps:
-                                          DropDownDecoratorProps(
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: "Select Treatment method",
-                                        ),
-                                      ),
-                                      items: [
+                                  MultiSelectDialogField(
+                                    items: <MultiSelectItem<String>>[
+                                      for (String value in [
                                         'Select Treatment method',
                                         'water base fogging',
                                         'oilbased fogging',
@@ -108,23 +90,71 @@ class CreateJobScreen2 extends StatelessWidget {
                                         'inspection',
                                         'monitoring',
                                         'others',
-                                      ],
-                                      onChanged: (val) {
-                                        if (val == "Select Treatment method") {
-                                          controller.selectedTreatment = "";
-                                        } else {
-                                          controller.selectedTreatment = val!;
-                                        }
-                                        print(controller.selectedTreatment);
-                                        controller.update();
-                                      },
-                                      selectedItem: selectedTreatment,
-                                    ),
+                                      ])
+                                        MultiSelectItem<String>(value, value),
+                                    ],
+                                    listType: MultiSelectListType.CHIP,
+                                    onConfirm: (values) {
+                                      controller.selectedTreatment =
+                                          values.cast<String>().toList();
+
+                                      print(controller.selectedTreatment);
+                                    },
                                   ),
+                                  // Container(
+                                  //   margin: EdgeInsets.only(bottom: 19.dynamic),
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       vertical: 2, horizontal: 15),
+                                  //   width: double.infinity,
+                                  //   decoration: BoxDecoration(
+                                  //     color: Colors.white,
+                                  //     borderRadius: BorderRadius.all(
+                                  //       Radius.circular(5.dynamic),
+                                  //     ),
+                                  //   ),
+                                  //   child: DropdownSearch<String>(
+                                  //     dropdownDecoratorProps:
+                                  //         DropDownDecoratorProps(
+                                  //       dropdownSearchDecoration:
+                                  //           InputDecoration(
+                                  //         border: InputBorder.none,
+                                  //         hintText: "Select Treatment method",
+                                  //       ),
+                                  //     ),
+                                  //     items: [
+                                  //       'Select Treatment method',
+                                  //       'water base fogging',
+                                  //       'oilbased fogging',
+                                  //       'larviciding',
+                                  //       'residual spraying',
+                                  //       'gelling',
+                                  //       'waterbased misting',
+                                  //       'termite baiting',
+                                  //       'dusting',
+                                  //       'corrective treatment',
+                                  //       'soil treatment',
+                                  //       'bin chute (fogging)',
+                                  //       'inspection',
+                                  //       'monitoring',
+                                  //       'others',
+                                  //     ],
+                                  //     onChanged: (val) {
+                                  //       if (val == "Select Treatment method") {
+                                  //         controller.selectedTreatment = "";
+                                  //       } else {
+                                  //         controller.selectedTreatment = val!;
+                                  //       }
+                                  //       print(controller.selectedTreatment);
+                                  //       controller.update();
+                                  //     },
+                                  //     selectedItem: selectedTreatment,
+                                  //   ),
+                                  // ),
                                   SizedBox(
-                                    height: 10.dynamic,
+                                    height: 20.dynamic,
                                   ),
-                                  controller.selectedTreatment == "others"
+                                  controller.selectedTreatment
+                                          .contains("others")
                                       ? Padding(
                                           padding: EdgeInsets.only(
                                               bottom: 19.dynamic),
@@ -993,7 +1023,6 @@ class CreateJobScreen2 extends StatelessWidget {
                             ),
                             child: TextButton(
                               onPressed: () {
-
                                 if (controller.selectedTreatment == "Other" &&
                                     controller.treatmentOtherCtrl.text
                                         .toString()

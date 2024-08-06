@@ -63,11 +63,13 @@ class CreateJobController extends GetxController {
   String selectedPriorityId = "";
   String selectedStatusId = "2";
   String selectedCustomerType = "";
-  String selectedTreatment = "";
+ // String selectedTreatment = "";
   String selectedfrequency = "";
   String selectedInfestation = "";
   String selectedSource = "";
   List<String> selectedPreparation = [];
+    List<String> selectedTreatment = [];
+
   String selectedBillingType = "";
   String selectedEngId = "";
   List<String> selectedSubServiceIds = [];
