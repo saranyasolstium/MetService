@@ -17,7 +17,6 @@ class CreateJobScreen2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String selectedTreatment = "Select Treatment method";
     String selectedFrequency = "Select Service Frequency";
     String selectedDegree = "Select";
     String selectedSource = "Select Source";
@@ -75,7 +74,6 @@ class CreateJobScreen2 extends StatelessWidget {
                                   MultiSelectDialogField(
                                     items: <MultiSelectItem<String>>[
                                       for (String value in [
-                                        'Select Treatment method',
                                         'water base fogging',
                                         'oilbased fogging',
                                         'larviciding',
@@ -981,6 +979,23 @@ class CreateJobScreen2 extends StatelessWidget {
                                             'Selected ID1: ${controller.selectedEngId}');
                                       },
                                     ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: controller.isEmailChecked,
+                                        onChanged: (value) {
+                                          print(value!);
+
+                                          controller.isEmailChecked = value;
+                                          controller.update();
+                                        },
+                                      ),
+                                      Text('Send email to customer.'),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:eagle_pixels/common/logger.dart';
 import 'package:eagle_pixels/common/snackbar.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/avaiable_engineer_model.dart';
@@ -63,17 +64,18 @@ class CreateJobController extends GetxController {
   String selectedPriorityId = "";
   String selectedStatusId = "2";
   String selectedCustomerType = "";
- // String selectedTreatment = "";
+  // String selectedTreatment = "";
   String selectedfrequency = "";
   String selectedInfestation = "";
   String selectedSource = "";
   List<String> selectedPreparation = [];
-    List<String> selectedTreatment = [];
+  List<String> selectedTreatment = [];
 
   String selectedBillingType = "";
   String selectedEngId = "";
   List<String> selectedSubServiceIds = [];
   bool isLoading = false;
+  bool isEmailChecked = false;
 
   void setSelected(String value) {
     valueOfDrop.value = value;
@@ -375,8 +377,8 @@ class CreateJobController extends GetxController {
       "service_id": serviceId,
       "subservice_id":
           selectedSubServiceIds.isEmpty ? "" : selectedSubServiceIds,
-     // "service_cover": "",
-     // "service_other": "",
+      // "service_cover": "",
+      // "service_other": "",
       "treatment_method": selectedTreatment,
       "treatment_other": treatmentOtherCtrl.text,
       "service_frequency": selectedfrequency,
@@ -389,7 +391,7 @@ class CreateJobController extends GetxController {
       "estimation_first_service": estimationDurationCtrl.text,
       "decision_maker": decisionMakerCtrl.text,
       "see_on_site": whomtoSeeCtrl.text,
-     // "service_premise_address": "",
+      // "service_premise_address": "",
       "billing_frequency": billingFreqCtrl.text,
       "preparation": selectedPreparation.isEmpty ? "" : selectedPreparation,
       "date": '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
@@ -403,13 +405,13 @@ class CreateJobController extends GetxController {
       "status": selectedStatusId,
       "customer_type": selectedCustomerType,
       //"service_order_id": "",
-     // "attention": "",
+      // "attention": "",
       "oppoinment_request_id": selectedAppointmentId,
-      "send_mail_customer":"0",
-     // "type": ""
+      "send_mail_customer": isEmailChecked ? "1" : "0",
+      // "type": ""
     };
 
-    print('Request Body: $requestBody');
+    Logger.log('Request Body:', requestBody.toString());
 
     try {
       var response = await API.service.call(
