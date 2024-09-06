@@ -158,23 +158,23 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          GetBuilder<JobCheckListController>(
-                            builder: (_) {
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (builder, index) {
-                                  var item =
-                                      checkListController.selectedlist[index];
-                                  return ReportItem(
-                                    item: item,
-                                  );
-                                },
-                                itemCount:
-                                    checkListController.selectedlist.length,
-                              );
-                            },
-                          ),
+                          // GetBuilder<JobCheckListController>(
+                          //   builder: (_) {
+                          //     return ListView.builder(
+                          //       shrinkWrap: true,
+                          //       physics: NeverScrollableScrollPhysics(),
+                          //       itemBuilder: (builder, index) {
+                          //         var item =
+                          //             checkListController.selectedlist[index];
+                          //         return ReportItem(
+                          //           item: item,
+                          //         );
+                          //       },
+                          //       itemCount:
+                          //           checkListController.selectedlist.length,
+                          //     );
+                          //   },
+                          // ),
                           SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
@@ -309,7 +309,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                         setState(() {
                                           controller.selectedPaymentMode =
                                               newValue!;
-                                          controller.other.value="";
+                                          controller.other.value = "";
                                           print(controller.selectedPaymentMode);
                                         });
                                       },
@@ -698,7 +698,8 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                       .signatureTechnicianController.value
                                       .toPngBytes();
 
-                                  if (controller.selectedPaymentMode == "Others" &&
+                                  if (controller.selectedPaymentMode ==
+                                          "Others" &&
                                       controller.other.isEmpty) {
                                     Toast.show(
                                       'Please enter other ',
@@ -773,7 +774,8 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                             technicianSign:
                                                 base64Encode(techBytes),
                                             feedback: controller.feedback.value,
-                                            paymentMode: controller.selectedPaymentMode!,
+                                            paymentMode:
+                                                controller.selectedPaymentMode!,
                                             chemicalList: "",
                                             technicianComment: controller
                                                 .engineerFeedback.value,
@@ -786,7 +788,12 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                             areasInspected:
                                                 controller.areasInspected.value,
                                             preparation:
-                                                controller.preparation.value);
+                                                controller.preparation.value,
+                                            contactName:
+                                                controller.contactName.value,
+                                            clientId: controller.clientId.value,
+                                            jobTitle:
+                                                controller.jobTitle.value);
 
                                     if (status != null) {
                                       Toast.show(
@@ -862,238 +869,238 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
   }
 }
 
-class ReportItem extends StatelessWidget {
-  // final JobCheckListController checkListController = Get.find();
-  // final int index;
-  //
-  // ACheckListItem get item {
-  //   return checkListController.selectedlist[index];
-  // }
-  //
-  // MCheckListOption get selectedItem {
-  //   return item.selectedItem!;
-  // }
+// class ReportItem extends StatelessWidget {
+//   // final JobCheckListController checkListController = Get.find();
+//   // final int index;
+//   //
+//   // ACheckListItem get item {
+//   //   return checkListController.selectedlist[index];
+//   // }
+//   //
+//   // MCheckListOption get selectedItem {
+//   //   return item.selectedItem!;
+//   // }
 
-  final ACheckListItem item;
-  ReportItem({required this.item});
-  // final _remarkController = TextEditingController();
+//   final ACheckListItem item;
+//   ReportItem({required this.item});
+//   // final _remarkController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 17.dynamic,
-        vertical: 18.dynamic,
-      ),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.only(
-          top: 12.dynamic,
-          left: 14.dynamic,
-          right: 14.dynamic,
-          bottom: 15.dynamic,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(
-            8.0,
-          ),
-          border: Border.all(
-            width: 1.5,
-            color: item.lastItem?.color ?? Colors.grey,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-              // mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    item.title,
-                    style: TextStyle(
-                      color: Colour.appBlack,
-                      fontSize: 16.dynamic.dynamic,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
-                // Expanded(child: Container()),
-                SizedBox(width: 5.dynamic),
-                ReportCheckbox(
-                    item: item.lastItem ?? MCheckListOption('', Colors.grey)),
-              ],
-            ),
-            Divider(
-              color: Colour.appDarkGrey,
-            ),
-            // Row(
-            //   mainAxisSize: MainAxisSize.max,
-            //   children: [
-            //     CheckListSelectionView(section: index, row: 0),
-            //   ],
-            // ),
-            // Expanded(
-            //   child: Container(
-            //     child: StaggeredGridView.countBuilder(
-            //       crossAxisCount: 2,
-            //       itemCount: item.options.length,
-            //       itemBuilder: (builder, row) {
-            //         var selection = item.options[index];
-            //         return CheckListSelectionView(section: index, row: row);
-            //       },
-            //       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-            //     ),
-            //   ),
-            // ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 10.5.dynamic,
-                bottom: 5.dynamic,
-              ),
-              child: Text(
-                'Remarks',
-                style: TextStyle(
-                  color: Colour.appRed,
-                  fontSize: 16.dynamic,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Text(
-                item.remarks,
-                style: TextStyle(
-                  fontSize: 14.dynamic,
-                  color: Colour.appDarkGrey,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10.dynamic,
-            ),
-            Row(
-              children: [
-                // Image.asset(
-                //   'images/add.png',
-                //   width: 19.dynamic,
-                //   height: 19.dynamic,
-                // ),
-                Text(
-                  'Photo Added',
-                  style: TextStyle(
-                    fontSize: 14.dynamic,
-                    fontWeight: FontWeight.w400,
-                    color: Colour.appText,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16.dynamic,
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                  item.selectedImages.length,
-                  (row) => Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colour.appBlue),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0),
-                          clipBehavior: Clip.hardEdge,
-                          child: (item.selectedImages[row] is Uint8List)
-                              ? Image.memory(
-                                  item.selectedImages[row],
-                                  height: 43.dynamic,
-                                  width: 43.dynamic,
-                                  fit: BoxFit.fill,
-                                  isAntiAlias: false,
-                                )
-                              : Image.network(
-                                  item.selectedImages[row],
-                                  height: 43.dynamic,
-                                  width: 43.dynamic,
-                                  fit: BoxFit.fill,
-                                  isAntiAlias: false,
-                                ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20.dynamic,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10.dynamic,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.symmetric(
+//         horizontal: 17.dynamic,
+//         vertical: 18.dynamic,
+//       ),
+//       child: Container(
+//         width: double.infinity,
+//         padding: EdgeInsets.only(
+//           top: 12.dynamic,
+//           left: 14.dynamic,
+//           right: 14.dynamic,
+//           bottom: 15.dynamic,
+//         ),
+//         decoration: BoxDecoration(
+//           color: Colors.white,
+//           borderRadius: BorderRadius.circular(
+//             8.0,
+//           ),
+//           border: Border.all(
+//             width: 1.5,
+//             color: item.lastItem?.color ?? Colors.grey,
+//           ),
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             Row(
+//               // mainAxisAlignment: MainAxisAlignment.spaceAround,
+//               // mainAxisSize: MainAxisSize.max,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Expanded(
+//                   child: Text(
+//                     item.title,
+//                     style: TextStyle(
+//                       color: Colour.appBlack,
+//                       fontSize: 16.dynamic.dynamic,
+//                       fontWeight: FontWeight.normal,
+//                     ),
+//                   ),
+//                 ),
+//                 // Expanded(child: Container()),
+//                 SizedBox(width: 5.dynamic),
+//                 ReportCheckbox(
+//                     item: item.lastItem ?? MCheckListOption('', Colors.grey)),
+//               ],
+//             ),
+//             Divider(
+//               color: Colour.appDarkGrey,
+//             ),
+//             // Row(
+//             //   mainAxisSize: MainAxisSize.max,
+//             //   children: [
+//             //     CheckListSelectionView(section: index, row: 0),
+//             //   ],
+//             // ),
+//             // Expanded(
+//             //   child: Container(
+//             //     child: StaggeredGridView.countBuilder(
+//             //       crossAxisCount: 2,
+//             //       itemCount: item.options.length,
+//             //       itemBuilder: (builder, row) {
+//             //         var selection = item.options[index];
+//             //         return CheckListSelectionView(section: index, row: row);
+//             //       },
+//             //       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+//             //     ),
+//             //   ),
+//             // ),
+//             Padding(
+//               padding: EdgeInsets.only(
+//                 top: 10.5.dynamic,
+//                 bottom: 5.dynamic,
+//               ),
+//               child: Text(
+//                 'Remarks',
+//                 style: TextStyle(
+//                   color: Colour.appRed,
+//                   fontSize: 16.dynamic,
+//                   fontWeight: FontWeight.w400,
+//                 ),
+//               ),
+//             ),
+//             Container(
+//               decoration: BoxDecoration(
+//                 color: Colors.white,
+//               ),
+//               child: Text(
+//                 item.remarks,
+//                 style: TextStyle(
+//                   fontSize: 14.dynamic,
+//                   color: Colour.appDarkGrey,
+//                 ),
+//               ),
+//             ),
+//             SizedBox(
+//               height: 10.dynamic,
+//             ),
+//             Row(
+//               children: [
+//                 // Image.asset(
+//                 //   'images/add.png',
+//                 //   width: 19.dynamic,
+//                 //   height: 19.dynamic,
+//                 // ),
+//                 Text(
+//                   'Photo Added',
+//                   style: TextStyle(
+//                     fontSize: 14.dynamic,
+//                     fontWeight: FontWeight.w400,
+//                     color: Colour.appText,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             SizedBox(
+//               height: 16.dynamic,
+//             ),
+//             SingleChildScrollView(
+//               scrollDirection: Axis.horizontal,
+//               child: Row(
+//                 children: List.generate(
+//                   item.selectedImages.length,
+//                   (row) => Row(
+//                     mainAxisSize: MainAxisSize.min,
+//                     children: [
+//                       Container(
+//                         clipBehavior: Clip.hardEdge,
+//                         decoration: BoxDecoration(
+//                           border: Border.all(color: Colour.appBlue),
+//                           borderRadius: BorderRadius.circular(5.0),
+//                         ),
+//                         child: ClipRRect(
+//                           borderRadius: BorderRadius.circular(5.0),
+//                           clipBehavior: Clip.hardEdge,
+//                           child: (item.selectedImages[row] is Uint8List)
+//                               ? Image.memory(
+//                                   item.selectedImages[row],
+//                                   height: 43.dynamic,
+//                                   width: 43.dynamic,
+//                                   fit: BoxFit.fill,
+//                                   isAntiAlias: false,
+//                                 )
+//                               : Image.network(
+//                                   item.selectedImages[row],
+//                                   height: 43.dynamic,
+//                                   width: 43.dynamic,
+//                                   fit: BoxFit.fill,
+//                                   isAntiAlias: false,
+//                                 ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 20.dynamic,
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(
+//               height: 10.dynamic,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-class ReportCheckbox extends StatelessWidget {
-  final MCheckListOption item;
+// class ReportCheckbox extends StatelessWidget {
+//   final MCheckListOption item;
 
-  ReportCheckbox({required this.item});
+//   ReportCheckbox({required this.item});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(
-          8.0,
-        ),
-      ),
-      child: Row(
-        children: [
-          Text(
-            item.name,
-            style: TextStyle(
-              color: Colour.appBlack,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          SizedBox(
-            width: 8.dynamic,
-          ),
-          CustomCheckbox(
-            isChecked: true,
-            size: 18.dynamic,
-            selectedColor: item.color,
-            selectedIconColor: Colors.white,
-            // didSelect: (checkbox) {
-            //   if (checkbox) {
-            //     checklistController.checkList[section].selectedItem = item;
-            //   } else {
-            //     checklistController.checkList[section].selectedItem = null;
-            //   }
-            //
-            //   checklistController.update();
-            // },
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(
+//           8.0,
+//         ),
+//       ),
+//       child: Row(
+//         children: [
+//           Text(
+//             item.name,
+//             style: TextStyle(
+//               color: Colour.appBlack,
+//               fontSize: 14.0,
+//               fontWeight: FontWeight.w400,
+//             ),
+//           ),
+//           SizedBox(
+//             width: 8.dynamic,
+//           ),
+//           CustomCheckbox(
+//             isChecked: true,
+//             size: 18.dynamic,
+//             selectedColor: item.color,
+//             selectedIconColor: Colors.white,
+//             // didSelect: (checkbox) {
+//             //   if (checkbox) {
+//             //     checklistController.checkList[section].selectedItem = item;
+//             //   } else {
+//             //     checklistController.checkList[section].selectedItem = null;
+//             //   }
+//             //
+//             //   checklistController.update();
+//             // },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

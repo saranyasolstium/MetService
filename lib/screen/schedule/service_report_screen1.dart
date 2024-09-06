@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:eagle_pixels/colors.dart';
 import 'package:eagle_pixels/constant.dart';
@@ -8,7 +6,6 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
-import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,17 +14,8 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:eagle_pixels/reuse/custom_checkbox.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
-import 'package:eagle_pixels/model/check_list_model.dart';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multi_select_flutter/util/multi_select_list_type.dart';
-import 'package:signature/signature.dart';
 import 'package:toast/toast.dart';
 
 class ServiceReportScreen1 extends StatefulWidget {
@@ -55,10 +43,12 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
   TextEditingController methodCtrl = TextEditingController();
   TextEditingController quantityCtrl = TextEditingController();
   TextEditingController otherCtrl = TextEditingController();
+  FocusNode contactNameFocusNode = FocusNode();
+  FocusNode clientIdFocusNode = FocusNode();
+  FocusNode jobTitleFocusNode = FocusNode();
 
   final List<String> radioValues = ['N', 'L', 'M', 'H'];
   String? selectedPreparationType = 'Advion Cockroach Gel';
-
   void addValue() {
     setState(() {
       controller.enteredValues.add({
@@ -88,7 +78,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
   @override
   void initState() {
     super.initState();
-    controller.itemsInspected = [
+    controller.itemsInspected.value = [
       "Cockroach",
       "Common Ant",
       "Rodent",
@@ -99,17 +89,14 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
       "Fleas",
       "Other"
     ];
+
     controller.selectedValues =
         List.generate(controller.itemsInspected.length, (index) => []);
 
-    controller.selectedCheckboxValues.forEach((item, values) {
-      int index = controller.itemsInspected.indexOf(item);
-      if (index != -1) {
-        List<String> valueList = values.split(',');
-        controller.selectedValues[index] = valueList;
-      }
-    });
+   
 
+    String requestId = detail.aServiceId ?? '0';
+    controller.getJobUpdate(requestId);
     // Print for debugging
     print('Selected Values: ${controller.selectedValues}');
   }
@@ -136,32 +123,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                 'SubService Name:', detail.aSubServiceName ?? 'NA'),
           ],
         ),
-        // SizedBox(
-        //   height: 20.dynamic,
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: [
-        //     JobDetailTitleDescriptionView(
-        //         'Service Type:',
-        //         detail.aTeamName != null && detail.aTeamName!.isNotEmpty
-        //             ? detail.aTeamName
-        //             : 'NA'),
-        //     JobDetailTitleDescriptionView(
-        //         'Service Order No:', detail.aServiceOrderNo ?? 'NA'),
-        //   ],
-        // ),
-        // SizedBox(
-        //   height: 20.dynamic,
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: [
-        //     JobDetailTitleDescriptionView(
-        //         'Customer Type:', detail.aCustomerType ?? 'NA'),
-        //     JobDetailTitleDescriptionView('Subject:', detail.aSubject ?? 'NA'),
-        //   ],
-        // ),
         SizedBox(
           height: 20.dynamic,
         ),
@@ -174,33 +135,21 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                 'Source:', detail.aBusinessSource ?? 'NA'),
           ],
         ),
-        // SizedBox(
-        //   height: 20.dynamic,
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: [
-        //     JobDetailTitleDescriptionView(
-        //         'Attention:', detail.aAttention ?? 'NA'),
-        //     JobDetailTitleDescriptionView(
-        //         'Priority:', detail.aPriority ?? 'NA'),
-        //   ],
-        // ),
         SizedBox(
           height: 20.dynamic,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // JobDetailTitleDescriptionView(
-            //     'Service Cover:', detail.aServiceCover ?? 'NA'),
             JobDetailTitleDescriptionView(
-                'Treatment Method:',
-                detail.aTreatmentMethod!
-                        .replaceAll('[', '')
-                        .replaceAll(']', '')
-                        .trim() ??
-                    'NA'),
+              'Treatment Method:',
+              (detail.aTreatmentMethod != null
+                  ? detail.aTreatmentMethod!
+                      .replaceAll('[', '')
+                      .replaceAll(']', '')
+                      .trim()
+                  : 'NA'),
+            ),
           ],
         ),
         SizedBox(
@@ -222,10 +171,11 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             JobDetailTitleDescriptionView(
-                'Preparation:', detail.aPreparation!
-                        .replaceAll('[', '')
-                        .replaceAll(']', '')
-                        .trim() ?? 'NA'),
+                'Preparation:',
+                (detail.aPreparation ?? 'NA')
+                    .replaceAll('[', '')
+                    .replaceAll(']', '')
+                    .trim()),
           ],
         ),
         SizedBox(
@@ -300,7 +250,29 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
           elevation: 0,
           backgroundColor: Colors.white,
           leading: RawMaterialButton(
-            onPressed: () => Get.back(),
+            onPressed: () {
+              String requestId = detail.aServiceId ?? '0';
+              if (controller.isOtherChecked.value) {
+                if (controller.otherInspected.isNotEmpty) {
+                  handleCheckboxChange(
+                      "Other",
+                      selectedOtherValues +
+                          "-" +
+                          controller.otherInspected.value,
+                      true);
+                }
+              }
+
+              Map<String, String> convertedMap = {};
+
+              controller.selectedCheckboxValues.forEach((key, value) {
+                convertedMap['"$key"'] = '"$value"';
+              });
+              controller.preparation.value =
+                  jsonEncode(controller.enteredValues);
+              controller.updateJob(requestId);
+              Get.back();
+            },
             child: Icon(
               Icons.arrow_back,
               color: Colour.appBlue,
@@ -340,23 +312,24 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          GetBuilder<JobCheckListController>(
-                            builder: (_) {
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (builder, index) {
-                                  var item =
-                                      checkListController.selectedlist[index];
-                                  return ReportItem(
-                                    item: item,
-                                  );
-                                },
-                                itemCount:
-                                    checkListController.selectedlist.length,
-                              );
-                            },
-                          ),
+                          // GetBuilder<JobCheckListController>(
+                          //   builder: (_) {
+                          //     return ListView.builder(
+                          //       shrinkWrap: true,
+                          //       physics: NeverScrollableScrollPhysics(),
+                          //       itemBuilder: (builder, index) {
+                          //         var item =
+                          //             checkListController.selectedlist[index];
+                          //         return ReportItem(
+                          //           item: item,
+                          //         );
+                          //       },
+                          //       itemCount:
+                          //           checkListController.selectedlist.length,
+                          //     );
+                          //   },
+                          // ),
+
                           SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
@@ -384,7 +357,140 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                           SizedBox(
                             height: 12.dynamic,
                           ),
+                          Obx(
+                            () => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6.dynamic),
+                                color: Colors.white,
+                              ),
+                              margin:
+                                  EdgeInsets.symmetric(horizontal: 17.dynamic),
+                              padding: EdgeInsets.all(14.dynamic),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Contact Name',
+                                    style: TextStyle(
+                                      fontSize: 14.dynamic,
+                                      color: Colour.appBlack,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 12.dynamic),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colour.appLightGrey,
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    child: TextFormField(
+                                      focusNode: contactNameFocusNode,
+                                      textInputAction: TextInputAction.next,
+                                      onFieldSubmitted: (_) {
+                                        FocusScope.of(context)
+                                            .requestFocus(clientIdFocusNode);
+                                      },
+                                      onChanged: (txt) {
+                                        controller.contactName.value = txt;
+                                      },
+                                      controller: TextEditingController(
+                                          text: controller.contactName.value),
+                                      obscureText: false,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontSize: 14.dynamic,
+                                          fontWeight: FontWeight.w300),
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.fromLTRB(
+                                            20.0, 15.0, 20.0, 15.0),
+                                        hintText: "Contact Name",
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.dynamic),
+                                  Text(
+                                    'Client Id',
+                                    style: TextStyle(
+                                      fontSize: 14.dynamic,
+                                      color: Colour.appBlack,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 12.dynamic),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colour.appLightGrey,
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    child: TextFormField(
+                                      focusNode: clientIdFocusNode,
+                                      textInputAction: TextInputAction.next,
+                                      onFieldSubmitted: (_) {
+                                        FocusScope.of(context)
+                                            .requestFocus(jobTitleFocusNode);
+                                      },
+                                      onChanged: (txt) {
+                                        controller.clientId.value = txt;
+                                      },
+                                      controller: TextEditingController(
+                                          text: controller.clientId.value),
+                                      obscureText: false,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontSize: 14.dynamic,
+                                          fontWeight: FontWeight.w300),
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.fromLTRB(
+                                            20.0, 15.0, 20.0, 15.0),
+                                        hintText: "Client Id",
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.dynamic),
+                                  Text(
+                                    'Job Title',
+                                    style: TextStyle(
+                                      fontSize: 14.dynamic,
+                                      color: Colour.appBlack,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 12.dynamic),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colour.appLightGrey,
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    child: TextFormField(
+                                      focusNode: jobTitleFocusNode,
+                                      textInputAction: TextInputAction.done,
+                                      onChanged: (txt) {
+                                        controller.jobTitle.value = txt;
+                                      },
+                                      controller: TextEditingController(
+                                          text: controller.jobTitle.value),
+                                      obscureText: false,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontSize: 14.dynamic,
+                                          fontWeight: FontWeight.w300),
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.fromLTRB(
+                                            20.0, 15.0, 20.0, 15.0),
+                                        hintText: "Job title",
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                           SizedBox(height: 12.dynamic),
+
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
@@ -410,40 +516,42 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    DropdownButton<String>(
-                                      value: controller.selectedVisitType,
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          controller.selectedVisitType =
-                                              newValue!;
+                                    Obx(() => DropdownButton<String>(
+                                          value: controller
+                                              .selectedVisitType.value,
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              controller.selectedVisitType
+                                                  .value = newValue!;
 
-                                          print(controller.selectedVisitType);
-                                        });
-                                      },
-                                      items: <String>[
-                                        'Routine',
-                                        'Call Out',
-                                        'Follow Up',
-                                        'KIV'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
-                                            style:
-                                                TextStyle(fontSize: 14.dynamic),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    )
+                                              print(
+                                                  controller.selectedVisitType);
+                                            });
+                                          },
+                                          items: <String>[
+                                            'Routine',
+                                            'Call Out',
+                                            'Follow Up',
+                                            'KIV'
+                                          ].map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(
+                                                value,
+                                                style: TextStyle(
+                                                    fontSize: 14.dynamic),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        )),
                                   ],
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(height: 12.dynamic),
-                          detail.aServiceName == "Pest Control"
+                          Obx(() => detail.aServiceName == "Pest Control"
                               ? Container(
                                   decoration: BoxDecoration(
                                     borderRadius:
@@ -502,42 +610,36 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                               false,
                                                           onChanged:
                                                               (newValue) {
-                                                            setState(() {
-                                                              if (newValue!) {
-                                                                controller
-                                                                        .selectedValues[
-                                                                    index] = [
-                                                                  value
-                                                                ];
-
-                                                                if (controller
-                                                                            .itemsInspected[
-                                                                        index] ==
-                                                                    "Other") {
-                                                                  controller
-                                                                          .isOtherChecked =
-                                                                      true;
-                                                                  selectedOtherValues =
-                                                                      controller
-                                                                          .selectedValues[
-                                                                              index]
-                                                                          .first;
-                                                                  print(controller
+                                                            if (newValue!) {
+                                                              controller
                                                                       .selectedValues[
-                                                                          index]
-                                                                      .first);
-                                                                }
-                                                              } else {
+                                                                  index] = [
+                                                                value
+                                                              ];
+
+                                                              if (controller
+                                                                          .itemsInspected[
+                                                                      index] ==
+                                                                  "Other") {
                                                                 controller
-                                                                    .selectedValues[
-                                                                        index]
-                                                                    .remove(
-                                                                        value);
-                                                                controller
-                                                                        .isOtherChecked =
-                                                                    false;
+                                                                        .isOtherChecked.value =
+                                                                    true;
+                                                                selectedOtherValues =
+                                                                    controller
+                                                                        .selectedValues[
+                                                                            index]
+                                                                        .first;
                                                               }
-                                                            });
+                                                            } else {
+                                                              controller
+                                                                  .selectedValues[
+                                                                      index]
+                                                                  .remove(
+                                                                      value);
+                                                              controller
+                                                                      .isOtherChecked.value =
+                                                                  false;
+                                                            }
                                                             handleCheckboxChange(
                                                                 controller
                                                                         .itemsInspected[
@@ -571,10 +673,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                           );
                                         }),
                                       ),
-                                      SizedBox(
-                                        height: 10.dynamic,
-                                      ),
-                                      controller.isOtherChecked
+                                      SizedBox(height: 10.dynamic),
+                                      controller.isOtherChecked.value
                                           ? Container(
                                               decoration: BoxDecoration(
                                                 color: Colour.appLightGrey,
@@ -612,13 +712,11 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      SizedBox(
-                                        height: 10.dynamic,
-                                      ),
+                                      SizedBox(height: 10.dynamic),
                                     ],
                                   ),
                                 )
-                              : SizedBox(),
+                              : SizedBox()),
                           SizedBox(height: 12.dynamic),
                           detail.aServiceName == "Pest Control"
                               ? Container(
@@ -796,7 +894,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                       SizedBox(
                                         height: 10.dynamic,
                                       ),
-                                      controller.enteredValues.isNotEmpty
+                                      Obx(() => controller
+                                              .enteredValues.isNotEmpty
                                           ? DataTable(
                                               columnSpacing: 10.dynamic,
                                               columns: [
@@ -913,12 +1012,9 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                           size: 15.dynamic,
                                                         ),
                                                         onPressed: () {
-                                                          setState(() {
-                                                            controller
-                                                                .enteredValues
-                                                                .removeAt(
-                                                                    index);
-                                                          });
+                                                          controller
+                                                              .enteredValues
+                                                              .removeAt(index);
                                                         },
                                                       ),
                                                     ),
@@ -926,11 +1022,12 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                 ]);
                                               }).toList(),
                                             )
-                                          : SizedBox(),
+                                          : SizedBox())
                                     ],
                                   ),
                                 )
                               : SizedBox(),
+
                           SizedBox(height: 42.dynamic),
                         ],
                       ),
@@ -975,18 +1072,54 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                             child: TextButton(
                               onPressed: () async {
                                 controller.visitType.value =
-                                    controller.selectedVisitType!;
+                                    controller.selectedVisitType.value;
 
                                 bool hasUncheckedRequired = controller
                                     .itemsInspected
                                     .asMap()
                                     .entries
+                                    .take(controller.itemsInspected.length -
+                                        1) // Exclude the last entry
                                     .any((entry) {
                                   int index = entry.key;
                                   bool isEmpty =
                                       controller.selectedValues[index].isEmpty;
                                   return isEmpty;
                                 });
+
+                                if (controller.contactName.isEmpty) {
+                                  Toast.show(
+                                    'Please enter contact name',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                      fontSize: 16.dynamic,
+                                      color: Colors.black,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if (controller.clientId.isEmpty) {
+                                  Toast.show(
+                                    'Please enter client id',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                      fontSize: 16.dynamic,
+                                      color: Colors.black,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if (controller.jobTitle.isEmpty) {
+                                  Toast.show(
+                                    'Please enter job title',
+                                    backgroundColor: Colors.white,
+                                    textStyle: TextStyle(
+                                      fontSize: 16.dynamic,
+                                      color: Colors.black,
+                                    ),
+                                  );
+                                  return;
+                                }
 
                                 if (hasUncheckedRequired) {
                                   Toast.show(
@@ -1000,7 +1133,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                   return;
                                 }
 
-                                if (controller.isOtherChecked) {
+                                if (controller.isOtherChecked.value) {
                                   if (controller.otherInspected.isNotEmpty) {
                                     handleCheckboxChange(
                                         "Other",

@@ -35,9 +35,13 @@ extension Method on EndPoint {
       case EndPoint.getCustomerStoreList:
       case EndPoint.createJob:
         return HTTPMethod.post;
-       case EndPoint.availableEngineer:
+      case EndPoint.updateJob:
+        return HTTPMethod.post;
+      case EndPoint.availableEngineer:
         return HTTPMethod.post;
       case EndPoint.getCustomerList:
+        return HTTPMethod.get;
+       case EndPoint.getJobUpdate:
         return HTTPMethod.get;
       default:
         return HTTPMethod.get;

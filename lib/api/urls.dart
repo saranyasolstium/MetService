@@ -1,3 +1,5 @@
+import 'package:eagle_pixels/common/constant.dart';
+
 enum EndPoint {
   profile,
   login,
@@ -15,6 +17,8 @@ enum EndPoint {
   stopJob,
   submitJob,
   completeJob,
+  updateJob,
+  getJobUpdate,
   activeJob,
   getCustomerList,
   getCustomerProductItemList,
@@ -64,6 +68,10 @@ extension EndPointString on EndPoint {
         return 'service_report';
       case EndPoint.completeJob:
         return 'complete_job';
+      case EndPoint.updateJob:
+        return 'update_job';
+      case EndPoint.getJobUpdate:
+        return 'get_update_job/${Constants.requestId}';
       case EndPoint.activeJob:
         return 'get_date_job_list';
       case EndPoint.getCustomerList:

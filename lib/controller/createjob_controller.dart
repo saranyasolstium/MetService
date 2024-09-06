@@ -448,8 +448,14 @@ class CreateJobController extends GetxController {
         model: MSubServiceResponse.fromJson({}),
         body: {'service_id': serviceId},
       );
+
       if (response.isValidModel) {
-        subServiceList.value = response.model!.data;
+        subServiceList.value = response.model!.data
+            .where((subService) =>
+                subService.serviceName != null &&
+                subService.serviceName!.isNotEmpty)
+            .toList();
+
         print(subServiceList.value.length);
       } else {
         subServiceList.value = [];

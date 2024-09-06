@@ -44,7 +44,7 @@ class MSubService {
     final Map<String, dynamic> data = {};
     data['id'] = id;
     data['service']=service;
-    data['subservice_name'] = serviceName;
+    data['subservice_name'] = serviceName ?? "";
     return data;
   }
 }
