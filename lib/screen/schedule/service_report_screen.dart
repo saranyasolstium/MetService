@@ -12,6 +12,7 @@ import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:get/get.dart';
@@ -99,6 +100,11 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
         );
       },
     );
+  }
+
+  Future<Uint8List> networkImageToBytes(String url) async {
+    final response = await http.get(Uri.parse(url));
+    return response.bodyBytes;
   }
 
   @override
@@ -406,8 +412,11 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
+                                        // Clear the signature and reset the URL
                                         controller.signatureController.value
                                             .clear();
+                                        controller.customerSignatureUrl.value =
+                                            "";
                                       },
                                       child: Text(
                                         'Clear',
@@ -421,18 +430,29 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                   ],
                                 ),
                                 SizedBox(height: 12.dynamic),
-                                DottedBorder(
-                                  color: Colour.appDarkGrey,
-                                  borderType: BorderType.RRect,
-                                  dashPattern: [4.dynamic, 4.dynamic],
-                                  child: Signature(
-                                    height: 67.dynamic,
-                                    width: Get.width - 60.dynamic,
-                                    controller:
-                                        controller.signatureController.value,
-                                    backgroundColor: Colors.white,
-                                  ),
-                                ),
+                                Obx(() => DottedBorder(
+                                      color: Colour.appDarkGrey,
+                                      borderType: BorderType.RRect,
+                                      dashPattern: [4.dynamic, 4.dynamic],
+                                      child: controller.customerSignatureUrl
+                                              .value.isEmpty
+                                          ? Signature(
+                                              height: 67.dynamic,
+                                              width: Get.width - 60.dynamic,
+                                              controller: controller
+                                                  .signatureController.value,
+                                              backgroundColor: Colors.white,
+                                            )
+                                          : Container(
+                                              height: 67.dynamic,
+                                              width: Get.width - 60.dynamic,
+                                              child: Center(
+                                                child: Image.network(controller
+                                                    .customerSignatureUrl
+                                                    .value),
+                                              ),
+                                            ),
+                                    )),
                               ],
                             ),
                           ),
@@ -466,6 +486,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                         controller
                                             .signatureTechnicianController.value
                                             .clear();
+                                        controller.technicianSignUrl.value = "";
                                       },
                                       child: Text(
                                         'Clear',
@@ -479,17 +500,30 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                   ],
                                 ),
                                 SizedBox(height: 12.dynamic),
-                                DottedBorder(
-                                  color: Colour.appDarkGrey,
-                                  borderType: BorderType.RRect,
-                                  dashPattern: [4.dynamic, 4.dynamic],
-                                  child: Signature(
-                                    height: 67.dynamic,
-                                    width: Get.width - 60.dynamic,
-                                    controller: controller
-                                        .signatureTechnicianController.value,
-                                    backgroundColor: Colors.white,
-                                  ),
+                                Obx(
+                                  () => DottedBorder(
+                                      color: Colour.appDarkGrey,
+                                      borderType: BorderType.RRect,
+                                      dashPattern: [4.dynamic, 4.dynamic],
+                                      child:
+                                          controller.technicianSignUrl.isEmpty
+                                              ? Signature(
+                                                  height: 67.dynamic,
+                                                  width: Get.width - 60.dynamic,
+                                                  controller: controller
+                                                      .signatureTechnicianController
+                                                      .value,
+                                                  backgroundColor: Colors.white,
+                                                )
+                                              : Container(
+                                                  height: 67.dynamic,
+                                                  width: Get.width - 60.dynamic,
+                                                  child: Center(
+                                                      child: Image.network(
+                                                          controller
+                                                              .technicianSignUrl
+                                                              .value)),
+                                                )),
                                 ),
                               ],
                             ),
@@ -691,12 +725,29 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () async {
-                                  var bytes = await controller
-                                      .signatureController.value
-                                      .toPngBytes();
-                                  var techBytes = await controller
-                                      .signatureTechnicianController.value
-                                      .toPngBytes();
+                                  var bytes;
+                                  var techBytes;
+                                  if (controller
+                                      .signatureController.value.isNotEmpty) {
+                                    bytes = await controller
+                                        .signatureController.value
+                                        .toPngBytes();
+                                  } else if (controller
+                                      .customerSignatureUrl.value.isNotEmpty) {
+                                    bytes = await networkImageToBytes(
+                                        controller.customerSignatureUrl.value);
+                                  }
+
+                                  if (controller.signatureTechnicianController
+                                      .value.isNotEmpty) {
+                                    techBytes = await controller
+                                        .signatureTechnicianController.value
+                                        .toPngBytes();
+                                  } else if (controller
+                                      .technicianSignUrl.value.isNotEmpty) {
+                                    techBytes = await networkImageToBytes(
+                                        controller.technicianSignUrl.value);
+                                  }
 
                                   if (controller.selectedPaymentMode ==
                                           "Others" &&
@@ -767,12 +818,12 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
 
                                     print(convertedMap.toString());
 
-                                    String? status =
-                                        await checkListController.onCompleteJob(
+                                    String? status = await checkListController
+                                        .onCompleteJob(
                                             requestID: detail.aServiceId ?? '0',
                                             signature: base64Encode(bytes),
-                                            technicianSign:
-                                                base64Encode(techBytes),
+                                            technicianSign: base64Encode(
+                                                techBytes),
                                             feedback: controller.feedback.value,
                                             paymentMode:
                                                 controller.selectedPaymentMode!,
@@ -789,11 +840,12 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                                 controller.areasInspected.value,
                                             preparation:
                                                 controller.preparation.value,
-                                            contactName:
-                                                controller.contactName.value,
-                                            clientId: controller.clientId.value,
-                                            jobTitle:
-                                                controller.jobTitle.value);
+                                            contactName: controller
+                                                .contactNameController.text,
+                                            clientId: controller
+                                                .clientIdController.text,
+                                            jobTitle: controller
+                                                .jobTitleController.text);
 
                                     if (status != null) {
                                       Toast.show(

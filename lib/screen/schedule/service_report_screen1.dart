@@ -93,8 +93,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
     controller.selectedValues =
         List.generate(controller.itemsInspected.length, (index) => []);
 
-   
-
     String requestId = detail.aServiceId ?? '0';
     controller.getJobUpdate(requestId);
     // Print for debugging
@@ -253,13 +251,15 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
             onPressed: () {
               String requestId = detail.aServiceId ?? '0';
               if (controller.isOtherChecked.value) {
-                if (controller.otherInspected.isNotEmpty) {
+                if (controller.otherInspectedController.text.isNotEmpty) {
                   handleCheckboxChange(
                       "Other",
                       selectedOtherValues +
                           "-" +
-                          controller.otherInspected.value,
+                          controller.otherInspectedController.text,
                       true);
+                  handleCheckboxChange("others_value",
+                      controller.otherInspectedController.text, true);
                 }
               }
 
@@ -357,137 +357,135 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                           SizedBox(
                             height: 12.dynamic,
                           ),
-                          Obx(
-                            () => Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6.dynamic),
-                                color: Colors.white,
-                              ),
-                              margin:
-                                  EdgeInsets.symmetric(horizontal: 17.dynamic),
-                              padding: EdgeInsets.all(14.dynamic),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Contact Name',
-                                    style: TextStyle(
-                                      fontSize: 14.dynamic,
-                                      color: Colour.appBlack,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: 12.dynamic),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colour.appLightGrey,
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: TextFormField(
-                                      focusNode: contactNameFocusNode,
-                                      textInputAction: TextInputAction.next,
-                                      onFieldSubmitted: (_) {
-                                        FocusScope.of(context)
-                                            .requestFocus(clientIdFocusNode);
-                                      },
-                                      onChanged: (txt) {
-                                        controller.contactName.value = txt;
-                                      },
-                                      controller: TextEditingController(
-                                          text: controller.contactName.value),
-                                      obscureText: false,
-                                      maxLines: 1,
+                          GetBuilder<JobDetailController>(
+                            init: JobDetailController(),
+                            builder: (controller) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(6.dynamic),
+                                  color: Colors.white,
+                                ),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 17.dynamic),
+                                padding: EdgeInsets.all(14.dynamic),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Contact Name Field
+                                    Text(
+                                      'Contact Name',
                                       style: TextStyle(
-                                          fontSize: 14.dynamic,
-                                          fontWeight: FontWeight.w300),
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.fromLTRB(
-                                            20.0, 15.0, 20.0, 15.0),
-                                        hintText: "Contact Name",
-                                        border: InputBorder.none,
+                                        fontSize: 14.dynamic,
+                                        color: Colour.appBlack,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 10.dynamic),
-                                  Text(
-                                    'Client Id',
-                                    style: TextStyle(
-                                      fontSize: 14.dynamic,
-                                      color: Colour.appBlack,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: 12.dynamic),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colour.appLightGrey,
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: TextFormField(
-                                      focusNode: clientIdFocusNode,
-                                      textInputAction: TextInputAction.next,
-                                      onFieldSubmitted: (_) {
-                                        FocusScope.of(context)
-                                            .requestFocus(jobTitleFocusNode);
-                                      },
-                                      onChanged: (txt) {
-                                        controller.clientId.value = txt;
-                                      },
-                                      controller: TextEditingController(
-                                          text: controller.clientId.value),
-                                      obscureText: false,
-                                      maxLines: 1,
-                                      style: TextStyle(
+                                    SizedBox(height: 12.dynamic),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colour.appLightGrey,
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ),
+                                      child: TextFormField(
+                                        focusNode: contactNameFocusNode,
+                                        textInputAction: TextInputAction.next,
+                                        controller:
+                                            controller.contactNameController,
+                                        obscureText: false,
+                                        maxLines: 1,
+                                        style: TextStyle(
                                           fontSize: 14.dynamic,
-                                          fontWeight: FontWeight.w300),
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.fromLTRB(
-                                            20.0, 15.0, 20.0, 15.0),
-                                        hintText: "Client Id",
-                                        border: InputBorder.none,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.fromLTRB(
+                                              20.0, 15.0, 20.0, 15.0),
+                                          hintText: "Contact Name",
+                                          border: InputBorder.none,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 10.dynamic),
-                                  Text(
-                                    'Job Title',
-                                    style: TextStyle(
-                                      fontSize: 14.dynamic,
-                                      color: Colour.appBlack,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: 12.dynamic),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colour.appLightGrey,
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: TextFormField(
-                                      focusNode: jobTitleFocusNode,
-                                      textInputAction: TextInputAction.done,
-                                      onChanged: (txt) {
-                                        controller.jobTitle.value = txt;
-                                      },
-                                      controller: TextEditingController(
-                                          text: controller.jobTitle.value),
-                                      obscureText: false,
-                                      maxLines: 1,
+
+                                    // Client ID Field
+                                    SizedBox(height: 10.dynamic),
+                                    Text(
+                                      'Client Id',
                                       style: TextStyle(
-                                          fontSize: 14.dynamic,
-                                          fontWeight: FontWeight.w300),
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.fromLTRB(
-                                            20.0, 15.0, 20.0, 15.0),
-                                        hintText: "Job title",
-                                        border: InputBorder.none,
+                                        fontSize: 14.dynamic,
+                                        color: Colour.appBlack,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                    SizedBox(height: 12.dynamic),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colour.appLightGrey,
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ),
+                                      child: TextFormField(
+                                        focusNode: clientIdFocusNode,
+                                        textInputAction: TextInputAction.next,
+                                        controller:
+                                            controller.clientIdController,
+                                        obscureText: false,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          fontSize: 14.dynamic,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.fromLTRB(
+                                              20.0, 15.0, 20.0, 15.0),
+                                          hintText: "Client Id",
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+
+                                    // Job Title Field
+                                    SizedBox(height: 10.dynamic),
+                                    Text(
+                                      'Job Title',
+                                      style: TextStyle(
+                                        fontSize: 14.dynamic,
+                                        color: Colour.appBlack,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(height: 12.dynamic),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colour.appLightGrey,
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ),
+                                      child: TextFormField(
+                                        focusNode: jobTitleFocusNode,
+                                        textInputAction: TextInputAction.done,
+                                        controller:
+                                            controller.jobTitleController,
+                                        obscureText: false,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          fontSize: 14.dynamic,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.fromLTRB(
+                                              20.0, 15.0, 20.0, 15.0),
+                                          hintText: "Job Title",
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           SizedBox(height: 12.dynamic),
 
@@ -622,8 +620,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                                       index] ==
                                                                   "Other") {
                                                                 controller
-                                                                        .isOtherChecked.value =
-                                                                    true;
+                                                                    .isOtherChecked
+                                                                    .value = true;
                                                                 selectedOtherValues =
                                                                     controller
                                                                         .selectedValues[
@@ -637,8 +635,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                                                   .remove(
                                                                       value);
                                                               controller
-                                                                      .isOtherChecked.value =
-                                                                  false;
+                                                                  .isOtherChecked
+                                                                  .value = false;
                                                             }
                                                             handleCheckboxChange(
                                                                 controller
@@ -685,15 +683,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                               ),
                                               child: TextFormField(
                                                 obscureText: false,
-                                                onChanged: (txt) {
-                                                  controller.otherInspected
-                                                      .value = txt;
-                                                },
-                                                controller:
-                                                    TextEditingController(
-                                                        text: controller
-                                                            .otherInspected
-                                                            .value),
+                                                controller: controller
+                                                    .otherInspectedController,
                                                 keyboardType:
                                                     TextInputType.multiline,
                                                 maxLines: 1,
@@ -1087,7 +1078,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                   return isEmpty;
                                 });
 
-                                if (controller.contactName.isEmpty) {
+                                if (controller
+                                    .contactNameController.text.isEmpty) {
                                   Toast.show(
                                     'Please enter contact name',
                                     backgroundColor: Colors.white,
@@ -1098,7 +1090,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                   );
                                   return;
                                 }
-                                if (controller.clientId.isEmpty) {
+                                if (controller
+                                    .clientIdController.text.isEmpty) {
                                   Toast.show(
                                     'Please enter client id',
                                     backgroundColor: Colors.white,
@@ -1109,7 +1102,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                   );
                                   return;
                                 }
-                                if (controller.jobTitle.isEmpty) {
+                                if (controller
+                                    .jobTitleController.text.isEmpty) {
                                   Toast.show(
                                     'Please enter job title',
                                     backgroundColor: Colors.white,
@@ -1121,25 +1115,27 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                   return;
                                 }
 
-                                if (hasUncheckedRequired) {
-                                  Toast.show(
-                                    'Please select all Inspected for checkboxes',
-                                    backgroundColor: Colors.white,
-                                    textStyle: TextStyle(
-                                      fontSize: 16.dynamic,
-                                      color: Colors.black,
-                                    ),
-                                  );
-                                  return;
-                                }
+                                // if (hasUncheckedRequired) {
+                                //   Toast.show(
+                                //     'Please select all Inspected for checkboxes',
+                                //     backgroundColor: Colors.white,
+                                //     textStyle: TextStyle(
+                                //       fontSize: 16.dynamic,
+                                //       color: Colors.black,
+                                //     ),
+                                //   );
+                                //   return;
+                                // }
 
                                 if (controller.isOtherChecked.value) {
-                                  if (controller.otherInspected.isNotEmpty) {
+                                  if (controller.otherInspectedController.text
+                                      .isNotEmpty) {
                                     handleCheckboxChange(
                                         "Other",
                                         selectedOtherValues +
                                             "-" +
-                                            controller.otherInspected.value,
+                                            controller
+                                                .otherInspectedController.text,
                                         true);
                                   } else {
                                     Toast.show(

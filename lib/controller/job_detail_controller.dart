@@ -1,24 +1,28 @@
 import 'dart:convert';
-
+import 'dart:typed_data';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/common/constant.dart';
 import 'package:eagle_pixels/common/logger.dart';
 import 'package:eagle_pixels/common/snackbar.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
+import 'package:eagle_pixels/model/schedule_job_detail_model.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:eagle_pixels/model/schedule_job_detail_model.dart';
 import 'package:signature/signature.dart';
 import 'package:toast/toast.dart';
+import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
 
 class JobDetailController extends GetxController {
   String completedMessage = '';
   var isRequestedDetailService = false;
   Rx<AJobDetail> detail = MJobDetail().obs;
-  // var arrSites = <MSite>[].obs;
-  // late Rx<MSite?> selectedSite = Rx(null);
+  TextEditingController contactNameController = TextEditingController();
+  TextEditingController clientIdController = TextEditingController();
+  TextEditingController jobTitleController = TextEditingController();
+  TextEditingController otherInspectedController = TextEditingController();
 
   final signatureController = SignatureController().obs;
   final signatureTechnicianController = SignatureController().obs;
@@ -27,31 +31,29 @@ class JobDetailController extends GetxController {
   final RxString engineerFeedback = ''.obs;
   final RxString areasInspected = ''.obs;
   final RxString other = ''.obs;
+  final RxString customerSignatureUrl = ''.obs;
+  final RxString technicianSignUrl = ''.obs;
+
   String? selectedPaymentMode = 'Bank Transfer';
   final RxString selectedVisitType = 'Routine'.obs;
   List<List<String>> selectedValues = [];
   RxBool isOtherChecked = false.obs;
   RxList<String> itemsInspected = <String>[].obs;
-
-  final RxString otherInspected = ''.obs;
+  final Rx<Uint8List?> imageBytes = Rx<Uint8List?>(null);
 
   final RxString remark = ''.obs;
   final RxString visitType = ''.obs;
-  final RxString clientId = ''.obs;
-  final RxString contactName = ''.obs;
-  final RxString jobTitle = ''.obs;
 
   final RxMap<String, String> selectedCheckboxValues = <String, String>{}.obs;
   final RxString preparation = ''.obs;
   final RxList<Map<String, String>> enteredValues = <Map<String, String>>[].obs;
 
-  set _isOtherChecked(bool _isOtherChecked) {}
   @override
   void onInit() {
     super.onInit();
   }
 
-  fetchDetail({required String jobID}) async {
+  Future<void> fetchDetail({required String jobID}) async {
     var response = await API.service.call(
         model: MScheduleJobDetail(),
         endPoint: EndPoint.jobdetail,
@@ -73,14 +75,14 @@ class JobDetailController extends GetxController {
     var requestBody = {
       "RequestID": requestID,
       "rating": 0,
-      "contact_name": contactName.value,
+      "contact_name": contactNameController.text,
       "customer_comment": engineerFeedback.value,
       "employee_comment": feedback.value,
       "payment_mode": selectedPaymentMode,
       "chemical_list": remark,
       "visit_type": selectedVisitType.value,
-      "client_id": clientId.value,
-      "job_title": jobTitle.value,
+      "client_id": clientIdController.text,
+      "job_title": jobTitleController.text,
       "areas_inspected": areasInspected.value,
       "inspection_report": convertedMap.toString(),
       "preparation": preparation.value,
@@ -97,40 +99,56 @@ class JobDetailController extends GetxController {
       );
 
       if (response.isSuccess) {
-        SnackbarService.showSnackbar(
-            "", "Service Request Update successfully.");
+        print("Service Request Update successfully.");
       } else {
-        // Toast.show(
-        //   response.message.toString(),
-        //   backgroundColor: Colors.white,
-        //   textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
-        // );
+        print('Error: ${response.message}');
       }
     } catch (e) {
-      // Handle any exceptions that might occur
       print('Error occurred: $e');
-    } finally {}
+    }
+  }
+
+  Future<void> updatePreparation(String requestID) async {
+    var requestBody = {
+      "RequestID": requestID,
+      "preparation": jsonEncode(enteredValues),
+    };
+
+    Logger.log('Request Body:', requestBody.toString());
+
+    try {
+      var response = await API.service.call(
+        endPoint: EndPoint.updateJob,
+        body: requestBody,
+      );
+
+      if (response.isSuccess) {
+        print("Service preparation Update successfully.");
+      } else {
+        print('Error: ${response.message}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
   }
 
   Future<void> getJobUpdate(String requestID) async {
-    Constants.requestId = requestID; // Assign the request ID
+    Constants.requestId = requestID;
+    enteredValues.clear();
     try {
       var response = await API.service.call(
         endPoint: EndPoint.getJobUpdate,
       );
 
       if (response.isSuccess) {
-        // Parse the response data
         var responseData = response.map;
-
         var data = responseData['data'];
 
-        contactName.value = data['contact_name'];
-        clientId.value = data['client_id'];
-        jobTitle.value = data['job_title'];
-        selectedVisitType.value = data['visit_type'];
+        contactNameController.text = data['contact_name'] ?? "";
+        clientIdController.text = data['client_id'] ?? "";
+        jobTitleController.text = data['job_title'] ?? "";
+        selectedVisitType.value = data['visit_type'] ?? "Routine";
 
-        //Inspected for
         selectedCheckboxValues['Cockroach'] =
             data['inspect_report']['cockroach'] ?? "";
         selectedCheckboxValues['Mosquito'] =
@@ -149,21 +167,26 @@ class JobDetailController extends GetxController {
 
         if (data['inspect_report']['others'] != null) {
           isOtherChecked.value = true;
+          selectedCheckboxValues['Other'] =
+              data['inspect_report']['others'] ?? "";
+          otherInspectedController.text =
+              data['inspect_report']['others_value'] ?? "";
+          ;
         } else {
           isOtherChecked.value = false;
         }
-        if (data['inspect_report']['others'] != null &&
-            data['inspect_report']['others'].contains('-')) {
-          List<String> splitValues =
-              data['inspect_report']['others'].split('-');
-          selectedCheckboxValues['Other'] = splitValues[0];
-          String otherValueDescription =
-              splitValues.length > 1 ? splitValues[1] : "";
-          otherInspected.value = otherValueDescription;
-        } else {
-          selectedCheckboxValues['Other'] =
-              data['inspect_report']['others'] ?? "";
-        }
+        // if (data['inspect_report']['others'] != null &&
+        //     data['inspect_report']['others'].contains('-')) {
+        //   List<String> splitValues =
+        //       data['inspect_report']['others'].split('-');
+        //   selectedCheckboxValues['Other'] = splitValues[0];
+        //   String otherValueDescription =
+        //       splitValues.length > 1 ? splitValues[1] : "";
+        //   otherInspectedController.text = otherValueDescription;
+        // } else {
+        //   selectedCheckboxValues['Other'] =
+        //       data['inspect_report']['others'] ?? "";
+        // }
 
         selectedCheckboxValues.forEach((item, values) {
           int index = itemsInspected.indexOf(item);
@@ -172,32 +195,85 @@ class JobDetailController extends GetxController {
             selectedValues[index] = valueList;
           }
         });
-        print('Bound Values1: ${selectedCheckboxValues.toString()}');
 
-        //Preparation
-        enteredValues.clear();
-        if (data['service_preparation'] != null) {
-          var servicePreparation = data['service_preparation'];
-          enteredValues.add({
-            "Type": servicePreparation['type'],
-            "Method": servicePreparation['method'],
-            "Quantity": servicePreparation['quantity'],
+        // Now, let's handle the service_preparation part
+        print('saranya2345');
+
+        var servicePreparation = data['service_preparation'] ?? [];
+
+        print(servicePreparation);
+        if (servicePreparation.isNotEmpty) {
+          servicePreparation.forEach((service) {
+            String type = service['type'] ?? "";
+            String method = service['method'] ?? "";
+            String quantity = service['quantity'] ?? "";
+            print("Service Type: $type, Method: $method, Quantity: $quantity");
+            enteredValues.add({
+              "Type": type,
+              "Method": method,
+              "Quantity": quantity,
+            });
           });
         }
-        areasInspected.value = data['areas_inspected'];
-        remark.value = data['chemical_list'];
-        selectedPaymentMode = data['payment_mode'];
 
-        engineerFeedback.value = data['customer_comment'];
-        feedback.value = data['employee_comment'];
+        areasInspected.value = data['areas_inspected'] ?? "";
+        remark.value = data['chemical_list'] ?? "";
+        selectedPaymentMode = data['payment_mode'] ?? "Bank Transfer";
+        engineerFeedback.value = data['customer_comment'] ?? "";
+        feedback.value = data['employee_comment'] ?? "";
 
+        // Download and set the signature image
+        await downloadImage(data['customer_sign']);
+        await downloadImageTech(data['employee_sign']);
         update();
       } else {
-        // Handle the error response
         print('Error: ${response.message}');
       }
     } catch (e) {
-      // Handle any exceptions that might occur
+      print('Error occurred: $e');
+    }
+  }
+
+  Future<void> downloadImage(String imageUrl) async {
+    print('Starting image download...');
+    try {
+      var response = await API.service.call(
+        endPoint: EndPoint.downloadImage,
+        body: {'image': imageUrl},
+      );
+
+      if (response.isSuccess) {
+        var responseData = response.map;
+        var data = responseData['data'];
+        print(data);
+        customerSignatureUrl.value = data;
+        update();
+      } else {
+        print('Error: ${response.message}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
+
+  Future<void> downloadImageTech(String imageUrl) async {
+    print('Starting image download...');
+    try {
+      var response = await API.service.call(
+        endPoint: EndPoint.downloadImage,
+        body: {'image': imageUrl},
+      );
+
+      if (response.isSuccess) {
+        var responseData = response.map;
+        var data = responseData['data'];
+        print(data);
+        technicianSignUrl.value = data;
+        update();
+      } else {
+        print('Error: ${response.message}');
+      }
+    } catch (e) {
       print('Error occurred: $e');
     }
   }

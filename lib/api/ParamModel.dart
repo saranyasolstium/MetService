@@ -103,6 +103,7 @@ class ParamCompleteJob {
     json['contact_name'] = contactName;
     json['client_id'] = clientId;
     json['job_title'] = jobTitle;
+    json["inspection_report"] = inspectionReport;
     json['employee_sign'] = technicianSign;
     json['signature'] = signature;
     json['rating'] = rating;
@@ -111,7 +112,6 @@ class ParamCompleteJob {
     json['paymet_mode'] = paymentMode;
     json['chemical_list'] = chemicalList;
     json['visit_type'] = visitType;
-    json["inspection_report"] = inspectionReport;
     json['preparation'] = preparation;
     json['areas_inspected'] = areasInspected;
     json['after_service_img'] = imagPath;

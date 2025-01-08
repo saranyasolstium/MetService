@@ -19,6 +19,7 @@ enum EndPoint {
   completeJob,
   updateJob,
   getJobUpdate,
+  downloadImage,
   activeJob,
   getCustomerList,
   getCustomerProductItemList,
@@ -96,6 +97,8 @@ extension EndPointString on EndPoint {
         return 'sub_servicelists';
       case EndPoint.availableEngineer:
         return 'getAvailableEngineer';
+      case EndPoint.downloadImage:
+        return 'download_image';
     }
   }
 }

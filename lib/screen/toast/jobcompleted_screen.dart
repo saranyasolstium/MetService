@@ -5,6 +5,7 @@ import 'package:eagle_pixels/dynamic_font.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/clockin_model.dart';
 import 'package:eagle_pixels/model/schedule_job_detail_model.dart';
+import 'package:eagle_pixels/screen/nav_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -138,8 +139,12 @@ class JobCompletedScreen extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {
                           // onComplete();
-                          navigator!.popUntil(
-                              (route) => route.settings.name == NavPage.root);
+                          // navigator!.popUntil(
+                          //     (route) => route.settings.name == NavPage.root);
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => Nav()),
+                            (Route<dynamic> route) => false,
+                          );
                         },
                         child: Text(
                           'Close attendance',

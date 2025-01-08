@@ -41,8 +41,11 @@ extension Method on EndPoint {
         return HTTPMethod.post;
       case EndPoint.getCustomerList:
         return HTTPMethod.get;
-       case EndPoint.getJobUpdate:
+      case EndPoint.getJobUpdate:
         return HTTPMethod.get;
+      case EndPoint.downloadImage:
+        return HTTPMethod.get;
+
       default:
         return HTTPMethod.get;
     }

@@ -141,6 +141,7 @@ class MJobDetail implements AJobDetail, AActiveService {
     serviceName = json['service_name'];
     // subserviceName = json['subservice_name'];
     final List<dynamic>? subserviceList = json['subservice_name'];
+    print('saranyaSubService $subserviceList');
     if (subserviceList != null && subserviceList.isNotEmpty) {
       subserviceName =
           subserviceList.map((e) => e['subservice_name'].toString()).join(', ');
