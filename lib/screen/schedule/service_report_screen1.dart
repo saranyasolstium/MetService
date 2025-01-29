@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:eagle_pixels/colors.dart';
+import 'package:eagle_pixels/common/currency_convertor.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +101,24 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
     print('Selected Values: ${controller.selectedValues}');
   }
 
+  Future<String> convertAndDisplayAmount(String amount) async {
+    try {
+      double amountInSGD = double.tryParse(amount) ?? 0.0;
+      String? toCurrency =
+          await SharedPreferencesHelper.instance.readCurrencyCode();
+      String? currencySymbol =
+          await SharedPreferencesHelper.instance.readCurrencySymbol();
+
+      print(toCurrency);
+      double result = await CurrencyConversionService()
+          .convertAmount(amountInSGD, 'SGD', toCurrency!);
+      return '$currencySymbol $result';
+    } catch (error) {
+      print('Error converting amount: $error');
+      return 'Error';
+    }
+  }
+
   Widget get serviceReportView {
     return Column(
       children: [
@@ -127,8 +147,10 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            JobDetailTitleDescriptionView(
-                'Warranty Status:', detail.aService ?? 'NA'),
+            if (detail.aSubServiceName != null &&
+                detail.aSubServiceName!.toLowerCase().contains('termites'))
+              JobDetailTitleDescriptionView(
+                  'Warranty Status:', detail.aService ?? 'NA'),
             JobDetailTitleDescriptionView(
                 'Source:', detail.aBusinessSource ?? 'NA'),
           ],
@@ -147,6 +169,21 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                       .replaceAll(']', '')
                       .trim()
                   : 'NA'),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailAmountDescriptionView(
+              'Service Amount',
+              detail.aBookingAmount == null || detail.aBookingAmount!.isEmpty
+                  ? () async => "NA"
+                  : () async =>
+                      await convertAndDisplayAmount(detail.aBookingAmount!),
             ),
           ],
         ),

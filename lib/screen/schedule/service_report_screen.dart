@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -54,9 +55,68 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
     return controller.detail.value;
   }
 
-  Future getImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(source: source);
+  // Future getImage(ImageSource source) async {
+  //   final pickedFile = await picker.pickImage(source: source);
 
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _images.add(File(pickedFile.path));
+  //       _imagePaths.add(pickedFile.name);
+  //     });
+  //   }
+  // }
+
+  // Future<void> _removeImage(int index) async {
+  //   setState(() {
+  //     _images.removeAt(index);
+  //     _imagePaths.removeAt(index);
+  //   });
+  // }
+
+  // void showImagePickerModal(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         child: Wrap(
+  //           children: <Widget>[
+  //             ListTile(
+  //               leading: Icon(Icons.photo_library),
+  //               title: Text('Gallery'),
+  //               onTap: () {
+  //                 getImage(ImageSource.gallery);
+  //                 Navigator.pop(context);
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.camera_alt),
+  //               title: Text('Camera'),
+  //               onTap: () {
+  //                 getImage(ImageSource.camera);
+  //                 Navigator.pop(context);
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  /// Function to select multiple images
+  Future<void> getImages() async {
+    final List<XFile>? pickedFiles = await picker.pickMultiImage();
+    if (pickedFiles != null) {
+      setState(() {
+        _images.addAll(pickedFiles.map((file) => File(file.path)).toList());
+        _imagePaths.addAll(pickedFiles.map((file) => file.name).toList());
+      });
+    }
+  }
+
+  /// Function to capture a single image using the camera
+  Future<void> getSingleImage(ImageSource source) async {
+    final XFile? pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _images.add(File(pickedFile.path));
@@ -65,6 +125,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
     }
   }
 
+  /// Function to remove a selected image
   Future<void> _removeImage(int index) async {
     setState(() {
       _images.removeAt(index);
@@ -72,6 +133,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
     });
   }
 
+  /// Function to show image picker options
   void showImagePickerModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -81,17 +143,17 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.photo_library),
-                title: Text('Gallery'),
+                title: Text('Select from Gallery'),
                 onTap: () {
-                  getImage(ImageSource.gallery);
+                  getImages();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
                 leading: Icon(Icons.camera_alt),
-                title: Text('Camera'),
+                title: Text('Capture with Camera'),
                 onTap: () {
-                  getImage(ImageSource.camera);
+                  getSingleImage(ImageSource.camera);
                   Navigator.pop(context);
                 },
               ),
@@ -655,32 +717,79 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: List<Widget>.generate(_imagePaths.length,
-                                (index) {
-                              final path = _imagePaths[index];
-                              return Row(
-                                children: [
-                                  SizedBox(width: 10),
-                                  IconButton(
-                                    icon: Icon(Icons.close, color: Colors.red),
-                                    onPressed: () {
-                                      _removeImage(index);
-                                    },
-                                  ),
-                                  SizedBox(width: 5),
-                                  Expanded(
-                                    child: Text(
-                                      path,
-                                      overflow: TextOverflow.ellipsis,
+
+                          Container(
+                            height: 300, // Adjust this height as needed
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: _images.isNotEmpty
+                                ? GridView.builder(
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: 5,
+                                      mainAxisSpacing: 5,
                                     ),
-                                  ),
-                                  SizedBox(width: 10),
-                                ],
-                              );
-                            }),
+                                    itemCount: _images.length,
+                                    itemBuilder: (context, index) {
+                                      return Stack(
+                                        alignment: Alignment.topRight,
+                                        children: [
+                                          Image.file(
+                                            _images[index],
+                                            fit: BoxFit.cover,
+                                            height: 60,
+                                            width: 60,
+                                          ),
+                                          Positioned(
+                                            top: 2,
+                                            right: 2,
+                                            child: GestureDetector(
+                                              onTap: () => _removeImage(index),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red,
+                                                ),
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  )
+                                : Center(child: Text("No images selected")),
                           ),
+                          // Column(
+                          //   crossAxisAlignment: CrossAxisAlignment.start,
+                          //   children: List<Widget>.generate(_imagePaths.length,
+                          //       (index) {
+                          //     final path = _imagePaths[index];
+                          //     return Row(
+                          //       children: [
+                          //         SizedBox(width: 10),
+                          //         IconButton(
+                          //           icon: Icon(Icons.close, color: Colors.red),
+                          //           onPressed: () {
+                          //             _removeImage(index);
+                          //           },
+                          //         ),
+                          //         SizedBox(width: 5),
+                          //         Expanded(
+                          //           child: Text(
+                          //             path,
+                          //             overflow: TextOverflow.ellipsis,
+                          //           ),
+                          //         ),
+                          //         SizedBox(width: 10),
+                          //       ],
+                          //     );
+                          //   }),
+                          // ),
+
                           SizedBox(height: 42.dynamic),
                         ],
                       ),
@@ -895,6 +1004,55 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                               child: TextButton(
                                 onPressed: () {
                                   Get.back();
+                                  setState(() {
+                                    // ✅ Clear text fields
+                                    controller.contactNameController.text = "";
+                                    controller.clientIdController.text = "";
+                                    controller.jobTitleController.text = "";
+
+                                    // ✅ Reset dropdowns and checkboxes
+                                    controller.selectedVisitType.value =
+                                        'Routine';
+                                    controller.selectedCheckboxValues.clear();
+                                        print('varshan123 ${controller.selectedCheckboxValues}');
+
+                                    controller.selectedValues = List.generate(
+                                        controller.itemsInspected.length,
+                                        (index) => []);
+                                    controller.isOtherChecked.value = false;
+                                    controller.otherInspectedController.text="";
+
+                                    // ✅ Clear preparation used
+                                    controller.enteredValues.clear();
+                                    controller.preparation.value="";
+                                    // ✅ Clear "Areas Inspected" and "Remarks"
+                                    controller.areasInspected.value = "";
+                                    controller.remark.value = "";
+
+                                    // ✅ Reset Payment Mode
+                                    controller.selectedPaymentMode = "Bank Transfer";
+                                    controller.other.value = "";
+
+                                    // ✅ Clear Customer & Technician E-Sign
+                                    controller.signatureController.value
+                                        .clear();
+                                    controller.customerSignatureUrl.value = "";
+                                    controller
+                                        .signatureTechnicianController.value
+                                        .clear();
+                                    controller.technicianSignUrl.value = "";
+
+                                    // ✅ Clear Feedback & Technician Feedback
+                                    controller.feedback.value = "";
+                                    controller.engineerFeedback.value = "";
+
+                                    // ✅ Refresh UI updates
+                                    controller.areasInspected.refresh();
+                                    controller.remark.refresh();
+                                    controller.feedback.refresh();
+                                    controller.engineerFeedback.refresh();
+                                    controller.update();
+                                  });
                                 },
                                 child: Text(
                                   'Re-Check',

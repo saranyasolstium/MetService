@@ -326,9 +326,66 @@ extension JobDetailWidgets on JobDetailScreen {
     );
   }
 
+//   Widget get serviceReportView {
+//     return Column(
+//       children: [
+//         SizedBox(
+//           height: 20.dynamic,
+//         ),
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           children: [
+//             JobDetailTitleDescriptionView(
+//                 'Service Name:', detail.aServiceName ?? 'NA'),
+//             JobDetailTitleDescriptionView(
+//                 'SubService Name:', detail.aSubServiceName ?? 'NA'),
+//           ],
+//         ),
+//         SizedBox(
+//           height: 20.dynamic,
+//         ),
+
+//         SizedBox(
+//           height: 20.dynamic,
+//         ),
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           children: [
+//             JobDetailTitleDescriptionView(
+//                 'Service date:', detail.aBookingDate ?? 'NA'),
+//             JobDetailTitleDescriptionView(
+//                 'Schedule Time:', detail.aBookingTime ?? 'NA'),
+//           ],
+//         ),
+//         SizedBox(
+//           height: 20.dynamic,
+//         ),
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           children: [
+//           JobDetailAmountDescriptionView(
+//   'Service Amount',
+//   detail.aBookingAmount == null || detail.aBookingAmount!.isEmpty
+//     ? () async => "NA"
+//     : () async => await convertAndDisplayAmount(detail.aBookingAmount!),
+// ),
+
+//           ],
+//         ),
+//       ],
+//     );
+//   }
+
   Widget get serviceReportView {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Product name:', detail.aCameraName ?? 'NA'),
+          ],
+        ),
         SizedBox(
           height: 20.dynamic,
         ),
@@ -344,7 +401,111 @@ extension JobDetailWidgets on JobDetailScreen {
         SizedBox(
           height: 20.dynamic,
         ),
-       
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            if (detail.aSubServiceName != null &&
+                detail.aSubServiceName!.toLowerCase().contains('termites'))
+              JobDetailTitleDescriptionView(
+                  'Warranty Status:', detail.aService ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Source:', detail.aBusinessSource ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+              'Treatment Method:',
+              (detail.aTreatmentMethod != null
+                  ? detail.aTreatmentMethod!
+                      .replaceAll('[', '')
+                      .replaceAll(']', '')
+                      .trim()
+                  : 'NA'),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailAmountDescriptionView(
+              'Service Amount',
+              detail.aBookingAmount == null || detail.aBookingAmount!.isEmpty
+                  ? () async => "NA"
+                  : () async =>
+                      await convertAndDisplayAmount(detail.aBookingAmount!),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Degree of Infestation:', detail.aDegreeInfestation ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Service Frequency:', detail.aServiceFrequency ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Preparation:',
+                (detail.aPreparation ?? 'NA')
+                    .replaceAll('[', '')
+                    .replaceAll(']', '')
+                    .trim()),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Referral Name:', detail.aReferralName ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'Billing Type:', detail.aBillingType ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Decision Maker:', detail.aDecisionMaker ?? 'NA'),
+            JobDetailTitleDescriptionView('Estimation First Service:',
+                detail.aEstimationFirstService ?? 'NA'),
+          ],
+        ),
+        SizedBox(
+          height: 20.dynamic,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            JobDetailTitleDescriptionView(
+                'Customer Type:', detail.aCustomerType ?? 'NA'),
+            JobDetailTitleDescriptionView(
+                'See On Site:', detail.aSeeOnSite ?? 'NA'),
+          ],
+        ),
         SizedBox(
           height: 20.dynamic,
         ),
@@ -359,20 +520,6 @@ extension JobDetailWidgets on JobDetailScreen {
         ),
         SizedBox(
           height: 20.dynamic,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-          JobDetailAmountDescriptionView(
-  'Service Amount',
-  detail.aBookingAmount == null || detail.aBookingAmount!.isEmpty
-    ? () async => "NA"
-    : () async => await convertAndDisplayAmount(detail.aBookingAmount!),
-),
-
-
-
-          ],
         ),
       ],
     );

@@ -35,7 +35,7 @@ class JobDetailController extends GetxController {
   final RxString technicianSignUrl = ''.obs;
 
   String? selectedPaymentMode = 'Bank Transfer';
-  final RxString selectedVisitType = 'Routine'.obs;
+   RxString selectedVisitType = 'Routine'.obs;
   List<List<String>> selectedValues = [];
   RxBool isOtherChecked = false.obs;
   RxList<String> itemsInspected = <String>[].obs;
@@ -53,6 +53,8 @@ class JobDetailController extends GetxController {
     super.onInit();
   }
 
+  
+
   Future<void> fetchDetail({required String jobID}) async {
     var response = await API.service.call(
         model: MScheduleJobDetail(),
@@ -69,6 +71,8 @@ class JobDetailController extends GetxController {
     selectedCheckboxValues.forEach((key, value) {
       convertedMap['"$key"'] = '"$value"';
     });
+
+    print('varshan $selectedCheckboxValues');
     var bytes = await signatureController.value.toPngBytes();
     var techBytes = await signatureTechnicianController.value.toPngBytes();
 

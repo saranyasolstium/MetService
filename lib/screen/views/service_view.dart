@@ -59,54 +59,6 @@ class ServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String? purchaseDateString = item.aPurchaseDate;
-    // DateTime? purchaseDate;
-
-    // if (purchaseDateString != null) {
-    //   purchaseDate = DateTime.tryParse(purchaseDateString);
-    // }
-
-    // String formattedTime = purchaseDate != null
-    //     ? "${purchaseDate.hour}:${purchaseDate.minute.toString().padLeft(2, '0')}"
-    //     : "N/A";
-
-    // print("Formatted Time: $formattedTime");
-    // print("Address: ${item.aCombinedAddress}");
-
-//     void fetchAndOpenPdf(String serviceId) async {
-//   String url = "https://met.solstium.net/api/v1/employee/report_pdf/$serviceId";
-//     String? token = await SharedPreferencesHelper.getToken();
-
-//   try {
-//     http.Response response = await http.get(
-//       Uri.parse(url),
-//       headers: {
-//         'Authorization': 'Bearer $token',
-//       },
-//     );
-
-//     if (response.statusCode == 200) {
-//       Directory tempDir = await getTemporaryDirectory();
-//       String tempPath = tempDir.path;
-
-//       String pdfPath = '$tempPath/report.pdf';
-//       await File(pdfPath).writeAsBytes(response.bodyBytes);
-
-//       Navigator.of(context).push(
-//         MaterialPageRoute(
-//           builder: (context) => PDFView(
-//             filePath: pdfPath,
-//           ),
-//         ),
-//       );
-//     } else {
-//       print('Request failed with status: ${response.statusCode}');
-//     }
-//   } catch (error) {
-//     print('Error while fetching PDF: $error');
-//   }
-// }
-
     return Container(
       padding: EdgeInsets.only(
         top: 16.dynamic,
@@ -126,10 +78,6 @@ class ServiceView extends StatelessWidget {
               Container(
                 width: 61.dynamic,
                 height: 61.dynamic,
-                // child: NetworkImageView(
-                //   item.aProductImage,
-                //   kCameraPlaceholder,
-                // ),
                 child: Image.asset('images/user.png'),
               ),
               SizedBox(
@@ -165,7 +113,6 @@ class ServiceView extends StatelessWidget {
           SizedBox(
             height: 20.dynamic,
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -276,42 +223,7 @@ class ServiceView extends StatelessWidget {
                 ),
               ],
             ),
-
-          //  Expanded(
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: [
-          //         Text(
-          //           'Scheduled Time',
-          //           style: TextStyle(
-          //               color: Colour.appDarkGrey,
-          //               fontWeight: FontWeight.w400,
-          //               fontSize: 12.dynamic),
-          //         ),
-          //         SizedBox(
-          //           height: 4.dynamic,
-          //         ),
-          //         Text(
-          //           item.aPurchaseDate ?? 'NA',
-          //           style: TextStyle(
-          //               color: Colour.appBlack,
-          //               fontWeight: FontWeight.w600,
-          //               fontSize: 14.dynamic),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-
           if (isNeedScheduledTime)
-            // Text(
-            //   "",
-            //   // (item as MScheduledJobItem).serviceDate!,
-            //   style: TextStyle(
-            //       color: Colour.appBlack,
-            //       fontWeight: FontWeight.w600,
-            //       fontSize: 14.dynamic),
-            // ),
             SizedBox(
               height: 21.dynamic,
             ),
@@ -333,6 +245,7 @@ class ServiceView extends StatelessWidget {
                       Uri.encodeComponent(item.aCombinedAddress ?? '');
                   String googleUrl =
                       "https://www.google.com/maps/search/?api=1&query=$query";
+                  print(query);
                   if (await canLaunch(googleUrl)) {
                     await launch(googleUrl);
                   }
@@ -354,44 +267,6 @@ class ServiceView extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: 14.dynamic),
           ),
-
-          // Container(
-          //   clipBehavior: Clip.hardEdge,
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(8.dynamic),
-          //   ),
-          //   height: 112.dynamic,
-          //   child: IgnorePointer(
-          //     child: FlutterMap(
-          //       options: MapOptions(
-          //         center: LatLng(12.22532035463426, 79.68630931341535),
-          //         zoom: 11.0,
-          //         boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(8.0)),
-          //       ),
-          //       layers: [
-          //         TileLayerOptions(
-          //             urlTemplate:
-          //                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          //             subdomains: ['a', 'b', 'c']),
-          //         MarkerLayerOptions(
-          //           markers: [
-          //             Marker(
-          //               width: 80.0,
-          //               height: 80.0,
-          //               point: LatLng(12.226456173312162, 79.65054512543048),
-          //               builder: (ctx) => Container(
-          //                 child: Icon(
-          //                   Icons.location_on,
-          //                   color: Colors.green,
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           SizedBox(
             height: 15.dynamic,
           ),
@@ -495,38 +370,6 @@ class ServiceView extends StatelessWidget {
             ],
           ),
           SizedBox(height: 15.dynamic),
-          // AttendanceController.to.isShowStop(
-          //         siteID: item.aSiteID ?? '0',
-          //         serviceID: item.aServiceID ?? '0')
-          //     ? ExpanderOrContainer(
-          //         isContainer: true,
-          //         child: Container(
-          //           margin: EdgeInsets.only(right: 18.dynamic),
-          //           child: Material(
-          //             // elevation: 5.0,
-          //             borderRadius: BorderRadius.circular(5.0),
-          //             color: Colour.appRed,
-          //             child: MaterialButton(
-          //               minWidth: 121.dynamic,
-          //               height: 44.dynamic,
-          //               padding: EdgeInsets.symmetric(horizontal: 40),
-          //               onPressed: () {
-          //                 onStopJob();
-          //               },
-          //               child: Text(
-          //                 'Stop Job',
-          //                 textAlign: TextAlign.center,
-          //                 style: TextStyle(
-          //                   color: Colors.white,
-          //                   fontSize: 16.dynamic,
-          //                   fontWeight: FontWeight.w400,
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       )
-          //     : Container(),
         ],
       ),
     );
