@@ -94,26 +94,28 @@ class JobCheckListController extends GetxController {
     required String clientId,
     required String contactName,
     required String jobTitle,
+    required String imageRemark,
   }) async {
     var param = await ParamCompleteJob(
-      requestID: requestID,
-      contactName: contactName,
-      clientId: clientId,
-      jobTitle: jobTitle,
-      visitType: visitType,
-      inspectionReport: inspectionReport,
-      preparation: preparation,
-      areasInspected: areasInspected,
-      remark: remark,
-      chemicalList: chemicalList,
-      paymentMode: paymentMode,
-      feedback: feedback,
-      technicianComment: technicianComment,
-      imagPath: imagPath,
-      rating: "4",
-      technicianSign: technicianSign,
-      signature: signature,
-    ).toJson();
+            requestID: requestID,
+            contactName: contactName,
+            clientId: clientId,
+            jobTitle: jobTitle,
+            visitType: visitType,
+            inspectionReport: inspectionReport,
+            preparation: preparation,
+            areasInspected: areasInspected,
+            remark: remark,
+            chemicalList: chemicalList,
+            paymentMode: paymentMode,
+            feedback: feedback,
+            technicianComment: technicianComment,
+            imagPath: imagPath,
+            rating: "4",
+            technicianSign: technicianSign,
+            signature: signature,
+            imageCaption: imageRemark)
+        .toJson();
 
     //Logger.log('Complete Job', imagPath);
     print(param);

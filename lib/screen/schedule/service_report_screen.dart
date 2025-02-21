@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -10,8 +9,6 @@ import 'package:eagle_pixels/controller/job_checklist_controller.dart';
 import 'package:eagle_pixels/controller/job_detail_controller.dart';
 import 'package:eagle_pixels/controller/schedule_list_controller.dart';
 import 'package:eagle_pixels/main.dart';
-import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:eagle_pixels/screen/all/job_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,13 +17,8 @@ import 'package:get/get.dart';
 import 'package:eagle_pixels/controller/timer_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:eagle_pixels/reuse/custom_checkbox.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
-import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:signature/signature.dart';
 import 'package:toast/toast.dart';
 
@@ -42,6 +34,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
   // String? selectedChemist = '';
   List<File> _images = [];
   List<String> _imagePaths = [];
+  List<TextEditingController> _remarkControllers = [];
 
   final picker = ImagePicker();
 
@@ -55,54 +48,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
     return controller.detail.value;
   }
 
-  // Future getImage(ImageSource source) async {
-  //   final pickedFile = await picker.pickImage(source: source);
-
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       _images.add(File(pickedFile.path));
-  //       _imagePaths.add(pickedFile.name);
-  //     });
-  //   }
-  // }
-
-  // Future<void> _removeImage(int index) async {
-  //   setState(() {
-  //     _images.removeAt(index);
-  //     _imagePaths.removeAt(index);
-  //   });
-  // }
-
-  // void showImagePickerModal(BuildContext context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return Container(
-  //         child: Wrap(
-  //           children: <Widget>[
-  //             ListTile(
-  //               leading: Icon(Icons.photo_library),
-  //               title: Text('Gallery'),
-  //               onTap: () {
-  //                 getImage(ImageSource.gallery);
-  //                 Navigator.pop(context);
-  //               },
-  //             ),
-  //             ListTile(
-  //               leading: Icon(Icons.camera_alt),
-  //               title: Text('Camera'),
-  //               onTap: () {
-  //                 getImage(ImageSource.camera);
-  //                 Navigator.pop(context);
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   /// Function to select multiple images
   Future<void> getImages() async {
     final List<XFile>? pickedFiles = await picker.pickMultiImage();
@@ -110,6 +55,9 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
       setState(() {
         _images.addAll(pickedFiles.map((file) => File(file.path)).toList());
         _imagePaths.addAll(pickedFiles.map((file) => file.name).toList());
+        _remarkControllers.addAll(
+          List.generate(pickedFiles.length, (index) => TextEditingController()),
+        );
       });
     }
   }
@@ -121,16 +69,23 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
       setState(() {
         _images.add(File(pickedFile.path));
         _imagePaths.add(pickedFile.name);
+        _remarkControllers.add(TextEditingController());
       });
     }
   }
 
   /// Function to remove a selected image
   Future<void> _removeImage(int index) async {
-    setState(() {
-      _images.removeAt(index);
-      _imagePaths.removeAt(index);
-    });
+    if (index >= 0 && index < _images.length) {
+      setState(() {
+        _images.removeAt(index);
+        _imagePaths.removeAt(index);
+        _remarkControllers[index].dispose(); // ✅ Dispose controller
+        _remarkControllers.removeAt(index); // ✅ Remove remark controller
+      });
+    } else {
+      print("Invalid index: $index");
+    }
   }
 
   /// Function to show image picker options
@@ -717,35 +672,56 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                             ),
                           ),
                           SizedBox(height: 20),
-
                           Container(
-                            height: 300, // Adjust this height as needed
+                            height: 300,
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: _images.isNotEmpty
-                                ? GridView.builder(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: 5,
-                                      mainAxisSpacing: 5,
-                                    ),
+                                ? ListView.builder(
+                                    scrollDirection: Axis.vertical,
                                     itemCount: _images.length,
                                     itemBuilder: (context, index) {
-                                      return Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          Image.file(
-                                            _images[index],
-                                            fit: BoxFit.cover,
-                                            height: 60,
-                                            width: 60,
-                                          ),
-                                          Positioned(
-                                            top: 2,
-                                            right: 2,
-                                            child: GestureDetector(
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            // ✅ Image Display
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: Image.file(
+                                                _images[index],
+                                                fit: BoxFit.cover,
+                                                height: 60,
+                                                width: 60,
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+
+                                            // ✅ TextField for Remarks (Bound to Controller)
+                                            Expanded(
+                                              child: TextField(
+                                                controller: _remarkControllers[
+                                                    index], // ✅ Bound controller
+                                                decoration: InputDecoration(
+                                                  hintText: "Enter remark",
+                                                  border: OutlineInputBorder(),
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 8),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+
+                                            // ✅ Remove Image Button
+                                            GestureDetector(
                                               onTap: () => _removeImage(index),
                                               child: Container(
+                                                padding: EdgeInsets.all(6),
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.red,
@@ -753,41 +729,87 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                                 child: Icon(
                                                   Icons.close,
                                                   color: Colors.white,
+                                                  size: 18,
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       );
                                     },
                                   )
                                 : Center(child: Text("No images selected")),
                           ),
-                          // Column(
-                          //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //   children: List<Widget>.generate(_imagePaths.length,
-                          //       (index) {
-                          //     final path = _imagePaths[index];
-                          //     return Row(
-                          //       children: [
-                          //         SizedBox(width: 10),
-                          //         IconButton(
-                          //           icon: Icon(Icons.close, color: Colors.red),
-                          //           onPressed: () {
-                          //             _removeImage(index);
+
+                          // Container(
+                          //   height: 300,
+                          //   padding: EdgeInsets.symmetric(horizontal: 20),
+                          //   child: _images.isNotEmpty
+                          //       ? ListView.builder(
+                          //           scrollDirection: Axis.vertical,
+                          //           itemCount: _images.length,
+                          //           itemBuilder: (context, index) {
+                          //             return Padding(
+                          //               padding: const EdgeInsets.symmetric(
+                          //                   vertical: 5),
+                          //               child: Row(
+                          //                 crossAxisAlignment:
+                          //                     CrossAxisAlignment.center,
+                          //                 children: [
+                          //                   // Image Display
+                          //                   ClipRRect(
+                          //                     borderRadius:
+                          //                         BorderRadius.circular(8),
+                          //                     child: Image.file(
+                          //                       _images[index],
+                          //                       fit: BoxFit.cover,
+                          //                       height: 60,
+                          //                       width: 60,
+                          //                     ),
+                          //                   ),
+                          //                   SizedBox(width: 10),
+
+                          //                   // TextField for Remarks
+                          //                   Expanded(
+                          //                     child: TextField(
+                          //                       onChanged: (value) {
+                          //                         _remarks[index] =
+                          //                             value; // Store remark for image
+                          //                       },
+                          //                       decoration: InputDecoration(
+                          //                         hintText: "Enter remark",
+                          //                         border: OutlineInputBorder(),
+                          //                         contentPadding:
+                          //                             EdgeInsets.symmetric(
+                          //                                 horizontal: 10,
+                          //                                 vertical: 8),
+                          //                       ),
+                          //                     ),
+                          //                   ),
+                          //                   SizedBox(width: 10),
+
+                          //                   // Remove Image Button
+                          //                   GestureDetector(
+                          //                     onTap: () => _removeImage(index),
+                          //                     child: Container(
+                          //                       padding: EdgeInsets.all(6),
+                          //                       decoration: BoxDecoration(
+                          //                         shape: BoxShape.circle,
+                          //                         color: Colors.red,
+                          //                       ),
+                          //                       child: Icon(
+                          //                         Icons.close,
+                          //                         color: Colors.white,
+                          //                         size: 18,
+                          //                       ),
+                          //                     ),
+                          //                   ),
+                          //                 ],
+                          //               ),
+                          //             );
                           //           },
-                          //         ),
-                          //         SizedBox(width: 5),
-                          //         Expanded(
-                          //           child: Text(
-                          //             path,
-                          //             overflow: TextOverflow.ellipsis,
-                          //           ),
-                          //         ),
-                          //         SizedBox(width: 10),
-                          //       ],
-                          //     );
-                          //   }),
+                          //         )
+                          //       : Center(child: Text("No images selected")),
                           // ),
 
                           SizedBox(height: 42.dynamic),
@@ -836,6 +858,11 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 onPressed: () async {
                                   var bytes;
                                   var techBytes;
+                                  bool allRemarksFilled =
+                                      _remarkControllers.every((controller) =>
+                                          controller.text.trim().isNotEmpty);
+
+                                  print('saranya ${_remarkControllers.length}');
                                   if (controller
                                       .signatureController.value.isNotEmpty) {
                                     bytes = await controller
@@ -894,11 +921,19 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                           fontSize: 16.dynamic,
                                           color: Colors.black),
                                     );
+                                  } else if (!allRemarksFilled) {
+                                    Toast.show(
+                                      'Please fill all remarks before submitting',
+                                      backgroundColor: Colors.white,
+                                      textStyle: TextStyle(
+                                          fontSize: 16.dynamic,
+                                          color: Colors.black),
+                                    );
                                   } else if (bytes != null &&
                                       techBytes != null) {
                                     List<String> base64Images = [];
 
-                                    print(_images.length);
+                                    // print(_images.length);
                                     for (var imageFile in _images) {
                                       List<int> imageBytes =
                                           await imageFile.readAsBytes();
@@ -906,7 +941,7 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                           base64Encode(imageBytes);
                                       base64Images.add(base64Image);
                                     }
-                                    print(base64Images.length);
+                                    // print(base64Images.length);
 
                                     String concatenatedImages = '';
 
@@ -926,6 +961,14 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     });
 
                                     print(convertedMap.toString());
+                                    controller.imageCaption.value =
+                                        _remarkControllers
+                                            .map(
+                                                (controller) => controller.text)
+                                            .join(', ');
+
+                                    print(
+                                        "All Remarks: ${controller.imageCaption.value}");
 
                                     String? status = await checkListController
                                         .onCompleteJob(
@@ -954,7 +997,9 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                             clientId: controller
                                                 .clientIdController.text,
                                             jobTitle: controller
-                                                .jobTitleController.text);
+                                                .jobTitleController.text,
+                                            imageRemark:
+                                                controller.imageCaption.value);
 
                                     if (status != null) {
                                       Toast.show(
@@ -1014,23 +1059,26 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     controller.selectedVisitType.value =
                                         'Routine';
                                     controller.selectedCheckboxValues.clear();
-                                        print('varshan123 ${controller.selectedCheckboxValues}');
+                                    print(
+                                        'varshan123 ${controller.selectedCheckboxValues}');
 
                                     controller.selectedValues = List.generate(
                                         controller.itemsInspected.length,
                                         (index) => []);
                                     controller.isOtherChecked.value = false;
-                                    controller.otherInspectedController.text="";
+                                    controller.otherInspectedController.text =
+                                        "";
 
                                     // ✅ Clear preparation used
                                     controller.enteredValues.clear();
-                                    controller.preparation.value="";
+                                    controller.preparation.value = "";
                                     // ✅ Clear "Areas Inspected" and "Remarks"
                                     controller.areasInspected.value = "";
                                     controller.remark.value = "";
 
                                     // ✅ Reset Payment Mode
-                                    controller.selectedPaymentMode = "Bank Transfer";
+                                    controller.selectedPaymentMode =
+                                        "Bank Transfer";
                                     controller.other.value = "";
 
                                     // ✅ Clear Customer & Technician E-Sign
@@ -1078,239 +1126,3 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
     );
   }
 }
-
-// class ReportItem extends StatelessWidget {
-//   // final JobCheckListController checkListController = Get.find();
-//   // final int index;
-//   //
-//   // ACheckListItem get item {
-//   //   return checkListController.selectedlist[index];
-//   // }
-//   //
-//   // MCheckListOption get selectedItem {
-//   //   return item.selectedItem!;
-//   // }
-
-//   final ACheckListItem item;
-//   ReportItem({required this.item});
-//   // final _remarkController = TextEditingController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: EdgeInsets.symmetric(
-//         horizontal: 17.dynamic,
-//         vertical: 18.dynamic,
-//       ),
-//       child: Container(
-//         width: double.infinity,
-//         padding: EdgeInsets.only(
-//           top: 12.dynamic,
-//           left: 14.dynamic,
-//           right: 14.dynamic,
-//           bottom: 15.dynamic,
-//         ),
-//         decoration: BoxDecoration(
-//           color: Colors.white,
-//           borderRadius: BorderRadius.circular(
-//             8.0,
-//           ),
-//           border: Border.all(
-//             width: 1.5,
-//             color: item.lastItem?.color ?? Colors.grey,
-//           ),
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [
-//             Row(
-//               // mainAxisAlignment: MainAxisAlignment.spaceAround,
-//               // mainAxisSize: MainAxisSize.max,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Expanded(
-//                   child: Text(
-//                     item.title,
-//                     style: TextStyle(
-//                       color: Colour.appBlack,
-//                       fontSize: 16.dynamic.dynamic,
-//                       fontWeight: FontWeight.normal,
-//                     ),
-//                   ),
-//                 ),
-//                 // Expanded(child: Container()),
-//                 SizedBox(width: 5.dynamic),
-//                 ReportCheckbox(
-//                     item: item.lastItem ?? MCheckListOption('', Colors.grey)),
-//               ],
-//             ),
-//             Divider(
-//               color: Colour.appDarkGrey,
-//             ),
-//             // Row(
-//             //   mainAxisSize: MainAxisSize.max,
-//             //   children: [
-//             //     CheckListSelectionView(section: index, row: 0),
-//             //   ],
-//             // ),
-//             // Expanded(
-//             //   child: Container(
-//             //     child: StaggeredGridView.countBuilder(
-//             //       crossAxisCount: 2,
-//             //       itemCount: item.options.length,
-//             //       itemBuilder: (builder, row) {
-//             //         var selection = item.options[index];
-//             //         return CheckListSelectionView(section: index, row: row);
-//             //       },
-//             //       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-//             //     ),
-//             //   ),
-//             // ),
-//             Padding(
-//               padding: EdgeInsets.only(
-//                 top: 10.5.dynamic,
-//                 bottom: 5.dynamic,
-//               ),
-//               child: Text(
-//                 'Remarks',
-//                 style: TextStyle(
-//                   color: Colour.appRed,
-//                   fontSize: 16.dynamic,
-//                   fontWeight: FontWeight.w400,
-//                 ),
-//               ),
-//             ),
-//             Container(
-//               decoration: BoxDecoration(
-//                 color: Colors.white,
-//               ),
-//               child: Text(
-//                 item.remarks,
-//                 style: TextStyle(
-//                   fontSize: 14.dynamic,
-//                   color: Colour.appDarkGrey,
-//                 ),
-//               ),
-//             ),
-//             SizedBox(
-//               height: 10.dynamic,
-//             ),
-//             Row(
-//               children: [
-//                 // Image.asset(
-//                 //   'images/add.png',
-//                 //   width: 19.dynamic,
-//                 //   height: 19.dynamic,
-//                 // ),
-//                 Text(
-//                   'Photo Added',
-//                   style: TextStyle(
-//                     fontSize: 14.dynamic,
-//                     fontWeight: FontWeight.w400,
-//                     color: Colour.appText,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//             SizedBox(
-//               height: 16.dynamic,
-//             ),
-//             SingleChildScrollView(
-//               scrollDirection: Axis.horizontal,
-//               child: Row(
-//                 children: List.generate(
-//                   item.selectedImages.length,
-//                   (row) => Row(
-//                     mainAxisSize: MainAxisSize.min,
-//                     children: [
-//                       Container(
-//                         clipBehavior: Clip.hardEdge,
-//                         decoration: BoxDecoration(
-//                           border: Border.all(color: Colour.appBlue),
-//                           borderRadius: BorderRadius.circular(5.0),
-//                         ),
-//                         child: ClipRRect(
-//                           borderRadius: BorderRadius.circular(5.0),
-//                           clipBehavior: Clip.hardEdge,
-//                           child: (item.selectedImages[row] is Uint8List)
-//                               ? Image.memory(
-//                                   item.selectedImages[row],
-//                                   height: 43.dynamic,
-//                                   width: 43.dynamic,
-//                                   fit: BoxFit.fill,
-//                                   isAntiAlias: false,
-//                                 )
-//                               : Image.network(
-//                                   item.selectedImages[row],
-//                                   height: 43.dynamic,
-//                                   width: 43.dynamic,
-//                                   fit: BoxFit.fill,
-//                                   isAntiAlias: false,
-//                                 ),
-//                         ),
-//                       ),
-//                       SizedBox(
-//                         width: 20.dynamic,
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             SizedBox(
-//               height: 10.dynamic,
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class ReportCheckbox extends StatelessWidget {
-//   final MCheckListOption item;
-
-//   ReportCheckbox({required this.item});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(
-//           8.0,
-//         ),
-//       ),
-//       child: Row(
-//         children: [
-//           Text(
-//             item.name,
-//             style: TextStyle(
-//               color: Colour.appBlack,
-//               fontSize: 14.0,
-//               fontWeight: FontWeight.w400,
-//             ),
-//           ),
-//           SizedBox(
-//             width: 8.dynamic,
-//           ),
-//           CustomCheckbox(
-//             isChecked: true,
-//             size: 18.dynamic,
-//             selectedColor: item.color,
-//             selectedIconColor: Colors.white,
-//             // didSelect: (checkbox) {
-//             //   if (checkbox) {
-//             //     checklistController.checkList[section].selectedItem = item;
-//             //   } else {
-//             //     checklistController.checkList[section].selectedItem = null;
-//             //   }
-//             //
-//             //   checklistController.update();
-//             // },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

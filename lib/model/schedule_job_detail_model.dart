@@ -193,7 +193,7 @@ class MJobDetail implements AJobDetail, AActiveService {
     referralName = json["referral_name"];
     estimationFirstService = json["estimation_first_service"];
     servicePremiseAddress = json["service_premise_address"];
-    businessSource=json['business_source'];
+    businessSource = json['business_source'];
     seeOnSite = json["see_on_site"];
     decisionMaker = json["decision_maker"];
 
@@ -267,7 +267,7 @@ class MJobDetail implements AJobDetail, AActiveService {
     data["referral_name"] = this.referralName;
     data["estimation_first_service"] = this.estimationFirstService;
     data["service_premise_address"] = this.servicePremiseAddress;
-    data['business_source']=this.businessSource;
+    data['business_source'] = this.businessSource;
     data["see_on_site"] = this.seeOnSite;
     data["decision_maker"] = this.decisionMaker;
 
@@ -311,6 +311,8 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aServiceName => serviceName;
 
   String? get aSubServiceName => subserviceName;
+
+  String? get aBusinessSource => source;
 
   String? get aTeamName => teamName;
 
@@ -414,7 +416,6 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aDecisionMaker => decisionMaker;
   String? get aEstimationFirstService => estimationFirstService;
   String? get aServicePremiseAddress => servicePremiseAddress;
-  String? get aBusinessSource => businessSource;
   String? get aSeeOnSite => seeOnSite;
 
   int? get aEnginnerStatus => engineerStatus;

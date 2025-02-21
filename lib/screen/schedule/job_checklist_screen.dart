@@ -12,7 +12,6 @@ import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
 import 'package:eagle_pixels/screen/schedule/service_report_screen1.dart';
 import 'package:eagle_pixels/screen/toast/photo_choose_screen.dart';
 import 'package:flutter/material.dart';

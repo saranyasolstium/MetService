@@ -76,7 +76,8 @@ class ParamCompleteJob {
       rating,
       contactName,
       clientId,
-      jobTitle;
+      jobTitle,
+      imageCaption;
   ParamCompleteJob({
     this.requestID,
     this.imagPath,
@@ -95,11 +96,13 @@ class ParamCompleteJob {
     this.contactName,
     this.clientId,
     this.jobTitle,
+    this.imageCaption,
   });
 
   Future<Map<String, dynamic>> toJson() async {
     Map<String, dynamic> json = {};
     json['RequestID'] = requestID;
+    json['after_service_images_caption'] = imageCaption;
     json['contact_name'] = contactName;
     json['client_id'] = clientId;
     json['job_title'] = jobTitle;
@@ -115,7 +118,6 @@ class ParamCompleteJob {
     json['preparation'] = preparation;
     json['areas_inspected'] = areasInspected;
     json['after_service_img'] = imagPath;
-
     return json;
   }
 }
