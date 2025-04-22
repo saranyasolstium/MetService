@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:eagle_pixels/dynamic_font.dart';
 
 import '../../colors.dart';
-import 'package:eagle_pixels/colors.dart';
 
 // extension ConfiramtionAction on ConfirmationScreen {
 //   onYes() {

@@ -11,9 +11,6 @@ import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:signature/signature.dart';
-import 'package:toast/toast.dart';
-import 'package:http/http.dart' as http;
-import 'package:image/image.dart' as img;
 
 class JobDetailController extends GetxController {
   String completedMessage = '';
@@ -33,6 +30,7 @@ class JobDetailController extends GetxController {
   final RxString other = ''.obs;
   final RxString customerSignatureUrl = ''.obs;
   final RxString technicianSignUrl = ''.obs;
+  String concatenatedImages = '';
 
   String? selectedPaymentMode = 'Bank Transfer';
   RxString selectedVisitType = 'Routine'.obs;
@@ -79,6 +77,8 @@ class JobDetailController extends GetxController {
 
     var requestBody = {
       "RequestID": requestID,
+      "after_service_img": concatenatedImages,
+      "after_service_images_caption": imageCaption.value,
       "rating": 0,
       "contact_name": contactNameController.text,
       "customer_comment": engineerFeedback.value,
@@ -92,7 +92,7 @@ class JobDetailController extends GetxController {
       "inspection_report": convertedMap.toString(),
       "preparation": preparationValue,
       "signature": bytes != null ? base64Encode(bytes) : "",
-      "employee_sign": techBytes != null ? base64Encode(techBytes) : ""
+      "employee_sign": techBytes != null ? base64Encode(techBytes) : "",
     };
 
     Logger.log('Request Body:', requestBody.toString());

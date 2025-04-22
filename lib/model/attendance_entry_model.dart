@@ -1,4 +1,3 @@
-import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/reuse/date_manager.dart';
 import 'package:intl/intl.dart';

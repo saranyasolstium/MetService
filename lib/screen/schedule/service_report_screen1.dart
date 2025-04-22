@@ -268,15 +268,49 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
     );
   }
 
+  Future<bool> _handleBack(BuildContext context) async {
+    String requestId = detail.aServiceId ?? '0';
+
+    if (controller.isOtherChecked.value) {
+      if (controller.otherInspectedController.text.isNotEmpty) {
+        handleCheckboxChange(
+          "Other",
+          selectedOtherValues + "-" + controller.otherInspectedController.text,
+          true,
+        );
+        handleCheckboxChange(
+          "others_value",
+          controller.otherInspectedController.text,
+          true,
+        );
+      }
+    }
+
+    Map<String, String> convertedMap = {};
+    controller.selectedCheckboxValues.forEach((key, value) {
+      convertedMap['"$key"'] = '"$value"';
+    });
+
+    controller.preparation.value = jsonEncode(controller.enteredValues);
+    controller.updateJob(requestId);
+
+    Get.back(); // or Navigator.pop(context)
+
+    return false; // Prevent default pop (we already handled it)
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
+    return WillPopScope(
+      onWillPop: () => _handleBack(context),
+
+      //  child: GestureDetector(
+      // onTap: () {
+      //   FocusScopeNode currentFocus = FocusScope.of(context);
+      //   if (!currentFocus.hasPrimaryFocus) {
+      //     currentFocus.unfocus();
+      //   }
+      // },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colour.appLightGrey,
@@ -286,29 +320,31 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
           backgroundColor: Colors.white,
           leading: RawMaterialButton(
             onPressed: () {
-              String requestId = detail.aServiceId ?? '0';
-              if (controller.isOtherChecked.value) {
-                if (controller.otherInspectedController.text.isNotEmpty) {
-                  handleCheckboxChange(
-                      "Other",
-                      selectedOtherValues +
-                          "-" +
-                          controller.otherInspectedController.text,
-                      true);
-                  handleCheckboxChange("others_value",
-                      controller.otherInspectedController.text, true);
-                }
-              }
+              // String requestId = detail.aServiceId ?? '0';
+              // if (controller.isOtherChecked.value) {
+              //   if (controller.otherInspectedController.text.isNotEmpty) {
+              //     handleCheckboxChange(
+              //         "Other",
+              //         selectedOtherValues +
+              //             "-" +
+              //             controller.otherInspectedController.text,
+              //         true);
+              //     handleCheckboxChange("others_value",
+              //         controller.otherInspectedController.text, true);
+              //   }
+              // }
 
-              Map<String, String> convertedMap = {};
+              // Map<String, String> convertedMap = {};
 
-              controller.selectedCheckboxValues.forEach((key, value) {
-                convertedMap['"$key"'] = '"$value"';
-              });
-              controller.preparation.value =
-                  jsonEncode(controller.enteredValues);
-              controller.updateJob(requestId);
-              Get.back();
+              // controller.selectedCheckboxValues.forEach((key, value) {
+              //   convertedMap['"$key"'] = '"$value"';
+              // });
+              // controller.preparation.value =
+              //     jsonEncode(controller.enteredValues);
+              // controller.updateJob(requestId);
+              // Get.back();
+
+              _handleBack(context);
             },
             child: Icon(
               Icons.arrow_back,
@@ -349,24 +385,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // GetBuilder<JobCheckListController>(
-                          //   builder: (_) {
-                          //     return ListView.builder(
-                          //       shrinkWrap: true,
-                          //       physics: NeverScrollableScrollPhysics(),
-                          //       itemBuilder: (builder, index) {
-                          //         var item =
-                          //             checkListController.selectedlist[index];
-                          //         return ReportItem(
-                          //           item: item,
-                          //         );
-                          //       },
-                          //       itemCount:
-                          //           checkListController.selectedlist.length,
-                          //     );
-                          //   },
-                          // ),
-
                           SizedBox(height: 12.dynamic),
                           Container(
                             decoration: BoxDecoration(
@@ -525,7 +543,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                             },
                           ),
                           SizedBox(height: 12.dynamic),
-
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6.dynamic),
@@ -1055,7 +1072,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                   ),
                                 )
                               : SizedBox(),
-
                           SizedBox(height: 42.dynamic),
                         ],
                       ),
@@ -1151,18 +1167,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                   );
                                   return;
                                 }
-
-                                // if (hasUncheckedRequired) {
-                                //   Toast.show(
-                                //     'Please select all Inspected for checkboxes',
-                                //     backgroundColor: Colors.white,
-                                //     textStyle: TextStyle(
-                                //       fontSize: 16.dynamic,
-                                //       color: Colors.black,
-                                //     ),
-                                //   );
-                                //   return;
-                                // }
 
                                 if (controller.isOtherChecked.value) {
                                   if (controller.otherInspectedController.text

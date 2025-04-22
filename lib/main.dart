@@ -45,7 +45,7 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseApi().initNotification();
 
- // String? fcmToken = await SharedPreferencesHelper.getFCMToken();
+  String? fcmToken = await SharedPreferencesHelper.getFCMToken();
   
 
   SystemChrome.setPreferredOrientations(

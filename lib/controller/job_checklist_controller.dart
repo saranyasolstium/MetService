@@ -1,22 +1,14 @@
-import 'dart:typed_data';
-
 import 'package:eagle_pixels/api/ParamModel.dart';
 import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/common/logger.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
-import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:eagle_pixels/screen/schedule/service_report_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:eagle_pixels/model/check_list_model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:eagle_pixels/model/abstract_class.dart';
-import 'package:signature/signature.dart';
 
-import '../colors.dart';
 import 'job_detail_controller.dart';
 
 class JobCheckListController extends GetxController {
@@ -97,27 +89,27 @@ class JobCheckListController extends GetxController {
     required String imageRemark,
   }) async {
     var param = await ParamCompleteJob(
-            requestID: requestID,
-            contactName: contactName,
-            clientId: clientId,
-            jobTitle: jobTitle,
-            visitType: visitType,
-            inspectionReport: inspectionReport,
-            preparation: preparation,
-            areasInspected: areasInspected,
-            remark: remark,
-            chemicalList: chemicalList,
-            paymentMode: paymentMode,
-            feedback: feedback,
-            technicianComment: technicianComment,
-            imagPath: imagPath,
-            rating: "4",
-            technicianSign: technicianSign,
-            signature: signature,
-            imageCaption: imageRemark)
-        .toJson();
+      requestID: requestID,
+      contactName: contactName,
+      imageCaption: imageRemark,
+      clientId: clientId,
+      jobTitle: jobTitle,
+      visitType: visitType,
+      inspectionReport: inspectionReport,
+      preparation: preparation,
+      areasInspected: areasInspected,
+      remark: remark,
+      chemicalList: chemicalList,
+      paymentMode: paymentMode,
+      feedback: feedback,
+      technicianComment: technicianComment,
+      imagPath: imagPath,
+      rating: "4",
+      technicianSign: technicianSign,
+      signature: signature,
+    ).toJson();
 
-    //Logger.log('Complete Job', imagPath);
+    Logger.log('Complete Job', param.toString());
     print(param);
     isLoading = true;
     update();

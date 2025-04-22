@@ -62,6 +62,32 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
     }
   }
 
+  Future<void> processImagesAndRemarks() async {
+    controller.concatenatedImages = '';
+    List<String> base64Images = [];
+
+    // Encode all images to base64
+    for (var imageFile in _images) {
+      List<int> imageBytes = await imageFile.readAsBytes();
+      String base64Image = base64Encode(imageBytes);
+      base64Images.add(base64Image);
+    }
+
+    // Concatenate with commas
+    for (int i = 0; i < base64Images.length; i++) {
+      controller.concatenatedImages += base64Images[i];
+      if (i < base64Images.length - 1) {
+        controller.concatenatedImages += ',';
+      }
+    }
+
+    // Capture remarks into comma-separated string
+    controller.imageCaption.value =
+        _remarkControllers.map((c) => c.text).join(', ');
+
+    print("All Remarks: ${controller.imageCaption.value}");
+  }
+
   /// Function to capture a single image using the camera
   Future<void> getSingleImage(ImageSource source) async {
     final XFile? pickedFile = await picker.pickImage(source: source);
@@ -141,7 +167,10 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
           elevation: 0,
           backgroundColor: Colors.white,
           leading: RawMaterialButton(
-            onPressed: () => Get.back(),
+            onPressed: () {
+              processImagesAndRemarks();
+              Get.back();
+            },
             child: Icon(
               Icons.arrow_back,
               color: Colour.appBlue,
@@ -741,77 +770,6 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                 : Center(child: Text("No images selected")),
                           ),
 
-                          // Container(
-                          //   height: 300,
-                          //   padding: EdgeInsets.symmetric(horizontal: 20),
-                          //   child: _images.isNotEmpty
-                          //       ? ListView.builder(
-                          //           scrollDirection: Axis.vertical,
-                          //           itemCount: _images.length,
-                          //           itemBuilder: (context, index) {
-                          //             return Padding(
-                          //               padding: const EdgeInsets.symmetric(
-                          //                   vertical: 5),
-                          //               child: Row(
-                          //                 crossAxisAlignment:
-                          //                     CrossAxisAlignment.center,
-                          //                 children: [
-                          //                   // Image Display
-                          //                   ClipRRect(
-                          //                     borderRadius:
-                          //                         BorderRadius.circular(8),
-                          //                     child: Image.file(
-                          //                       _images[index],
-                          //                       fit: BoxFit.cover,
-                          //                       height: 60,
-                          //                       width: 60,
-                          //                     ),
-                          //                   ),
-                          //                   SizedBox(width: 10),
-
-                          //                   // TextField for Remarks
-                          //                   Expanded(
-                          //                     child: TextField(
-                          //                       onChanged: (value) {
-                          //                         _remarks[index] =
-                          //                             value; // Store remark for image
-                          //                       },
-                          //                       decoration: InputDecoration(
-                          //                         hintText: "Enter remark",
-                          //                         border: OutlineInputBorder(),
-                          //                         contentPadding:
-                          //                             EdgeInsets.symmetric(
-                          //                                 horizontal: 10,
-                          //                                 vertical: 8),
-                          //                       ),
-                          //                     ),
-                          //                   ),
-                          //                   SizedBox(width: 10),
-
-                          //                   // Remove Image Button
-                          //                   GestureDetector(
-                          //                     onTap: () => _removeImage(index),
-                          //                     child: Container(
-                          //                       padding: EdgeInsets.all(6),
-                          //                       decoration: BoxDecoration(
-                          //                         shape: BoxShape.circle,
-                          //                         color: Colors.red,
-                          //                       ),
-                          //                       child: Icon(
-                          //                         Icons.close,
-                          //                         color: Colors.white,
-                          //                         size: 18,
-                          //                       ),
-                          //                     ),
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             );
-                          //           },
-                          //         )
-                          //       : Center(child: Text("No images selected")),
-                          // ),
-
                           SizedBox(height: 42.dynamic),
                         ],
                       ),
@@ -943,14 +901,13 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                     }
                                     // print(base64Images.length);
 
-                                    String concatenatedImages = '';
-
                                     for (int i = 0;
                                         i < base64Images.length;
                                         i++) {
-                                      concatenatedImages += base64Images[i];
+                                      controller.concatenatedImages +=
+                                          base64Images[i];
                                       if (i < base64Images.length - 1) {
-                                        concatenatedImages += ',';
+                                        controller.concatenatedImages += ',';
                                       }
                                     }
                                     Map<String, String> convertedMap = {};
@@ -974,15 +931,16 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
                                         .onCompleteJob(
                                             requestID: detail.aServiceId ?? '0',
                                             signature: base64Encode(bytes),
-                                            technicianSign: base64Encode(
-                                                techBytes),
+                                            technicianSign:
+                                                base64Encode(techBytes),
                                             feedback: controller.feedback.value,
-                                            paymentMode:
-                                                controller.selectedPaymentMode!,
+                                            paymentMode: controller
+                                                .selectedPaymentMode!,
                                             chemicalList: "",
                                             technicianComment: controller
                                                 .engineerFeedback.value,
-                                            imagPath: concatenatedImages,
+                                            imagPath:
+                                                controller.concatenatedImages,
                                             visitType:
                                                 controller.visitType.value,
                                             inspectionReport:
