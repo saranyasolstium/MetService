@@ -97,6 +97,7 @@ abstract class AJobDetail {
   String? get aAttention;
   String? get aCustomerType;
   String? get aServiceOrderNo;
+  String? get aAttachedImages;
 
   // Booking Information
   String? get aTeamName;

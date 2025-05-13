@@ -73,15 +73,6 @@ extension JobDetailAction on JobDetailScreen {
   onCompleteJob() async {
     print('saranya');
     schedule.reloadList();
-    //scheduled_job_details_model.dart
-    //Get.to(() => JobCheckListScreen(detail.aServiceId ?? '0'));
-
-    // AppController().verifyUser().then((result) async {
-    //   print(result.image?.path);
-    //   if (result.image?.path != null && result.image!.path.isNotEmpty) {
-
-    //   }
-    // });
 
     Get.put(JobCheckListController());
 

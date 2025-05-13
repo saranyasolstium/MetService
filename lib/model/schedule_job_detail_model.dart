@@ -1,4 +1,5 @@
 import 'package:eagle_pixels/api/api_service.dart';
+import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/constant.dart';
 import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
@@ -29,6 +30,24 @@ class MScheduleJobDetail implements Codable {
   }
 
   bool get isValid => this.data != null;
+}
+
+Future<void> getSignedUrl(String params) async {
+  try {
+    var response = await API.service.call(
+        endPoint: EndPoint.signedUrl,
+        body: {"key": "uploads/attachments/1746432603_ZHqpgiO0AK.jpg"});
+
+    if (response.isSuccess) {
+      var responseData = response.map;
+
+      print('responssff $responseData');
+    } else {
+      print('Error: ${response.message}');
+    }
+  } catch (e) {
+    print('Error occurred: $e');
+  }
 }
 
 // extension MJobDetailWithActiveService on MJobDetail extends AActiveService {}
@@ -107,6 +126,7 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? servicePremiseAddress;
   String? businessSource;
   String? seeOnSite;
+  String? attachment;
 
   MJobDetail();
 
@@ -196,6 +216,8 @@ class MJobDetail implements AJobDetail, AActiveService {
     businessSource = json['business_source'];
     seeOnSite = json["see_on_site"];
     decisionMaker = json["decision_maker"];
+    attachment = json['attachments'];
+    print('attachement $attachment');
 
     attention = json["attention"];
     customerType = json["customer_type"];
@@ -417,6 +439,7 @@ class MJobDetail implements AJobDetail, AActiveService {
   String? get aEstimationFirstService => estimationFirstService;
   String? get aServicePremiseAddress => servicePremiseAddress;
   String? get aSeeOnSite => seeOnSite;
+  String? get aAttachedImages => attachment;
 
   int? get aEnginnerStatus => engineerStatus;
 

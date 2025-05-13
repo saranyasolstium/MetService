@@ -49,6 +49,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
   FocusNode clientIdFocusNode = FocusNode();
   FocusNode jobTitleFocusNode = FocusNode();
 
+  List<String> attachedImageList = [];
+
   final List<String> radioValues = ['N', 'L', 'M', 'H'];
   String? selectedPreparationType = 'Advion Cockroach Gel';
   void addValue() {
@@ -97,8 +99,32 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
 
     String requestId = detail.aServiceId ?? '0';
     controller.getJobUpdate(requestId);
+    loadImage();
     // Print for debugging
     print('Selected Values: ${controller.selectedValues}');
+  }
+
+  void loadImage() async {
+    String? key = detail.aAttachedImages;
+
+    String? attachedImage = await controller.getSignedUrl(key);
+
+    if (attachedImage != null && attachedImage.isNotEmpty) {
+      // Clear existing list to avoid duplicates on reload
+      attachedImageList.clear();
+
+      // Add each URL to the list with trimming
+      for (var url in attachedImage.split(',')) {
+        attachedImageList.add(url.trim());
+      }
+
+      print("Signed image URLs:");
+      for (var url in attachedImageList) {
+        print(url);
+      }
+    } else {
+      print("No signed URLs found.");
+    }
   }
 
   Future<String> convertAndDisplayAmount(String amount) async {
@@ -264,6 +290,57 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
         SizedBox(
           height: 20.dynamic,
         ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Attachment Images',
+              style: TextStyle(
+                color: Colour.appDarkGrey,
+                fontWeight: FontWeight.normal,
+                fontSize: 12.dynamic,
+              ),
+            ),
+            const SizedBox(height: 8),
+            attachedImageList.isNotEmpty
+                ? GridView.builder(
+                    shrinkWrap: true,
+                    physics:
+                        NeverScrollableScrollPhysics(), // Prevents scrolling inside Column
+                    itemCount: attachedImageList.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 items per row
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 1,
+                    ),
+                    itemBuilder: (context, index) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          attachedImageList[index],
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Icon(Icons.broken_image),
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(child: CircularProgressIndicator());
+                          },
+                        ),
+                      );
+                    },
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      'No attachment images.',
+                      style:
+                          TextStyle(fontSize: 12.dynamic, color: Colors.grey),
+                    ),
+                  ),
+          ],
+        )
       ],
     );
   }
@@ -303,14 +380,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => _handleBack(context),
-
-      //  child: GestureDetector(
-      // onTap: () {
-      //   FocusScopeNode currentFocus = FocusScope.of(context);
-      //   if (!currentFocus.hasPrimaryFocus) {
-      //     currentFocus.unfocus();
-      //   }
-      // },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colour.appLightGrey,
@@ -320,30 +389,6 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
           backgroundColor: Colors.white,
           leading: RawMaterialButton(
             onPressed: () {
-              // String requestId = detail.aServiceId ?? '0';
-              // if (controller.isOtherChecked.value) {
-              //   if (controller.otherInspectedController.text.isNotEmpty) {
-              //     handleCheckboxChange(
-              //         "Other",
-              //         selectedOtherValues +
-              //             "-" +
-              //             controller.otherInspectedController.text,
-              //         true);
-              //     handleCheckboxChange("others_value",
-              //         controller.otherInspectedController.text, true);
-              //   }
-              // }
-
-              // Map<String, String> convertedMap = {};
-
-              // controller.selectedCheckboxValues.forEach((key, value) {
-              //   convertedMap['"$key"'] = '"$value"';
-              // });
-              // controller.preparation.value =
-              //     jsonEncode(controller.enteredValues);
-              // controller.updateJob(requestId);
-              // Get.back();
-
               _handleBack(context);
             },
             child: Icon(

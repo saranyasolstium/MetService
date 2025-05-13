@@ -4,13 +4,14 @@ import 'package:eagle_pixels/api/api_service.dart';
 import 'package:eagle_pixels/api/urls.dart';
 import 'package:eagle_pixels/common/constant.dart';
 import 'package:eagle_pixels/common/logger.dart';
-import 'package:eagle_pixels/common/snackbar.dart';
 import 'package:eagle_pixels/model/abstract_class.dart';
 import 'package:eagle_pixels/model/schedule_job_detail_model.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
+import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:signature/signature.dart';
+import 'package:http/http.dart' as http;
 
 class JobDetailController extends GetxController {
   String completedMessage = '';
@@ -42,6 +43,7 @@ class JobDetailController extends GetxController {
 
   final RxString remark = ''.obs;
   final RxString visitType = ''.obs;
+  final String? attachedUrl = "";
 
   final RxMap<String, String> selectedCheckboxValues = <String, String>{}.obs;
   final RxString preparation = ''.obs;
@@ -134,6 +136,37 @@ class JobDetailController extends GetxController {
       }
     } catch (e) {
       print('Error occurred: $e');
+    }
+  }
+
+  Future<String?> getSignedUrl(String? key) async {
+    if (key == null || key.trim().isEmpty) return null;
+
+    // Take only the first key if comma-separated
+    String firstKey = key.split(',').first.trim();
+
+    // Construct GET URL with query param
+    String url = "https://met.solstium.net/api/v1/signed_url?key=$firstKey";
+    String? token = await SharedPreferencesHelper.getToken();
+
+    try {
+      http.Response response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);
+        return jsonData['data']?.toString(); // Return signed URL
+      } else {
+        print('GET failed with status: ${response.statusCode}');
+        return null;
+      }
+    } catch (error) {
+      print('GET request error: $error');
+      return null;
     }
   }
 

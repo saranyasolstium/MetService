@@ -32,6 +32,7 @@ enum EndPoint {
   subServicelists,
   availableEngineer,
   createJob,
+  signedUrl,
 }
 
 extension EndPointString on EndPoint {
@@ -99,6 +100,8 @@ extension EndPointString on EndPoint {
         return 'getAvailableEngineer';
       case EndPoint.downloadImage:
         return 'download_image';
+      case EndPoint.signedUrl:
+        return 'signed_url';
     }
   }
 }
@@ -128,6 +131,8 @@ extension BaseURLString on EBaseURL {
     } else if (endPoint == EndPoint.register.string) {
       extend = 'api/v1';
     } else if (endPoint == EndPoint.profile.string) {
+      extend = 'api/v1';
+    } else if (endPoint == EndPoint.signedUrl.string) {
       extend = 'api/v1';
     } else {
       extend = "api/v1/employee";

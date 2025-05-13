@@ -7,7 +7,6 @@ import 'package:eagle_pixels/controller/app_controller.dart';
 import 'package:eagle_pixels/main.dart';
 import 'package:eagle_pixels/reuse/Keys.dart';
 import 'package:eagle_pixels/reuse/loader.dart';
-import 'package:eagle_pixels/reuse/shared_preference_helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'urls.dart';
@@ -186,12 +185,10 @@ class APIResponse<T> {
       if (decoded != null) {
         print('response ->');
         printPrettyJson(decoded, indent: 2);
-        // print(JsonEncoder.withIndent(" ").convert(decoded));
         if (decoded is List<dynamic>) {
           _maps = decoded;
         } else {
           _maps = [decoded];
-          // models = [(_model as Codable).fromJson(map) as T];
         }
         if (!isNeedModel) {
           return;
