@@ -105,25 +105,21 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
   }
 
   void loadImage() async {
-    String? key = detail.aAttachedImages;
+    setState(() {});
 
+    String? key = detail.aAttachedImages;
     String? attachedImage = await controller.getSignedUrl(key);
+    attachedImage = attachedImage?.replaceAll('[', '').replaceAll(']', '');
 
     if (attachedImage != null && attachedImage.isNotEmpty) {
-      // Clear existing list to avoid duplicates on reload
-      attachedImageList.clear();
-
-      // Add each URL to the list with trimming
-      for (var url in attachedImage.split(',')) {
-        attachedImageList.add(url.trim());
-      }
-
-      print("Signed image URLs:");
-      for (var url in attachedImageList) {
-        print(url);
-      }
+      setState(() {
+        attachedImageList.clear();
+        for (var url in attachedImage!.split(',')) {
+          attachedImageList.add(url.trim());
+        }
+      });
     } else {
-      print("No signed URLs found.");
+      setState(() {});
     }
   }
 
@@ -305,8 +301,7 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
             attachedImageList.isNotEmpty
                 ? GridView.builder(
                     shrinkWrap: true,
-                    physics:
-                        NeverScrollableScrollPhysics(), // Prevents scrolling inside Column
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: attachedImageList.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -316,16 +311,18 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                       childAspectRatio: 1,
                     ),
                     itemBuilder: (context, index) {
+                      print(
+                          'hdshdshhdsh ${attachedImageList[index].replaceAll('[', '').replaceAll(']', '')}');
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
-                          attachedImageList[index],
+                          attachedImageList[index]
+                              .replaceAll('[', '')
+                              .replaceAll(']', ''),
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Icon(Icons.broken_image),
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(child: CircularProgressIndicator());
+                          errorBuilder: (context, error, stackTrace) {
+                            print("Image load error at index $index: $error");
+                            return Icon(Icons.broken_image);
                           },
                         ),
                       );

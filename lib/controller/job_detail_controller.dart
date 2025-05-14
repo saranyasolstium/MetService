@@ -143,10 +143,9 @@ class JobDetailController extends GetxController {
     if (key == null || key.trim().isEmpty) return null;
 
     // Take only the first key if comma-separated
-    String firstKey = key.split(',').first.trim();
 
     // Construct GET URL with query param
-    String url = "https://met.solstium.net/api/v1/signed_url?key=$firstKey";
+    String url = "https://met.solstium.net/api/v1/signed_url?key=$key";
     String? token = await SharedPreferencesHelper.getToken();
 
     try {
@@ -159,6 +158,7 @@ class JobDetailController extends GetxController {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
+        print('hdsbhdshh $jsonData');
         return jsonData['data']?.toString(); // Return signed URL
       } else {
         print('GET failed with status: ${response.statusCode}');
