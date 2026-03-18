@@ -235,8 +235,6 @@ class JobDetailController extends GetxController {
         });
 
         // Now, let's handle the service_preparation part
-        print('saranya2345');
-
         var servicePreparation = data['service_preparation'] ?? [];
 
         print(servicePreparation);

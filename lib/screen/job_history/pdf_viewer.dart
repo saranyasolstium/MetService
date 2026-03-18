@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:external_path/external_path.dart';
 
-
 class PDFViewerScreen extends StatefulWidget {
   final String serviceId;
 
@@ -27,7 +26,8 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
   }
 
   Future<void> _fetchAndLoadPdf() async {
-    String url = "https://met.solstium.net/api/v1/employee/report_pdf/${widget.serviceId}";
+    String url =
+        "https://met.solstium.net/api/v1/employee/report_pdf/${widget.serviceId}";
     String? token = await SharedPreferencesHelper.getToken();
 
     try {
@@ -56,59 +56,58 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
     }
   }
 
+  Future<void> _downloadPdf() async {
+    try {
+      String url =
+          "https://met.solstium.net/api/v1/employee/report_pdf/${widget.serviceId}";
+      String? token = await SharedPreferencesHelper.getToken();
 
+      http.Response response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
 
-Future<void> _downloadPdf() async {
-  try {
-    String url = "https://met.solstium.net/api/v1/employee/report_pdf/${widget.serviceId}";
-    String? token = await SharedPreferencesHelper.getToken();
-    
-    http.Response response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
+      if (response.statusCode == 200) {
+        String customFolderPath =
+            await ExternalPath.getExternalStoragePublicDirectory(
+                ExternalPath.DIRECTORY_DOWNLOAD);
 
-    if (response.statusCode == 200) {
-      String customFolderPath = await ExternalPath.getExternalStoragePublicDirectory(
-          ExternalPath.DIRECTORY_DOWNLOADS);
-      
-      Directory customDir = Directory(customFolderPath);
-      if (!customDir.existsSync()) {
-        customDir.createSync(recursive: true);
+        Directory customDir = Directory(customFolderPath);
+        if (!customDir.existsSync()) {
+          customDir.createSync(recursive: true);
+        }
+
+        String fileName = 'report.pdf';
+        String filePath = '$customFolderPath/$fileName';
+
+        await File(filePath).writeAsBytes(response.bodyBytes);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text('PDF downloaded successfully. File saved at: $filePath'),
+          ),
+        );
+      } else {
+        print('Request failed with status: ${response.statusCode}');
       }
-
-      String fileName = 'report.pdf';
-      String filePath = '$customFolderPath/$fileName';
-      
-      await File(filePath).writeAsBytes(response.bodyBytes);
-
+    } catch (error) {
+      print('Error while downloading PDF: $error');
+      // Show a snackbar to indicate download failure
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('PDF downloaded successfully. File saved at: $filePath'),
+          content: Text('Failed to download PDF. Error: $error'),
         ),
       );
-    } else {
-      print('Request failed with status: ${response.statusCode}');
     }
-  } catch (error) {
-    print('Error while downloading PDF: $error');
-    // Show a snackbar to indicate download failure
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Failed to download PDF. Error: $error'),
-      ),
-    );
   }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(
+      appBar: AppBar(
         title: Text('PDF Viewer'),
         actions: [
           IconButton(
@@ -117,7 +116,6 @@ Future<void> _downloadPdf() async {
           ),
         ],
       ),
-
       body: _pdfPath != null
           ? PDFView(filePath: _pdfPath!)
           : Center(child: CircularProgressIndicator()),

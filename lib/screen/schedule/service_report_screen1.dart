@@ -868,7 +868,8 @@ class _ServiceReportScreen1State extends State<ServiceReportScreen1> {
                                           "Dome Trap",
                                           "Sulphur powder",
                                           "Ultrathor",
-                                          "Ultriset"
+                                          "Ultriset",
+                                          "Other"
                                         ].map<DropdownMenuItem<String>>(
                                             (String value) {
                                           return DropdownMenuItem<String>(

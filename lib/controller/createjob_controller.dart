@@ -72,7 +72,7 @@ class CreateJobController extends GetxController {
   List<String> selectedTreatment = [];
 
   String selectedBillingType = "";
-  String selectedEngId = "";
+  List<String> selectedEngIds = [];
   List<String> selectedSubServiceIds = [];
   bool isLoading = false;
   bool isEmailChecked = false;
@@ -368,6 +368,7 @@ class CreateJobController extends GetxController {
     var requestBody = {
       "requester_id": customerID,
       "product_id": selectedProductId,
+      "new_engineer_id": selectedEngIds.isEmpty ? "" : selectedEngIds,
       "address": addressCtrl.text,
       "department_id": selectedDepartId,
       "project_id": "",
@@ -377,8 +378,6 @@ class CreateJobController extends GetxController {
       "service_id": serviceId,
       "subservice_id":
           selectedSubServiceIds.isEmpty ? "" : selectedSubServiceIds,
-      // "service_cover": "",
-      // "service_other": "",
       "treatment_method": selectedTreatment,
       "treatment_other": treatmentOtherCtrl.text,
       "service_frequency": selectedfrequency,
@@ -391,24 +390,17 @@ class CreateJobController extends GetxController {
       "estimation_first_service": estimationDurationCtrl.text,
       "decision_maker": decisionMakerCtrl.text,
       "see_on_site": whomtoSeeCtrl.text,
-      // "service_premise_address": "",
       "billing_frequency": billingFreqCtrl.text,
       "preparation": selectedPreparation.isEmpty ? "" : selectedPreparation,
       "date": '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
       "service_time_start": convertTo24HourFormat(startTime!),
       "service_time_end": convertTo24HourFormat(endTime!),
-      "new_engineer_id": selectedEngId,
-      //"subject": "",
       "description": descriptionCtrl.text,
       "source": 2,
-      //"priority": "",
       "status": selectedStatusId,
       "customer_type": selectedCustomerType,
-      //"service_order_id": "",
-      // "attention": "",
       "oppoinment_request_id": selectedAppointmentId,
       "send_mail_customer": isEmailChecked ? "1" : "0",
-      // "type": ""
     };
 
     Logger.log('Request Body:', requestBody.toString());
