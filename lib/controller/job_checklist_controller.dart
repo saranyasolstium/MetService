@@ -110,7 +110,6 @@ class JobCheckListController extends GetxController {
     ).toJson();
 
     Logger.log('Complete Job', param.toString());
-    print(param);
     isLoading = true;
     update();
     try {

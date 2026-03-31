@@ -64,45 +64,75 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
 
       http.Response response = await http.get(
         Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
-        String customFolderPath =
-            await ExternalPath.getExternalStoragePublicDirectory(
-                ExternalPath.DIRECTORY_DOWNLOAD);
+        // ✅ Use this - NO permission needed
+        Directory? dir = await getExternalStorageDirectory();
 
-        Directory customDir = Directory(customFolderPath);
-        if (!customDir.existsSync()) {
-          customDir.createSync(recursive: true);
-        }
-
-        String fileName = 'report.pdf';
-        String filePath = '$customFolderPath/$fileName';
-
+        String filePath = '${dir!.path}/report_${widget.serviceId}.pdf';
         await File(filePath).writeAsBytes(response.bodyBytes);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text('PDF downloaded successfully. File saved at: $filePath'),
-          ),
+          SnackBar(content: Text('PDF saved! Path: $filePath')),
         );
-      } else {
-        print('Request failed with status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error while downloading PDF: $error');
-      // Show a snackbar to indicate download failure
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to download PDF. Error: $error'),
-        ),
+        SnackBar(content: Text('Error: $error')),
       );
     }
   }
+
+  // Future<void> _downloadPdf() async {
+  //   try {
+  //     String url =
+  //         "https://met.solstium.net/api/v1/employee/report_pdf/${widget.serviceId}";
+  //     String? token = await SharedPreferencesHelper.getToken();
+
+  //     http.Response response = await http.get(
+  //       Uri.parse(url),
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //       },
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       String customFolderPath =
+  //           await ExternalPath.getExternalStoragePublicDirectory(
+  //               ExternalPath.DIRECTORY_DOWNLOAD);
+
+  //       Directory customDir = Directory(customFolderPath);
+  //       if (!customDir.existsSync()) {
+  //         customDir.createSync(recursive: true);
+  //       }
+
+  //       String fileName = 'report.pdf';
+  //       String filePath = '$customFolderPath/$fileName';
+
+  //       await File(filePath).writeAsBytes(response.bodyBytes);
+
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content:
+  //               Text('PDF downloaded successfully. File saved at: $filePath'),
+  //         ),
+  //       );
+  //     } else {
+  //       print('Request failed with status: ${response.statusCode}');
+  //     }
+  //   } catch (error) {
+  //     print('Error while downloading PDF: $error');
+  //     // Show a snackbar to indicate download failure
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Failed to download PDF. Error: $error'),
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
